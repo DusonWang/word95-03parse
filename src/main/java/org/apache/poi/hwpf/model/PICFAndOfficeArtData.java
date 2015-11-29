@@ -16,18 +16,17 @@
 ==================================================================== */
 package org.apache.poi.hwpf.model;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.poi.ddf.DefaultEscherRecordFactory;
 import org.apache.poi.ddf.EscherContainerRecord;
 import org.apache.poi.ddf.EscherRecord;
 import org.apache.poi.util.Internal;
 import org.apache.poi.util.LittleEndian;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Internal
-public class PICFAndOfficeArtData
-{
+public class PICFAndOfficeArtData {
 
     private List<EscherRecord> _blipRecords;
 
@@ -39,64 +38,57 @@ public class PICFAndOfficeArtData
 
     private byte[] _stPicName;
 
-    public PICFAndOfficeArtData( byte[] dataStream, int startOffset )
-    {
+    public PICFAndOfficeArtData(byte[] dataStream, int startOffset) {
         int offset = startOffset;
 
-        _picf = new PICF( dataStream, offset );
+        _picf = new PICF(dataStream, offset);
         offset += PICF.getSize();
 
-        if ( _picf.getMm() == 0x0066 )
-        {
-            _cchPicName = LittleEndian.getUByte( dataStream, offset );
+        if (_picf.getMm() == 0x0066) {
+            _cchPicName = LittleEndian.getUByte(dataStream, offset);
             offset += 1;
 
-            _stPicName = LittleEndian.getByteArray( dataStream, offset,
-                    _cchPicName );
+            _stPicName = LittleEndian.getByteArray(dataStream, offset,
+                    _cchPicName);
             offset += _cchPicName;
         }
 
         final DefaultEscherRecordFactory escherRecordFactory = new DefaultEscherRecordFactory();
         _shape = new EscherContainerRecord();
-        int recordSize = _shape.fillFields( dataStream, offset,
-                escherRecordFactory );
+        int recordSize = _shape.fillFields(dataStream, offset,
+                escherRecordFactory);
         offset += recordSize;
 
         _blipRecords = new LinkedList<EscherRecord>();
-        while ( ( offset - startOffset ) < _picf.getLcb() )
-        {
+        while ((offset - startOffset) < _picf.getLcb()) {
             EscherRecord nextRecord = escherRecordFactory.createRecord(
-                    dataStream, offset );
-            if ( nextRecord.getRecordId() != (short) 0xF007
-                    && ( nextRecord.getRecordId() < (short) 0xF018 || nextRecord
-                            .getRecordId() > (short) 0xF117 ) )
+                    dataStream, offset);
+            if (nextRecord.getRecordId() != (short) 0xF007
+                    && (nextRecord.getRecordId() < (short) 0xF018 || nextRecord
+                    .getRecordId() > (short) 0xF117))
                 break;
 
-            int blipRecordSize = nextRecord.fillFields( dataStream, offset,
-                    escherRecordFactory );
+            int blipRecordSize = nextRecord.fillFields(dataStream, offset,
+                    escherRecordFactory);
             offset += blipRecordSize;
 
-            _blipRecords.add( nextRecord );
+            _blipRecords.add(nextRecord);
         }
     }
 
-    public List<EscherRecord> getBlipRecords()
-    {
+    public List<EscherRecord> getBlipRecords() {
         return _blipRecords;
     }
 
-    public PICF getPicf()
-    {
+    public PICF getPicf() {
         return _picf;
     }
 
-    public EscherContainerRecord getShape()
-    {
+    public EscherContainerRecord getShape() {
         return _shape;
     }
 
-    public byte[] getStPicName()
-    {
+    public byte[] getStPicName() {
         return _stPicName;
     }
 }

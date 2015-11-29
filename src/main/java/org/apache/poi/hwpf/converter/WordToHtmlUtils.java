@@ -16,184 +16,153 @@
 ==================================================================== */
 package org.apache.poi.hwpf.converter;
 
-import org.apache.poi.hwpf.usermodel.BorderCode;
-import org.apache.poi.hwpf.usermodel.CharacterRun;
-import org.apache.poi.hwpf.usermodel.Paragraph;
-import org.apache.poi.hwpf.usermodel.TableCell;
-import org.apache.poi.hwpf.usermodel.TableRow;
+import org.apache.poi.hwpf.usermodel.*;
 import org.apache.poi.util.Beta;
 import org.w3c.dom.Element;
 
 @Beta
-public class WordToHtmlUtils extends AbstractWordUtils
-{
-    public static void addBold( final boolean bold, StringBuilder style )
-    {
-        style.append( "font-weight:" + ( bold ? "bold" : "normal" ) + ";" );
+public class WordToHtmlUtils extends AbstractWordUtils {
+    public static void addBold(final boolean bold, StringBuilder style) {
+        style.append("font-weight:" + (bold ? "bold" : "normal") + ";");
     }
 
-    public static void addBorder( BorderCode borderCode, String where,
-            StringBuilder style )
-    {
-        if ( borderCode == null || borderCode.isEmpty() )
+    public static void addBorder(BorderCode borderCode, String where,
+                                 StringBuilder style) {
+        if (borderCode == null || borderCode.isEmpty())
             return;
 
-        if ( isEmpty( where ) )
-        {
-            style.append( "border:" );
-        }
-        else
-        {
-            style.append( "border-" );
-            style.append( where );
+        if (isEmpty(where)) {
+            style.append("border:");
+        } else {
+            style.append("border-");
+            style.append(where);
         }
 
-        style.append( ":" );
-        if ( borderCode.getLineWidth() < 8 )
-            style.append( "thin" );
+        style.append(":");
+        if (borderCode.getLineWidth() < 8)
+            style.append("thin");
         else
-            style.append( getBorderWidth( borderCode ) );
-        style.append( ' ' );
-        style.append( getBorderType( borderCode ) );
-        style.append( ' ' );
-        style.append( getColor( borderCode.getColor() ) );
-        style.append( ';' );
+            style.append(getBorderWidth(borderCode));
+        style.append(' ');
+        style.append(getBorderType(borderCode));
+        style.append(' ');
+        style.append(getColor(borderCode.getColor()));
+        style.append(';');
     }
 
     public static void addCharactersProperties(
-            final CharacterRun characterRun, StringBuilder style )
-    {
-        addBorder( characterRun.getBorder(), EMPTY, style );
+            final CharacterRun characterRun, StringBuilder style) {
+        addBorder(characterRun.getBorder(), EMPTY, style);
 
-        if ( characterRun.isCapitalized() )
-        {
-            style.append( "text-transform:uppercase;" );
+        if (characterRun.isCapitalized()) {
+            style.append("text-transform:uppercase;");
         }
-        if ( characterRun.getIco24() != -1 )
-        {
-            style.append( "color:" + getColor24( characterRun.getIco24() )
-                    + ";" );
+        if (characterRun.getIco24() != -1) {
+            style.append("color:" + getColor24(characterRun.getIco24())
+                    + ";");
         }
-        if ( characterRun.isHighlighted() )
-        {
-            style.append( "background-color:"
-                    + getColor( characterRun.getHighlightedColor() ) + ";" );
+        if (characterRun.isHighlighted()) {
+            style.append("background-color:"
+                    + getColor(characterRun.getHighlightedColor()) + ";");
         }
-        if ( characterRun.isStrikeThrough() )
-        {
-            style.append( "text-decoration:line-through;" );
+        if (characterRun.isStrikeThrough()) {
+            style.append("text-decoration:line-through;");
         }
-        if ( characterRun.isShadowed() )
-        {
-            style.append( "text-shadow:" + characterRun.getFontSize() / 24
-                    + "pt;" );
+        if (characterRun.isShadowed()) {
+            style.append("text-shadow:" + characterRun.getFontSize() / 24
+                    + "pt;");
         }
-        if ( characterRun.isSmallCaps() )
-        {
-            style.append( "font-variant:small-caps;" );
+        if (characterRun.isSmallCaps()) {
+            style.append("font-variant:small-caps;");
         }
-        if ( characterRun.getSubSuperScriptIndex() == 1 )
-        {
-            style.append( "vertical-align:super;" );
-            style.append( "font-size:smaller;" );
+        if (characterRun.getSubSuperScriptIndex() == 1) {
+            style.append("vertical-align:super;");
+            style.append("font-size:smaller;");
         }
-        if ( characterRun.getSubSuperScriptIndex() == 2 )
-        {
-            style.append( "vertical-align:sub;" );
-            style.append( "font-size:smaller;" );
+        if (characterRun.getSubSuperScriptIndex() == 2) {
+            style.append("vertical-align:sub;");
+            style.append("font-size:smaller;");
         }
-        if ( characterRun.getUnderlineCode() > 0 )
-        {
-            style.append( "text-decoration:underline;" );
+        if (characterRun.getUnderlineCode() > 0) {
+            style.append("text-decoration:underline;");
         }
-        if ( characterRun.isVanished() )
-        {
-            style.append( "visibility:hidden;" );
+        if (characterRun.isVanished()) {
+            style.append("visibility:hidden;");
         }
     }
 
-    public static void addFontFamily( final String fontFamily,
-            StringBuilder style )
-    {
-        if ( isEmpty( fontFamily ) )
+    public static void addFontFamily(final String fontFamily,
+                                     StringBuilder style) {
+        if (isEmpty(fontFamily))
             return;
 
-        style.append( "font-family:" + fontFamily + ";" );
+        style.append("font-family:" + fontFamily + ";");
     }
 
-    public static void addFontSize( final int fontSize, StringBuilder style )
-    {
-        style.append( "font-size:" + fontSize + "pt;" );
+    public static void addFontSize(final int fontSize, StringBuilder style) {
+        style.append("font-size:" + fontSize + "pt;");
     }
 
-    public static void addIndent( Paragraph paragraph, StringBuilder style )
-    {
-        addIndent( style, "text-indent", paragraph.getFirstLineIndent() );
+    public static void addIndent(Paragraph paragraph, StringBuilder style) {
+        addIndent(style, "text-indent", paragraph.getFirstLineIndent());
 
-        addIndent( style, "margin-left", paragraph.getIndentFromLeft() );
-        addIndent( style, "margin-right", paragraph.getIndentFromRight() );
+        addIndent(style, "margin-left", paragraph.getIndentFromLeft());
+        addIndent(style, "margin-right", paragraph.getIndentFromRight());
 
-        addIndent( style, "margin-top", paragraph.getSpacingBefore() );
-        addIndent( style, "margin-bottom", paragraph.getSpacingAfter() );
+        addIndent(style, "margin-top", paragraph.getSpacingBefore());
+        addIndent(style, "margin-bottom", paragraph.getSpacingAfter());
     }
 
-    private static void addIndent( StringBuilder style, final String cssName,
-            final int twipsValue )
-    {
-        if ( twipsValue == 0 )
+    private static void addIndent(StringBuilder style, final String cssName,
+                                  final int twipsValue) {
+        if (twipsValue == 0)
             return;
 
-        style.append( cssName + ":" + ( twipsValue / TWIPS_PER_INCH ) + "in;" );
+        style.append(cssName + ":" + (twipsValue / TWIPS_PER_INCH) + "in;");
     }
 
-    public static void addJustification( Paragraph paragraph,
-            final StringBuilder style )
-    {
-        String justification = getJustification( paragraph.getJustification() );
-        if ( isNotEmpty( justification ) )
-            style.append( "text-align:" + justification + ";" );
+    public static void addJustification(Paragraph paragraph,
+                                        final StringBuilder style) {
+        String justification = getJustification(paragraph.getJustification());
+        if (isNotEmpty(justification))
+            style.append("text-align:" + justification + ";");
     }
 
-    public static void addParagraphProperties( Paragraph paragraph,
-            StringBuilder style )
-    {
-        addIndent( paragraph, style );
-        addJustification( paragraph, style );
+    public static void addParagraphProperties(Paragraph paragraph,
+                                              StringBuilder style) {
+        addIndent(paragraph, style);
+        addJustification(paragraph, style);
 
-        addBorder( paragraph.getBottomBorder(), "bottom", style );
-        addBorder( paragraph.getLeftBorder(), "left", style );
-        addBorder( paragraph.getRightBorder(), "right", style );
-        addBorder( paragraph.getTopBorder(), "top", style );
+        addBorder(paragraph.getBottomBorder(), "bottom", style);
+        addBorder(paragraph.getLeftBorder(), "left", style);
+        addBorder(paragraph.getRightBorder(), "right", style);
+        addBorder(paragraph.getTopBorder(), "top", style);
 
-        if ( paragraph.pageBreakBefore() )
-        {
-            style.append( "break-before:page;" );
+        if (paragraph.pageBreakBefore()) {
+            style.append("break-before:page;");
         }
 
-        style.append( "hyphenate:"
-                + ( paragraph.isAutoHyphenated() ? "auto" : "none" ) + ";" );
+        style.append("hyphenate:"
+                + (paragraph.isAutoHyphenated() ? "auto" : "none") + ";");
 
-        if ( paragraph.keepOnPage() )
-        {
-            style.append( "keep-together.within-page:always;" );
+        if (paragraph.keepOnPage()) {
+            style.append("keep-together.within-page:always;");
         }
 
-        if ( paragraph.keepWithNext() )
-        {
-            style.append( "keep-with-next.within-page:always;" );
+        if (paragraph.keepWithNext()) {
+            style.append("keep-with-next.within-page:always;");
         }
     }
 
-    public static void addTableCellProperties( TableRow tableRow,
-            TableCell tableCell, boolean toppest, boolean bottomest,
-            boolean leftest, boolean rightest, StringBuilder style )
-    {
-        style.append( "width:" + ( tableCell.getWidth() / TWIPS_PER_INCH )
-                + "in;" );
-        style.append( "padding-start:"
-                + ( tableRow.getGapHalf() / TWIPS_PER_INCH ) + "in;" );
-        style.append( "padding-end:"
-                + ( tableRow.getGapHalf() / TWIPS_PER_INCH ) + "in;" );
+    public static void addTableCellProperties(TableRow tableRow,
+                                              TableCell tableCell, boolean toppest, boolean bottomest,
+                                              boolean leftest, boolean rightest, StringBuilder style) {
+        style.append("width:" + (tableCell.getWidth() / TWIPS_PER_INCH)
+                + "in;");
+        style.append("padding-start:"
+                + (tableRow.getGapHalf() / TWIPS_PER_INCH) + "in;");
+        style.append("padding-end:"
+                + (tableRow.getGapHalf() / TWIPS_PER_INCH) + "in;");
 
         BorderCode top = tableCell.getBrcTop() != null
                 && tableCell.getBrcTop().getBorderType() != 0 ? tableCell
@@ -213,29 +182,25 @@ public class WordToHtmlUtils extends AbstractWordUtils
                 .getBrcRight() : rightest ? tableRow.getRightBorder()
                 : tableRow.getVerticalBorder();
 
-        addBorder( bottom, "bottom", style );
-        addBorder( left, "left", style );
-        addBorder( right, "right", style );
-        addBorder( top, "top", style );
+        addBorder(bottom, "bottom", style);
+        addBorder(left, "left", style);
+        addBorder(right, "right", style);
+        addBorder(top, "top", style);
     }
 
-    public static void addTableRowProperties( TableRow tableRow,
-            StringBuilder style )
-    {
-        if ( tableRow.getRowHeight() > 0 )
-        {
-            style.append( "height:"
-                    + ( tableRow.getRowHeight() / TWIPS_PER_INCH ) + "in;" );
+    public static void addTableRowProperties(TableRow tableRow,
+                                             StringBuilder style) {
+        if (tableRow.getRowHeight() > 0) {
+            style.append("height:"
+                    + (tableRow.getRowHeight() / TWIPS_PER_INCH) + "in;");
         }
-        if ( !tableRow.cantSplit() )
-        {
-            style.append( "keep-together:always;" );
+        if (!tableRow.cantSplit()) {
+            style.append("keep-together:always;");
         }
     }
 
-    static void compactSpans( Element pElement )
-    {
-        compactChildNodesR( pElement, "span" );
+    static void compactSpans(Element pElement) {
+        compactChildNodesR(pElement, "span");
     }
 
 }

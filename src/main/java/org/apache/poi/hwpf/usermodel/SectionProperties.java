@@ -17,15 +17,13 @@
 
 package org.apache.poi.hwpf.usermodel;
 
+import org.apache.poi.hwpf.model.types.SEPAbstractType;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 
-import org.apache.poi.hwpf.model.types.SEPAbstractType;
-
-public final class SectionProperties extends SEPAbstractType
-{
-    public SectionProperties()
-    {
+public final class SectionProperties extends SEPAbstractType {
+    public SectionProperties() {
         field_20_brcTop = new BorderCode();
         field_21_brcLeft = new BorderCode();
         field_22_brcBottom = new BorderCode();
@@ -33,8 +31,7 @@ public final class SectionProperties extends SEPAbstractType
         field_26_dttmPropRMark = new DateAndTime();
     }
 
-    public Object clone() throws CloneNotSupportedException
-    {
+    public Object clone() throws CloneNotSupportedException {
         SectionProperties copy = (SectionProperties) super.clone();
         copy.field_20_brcTop = (BorderCode) field_20_brcTop.clone();
         copy.field_21_brcLeft = (BorderCode) field_21_brcLeft.clone();
@@ -46,30 +43,23 @@ public final class SectionProperties extends SEPAbstractType
         return copy;
     }
 
-    public boolean equals( Object obj )
-    {
+    public boolean equals(Object obj) {
         Field[] fields = SectionProperties.class.getSuperclass()
                 .getDeclaredFields();
-        AccessibleObject.setAccessible( fields, true );
-        try
-        {
-            for ( int x = 0; x < fields.length; x++ )
-            {
-                Object obj1 = fields[x].get( this );
-                Object obj2 = fields[x].get( obj );
-                if ( obj1 == null && obj2 == null )
-                {
+        AccessibleObject.setAccessible(fields, true);
+        try {
+            for (int x = 0; x < fields.length; x++) {
+                Object obj1 = fields[x].get(this);
+                Object obj2 = fields[x].get(obj);
+                if (obj1 == null && obj2 == null) {
                     continue;
                 }
-                if ( !obj1.equals( obj2 ) )
-                {
+                if (!obj1.equals(obj2)) {
                     return false;
                 }
             }
             return true;
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
             return false;
         }
     }

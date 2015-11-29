@@ -17,80 +17,78 @@
 
 package org.apache.poi.hwpf.model;
 
+import org.apache.poi.hwpf.model.io.HWPFOutputStream;
+import org.apache.poi.util.Internal;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.poi.hwpf.model.io.HWPFOutputStream;
-import org.apache.poi.util.Internal;
-
 /**
  * String table containing the names of authors of revision marks, e-mails and
  * comments in this document.
- * 
+ *
  * @author Ryan Lauck
  */
 @Internal
 public final class RevisionMarkAuthorTable {
-	/**
-	 * Array of entries.
-	 */
-	private String[] entries;
+    /**
+     * Array of entries.
+     */
+    private String[] entries;
 
-	/**
-	 * Constructor to read the table from the table stream.
-	 * 
-	 * @param tableStream the table stream.
-	 * @param offset the offset into the byte array.
-	 * @param size the size of the table in the byte array.
-	 */
-    public RevisionMarkAuthorTable( byte[] tableStream, int offset, int size )
-            throws IOException
-    {
-        entries = SttbUtils.readSttbfRMark( tableStream, offset );
+    /**
+     * Constructor to read the table from the table stream.
+     *
+     * @param tableStream the table stream.
+     * @param offset      the offset into the byte array.
+     * @param size        the size of the table in the byte array.
+     */
+    public RevisionMarkAuthorTable(byte[] tableStream, int offset, int size)
+            throws IOException {
+        entries = SttbUtils.readSttbfRMark(tableStream, offset);
     }
 
-	/**
-	 * Gets the entries. The returned list cannot be modified.
-	 * 
-	 * @return the list of entries.
-	 */
-	public List<String> getEntries() {
-		return Collections.unmodifiableList(Arrays.asList(entries));
-	}
-	
-	/**
-	 * Get an author by its index.  Returns null if it does not exist.
-	 * 
-	 * @return the revision mark author
-	 */
-	public String getAuthor(int index) {
-		String auth = null;
-		if(index >= 0 && index < entries.length) {
-			auth = entries[index];
-		}
-		return auth;
-	}
-	
-	/**
-	 * Gets the number of entries.
-	 * 
-	 * @return the number of entries.
-	 */
-	public int getSize() {
-		return entries.length;
-	}
+    /**
+     * Gets the entries. The returned list cannot be modified.
+     *
+     * @return the list of entries.
+     */
+    public List<String> getEntries() {
+        return Collections.unmodifiableList(Arrays.asList(entries));
+    }
 
-	/**
-	 * Writes this table to the table stream.
-	 * 
-	 * @param tableStream  the table stream to write to.
-	 * @throws IOException  if an error occurs while writing.
-	 */
-    public void writeTo( HWPFOutputStream tableStream ) throws IOException
-    {
-        SttbUtils.writeSttbfRMark( entries, tableStream );
+    /**
+     * Get an author by its index.  Returns null if it does not exist.
+     *
+     * @return the revision mark author
+     */
+    public String getAuthor(int index) {
+        String auth = null;
+        if (index >= 0 && index < entries.length) {
+            auth = entries[index];
+        }
+        return auth;
+    }
+
+    /**
+     * Gets the number of entries.
+     *
+     * @return the number of entries.
+     */
+    public int getSize() {
+        return entries.length;
+    }
+
+    /**
+     * Writes this table to the table stream.
+     *
+     * @param tableStream the table stream to write to.
+     * @throws IOException if an error occurs while writing.
+     */
+    public void writeTo(HWPFOutputStream tableStream) throws IOException {
+        SttbUtils.writeSttbfRMark(entries, tableStream);
     }
 
 }

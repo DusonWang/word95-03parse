@@ -18,9 +18,9 @@
  */
 package org.apache.poi.hwpf.model;
 
-import java.util.Arrays;
-
 import org.apache.poi.util.LittleEndian;
+
+import java.util.Arrays;
 
 /**
  * The Xst structure is a string. The string is prepended by its length and is
@@ -28,11 +28,10 @@ import org.apache.poi.util.LittleEndian;
  * <p>
  * Documentation quoted from Page 424 of 621. [MS-DOC] -- v20110315 Word (.doc)
  * Binary File Format
- * 
+ *
  * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
  */
-public class Xst
-{
+public class Xst {
 
     /**
      * An unsigned integer that specifies the number of characters that are
@@ -45,105 +44,92 @@ public class Xst
      */
     private char[] _rgtchar;
 
-    public Xst()
-    {
+    public Xst() {
         _cch = 0;
         _rgtchar = new char[0];
     }
 
-    public Xst( byte[] data, int startOffset )
-    {
+    public Xst(byte[] data, int startOffset) {
         int offset = startOffset;
 
-        _cch = LittleEndian.getUShort( data, offset );
+        _cch = LittleEndian.getUShort(data, offset);
         offset += LittleEndian.SHORT_SIZE;
 
         _rgtchar = new char[_cch];
-        for ( int x = 0; x < _cch; x++ )
-        {
-            _rgtchar[x] = (char) LittleEndian.getShort( data, offset );
+        for (int x = 0; x < _cch; x++) {
+            _rgtchar[x] = (char) LittleEndian.getShort(data, offset);
             offset += LittleEndian.SHORT_SIZE;
         }
 
     }
 
-    public Xst( String str )
-    {
+    public Xst(String str) {
         _cch = str.length();
         _rgtchar = str.toCharArray();
     }
 
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         Xst other = (Xst) obj;
-        if ( _cch != other._cch )
+        if (_cch != other._cch)
             return false;
-        if ( !Arrays.equals( _rgtchar, other._rgtchar ) )
+        if (!Arrays.equals(_rgtchar, other._rgtchar))
             return false;
         return true;
     }
 
-    public String getAsJavaString()
-    {
-        return new String( _rgtchar );
+    public String getAsJavaString() {
+        return new String(_rgtchar);
     }
 
     /**
      * An unsigned integer that specifies the number of characters that are
      * contained in the rgtchar array.
      */
-    public int getCch()
-    {
+    public int getCch() {
         return _cch;
     }
 
     /**
      * An array of 16-bit Unicode characters that make up a string.
      */
-    public char[] getRgtchar()
-    {
+    public char[] getRgtchar() {
         return _rgtchar;
     }
 
-    public int getSize()
-    {
+    public int getSize() {
         return LittleEndian.SHORT_SIZE + _rgtchar.length * 2;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + _cch;
-        result = prime * result + Arrays.hashCode( _rgtchar );
+        result = prime * result + Arrays.hashCode(_rgtchar);
         return result;
     }
 
-    public void serialize( byte[] data, int startOffset )
-    {
+    public void serialize(byte[] data, int startOffset) {
         int offset = startOffset;
 
-        LittleEndian.putUShort( data, offset, _cch );
+        LittleEndian.putUShort(data, offset, _cch);
         offset += LittleEndian.SHORT_SIZE;
 
-        for ( char c : _rgtchar )
-        {
-            LittleEndian.putShort( data, offset, (short) c );
+        for (char c : _rgtchar) {
+            LittleEndian.putShort(data, offset, (short) c);
             offset += LittleEndian.SHORT_SIZE;
         }
     }
 
     @Override
-    public String toString()
-    {
-        return new String( "Xst [" + _cch + "; " + _rgtchar + "]" );
+    public String toString() {
+        return new String("Xst [" + _cch + "; " + _rgtchar + "]");
     }
 }

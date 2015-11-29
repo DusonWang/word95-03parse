@@ -16,14 +16,13 @@
 ==================================================================== */
 package org.apache.poi.hwpf.model;
 
-public interface FibRgLw
-{
+public interface FibRgLw {
     int getCbMac();
 
-    int getSubdocumentTextStreamLength( SubdocumentType subdocumentType );
+    void setCbMac(int cbMac);
 
-    void setCbMac( int cbMac );
+    int getSubdocumentTextStreamLength(SubdocumentType subdocumentType);
 
-    void setSubdocumentTextStreamLength( SubdocumentType subdocumentType,
-            int newLength );
+    void setSubdocumentTextStreamLength(SubdocumentType subdocumentType,
+                                        int newLength);
 }

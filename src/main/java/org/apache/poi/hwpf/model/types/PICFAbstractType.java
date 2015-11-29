@@ -19,29 +19,28 @@
 package org.apache.poi.hwpf.model.types;
 
 
-import org.apache.poi.util.*;
+import org.apache.poi.util.Internal;
+import org.apache.poi.util.LittleEndian;
 
 /**
  * The PICF structure specifies the type of a picture, as well as the size of the
-        picture and information about its border. <p>Class and fields descriptions are quoted
-        from Microsoft Office Word 97-2007
-        Binary File Format and [MS-DOC] - v20110608 Word (.doc)
-        Binary File Format
-    
+ * picture and information about its border. <p>Class and fields descriptions are quoted
+ * from Microsoft Office Word 97-2007
+ * Binary File Format and [MS-DOC] - v20110608 Word (.doc)
+ * Binary File Format
+ * <p>
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author Sergey Vladimirov; according to Microsoft Office Word 97-2007 Binary File Format
-        Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
-    
+ *         Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
  */
 @Internal
-public abstract class PICFAbstractType
-{
+public abstract class PICFAbstractType {
 
     protected int field_1_lcb;
     protected int field_2_cbHeader;
@@ -71,93 +70,87 @@ public abstract class PICFAbstractType
     protected short field_26_dyaReserved3;
     protected short field_27_cProps;
 
-    protected PICFAbstractType()
-    {
+    protected PICFAbstractType() {
         this.field_21_brcTop80 = new byte[4];
         this.field_22_brcLeft80 = new byte[4];
         this.field_23_brcBottom80 = new byte[4];
         this.field_24_brcRight80 = new byte[4];
     }
 
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_lcb                    = LittleEndian.getInt( data, 0x0 + offset );
-        field_2_cbHeader               = LittleEndian.getShort( data, 0x4 + offset );
-        field_3_mm                     = LittleEndian.getShort( data, 0x6 + offset );
-        field_4_xExt                   = LittleEndian.getShort( data, 0x8 + offset );
-        field_5_yExt                   = LittleEndian.getShort( data, 0xa + offset );
-        field_6_swHMF                  = LittleEndian.getShort( data, 0xc + offset );
-        field_7_grf                    = LittleEndian.getInt( data, 0xe + offset );
-        field_8_padding                = LittleEndian.getInt( data, 0x12 + offset );
-        field_9_mmPM                   = LittleEndian.getShort( data, 0x16 + offset );
-        field_10_padding2              = LittleEndian.getInt( data, 0x18 + offset );
-        field_11_dxaGoal               = LittleEndian.getShort( data, 0x1c + offset );
-        field_12_dyaGoal               = LittleEndian.getShort( data, 0x1e + offset );
-        field_13_mx                    = LittleEndian.getShort( data, 0x20 + offset );
-        field_14_my                    = LittleEndian.getShort( data, 0x22 + offset );
-        field_15_dxaReserved1          = LittleEndian.getShort( data, 0x24 + offset );
-        field_16_dyaReserved1          = LittleEndian.getShort( data, 0x26 + offset );
-        field_17_dxaReserved2          = LittleEndian.getShort( data, 0x28 + offset );
-        field_18_dyaReserved2          = LittleEndian.getShort( data, 0x2a + offset );
-        field_19_fReserved             = data[ 0x2c + offset ];
-        field_20_bpp                   = data[ 0x2d + offset ];
-        field_21_brcTop80              = LittleEndian.getByteArray( data, 0x2e + offset,4 );
-        field_22_brcLeft80             = LittleEndian.getByteArray( data, 0x32 + offset,4 );
-        field_23_brcBottom80           = LittleEndian.getByteArray( data, 0x36 + offset,4 );
-        field_24_brcRight80            = LittleEndian.getByteArray( data, 0x3a + offset,4 );
-        field_25_dxaReserved3          = LittleEndian.getShort( data, 0x3e + offset );
-        field_26_dyaReserved3          = LittleEndian.getShort( data, 0x40 + offset );
-        field_27_cProps                = LittleEndian.getShort( data, 0x42 + offset );
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putInt( data, 0x0 + offset, field_1_lcb );
-        LittleEndian.putUShort( data, 0x4 + offset, field_2_cbHeader );
-        LittleEndian.putShort( data, 0x6 + offset, field_3_mm );
-        LittleEndian.putShort( data, 0x8 + offset, field_4_xExt );
-        LittleEndian.putShort( data, 0xa + offset, field_5_yExt );
-        LittleEndian.putShort( data, 0xc + offset, field_6_swHMF );
-        LittleEndian.putInt( data, 0xe + offset, field_7_grf );
-        LittleEndian.putInt( data, 0x12 + offset, field_8_padding );
-        LittleEndian.putUShort( data, 0x16 + offset, field_9_mmPM );
-        LittleEndian.putInt( data, 0x18 + offset, field_10_padding2 );
-        LittleEndian.putShort( data, 0x1c + offset, field_11_dxaGoal );
-        LittleEndian.putShort( data, 0x1e + offset, field_12_dyaGoal );
-        LittleEndian.putUShort( data, 0x20 + offset, field_13_mx );
-        LittleEndian.putUShort( data, 0x22 + offset, field_14_my );
-        LittleEndian.putShort( data, 0x24 + offset, field_15_dxaReserved1 );
-        LittleEndian.putShort( data, 0x26 + offset, field_16_dyaReserved1 );
-        LittleEndian.putShort( data, 0x28 + offset, field_17_dxaReserved2 );
-        LittleEndian.putShort( data, 0x2a + offset, field_18_dyaReserved2 );
-        data[ 0x2c + offset ] = field_19_fReserved;
-        data[ 0x2d + offset ] = field_20_bpp;
-        System.arraycopy( field_21_brcTop80, 0, data, 0x2e + offset, field_21_brcTop80.length );
-        System.arraycopy( field_22_brcLeft80, 0, data, 0x32 + offset, field_22_brcLeft80.length );
-        System.arraycopy( field_23_brcBottom80, 0, data, 0x36 + offset, field_23_brcBottom80.length );
-        System.arraycopy( field_24_brcRight80, 0, data, 0x3a + offset, field_24_brcRight80.length );
-        LittleEndian.putShort( data, 0x3e + offset, field_25_dxaReserved3 );
-        LittleEndian.putShort( data, 0x40 + offset, field_26_dyaReserved3 );
-        LittleEndian.putShort( data, 0x42 + offset, field_27_cProps );
-    }
-
-    public byte[] serialize()
-    {
-        final byte[] result = new byte[ getSize() ];
-        serialize( result, 0 );
-        return result;
-    }
-
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 4 + 2 + 2 + 2 + 2 + 2 + 4 + 4 + 2 + 4 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2;
     }
 
-    public String toString()
-    {
+    protected void fillFields(byte[] data, int offset) {
+        field_1_lcb = LittleEndian.getInt(data, 0x0 + offset);
+        field_2_cbHeader = LittleEndian.getShort(data, 0x4 + offset);
+        field_3_mm = LittleEndian.getShort(data, 0x6 + offset);
+        field_4_xExt = LittleEndian.getShort(data, 0x8 + offset);
+        field_5_yExt = LittleEndian.getShort(data, 0xa + offset);
+        field_6_swHMF = LittleEndian.getShort(data, 0xc + offset);
+        field_7_grf = LittleEndian.getInt(data, 0xe + offset);
+        field_8_padding = LittleEndian.getInt(data, 0x12 + offset);
+        field_9_mmPM = LittleEndian.getShort(data, 0x16 + offset);
+        field_10_padding2 = LittleEndian.getInt(data, 0x18 + offset);
+        field_11_dxaGoal = LittleEndian.getShort(data, 0x1c + offset);
+        field_12_dyaGoal = LittleEndian.getShort(data, 0x1e + offset);
+        field_13_mx = LittleEndian.getShort(data, 0x20 + offset);
+        field_14_my = LittleEndian.getShort(data, 0x22 + offset);
+        field_15_dxaReserved1 = LittleEndian.getShort(data, 0x24 + offset);
+        field_16_dyaReserved1 = LittleEndian.getShort(data, 0x26 + offset);
+        field_17_dxaReserved2 = LittleEndian.getShort(data, 0x28 + offset);
+        field_18_dyaReserved2 = LittleEndian.getShort(data, 0x2a + offset);
+        field_19_fReserved = data[0x2c + offset];
+        field_20_bpp = data[0x2d + offset];
+        field_21_brcTop80 = LittleEndian.getByteArray(data, 0x2e + offset, 4);
+        field_22_brcLeft80 = LittleEndian.getByteArray(data, 0x32 + offset, 4);
+        field_23_brcBottom80 = LittleEndian.getByteArray(data, 0x36 + offset, 4);
+        field_24_brcRight80 = LittleEndian.getByteArray(data, 0x3a + offset, 4);
+        field_25_dxaReserved3 = LittleEndian.getShort(data, 0x3e + offset);
+        field_26_dyaReserved3 = LittleEndian.getShort(data, 0x40 + offset);
+        field_27_cProps = LittleEndian.getShort(data, 0x42 + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putInt(data, 0x0 + offset, field_1_lcb);
+        LittleEndian.putUShort(data, 0x4 + offset, field_2_cbHeader);
+        LittleEndian.putShort(data, 0x6 + offset, field_3_mm);
+        LittleEndian.putShort(data, 0x8 + offset, field_4_xExt);
+        LittleEndian.putShort(data, 0xa + offset, field_5_yExt);
+        LittleEndian.putShort(data, 0xc + offset, field_6_swHMF);
+        LittleEndian.putInt(data, 0xe + offset, field_7_grf);
+        LittleEndian.putInt(data, 0x12 + offset, field_8_padding);
+        LittleEndian.putUShort(data, 0x16 + offset, field_9_mmPM);
+        LittleEndian.putInt(data, 0x18 + offset, field_10_padding2);
+        LittleEndian.putShort(data, 0x1c + offset, field_11_dxaGoal);
+        LittleEndian.putShort(data, 0x1e + offset, field_12_dyaGoal);
+        LittleEndian.putUShort(data, 0x20 + offset, field_13_mx);
+        LittleEndian.putUShort(data, 0x22 + offset, field_14_my);
+        LittleEndian.putShort(data, 0x24 + offset, field_15_dxaReserved1);
+        LittleEndian.putShort(data, 0x26 + offset, field_16_dyaReserved1);
+        LittleEndian.putShort(data, 0x28 + offset, field_17_dxaReserved2);
+        LittleEndian.putShort(data, 0x2a + offset, field_18_dyaReserved2);
+        data[0x2c + offset] = field_19_fReserved;
+        data[0x2d + offset] = field_20_bpp;
+        System.arraycopy(field_21_brcTop80, 0, data, 0x2e + offset, field_21_brcTop80.length);
+        System.arraycopy(field_22_brcLeft80, 0, data, 0x32 + offset, field_22_brcLeft80.length);
+        System.arraycopy(field_23_brcBottom80, 0, data, 0x36 + offset, field_23_brcBottom80.length);
+        System.arraycopy(field_24_brcRight80, 0, data, 0x3a + offset, field_24_brcRight80.length);
+        LittleEndian.putShort(data, 0x3e + offset, field_25_dxaReserved3);
+        LittleEndian.putShort(data, 0x40 + offset, field_26_dyaReserved3);
+        LittleEndian.putShort(data, 0x42 + offset, field_27_cProps);
+    }
+
+    public byte[] serialize() {
+        final byte[] result = new byte[getSize()];
+        serialize(result, 0);
+        return result;
+    }
+
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[PICF]\n");
         builder.append("    .lcb                  = ");
@@ -223,8 +216,7 @@ public abstract class PICFAbstractType
      * A signed integer that specifies the size, in bytes, of this PICF structure and the subsequent data.
      */
     @Internal
-    public int getLcb()
-    {
+    public int getLcb() {
         return field_1_lcb;
     }
 
@@ -232,8 +224,7 @@ public abstract class PICFAbstractType
      * A signed integer that specifies the size, in bytes, of this PICF structure and the subsequent data.
      */
     @Internal
-    public void setLcb( int field_1_lcb )
-    {
+    public void setLcb(int field_1_lcb) {
         this.field_1_lcb = field_1_lcb;
     }
 
@@ -241,8 +232,7 @@ public abstract class PICFAbstractType
      * An unsigned integer that specifies the size, in bytes, of this PICF structure. This value MUST be 0x44.
      */
     @Internal
-    public int getCbHeader()
-    {
+    public int getCbHeader() {
         return field_2_cbHeader;
     }
 
@@ -250,8 +240,7 @@ public abstract class PICFAbstractType
      * An unsigned integer that specifies the size, in bytes, of this PICF structure. This value MUST be 0x44.
      */
     @Internal
-    public void setCbHeader( int field_2_cbHeader )
-    {
+    public void setCbHeader(int field_2_cbHeader) {
         this.field_2_cbHeader = field_2_cbHeader;
     }
 
@@ -259,8 +248,7 @@ public abstract class PICFAbstractType
      * A signed integer that specifies the format of the picture data.
      */
     @Internal
-    public short getMm()
-    {
+    public short getMm() {
         return field_3_mm;
     }
 
@@ -268,8 +256,7 @@ public abstract class PICFAbstractType
      * A signed integer that specifies the format of the picture data.
      */
     @Internal
-    public void setMm( short field_3_mm )
-    {
+    public void setMm(short field_3_mm) {
         this.field_3_mm = field_3_mm;
     }
 
@@ -277,8 +264,7 @@ public abstract class PICFAbstractType
      * This field is unused and MUST be ignored.
      */
     @Internal
-    public short getXExt()
-    {
+    public short getXExt() {
         return field_4_xExt;
     }
 
@@ -286,8 +272,7 @@ public abstract class PICFAbstractType
      * This field is unused and MUST be ignored.
      */
     @Internal
-    public void setXExt( short field_4_xExt )
-    {
+    public void setXExt(short field_4_xExt) {
         this.field_4_xExt = field_4_xExt;
     }
 
@@ -295,8 +280,7 @@ public abstract class PICFAbstractType
      * This field is unused and MUST be ignored.
      */
     @Internal
-    public short getYExt()
-    {
+    public short getYExt() {
         return field_5_yExt;
     }
 
@@ -304,8 +288,7 @@ public abstract class PICFAbstractType
      * This field is unused and MUST be ignored.
      */
     @Internal
-    public void setYExt( short field_5_yExt )
-    {
+    public void setYExt(short field_5_yExt) {
         this.field_5_yExt = field_5_yExt;
     }
 
@@ -313,8 +296,7 @@ public abstract class PICFAbstractType
      * This field is unused and MUST be ignored.
      */
     @Internal
-    public short getSwHMF()
-    {
+    public short getSwHMF() {
         return field_6_swHMF;
     }
 
@@ -322,8 +304,7 @@ public abstract class PICFAbstractType
      * This field is unused and MUST be ignored.
      */
     @Internal
-    public void setSwHMF( short field_6_swHMF )
-    {
+    public void setSwHMF(short field_6_swHMF) {
         this.field_6_swHMF = field_6_swHMF;
     }
 
@@ -331,8 +312,7 @@ public abstract class PICFAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public int getGrf()
-    {
+    public int getGrf() {
         return field_7_grf;
     }
 
@@ -340,8 +320,7 @@ public abstract class PICFAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public void setGrf( int field_7_grf )
-    {
+    public void setGrf(int field_7_grf) {
         this.field_7_grf = field_7_grf;
     }
 
@@ -349,8 +328,7 @@ public abstract class PICFAbstractType
      * This value MUST be zero and MUST be ignored.
      */
     @Internal
-    public int getPadding()
-    {
+    public int getPadding() {
         return field_8_padding;
     }
 
@@ -358,8 +336,7 @@ public abstract class PICFAbstractType
      * This value MUST be zero and MUST be ignored.
      */
     @Internal
-    public void setPadding( int field_8_padding )
-    {
+    public void setPadding(int field_8_padding) {
         this.field_8_padding = field_8_padding;
     }
 
@@ -367,8 +344,7 @@ public abstract class PICFAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public int getMmPM()
-    {
+    public int getMmPM() {
         return field_9_mmPM;
     }
 
@@ -376,8 +352,7 @@ public abstract class PICFAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public void setMmPM( int field_9_mmPM )
-    {
+    public void setMmPM(int field_9_mmPM) {
         this.field_9_mmPM = field_9_mmPM;
     }
 
@@ -385,8 +360,7 @@ public abstract class PICFAbstractType
      * This value MUST be zero and MUST be ignored.
      */
     @Internal
-    public int getPadding2()
-    {
+    public int getPadding2() {
         return field_10_padding2;
     }
 
@@ -394,8 +368,7 @@ public abstract class PICFAbstractType
      * This value MUST be zero and MUST be ignored.
      */
     @Internal
-    public void setPadding2( int field_10_padding2 )
-    {
+    public void setPadding2(int field_10_padding2) {
         this.field_10_padding2 = field_10_padding2;
     }
 
@@ -403,8 +376,7 @@ public abstract class PICFAbstractType
      * Get the dxaGoal field for the PICF record.
      */
     @Internal
-    public short getDxaGoal()
-    {
+    public short getDxaGoal() {
         return field_11_dxaGoal;
     }
 
@@ -412,8 +384,7 @@ public abstract class PICFAbstractType
      * Set the dxaGoal field for the PICF record.
      */
     @Internal
-    public void setDxaGoal( short field_11_dxaGoal )
-    {
+    public void setDxaGoal(short field_11_dxaGoal) {
         this.field_11_dxaGoal = field_11_dxaGoal;
     }
 
@@ -421,8 +392,7 @@ public abstract class PICFAbstractType
      * Get the dyaGoal field for the PICF record.
      */
     @Internal
-    public short getDyaGoal()
-    {
+    public short getDyaGoal() {
         return field_12_dyaGoal;
     }
 
@@ -430,8 +400,7 @@ public abstract class PICFAbstractType
      * Set the dyaGoal field for the PICF record.
      */
     @Internal
-    public void setDyaGoal( short field_12_dyaGoal )
-    {
+    public void setDyaGoal(short field_12_dyaGoal) {
         this.field_12_dyaGoal = field_12_dyaGoal;
     }
 
@@ -439,8 +408,7 @@ public abstract class PICFAbstractType
      * Get the mx field for the PICF record.
      */
     @Internal
-    public int getMx()
-    {
+    public int getMx() {
         return field_13_mx;
     }
 
@@ -448,8 +416,7 @@ public abstract class PICFAbstractType
      * Set the mx field for the PICF record.
      */
     @Internal
-    public void setMx( int field_13_mx )
-    {
+    public void setMx(int field_13_mx) {
         this.field_13_mx = field_13_mx;
     }
 
@@ -457,8 +424,7 @@ public abstract class PICFAbstractType
      * Get the my field for the PICF record.
      */
     @Internal
-    public int getMy()
-    {
+    public int getMy() {
         return field_14_my;
     }
 
@@ -466,8 +432,7 @@ public abstract class PICFAbstractType
      * Set the my field for the PICF record.
      */
     @Internal
-    public void setMy( int field_14_my )
-    {
+    public void setMy(int field_14_my) {
         this.field_14_my = field_14_my;
     }
 
@@ -475,8 +440,7 @@ public abstract class PICFAbstractType
      * Get the dxaReserved1 field for the PICF record.
      */
     @Internal
-    public short getDxaReserved1()
-    {
+    public short getDxaReserved1() {
         return field_15_dxaReserved1;
     }
 
@@ -484,8 +448,7 @@ public abstract class PICFAbstractType
      * Set the dxaReserved1 field for the PICF record.
      */
     @Internal
-    public void setDxaReserved1( short field_15_dxaReserved1 )
-    {
+    public void setDxaReserved1(short field_15_dxaReserved1) {
         this.field_15_dxaReserved1 = field_15_dxaReserved1;
     }
 
@@ -493,8 +456,7 @@ public abstract class PICFAbstractType
      * Get the dyaReserved1 field for the PICF record.
      */
     @Internal
-    public short getDyaReserved1()
-    {
+    public short getDyaReserved1() {
         return field_16_dyaReserved1;
     }
 
@@ -502,8 +464,7 @@ public abstract class PICFAbstractType
      * Set the dyaReserved1 field for the PICF record.
      */
     @Internal
-    public void setDyaReserved1( short field_16_dyaReserved1 )
-    {
+    public void setDyaReserved1(short field_16_dyaReserved1) {
         this.field_16_dyaReserved1 = field_16_dyaReserved1;
     }
 
@@ -511,8 +472,7 @@ public abstract class PICFAbstractType
      * Get the dxaReserved2 field for the PICF record.
      */
     @Internal
-    public short getDxaReserved2()
-    {
+    public short getDxaReserved2() {
         return field_17_dxaReserved2;
     }
 
@@ -520,8 +480,7 @@ public abstract class PICFAbstractType
      * Set the dxaReserved2 field for the PICF record.
      */
     @Internal
-    public void setDxaReserved2( short field_17_dxaReserved2 )
-    {
+    public void setDxaReserved2(short field_17_dxaReserved2) {
         this.field_17_dxaReserved2 = field_17_dxaReserved2;
     }
 
@@ -529,8 +488,7 @@ public abstract class PICFAbstractType
      * Get the dyaReserved2 field for the PICF record.
      */
     @Internal
-    public short getDyaReserved2()
-    {
+    public short getDyaReserved2() {
         return field_18_dyaReserved2;
     }
 
@@ -538,8 +496,7 @@ public abstract class PICFAbstractType
      * Set the dyaReserved2 field for the PICF record.
      */
     @Internal
-    public void setDyaReserved2( short field_18_dyaReserved2 )
-    {
+    public void setDyaReserved2(short field_18_dyaReserved2) {
         this.field_18_dyaReserved2 = field_18_dyaReserved2;
     }
 
@@ -547,8 +504,7 @@ public abstract class PICFAbstractType
      * Get the fReserved field for the PICF record.
      */
     @Internal
-    public byte getFReserved()
-    {
+    public byte getFReserved() {
         return field_19_fReserved;
     }
 
@@ -556,8 +512,7 @@ public abstract class PICFAbstractType
      * Set the fReserved field for the PICF record.
      */
     @Internal
-    public void setFReserved( byte field_19_fReserved )
-    {
+    public void setFReserved(byte field_19_fReserved) {
         this.field_19_fReserved = field_19_fReserved;
     }
 
@@ -565,8 +520,7 @@ public abstract class PICFAbstractType
      * Get the bpp field for the PICF record.
      */
     @Internal
-    public byte getBpp()
-    {
+    public byte getBpp() {
         return field_20_bpp;
     }
 
@@ -574,8 +528,7 @@ public abstract class PICFAbstractType
      * Set the bpp field for the PICF record.
      */
     @Internal
-    public void setBpp( byte field_20_bpp )
-    {
+    public void setBpp(byte field_20_bpp) {
         this.field_20_bpp = field_20_bpp;
     }
 
@@ -583,8 +536,7 @@ public abstract class PICFAbstractType
      * Get the brcTop80 field for the PICF record.
      */
     @Internal
-    public byte[] getBrcTop80()
-    {
+    public byte[] getBrcTop80() {
         return field_21_brcTop80;
     }
 
@@ -592,8 +544,7 @@ public abstract class PICFAbstractType
      * Set the brcTop80 field for the PICF record.
      */
     @Internal
-    public void setBrcTop80( byte[] field_21_brcTop80 )
-    {
+    public void setBrcTop80(byte[] field_21_brcTop80) {
         this.field_21_brcTop80 = field_21_brcTop80;
     }
 
@@ -601,8 +552,7 @@ public abstract class PICFAbstractType
      * Get the brcLeft80 field for the PICF record.
      */
     @Internal
-    public byte[] getBrcLeft80()
-    {
+    public byte[] getBrcLeft80() {
         return field_22_brcLeft80;
     }
 
@@ -610,8 +560,7 @@ public abstract class PICFAbstractType
      * Set the brcLeft80 field for the PICF record.
      */
     @Internal
-    public void setBrcLeft80( byte[] field_22_brcLeft80 )
-    {
+    public void setBrcLeft80(byte[] field_22_brcLeft80) {
         this.field_22_brcLeft80 = field_22_brcLeft80;
     }
 
@@ -619,8 +568,7 @@ public abstract class PICFAbstractType
      * Get the brcBottom80 field for the PICF record.
      */
     @Internal
-    public byte[] getBrcBottom80()
-    {
+    public byte[] getBrcBottom80() {
         return field_23_brcBottom80;
     }
 
@@ -628,8 +576,7 @@ public abstract class PICFAbstractType
      * Set the brcBottom80 field for the PICF record.
      */
     @Internal
-    public void setBrcBottom80( byte[] field_23_brcBottom80 )
-    {
+    public void setBrcBottom80(byte[] field_23_brcBottom80) {
         this.field_23_brcBottom80 = field_23_brcBottom80;
     }
 
@@ -637,8 +584,7 @@ public abstract class PICFAbstractType
      * Get the brcRight80 field for the PICF record.
      */
     @Internal
-    public byte[] getBrcRight80()
-    {
+    public byte[] getBrcRight80() {
         return field_24_brcRight80;
     }
 
@@ -646,8 +592,7 @@ public abstract class PICFAbstractType
      * Set the brcRight80 field for the PICF record.
      */
     @Internal
-    public void setBrcRight80( byte[] field_24_brcRight80 )
-    {
+    public void setBrcRight80(byte[] field_24_brcRight80) {
         this.field_24_brcRight80 = field_24_brcRight80;
     }
 
@@ -655,8 +600,7 @@ public abstract class PICFAbstractType
      * Get the dxaReserved3 field for the PICF record.
      */
     @Internal
-    public short getDxaReserved3()
-    {
+    public short getDxaReserved3() {
         return field_25_dxaReserved3;
     }
 
@@ -664,8 +608,7 @@ public abstract class PICFAbstractType
      * Set the dxaReserved3 field for the PICF record.
      */
     @Internal
-    public void setDxaReserved3( short field_25_dxaReserved3 )
-    {
+    public void setDxaReserved3(short field_25_dxaReserved3) {
         this.field_25_dxaReserved3 = field_25_dxaReserved3;
     }
 
@@ -673,8 +616,7 @@ public abstract class PICFAbstractType
      * Get the dyaReserved3 field for the PICF record.
      */
     @Internal
-    public short getDyaReserved3()
-    {
+    public short getDyaReserved3() {
         return field_26_dyaReserved3;
     }
 
@@ -682,8 +624,7 @@ public abstract class PICFAbstractType
      * Set the dyaReserved3 field for the PICF record.
      */
     @Internal
-    public void setDyaReserved3( short field_26_dyaReserved3 )
-    {
+    public void setDyaReserved3(short field_26_dyaReserved3) {
         this.field_26_dyaReserved3 = field_26_dyaReserved3;
     }
 
@@ -691,8 +632,7 @@ public abstract class PICFAbstractType
      * This value MUST be 0 and MUST be ignored.
      */
     @Internal
-    public short getCProps()
-    {
+    public short getCProps() {
         return field_27_cProps;
     }
 
@@ -700,8 +640,7 @@ public abstract class PICFAbstractType
      * This value MUST be 0 and MUST be ignored.
      */
     @Internal
-    public void setCProps( short field_27_cProps )
-    {
+    public void setCProps(short field_27_cProps) {
         this.field_27_cProps = field_27_cProps;
     }
 

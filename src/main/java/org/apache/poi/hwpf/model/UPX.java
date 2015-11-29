@@ -17,38 +17,33 @@
 
 package org.apache.poi.hwpf.model;
 
-import java.util.Arrays;
-
 import org.apache.poi.util.Internal;
 
+import java.util.Arrays;
+
 @Internal
-public final class UPX
-{
-  private byte[] _upx;
+public final class UPX {
+    private byte[] _upx;
 
-  public UPX(byte[] upx)
-  {
-    _upx = upx;
-  }
+    public UPX(byte[] upx) {
+        _upx = upx;
+    }
 
-  public byte[] getUPX()
-  {
-    return _upx;
-  }
-  public int size()
-  {
-    return _upx.length;
-  }
+    public byte[] getUPX() {
+        return _upx;
+    }
 
-  public boolean equals(Object o)
-  {
-    UPX upx = (UPX)o;
-    return Arrays.equals(_upx, upx._upx);
-  }
+    public int size() {
+        return _upx.length;
+    }
+
+    public boolean equals(Object o) {
+        UPX upx = (UPX) o;
+        return Arrays.equals(_upx, upx._upx);
+    }
 
     @Override
-    public String toString()
-    {
-        return "[UPX] " + Arrays.toString( _upx );
+    public String toString() {
+        return "[UPX] " + Arrays.toString(_upx);
     }
 }

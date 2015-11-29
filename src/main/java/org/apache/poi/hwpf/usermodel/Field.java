@@ -16,39 +16,38 @@
 ==================================================================== */
 package org.apache.poi.hwpf.usermodel;
 
-public interface Field
-{
+public interface Field {
 
-    Range firstSubrange( Range parent );
+    Range firstSubrange(Range parent);
 
     /**
      * @return character position of first character after field (i.e.
-     *         {@link #getMarkEndOffset()} + 1)
+     * {@link #getMarkEndOffset()} + 1)
      */
     int getFieldEndOffset();
 
     /**
      * @return character position of first character in field (i.e.
-     *         {@link #getFieldStartOffset()})
+     * {@link #getFieldStartOffset()})
      */
     int getFieldStartOffset();
 
-    CharacterRun getMarkEndCharacterRun( Range parent );
+    CharacterRun getMarkEndCharacterRun(Range parent);
 
     /**
      * @return character position of end field mark
      */
     int getMarkEndOffset();
 
-    CharacterRun getMarkSeparatorCharacterRun( Range parent );
+    CharacterRun getMarkSeparatorCharacterRun(Range parent);
 
     /**
      * @return character position of separator field mark (if present,
-     *         {@link NullPointerException} otherwise)
+     * {@link NullPointerException} otherwise)
      */
     int getMarkSeparatorOffset();
 
-    CharacterRun getMarkStartCharacterRun( Range parent );
+    CharacterRun getMarkStartCharacterRun(Range parent);
 
     /**
      * @return character position of start field mark
@@ -73,5 +72,5 @@ public interface Field
 
     boolean isZombieEmbed();
 
-    Range secondSubrange( Range parent );
+    Range secondSubrange(Range parent);
 }

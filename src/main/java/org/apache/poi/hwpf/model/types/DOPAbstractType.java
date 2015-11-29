@@ -26,26 +26,21 @@ import org.apache.poi.util.LittleEndian;
 /**
  * Document Properties.
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/records/definitions.
+ * remove the record in src/records/definitions.
  *
  * @author S. Ryan Ackley
  */
 @Internal
 public abstract class DOPAbstractType implements HDFType {
 
-    protected byte field_1_formatFlags;
     /**/private static BitField fFacingPages = new BitField(0x01);
     /**/private static BitField fWidowControl = new BitField(0x02);
     /**/private static BitField fPMHMainDoc = new BitField(0x04);
     /**/private static BitField grfSupression = new BitField(0x18);
     /**/private static BitField fpc = new BitField(0x60);
     /**/private static BitField unused1 = new BitField(0x80);
-    protected byte field_2_unused2;
-    protected short field_3_footnoteInfo;
     /**/private static BitField rncFtn = new BitField(0x0003);
     /**/private static BitField nFtn = new BitField(0xfffc);
-    protected byte field_4_fOutlineDirtySave;
-    protected byte field_5_docinfo;
     /**/private static BitField fOnlyMacPics = new BitField(0x01);
     /**/private static BitField fOnlyWinPics = new BitField(0x02);
     /**/private static BitField fLabelDoc = new BitField(0x04);
@@ -54,7 +49,6 @@ public abstract class DOPAbstractType implements HDFType {
     /**/private static BitField fFormNoFields = new BitField(0x20);
     /**/private static BitField fLinkStyles = new BitField(0x40);
     /**/private static BitField fRevMarking = new BitField(0x80);
-    protected byte field_6_docinfo1;
     /**/private static BitField fBackup = new BitField(0x01);
     /**/private static BitField fExactCWords = new BitField(0x02);
     /**/private static BitField fPagHidden = new BitField(0x04);
@@ -63,7 +57,6 @@ public abstract class DOPAbstractType implements HDFType {
     /**/private static BitField fMirrorMargins = new BitField(0x20);
     /**/private static BitField unused3 = new BitField(0x40);
     /**/private static BitField fDfltTrueType = new BitField(0x80);
-    protected byte field_7_docinfo2;
     /**/private static BitField fPagSupressTopSpacing = new BitField(0x01);
     /**/private static BitField fProtEnabled = new BitField(0x02);
     /**/private static BitField fDispFormFldSel = new BitField(0x04);
@@ -72,7 +65,6 @@ public abstract class DOPAbstractType implements HDFType {
     /**/private static BitField unused4 = new BitField(0x20);
     /**/private static BitField fLockRev = new BitField(0x40);
     /**/private static BitField fEmbedFonts = new BitField(0x80);
-    protected short field_8_docinfo3;
     /**/private static BitField oldfNoTabForInd = new BitField(0x0001);
     /**/private static BitField oldfNoSpaceRaiseLower = new BitField(0x0002);
     /**/private static BitField oldfSuppressSpbfAfterPageBreak = new BitField(0x0004);
@@ -86,24 +78,8 @@ public abstract class DOPAbstractType implements HDFType {
     /**/private static BitField oldfShowBreaksInFrames = new BitField(0x0400);
     /**/private static BitField oldfSwapBordersFacingPgs = new BitField(0x0800);
     /**/private static BitField unused5 = new BitField(0xf000);
-    protected int field_9_dxaTab;
-    protected int field_10_wSpare;
-    protected int field_11_dxaHotz;
-    protected int field_12_cConsexHypLim;
-    protected int field_13_wSpare2;
-    protected int field_14_dttmCreated;
-    protected int field_15_dttmRevised;
-    protected int field_16_dttmLastPrint;
-    protected int field_17_nRevision;
-    protected int field_18_tmEdited;
-    protected int field_19_cWords;
-    protected int field_20_cCh;
-    protected int field_21_cPg;
-    protected int field_22_cParas;
-    protected short field_23_Edn;
     /**/private static BitField rncEdn = new BitField(0x0003);
     /**/private static BitField nEdn = new BitField(0xfffc);
-    protected short field_24_Edn1;
     /**/private static BitField epc = new BitField(0x0003);
     /**/private static BitField nfcFtnRef1 = new BitField(0x003c);
     /**/private static BitField nfcEdnRef1 = new BitField(0x03c0);
@@ -111,20 +87,11 @@ public abstract class DOPAbstractType implements HDFType {
     /**/private static BitField fSaveFormData = new BitField(0x0800);
     /**/private static BitField fShadeFormData = new BitField(0x1000);
     /**/private static BitField fWCFtnEdn = new BitField(0x8000);
-    protected int field_25_cLines;
-    protected int field_26_cWordsFtnEnd;
-    protected int field_27_cChFtnEdn;
-    protected short field_28_cPgFtnEdn;
-    protected int field_29_cParasFtnEdn;
-    protected int field_30_cLinesFtnEdn;
-    protected int field_31_lKeyProtDoc;
-    protected short field_32_view;
     /**/private static BitField wvkSaved = new BitField(0x0007);
     /**/private static BitField wScaleSaved = new BitField(0x0ff8);
     /**/private static BitField zkSaved = new BitField(0x3000);
     /**/private static BitField fRotateFontW6 = new BitField(0x4000);
     /**/private static BitField iGutterPos = new BitField(0x8000);
-    protected int field_33_docinfo4;
     /**/private static BitField fNoTabForInd = new BitField(0x00000001);
     /**/private static BitField fNoSpaceRaiseLower = new BitField(0x00000002);
     /**/private static BitField fSupressSpdfAfterPageBreak = new BitField(0x00000004);
@@ -142,10 +109,6 @@ public abstract class DOPAbstractType implements HDFType {
     /**/private static BitField fPrintBodyBeforeHdr = new BitField(0x00040000);
     /**/private static BitField fNoLeading = new BitField(0x00080000);
     /**/private static BitField fMWSmallCaps = new BitField(0x00200000);
-    protected short field_34_adt;
-    protected byte[] field_35_doptypography;
-    protected byte[] field_36_dogrid;
-    protected short field_37_docinfo5;
     /**/private static BitField lvl = new BitField(0x001e);
     /**/private static BitField fGramAllDone = new BitField(0x0020);
     /**/private static BitField fGramAllClean = new BitField(0x0040);
@@ -157,17 +120,54 @@ public abstract class DOPAbstractType implements HDFType {
     /**/private static BitField fIncludeFooter = new BitField(0x2000);
     /**/private static BitField fForcePageSizePag = new BitField(0x4000);
     /**/private static BitField fMinFontSizePag = new BitField(0x8000);
-    protected short field_38_docinfo6;
     /**/private static BitField fHaveVersions = new BitField(0x0001);
     /**/private static BitField fAutoVersions = new BitField(0x0002);
+    /**/private static BitField fVirusPrompted = new BitField(0x0001);
+    /**/private static BitField fVirusLoadSafe = new BitField(0x0002);
+    /**/private static BitField KeyVirusSession30 = new BitField(0xfffffffc);
+    protected byte field_1_formatFlags;
+    protected byte field_2_unused2;
+    protected short field_3_footnoteInfo;
+    protected byte field_4_fOutlineDirtySave;
+    protected byte field_5_docinfo;
+    protected byte field_6_docinfo1;
+    protected byte field_7_docinfo2;
+    protected short field_8_docinfo3;
+    protected int field_9_dxaTab;
+    protected int field_10_wSpare;
+    protected int field_11_dxaHotz;
+    protected int field_12_cConsexHypLim;
+    protected int field_13_wSpare2;
+    protected int field_14_dttmCreated;
+    protected int field_15_dttmRevised;
+    protected int field_16_dttmLastPrint;
+    protected int field_17_nRevision;
+    protected int field_18_tmEdited;
+    protected int field_19_cWords;
+    protected int field_20_cCh;
+    protected int field_21_cPg;
+    protected int field_22_cParas;
+    protected short field_23_Edn;
+    protected short field_24_Edn1;
+    protected int field_25_cLines;
+    protected int field_26_cWordsFtnEnd;
+    protected int field_27_cChFtnEdn;
+    protected short field_28_cPgFtnEdn;
+    protected int field_29_cParasFtnEdn;
+    protected int field_30_cLinesFtnEdn;
+    protected int field_31_lKeyProtDoc;
+    protected short field_32_view;
+    protected int field_33_docinfo4;
+    protected short field_34_adt;
+    protected byte[] field_35_doptypography;
+    protected byte[] field_36_dogrid;
+    protected short field_37_docinfo5;
+    protected short field_38_docinfo6;
     protected byte[] field_39_asumyi;
     protected int field_40_cChWS;
     protected int field_41_cChWSFtnEdn;
     protected int field_42_grfDocEvents;
     protected int field_43_virusinfo;
-    /**/private static BitField fVirusPrompted = new BitField(0x0001);
-    /**/private static BitField fVirusLoadSafe = new BitField(0x0002);
-    /**/private static BitField KeyVirusSession30 = new BitField(0xfffffffc);
     protected byte[] field_44_Spare;
     protected int field_45_reserved1;
     protected int field_46_reserved2;
@@ -179,111 +179,115 @@ public abstract class DOPAbstractType implements HDFType {
     protected short field_52_hpsZoonFontPag;
     protected short field_53_dywDispPag;
 
-    protected DOPAbstractType()
-    {
+    protected DOPAbstractType() {
         this.field_35_doptypography = new byte[0];
         this.field_36_dogrid = new byte[0];
         this.field_39_asumyi = new byte[0];
         this.field_44_Spare = new byte[0];
     }
 
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_formatFlags            = data[ 0x0 + offset ];
-        field_2_unused2                = data[ 0x1 + offset ];
-        field_3_footnoteInfo           = LittleEndian.getShort(data, 0x2 + offset);
-        field_4_fOutlineDirtySave      = data[ 0x4 + offset ];
-        field_5_docinfo                = data[ 0x5 + offset ];
-        field_6_docinfo1               = data[ 0x6 + offset ];
-        field_7_docinfo2               = data[ 0x7 + offset ];
-        field_8_docinfo3               = LittleEndian.getShort(data, 0x8 + offset);
-        field_9_dxaTab                 = LittleEndian.getShort(data, 0xa + offset);
-        field_10_wSpare                = LittleEndian.getShort(data, 0xc + offset);
-        field_11_dxaHotz               = LittleEndian.getShort(data, 0xe + offset);
-        field_12_cConsexHypLim         = LittleEndian.getShort(data, 0x10 + offset);
-        field_13_wSpare2               = LittleEndian.getShort(data, 0x12 + offset);
-        field_14_dttmCreated           = LittleEndian.getInt(data, 0x14 + offset);
-        field_15_dttmRevised           = LittleEndian.getInt(data, 0x18 + offset);
-        field_16_dttmLastPrint         = LittleEndian.getInt(data, 0x1c + offset);
-        field_17_nRevision             = LittleEndian.getShort(data, 0x20 + offset);
-        field_18_tmEdited              = LittleEndian.getInt(data, 0x22 + offset);
-        field_19_cWords                = LittleEndian.getInt(data, 0x26 + offset);
-        field_20_cCh                   = LittleEndian.getInt(data, 0x2a + offset);
-        field_21_cPg                   = LittleEndian.getShort(data, 0x2e + offset);
-        field_22_cParas                = LittleEndian.getInt(data, 0x30 + offset);
-        field_23_Edn                   = LittleEndian.getShort(data, 0x34 + offset);
-        field_24_Edn1                  = LittleEndian.getShort(data, 0x36 + offset);
-        field_25_cLines                = LittleEndian.getInt(data, 0x38 + offset);
-        field_26_cWordsFtnEnd          = LittleEndian.getInt(data, 0x3c + offset);
-        field_27_cChFtnEdn             = LittleEndian.getInt(data, 0x40 + offset);
-        field_28_cPgFtnEdn             = LittleEndian.getShort(data, 0x44 + offset);
-        field_29_cParasFtnEdn          = LittleEndian.getInt(data, 0x46 + offset);
-        field_30_cLinesFtnEdn          = LittleEndian.getInt(data, 0x4a + offset);
-        field_31_lKeyProtDoc           = LittleEndian.getInt(data, 0x4e + offset);
-        field_32_view                  = LittleEndian.getShort(data, 0x52 + offset);
-        field_33_docinfo4              = LittleEndian.getInt(data, 0x54 + offset);
-        field_34_adt                   = LittleEndian.getShort(data, 0x58 + offset);
-        field_35_doptypography         = LittleEndian.getByteArray(data, 0x5a + offset,310);
-        field_36_dogrid                = LittleEndian.getByteArray(data, 0x190 + offset,10);
-        field_37_docinfo5              = LittleEndian.getShort(data, 0x19a + offset);
-        field_38_docinfo6              = LittleEndian.getShort(data, 0x19c + offset);
-        field_39_asumyi                = LittleEndian.getByteArray(data, 0x19e + offset,12);
-        field_40_cChWS                 = LittleEndian.getInt(data, 0x1aa + offset);
-        field_41_cChWSFtnEdn           = LittleEndian.getInt(data, 0x1ae + offset);
-        field_42_grfDocEvents          = LittleEndian.getInt(data, 0x1b2 + offset);
-        field_43_virusinfo             = LittleEndian.getInt(data, 0x1b6 + offset);
-        field_44_Spare                 = LittleEndian.getByteArray(data, 0x1ba + offset,30);
-        field_45_reserved1             = LittleEndian.getInt(data, 0x1d8 + offset);
-        field_46_reserved2             = LittleEndian.getInt(data, 0x1dc + offset);
-        field_47_cDBC                  = LittleEndian.getInt(data, 0x1e0 + offset);
-        field_48_cDBCFtnEdn            = LittleEndian.getInt(data, 0x1e4 + offset);
-        field_49_reserved              = LittleEndian.getInt(data, 0x1e8 + offset);
-        field_50_nfcFtnRef             = LittleEndian.getShort(data, 0x1ec + offset);
-        field_51_nfcEdnRef             = LittleEndian.getShort(data, 0x1ee + offset);
-        field_52_hpsZoonFontPag        = LittleEndian.getShort(data, 0x1f0 + offset);
-        field_53_dywDispPag            = LittleEndian.getShort(data, 0x1f2 + offset);
+    /**
+     * Size of record
+     */
+    public static int getSize() {
+        return 0 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 2 + 4 + 2 + 2 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 2 + 4 + 2 + 310 + 10 + 2 + 2 + 12 + 4 + 4 + 4 + 4 + 30 + 4 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2;
     }
 
-    public void serialize( byte[] data, int offset )
-    {
-        data[ 0x0 + offset] = field_1_formatFlags;
-        data[ 0x1 + offset] = field_2_unused2;
-        LittleEndian.putShort(data, 0x2 + offset, (short)field_3_footnoteInfo);
-        data[ 0x4 + offset] = field_4_fOutlineDirtySave;
-        data[ 0x5 + offset] = field_5_docinfo;
-        data[ 0x6 + offset] = field_6_docinfo1;
-        data[ 0x7 + offset] = field_7_docinfo2;
-        LittleEndian.putShort(data, 0x8 + offset, (short)field_8_docinfo3);
-        LittleEndian.putShort(data, 0xa + offset, (short)field_9_dxaTab);
-        LittleEndian.putShort(data, 0xc + offset, (short)field_10_wSpare);
-        LittleEndian.putShort(data, 0xe + offset, (short)field_11_dxaHotz);
-        LittleEndian.putShort(data, 0x10 + offset, (short)field_12_cConsexHypLim);
-        LittleEndian.putShort(data, 0x12 + offset, (short)field_13_wSpare2);
+    protected void fillFields(byte[] data, int offset) {
+        field_1_formatFlags = data[0x0 + offset];
+        field_2_unused2 = data[0x1 + offset];
+        field_3_footnoteInfo = LittleEndian.getShort(data, 0x2 + offset);
+        field_4_fOutlineDirtySave = data[0x4 + offset];
+        field_5_docinfo = data[0x5 + offset];
+        field_6_docinfo1 = data[0x6 + offset];
+        field_7_docinfo2 = data[0x7 + offset];
+        field_8_docinfo3 = LittleEndian.getShort(data, 0x8 + offset);
+        field_9_dxaTab = LittleEndian.getShort(data, 0xa + offset);
+        field_10_wSpare = LittleEndian.getShort(data, 0xc + offset);
+        field_11_dxaHotz = LittleEndian.getShort(data, 0xe + offset);
+        field_12_cConsexHypLim = LittleEndian.getShort(data, 0x10 + offset);
+        field_13_wSpare2 = LittleEndian.getShort(data, 0x12 + offset);
+        field_14_dttmCreated = LittleEndian.getInt(data, 0x14 + offset);
+        field_15_dttmRevised = LittleEndian.getInt(data, 0x18 + offset);
+        field_16_dttmLastPrint = LittleEndian.getInt(data, 0x1c + offset);
+        field_17_nRevision = LittleEndian.getShort(data, 0x20 + offset);
+        field_18_tmEdited = LittleEndian.getInt(data, 0x22 + offset);
+        field_19_cWords = LittleEndian.getInt(data, 0x26 + offset);
+        field_20_cCh = LittleEndian.getInt(data, 0x2a + offset);
+        field_21_cPg = LittleEndian.getShort(data, 0x2e + offset);
+        field_22_cParas = LittleEndian.getInt(data, 0x30 + offset);
+        field_23_Edn = LittleEndian.getShort(data, 0x34 + offset);
+        field_24_Edn1 = LittleEndian.getShort(data, 0x36 + offset);
+        field_25_cLines = LittleEndian.getInt(data, 0x38 + offset);
+        field_26_cWordsFtnEnd = LittleEndian.getInt(data, 0x3c + offset);
+        field_27_cChFtnEdn = LittleEndian.getInt(data, 0x40 + offset);
+        field_28_cPgFtnEdn = LittleEndian.getShort(data, 0x44 + offset);
+        field_29_cParasFtnEdn = LittleEndian.getInt(data, 0x46 + offset);
+        field_30_cLinesFtnEdn = LittleEndian.getInt(data, 0x4a + offset);
+        field_31_lKeyProtDoc = LittleEndian.getInt(data, 0x4e + offset);
+        field_32_view = LittleEndian.getShort(data, 0x52 + offset);
+        field_33_docinfo4 = LittleEndian.getInt(data, 0x54 + offset);
+        field_34_adt = LittleEndian.getShort(data, 0x58 + offset);
+        field_35_doptypography = LittleEndian.getByteArray(data, 0x5a + offset, 310);
+        field_36_dogrid = LittleEndian.getByteArray(data, 0x190 + offset, 10);
+        field_37_docinfo5 = LittleEndian.getShort(data, 0x19a + offset);
+        field_38_docinfo6 = LittleEndian.getShort(data, 0x19c + offset);
+        field_39_asumyi = LittleEndian.getByteArray(data, 0x19e + offset, 12);
+        field_40_cChWS = LittleEndian.getInt(data, 0x1aa + offset);
+        field_41_cChWSFtnEdn = LittleEndian.getInt(data, 0x1ae + offset);
+        field_42_grfDocEvents = LittleEndian.getInt(data, 0x1b2 + offset);
+        field_43_virusinfo = LittleEndian.getInt(data, 0x1b6 + offset);
+        field_44_Spare = LittleEndian.getByteArray(data, 0x1ba + offset, 30);
+        field_45_reserved1 = LittleEndian.getInt(data, 0x1d8 + offset);
+        field_46_reserved2 = LittleEndian.getInt(data, 0x1dc + offset);
+        field_47_cDBC = LittleEndian.getInt(data, 0x1e0 + offset);
+        field_48_cDBCFtnEdn = LittleEndian.getInt(data, 0x1e4 + offset);
+        field_49_reserved = LittleEndian.getInt(data, 0x1e8 + offset);
+        field_50_nfcFtnRef = LittleEndian.getShort(data, 0x1ec + offset);
+        field_51_nfcEdnRef = LittleEndian.getShort(data, 0x1ee + offset);
+        field_52_hpsZoonFontPag = LittleEndian.getShort(data, 0x1f0 + offset);
+        field_53_dywDispPag = LittleEndian.getShort(data, 0x1f2 + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        data[0x0 + offset] = field_1_formatFlags;
+        data[0x1 + offset] = field_2_unused2;
+        LittleEndian.putShort(data, 0x2 + offset, (short) field_3_footnoteInfo);
+        data[0x4 + offset] = field_4_fOutlineDirtySave;
+        data[0x5 + offset] = field_5_docinfo;
+        data[0x6 + offset] = field_6_docinfo1;
+        data[0x7 + offset] = field_7_docinfo2;
+        LittleEndian.putShort(data, 0x8 + offset, (short) field_8_docinfo3);
+        LittleEndian.putShort(data, 0xa + offset, (short) field_9_dxaTab);
+        LittleEndian.putShort(data, 0xc + offset, (short) field_10_wSpare);
+        LittleEndian.putShort(data, 0xe + offset, (short) field_11_dxaHotz);
+        LittleEndian.putShort(data, 0x10 + offset, (short) field_12_cConsexHypLim);
+        LittleEndian.putShort(data, 0x12 + offset, (short) field_13_wSpare2);
         LittleEndian.putInt(data, 0x14 + offset, field_14_dttmCreated);
         LittleEndian.putInt(data, 0x18 + offset, field_15_dttmRevised);
         LittleEndian.putInt(data, 0x1c + offset, field_16_dttmLastPrint);
-        LittleEndian.putShort(data, 0x20 + offset, (short)field_17_nRevision);
+        LittleEndian.putShort(data, 0x20 + offset, (short) field_17_nRevision);
         LittleEndian.putInt(data, 0x22 + offset, field_18_tmEdited);
         LittleEndian.putInt(data, 0x26 + offset, field_19_cWords);
         LittleEndian.putInt(data, 0x2a + offset, field_20_cCh);
-        LittleEndian.putShort(data, 0x2e + offset, (short)field_21_cPg);
+        LittleEndian.putShort(data, 0x2e + offset, (short) field_21_cPg);
         LittleEndian.putInt(data, 0x30 + offset, field_22_cParas);
-        LittleEndian.putShort(data, 0x34 + offset, (short)field_23_Edn);
-        LittleEndian.putShort(data, 0x36 + offset, (short)field_24_Edn1);
+        LittleEndian.putShort(data, 0x34 + offset, (short) field_23_Edn);
+        LittleEndian.putShort(data, 0x36 + offset, (short) field_24_Edn1);
         LittleEndian.putInt(data, 0x38 + offset, field_25_cLines);
         LittleEndian.putInt(data, 0x3c + offset, field_26_cWordsFtnEnd);
         LittleEndian.putInt(data, 0x40 + offset, field_27_cChFtnEdn);
-        LittleEndian.putShort(data, 0x44 + offset, (short)field_28_cPgFtnEdn);
+        LittleEndian.putShort(data, 0x44 + offset, (short) field_28_cPgFtnEdn);
         LittleEndian.putInt(data, 0x46 + offset, field_29_cParasFtnEdn);
         LittleEndian.putInt(data, 0x4a + offset, field_30_cLinesFtnEdn);
         LittleEndian.putInt(data, 0x4e + offset, field_31_lKeyProtDoc);
-        LittleEndian.putShort(data, 0x52 + offset, (short)field_32_view);
+        LittleEndian.putShort(data, 0x52 + offset, (short) field_32_view);
         LittleEndian.putInt(data, 0x54 + offset, field_33_docinfo4);
-        LittleEndian.putShort(data, 0x58 + offset, (short)field_34_adt);
+        LittleEndian.putShort(data, 0x58 + offset, (short) field_34_adt);
         System.arraycopy(field_35_doptypography, 0, data, 0x5a + offset, field_35_doptypography.length);
         System.arraycopy(field_36_dogrid, 0, data, 0x190 + offset, field_36_dogrid.length);
-        LittleEndian.putShort(data, 0x19a + offset, (short)field_37_docinfo5);
-        LittleEndian.putShort(data, 0x19c + offset, (short)field_38_docinfo6);
+        LittleEndian.putShort(data, 0x19a + offset, (short) field_37_docinfo5);
+        LittleEndian.putShort(data, 0x19c + offset, (short) field_38_docinfo6);
         System.arraycopy(field_39_asumyi, 0, data, 0x19e + offset, field_39_asumyi.length);
         LittleEndian.putInt(data, 0x1aa + offset, field_40_cChWS);
         LittleEndian.putInt(data, 0x1ae + offset, field_41_cChWSFtnEdn);
@@ -295,22 +299,13 @@ public abstract class DOPAbstractType implements HDFType {
         LittleEndian.putInt(data, 0x1e0 + offset, field_47_cDBC);
         LittleEndian.putInt(data, 0x1e4 + offset, field_48_cDBCFtnEdn);
         LittleEndian.putInt(data, 0x1e8 + offset, field_49_reserved);
-        LittleEndian.putShort(data, 0x1ec + offset, (short)field_50_nfcFtnRef);
-        LittleEndian.putShort(data, 0x1ee + offset, (short)field_51_nfcEdnRef);
-        LittleEndian.putShort(data, 0x1f0 + offset, (short)field_52_hpsZoonFontPag);
-        LittleEndian.putShort(data, 0x1f2 + offset, (short)field_53_dywDispPag);
+        LittleEndian.putShort(data, 0x1ec + offset, (short) field_50_nfcFtnRef);
+        LittleEndian.putShort(data, 0x1ee + offset, (short) field_51_nfcEdnRef);
+        LittleEndian.putShort(data, 0x1f0 + offset, (short) field_52_hpsZoonFontPag);
+        LittleEndian.putShort(data, 0x1f2 + offset, (short) field_53_dywDispPag);
     }
 
-    /**
-     * Size of record
-     */
-    public static int getSize()
-    {
-        return 0 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 2 + 4 + 2 + 2 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 2 + 4 + 2 + 310 + 10 + 2 + 2 + 12 + 4 + 4 + 4 + 4 + 30 + 4 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2;
-    }
-
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[DOP]\n");
         builder.append("    .formatFlags          = ");
@@ -520,8 +515,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the formatFlags field for the DOP record.
      */
     @Internal
-    public byte getFormatFlags()
-    {
+    public byte getFormatFlags() {
         return field_1_formatFlags;
     }
 
@@ -529,8 +523,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the formatFlags field for the DOP record.
      */
     @Internal
-    public void setFormatFlags( byte field_1_formatFlags )
-    {
+    public void setFormatFlags(byte field_1_formatFlags) {
         this.field_1_formatFlags = field_1_formatFlags;
     }
 
@@ -538,8 +531,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the unused2 field for the DOP record.
      */
     @Internal
-    public byte getUnused2()
-    {
+    public byte getUnused2() {
         return field_2_unused2;
     }
 
@@ -547,8 +539,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the unused2 field for the DOP record.
      */
     @Internal
-    public void setUnused2( byte field_2_unused2 )
-    {
+    public void setUnused2(byte field_2_unused2) {
         this.field_2_unused2 = field_2_unused2;
     }
 
@@ -556,8 +547,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the footnoteInfo field for the DOP record.
      */
     @Internal
-    public short getFootnoteInfo()
-    {
+    public short getFootnoteInfo() {
         return field_3_footnoteInfo;
     }
 
@@ -565,8 +555,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the footnoteInfo field for the DOP record.
      */
     @Internal
-    public void setFootnoteInfo( short field_3_footnoteInfo )
-    {
+    public void setFootnoteInfo(short field_3_footnoteInfo) {
         this.field_3_footnoteInfo = field_3_footnoteInfo;
     }
 
@@ -574,8 +563,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the fOutlineDirtySave field for the DOP record.
      */
     @Internal
-    public byte getFOutlineDirtySave()
-    {
+    public byte getFOutlineDirtySave() {
         return field_4_fOutlineDirtySave;
     }
 
@@ -583,8 +571,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the fOutlineDirtySave field for the DOP record.
      */
     @Internal
-    public void setFOutlineDirtySave( byte field_4_fOutlineDirtySave )
-    {
+    public void setFOutlineDirtySave(byte field_4_fOutlineDirtySave) {
         this.field_4_fOutlineDirtySave = field_4_fOutlineDirtySave;
     }
 
@@ -592,8 +579,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the docinfo field for the DOP record.
      */
     @Internal
-    public byte getDocinfo()
-    {
+    public byte getDocinfo() {
         return field_5_docinfo;
     }
 
@@ -601,8 +587,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the docinfo field for the DOP record.
      */
     @Internal
-    public void setDocinfo( byte field_5_docinfo )
-    {
+    public void setDocinfo(byte field_5_docinfo) {
         this.field_5_docinfo = field_5_docinfo;
     }
 
@@ -610,8 +595,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the docinfo1 field for the DOP record.
      */
     @Internal
-    public byte getDocinfo1()
-    {
+    public byte getDocinfo1() {
         return field_6_docinfo1;
     }
 
@@ -619,8 +603,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the docinfo1 field for the DOP record.
      */
     @Internal
-    public void setDocinfo1( byte field_6_docinfo1 )
-    {
+    public void setDocinfo1(byte field_6_docinfo1) {
         this.field_6_docinfo1 = field_6_docinfo1;
     }
 
@@ -628,8 +611,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the docinfo2 field for the DOP record.
      */
     @Internal
-    public byte getDocinfo2()
-    {
+    public byte getDocinfo2() {
         return field_7_docinfo2;
     }
 
@@ -637,8 +619,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the docinfo2 field for the DOP record.
      */
     @Internal
-    public void setDocinfo2( byte field_7_docinfo2 )
-    {
+    public void setDocinfo2(byte field_7_docinfo2) {
         this.field_7_docinfo2 = field_7_docinfo2;
     }
 
@@ -646,8 +627,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the docinfo3 field for the DOP record.
      */
     @Internal
-    public short getDocinfo3()
-    {
+    public short getDocinfo3() {
         return field_8_docinfo3;
     }
 
@@ -655,8 +635,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the docinfo3 field for the DOP record.
      */
     @Internal
-    public void setDocinfo3( short field_8_docinfo3 )
-    {
+    public void setDocinfo3(short field_8_docinfo3) {
         this.field_8_docinfo3 = field_8_docinfo3;
     }
 
@@ -664,8 +643,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the dxaTab field for the DOP record.
      */
     @Internal
-    public int getDxaTab()
-    {
+    public int getDxaTab() {
         return field_9_dxaTab;
     }
 
@@ -673,8 +651,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the dxaTab field for the DOP record.
      */
     @Internal
-    public void setDxaTab( int field_9_dxaTab )
-    {
+    public void setDxaTab(int field_9_dxaTab) {
         this.field_9_dxaTab = field_9_dxaTab;
     }
 
@@ -682,8 +659,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the wSpare field for the DOP record.
      */
     @Internal
-    public int getWSpare()
-    {
+    public int getWSpare() {
         return field_10_wSpare;
     }
 
@@ -691,8 +667,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the wSpare field for the DOP record.
      */
     @Internal
-    public void setWSpare( int field_10_wSpare )
-    {
+    public void setWSpare(int field_10_wSpare) {
         this.field_10_wSpare = field_10_wSpare;
     }
 
@@ -700,8 +675,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the dxaHotz field for the DOP record.
      */
     @Internal
-    public int getDxaHotz()
-    {
+    public int getDxaHotz() {
         return field_11_dxaHotz;
     }
 
@@ -709,8 +683,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the dxaHotz field for the DOP record.
      */
     @Internal
-    public void setDxaHotz( int field_11_dxaHotz )
-    {
+    public void setDxaHotz(int field_11_dxaHotz) {
         this.field_11_dxaHotz = field_11_dxaHotz;
     }
 
@@ -718,8 +691,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cConsexHypLim field for the DOP record.
      */
     @Internal
-    public int getCConsexHypLim()
-    {
+    public int getCConsexHypLim() {
         return field_12_cConsexHypLim;
     }
 
@@ -727,8 +699,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cConsexHypLim field for the DOP record.
      */
     @Internal
-    public void setCConsexHypLim( int field_12_cConsexHypLim )
-    {
+    public void setCConsexHypLim(int field_12_cConsexHypLim) {
         this.field_12_cConsexHypLim = field_12_cConsexHypLim;
     }
 
@@ -736,8 +707,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the wSpare2 field for the DOP record.
      */
     @Internal
-    public int getWSpare2()
-    {
+    public int getWSpare2() {
         return field_13_wSpare2;
     }
 
@@ -745,8 +715,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the wSpare2 field for the DOP record.
      */
     @Internal
-    public void setWSpare2( int field_13_wSpare2 )
-    {
+    public void setWSpare2(int field_13_wSpare2) {
         this.field_13_wSpare2 = field_13_wSpare2;
     }
 
@@ -754,8 +723,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the dttmCreated field for the DOP record.
      */
     @Internal
-    public int getDttmCreated()
-    {
+    public int getDttmCreated() {
         return field_14_dttmCreated;
     }
 
@@ -763,8 +731,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the dttmCreated field for the DOP record.
      */
     @Internal
-    public void setDttmCreated( int field_14_dttmCreated )
-    {
+    public void setDttmCreated(int field_14_dttmCreated) {
         this.field_14_dttmCreated = field_14_dttmCreated;
     }
 
@@ -772,8 +739,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the dttmRevised field for the DOP record.
      */
     @Internal
-    public int getDttmRevised()
-    {
+    public int getDttmRevised() {
         return field_15_dttmRevised;
     }
 
@@ -781,8 +747,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the dttmRevised field for the DOP record.
      */
     @Internal
-    public void setDttmRevised( int field_15_dttmRevised )
-    {
+    public void setDttmRevised(int field_15_dttmRevised) {
         this.field_15_dttmRevised = field_15_dttmRevised;
     }
 
@@ -790,8 +755,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the dttmLastPrint field for the DOP record.
      */
     @Internal
-    public int getDttmLastPrint()
-    {
+    public int getDttmLastPrint() {
         return field_16_dttmLastPrint;
     }
 
@@ -799,8 +763,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the dttmLastPrint field for the DOP record.
      */
     @Internal
-    public void setDttmLastPrint( int field_16_dttmLastPrint )
-    {
+    public void setDttmLastPrint(int field_16_dttmLastPrint) {
         this.field_16_dttmLastPrint = field_16_dttmLastPrint;
     }
 
@@ -808,8 +771,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the nRevision field for the DOP record.
      */
     @Internal
-    public int getNRevision()
-    {
+    public int getNRevision() {
         return field_17_nRevision;
     }
 
@@ -817,8 +779,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the nRevision field for the DOP record.
      */
     @Internal
-    public void setNRevision( int field_17_nRevision )
-    {
+    public void setNRevision(int field_17_nRevision) {
         this.field_17_nRevision = field_17_nRevision;
     }
 
@@ -826,8 +787,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the tmEdited field for the DOP record.
      */
     @Internal
-    public int getTmEdited()
-    {
+    public int getTmEdited() {
         return field_18_tmEdited;
     }
 
@@ -835,8 +795,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the tmEdited field for the DOP record.
      */
     @Internal
-    public void setTmEdited( int field_18_tmEdited )
-    {
+    public void setTmEdited(int field_18_tmEdited) {
         this.field_18_tmEdited = field_18_tmEdited;
     }
 
@@ -844,8 +803,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cWords field for the DOP record.
      */
     @Internal
-    public int getCWords()
-    {
+    public int getCWords() {
         return field_19_cWords;
     }
 
@@ -853,8 +811,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cWords field for the DOP record.
      */
     @Internal
-    public void setCWords( int field_19_cWords )
-    {
+    public void setCWords(int field_19_cWords) {
         this.field_19_cWords = field_19_cWords;
     }
 
@@ -862,8 +819,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cCh field for the DOP record.
      */
     @Internal
-    public int getCCh()
-    {
+    public int getCCh() {
         return field_20_cCh;
     }
 
@@ -871,8 +827,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cCh field for the DOP record.
      */
     @Internal
-    public void setCCh( int field_20_cCh )
-    {
+    public void setCCh(int field_20_cCh) {
         this.field_20_cCh = field_20_cCh;
     }
 
@@ -880,8 +835,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cPg field for the DOP record.
      */
     @Internal
-    public int getCPg()
-    {
+    public int getCPg() {
         return field_21_cPg;
     }
 
@@ -889,8 +843,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cPg field for the DOP record.
      */
     @Internal
-    public void setCPg( int field_21_cPg )
-    {
+    public void setCPg(int field_21_cPg) {
         this.field_21_cPg = field_21_cPg;
     }
 
@@ -898,8 +851,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cParas field for the DOP record.
      */
     @Internal
-    public int getCParas()
-    {
+    public int getCParas() {
         return field_22_cParas;
     }
 
@@ -907,8 +859,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cParas field for the DOP record.
      */
     @Internal
-    public void setCParas( int field_22_cParas )
-    {
+    public void setCParas(int field_22_cParas) {
         this.field_22_cParas = field_22_cParas;
     }
 
@@ -916,8 +867,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the Edn field for the DOP record.
      */
     @Internal
-    public short getEdn()
-    {
+    public short getEdn() {
         return field_23_Edn;
     }
 
@@ -925,8 +875,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the Edn field for the DOP record.
      */
     @Internal
-    public void setEdn( short field_23_Edn )
-    {
+    public void setEdn(short field_23_Edn) {
         this.field_23_Edn = field_23_Edn;
     }
 
@@ -934,8 +883,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the Edn1 field for the DOP record.
      */
     @Internal
-    public short getEdn1()
-    {
+    public short getEdn1() {
         return field_24_Edn1;
     }
 
@@ -943,8 +891,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the Edn1 field for the DOP record.
      */
     @Internal
-    public void setEdn1( short field_24_Edn1 )
-    {
+    public void setEdn1(short field_24_Edn1) {
         this.field_24_Edn1 = field_24_Edn1;
     }
 
@@ -952,8 +899,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cLines field for the DOP record.
      */
     @Internal
-    public int getCLines()
-    {
+    public int getCLines() {
         return field_25_cLines;
     }
 
@@ -961,8 +907,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cLines field for the DOP record.
      */
     @Internal
-    public void setCLines( int field_25_cLines )
-    {
+    public void setCLines(int field_25_cLines) {
         this.field_25_cLines = field_25_cLines;
     }
 
@@ -970,8 +915,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cWordsFtnEnd field for the DOP record.
      */
     @Internal
-    public int getCWordsFtnEnd()
-    {
+    public int getCWordsFtnEnd() {
         return field_26_cWordsFtnEnd;
     }
 
@@ -979,8 +923,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cWordsFtnEnd field for the DOP record.
      */
     @Internal
-    public void setCWordsFtnEnd( int field_26_cWordsFtnEnd )
-    {
+    public void setCWordsFtnEnd(int field_26_cWordsFtnEnd) {
         this.field_26_cWordsFtnEnd = field_26_cWordsFtnEnd;
     }
 
@@ -988,8 +931,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cChFtnEdn field for the DOP record.
      */
     @Internal
-    public int getCChFtnEdn()
-    {
+    public int getCChFtnEdn() {
         return field_27_cChFtnEdn;
     }
 
@@ -997,8 +939,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cChFtnEdn field for the DOP record.
      */
     @Internal
-    public void setCChFtnEdn( int field_27_cChFtnEdn )
-    {
+    public void setCChFtnEdn(int field_27_cChFtnEdn) {
         this.field_27_cChFtnEdn = field_27_cChFtnEdn;
     }
 
@@ -1006,8 +947,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cPgFtnEdn field for the DOP record.
      */
     @Internal
-    public short getCPgFtnEdn()
-    {
+    public short getCPgFtnEdn() {
         return field_28_cPgFtnEdn;
     }
 
@@ -1015,8 +955,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cPgFtnEdn field for the DOP record.
      */
     @Internal
-    public void setCPgFtnEdn( short field_28_cPgFtnEdn )
-    {
+    public void setCPgFtnEdn(short field_28_cPgFtnEdn) {
         this.field_28_cPgFtnEdn = field_28_cPgFtnEdn;
     }
 
@@ -1024,8 +963,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cParasFtnEdn field for the DOP record.
      */
     @Internal
-    public int getCParasFtnEdn()
-    {
+    public int getCParasFtnEdn() {
         return field_29_cParasFtnEdn;
     }
 
@@ -1033,8 +971,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cParasFtnEdn field for the DOP record.
      */
     @Internal
-    public void setCParasFtnEdn( int field_29_cParasFtnEdn )
-    {
+    public void setCParasFtnEdn(int field_29_cParasFtnEdn) {
         this.field_29_cParasFtnEdn = field_29_cParasFtnEdn;
     }
 
@@ -1042,8 +979,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cLinesFtnEdn field for the DOP record.
      */
     @Internal
-    public int getCLinesFtnEdn()
-    {
+    public int getCLinesFtnEdn() {
         return field_30_cLinesFtnEdn;
     }
 
@@ -1051,8 +987,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cLinesFtnEdn field for the DOP record.
      */
     @Internal
-    public void setCLinesFtnEdn( int field_30_cLinesFtnEdn )
-    {
+    public void setCLinesFtnEdn(int field_30_cLinesFtnEdn) {
         this.field_30_cLinesFtnEdn = field_30_cLinesFtnEdn;
     }
 
@@ -1060,8 +995,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the lKeyProtDoc field for the DOP record.
      */
     @Internal
-    public int getLKeyProtDoc()
-    {
+    public int getLKeyProtDoc() {
         return field_31_lKeyProtDoc;
     }
 
@@ -1069,8 +1003,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the lKeyProtDoc field for the DOP record.
      */
     @Internal
-    public void setLKeyProtDoc( int field_31_lKeyProtDoc )
-    {
+    public void setLKeyProtDoc(int field_31_lKeyProtDoc) {
         this.field_31_lKeyProtDoc = field_31_lKeyProtDoc;
     }
 
@@ -1078,8 +1011,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the view field for the DOP record.
      */
     @Internal
-    public short getView()
-    {
+    public short getView() {
         return field_32_view;
     }
 
@@ -1087,8 +1019,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the view field for the DOP record.
      */
     @Internal
-    public void setView( short field_32_view )
-    {
+    public void setView(short field_32_view) {
         this.field_32_view = field_32_view;
     }
 
@@ -1096,8 +1027,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the docinfo4 field for the DOP record.
      */
     @Internal
-    public int getDocinfo4()
-    {
+    public int getDocinfo4() {
         return field_33_docinfo4;
     }
 
@@ -1105,8 +1035,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the docinfo4 field for the DOP record.
      */
     @Internal
-    public void setDocinfo4( int field_33_docinfo4 )
-    {
+    public void setDocinfo4(int field_33_docinfo4) {
         this.field_33_docinfo4 = field_33_docinfo4;
     }
 
@@ -1114,8 +1043,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the adt field for the DOP record.
      */
     @Internal
-    public short getAdt()
-    {
+    public short getAdt() {
         return field_34_adt;
     }
 
@@ -1123,8 +1051,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the adt field for the DOP record.
      */
     @Internal
-    public void setAdt( short field_34_adt )
-    {
+    public void setAdt(short field_34_adt) {
         this.field_34_adt = field_34_adt;
     }
 
@@ -1132,8 +1059,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the doptypography field for the DOP record.
      */
     @Internal
-    public byte[] getDoptypography()
-    {
+    public byte[] getDoptypography() {
         return field_35_doptypography;
     }
 
@@ -1141,8 +1067,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the doptypography field for the DOP record.
      */
     @Internal
-    public void setDoptypography( byte[] field_35_doptypography )
-    {
+    public void setDoptypography(byte[] field_35_doptypography) {
         this.field_35_doptypography = field_35_doptypography;
     }
 
@@ -1150,8 +1075,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the dogrid field for the DOP record.
      */
     @Internal
-    public byte[] getDogrid()
-    {
+    public byte[] getDogrid() {
         return field_36_dogrid;
     }
 
@@ -1159,8 +1083,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the dogrid field for the DOP record.
      */
     @Internal
-    public void setDogrid( byte[] field_36_dogrid )
-    {
+    public void setDogrid(byte[] field_36_dogrid) {
         this.field_36_dogrid = field_36_dogrid;
     }
 
@@ -1168,8 +1091,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the docinfo5 field for the DOP record.
      */
     @Internal
-    public short getDocinfo5()
-    {
+    public short getDocinfo5() {
         return field_37_docinfo5;
     }
 
@@ -1177,8 +1099,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the docinfo5 field for the DOP record.
      */
     @Internal
-    public void setDocinfo5( short field_37_docinfo5 )
-    {
+    public void setDocinfo5(short field_37_docinfo5) {
         this.field_37_docinfo5 = field_37_docinfo5;
     }
 
@@ -1186,8 +1107,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the docinfo6 field for the DOP record.
      */
     @Internal
-    public short getDocinfo6()
-    {
+    public short getDocinfo6() {
         return field_38_docinfo6;
     }
 
@@ -1195,8 +1115,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the docinfo6 field for the DOP record.
      */
     @Internal
-    public void setDocinfo6( short field_38_docinfo6 )
-    {
+    public void setDocinfo6(short field_38_docinfo6) {
         this.field_38_docinfo6 = field_38_docinfo6;
     }
 
@@ -1204,8 +1123,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the asumyi field for the DOP record.
      */
     @Internal
-    public byte[] getAsumyi()
-    {
+    public byte[] getAsumyi() {
         return field_39_asumyi;
     }
 
@@ -1213,8 +1131,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the asumyi field for the DOP record.
      */
     @Internal
-    public void setAsumyi( byte[] field_39_asumyi )
-    {
+    public void setAsumyi(byte[] field_39_asumyi) {
         this.field_39_asumyi = field_39_asumyi;
     }
 
@@ -1222,8 +1139,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cChWS field for the DOP record.
      */
     @Internal
-    public int getCChWS()
-    {
+    public int getCChWS() {
         return field_40_cChWS;
     }
 
@@ -1231,8 +1147,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cChWS field for the DOP record.
      */
     @Internal
-    public void setCChWS( int field_40_cChWS )
-    {
+    public void setCChWS(int field_40_cChWS) {
         this.field_40_cChWS = field_40_cChWS;
     }
 
@@ -1240,8 +1155,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cChWSFtnEdn field for the DOP record.
      */
     @Internal
-    public int getCChWSFtnEdn()
-    {
+    public int getCChWSFtnEdn() {
         return field_41_cChWSFtnEdn;
     }
 
@@ -1249,8 +1163,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cChWSFtnEdn field for the DOP record.
      */
     @Internal
-    public void setCChWSFtnEdn( int field_41_cChWSFtnEdn )
-    {
+    public void setCChWSFtnEdn(int field_41_cChWSFtnEdn) {
         this.field_41_cChWSFtnEdn = field_41_cChWSFtnEdn;
     }
 
@@ -1258,8 +1171,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the grfDocEvents field for the DOP record.
      */
     @Internal
-    public int getGrfDocEvents()
-    {
+    public int getGrfDocEvents() {
         return field_42_grfDocEvents;
     }
 
@@ -1267,8 +1179,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the grfDocEvents field for the DOP record.
      */
     @Internal
-    public void setGrfDocEvents( int field_42_grfDocEvents )
-    {
+    public void setGrfDocEvents(int field_42_grfDocEvents) {
         this.field_42_grfDocEvents = field_42_grfDocEvents;
     }
 
@@ -1276,8 +1187,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the virusinfo field for the DOP record.
      */
     @Internal
-    public int getVirusinfo()
-    {
+    public int getVirusinfo() {
         return field_43_virusinfo;
     }
 
@@ -1285,8 +1195,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the virusinfo field for the DOP record.
      */
     @Internal
-    public void setVirusinfo( int field_43_virusinfo )
-    {
+    public void setVirusinfo(int field_43_virusinfo) {
         this.field_43_virusinfo = field_43_virusinfo;
     }
 
@@ -1294,8 +1203,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the Spare field for the DOP record.
      */
     @Internal
-    public byte[] getSpare()
-    {
+    public byte[] getSpare() {
         return field_44_Spare;
     }
 
@@ -1303,8 +1211,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the Spare field for the DOP record.
      */
     @Internal
-    public void setSpare( byte[] field_44_Spare )
-    {
+    public void setSpare(byte[] field_44_Spare) {
         this.field_44_Spare = field_44_Spare;
     }
 
@@ -1312,8 +1219,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the reserved1 field for the DOP record.
      */
     @Internal
-    public int getReserved1()
-    {
+    public int getReserved1() {
         return field_45_reserved1;
     }
 
@@ -1321,8 +1227,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the reserved1 field for the DOP record.
      */
     @Internal
-    public void setReserved1( int field_45_reserved1 )
-    {
+    public void setReserved1(int field_45_reserved1) {
         this.field_45_reserved1 = field_45_reserved1;
     }
 
@@ -1330,8 +1235,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the reserved2 field for the DOP record.
      */
     @Internal
-    public int getReserved2()
-    {
+    public int getReserved2() {
         return field_46_reserved2;
     }
 
@@ -1339,8 +1243,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the reserved2 field for the DOP record.
      */
     @Internal
-    public void setReserved2( int field_46_reserved2 )
-    {
+    public void setReserved2(int field_46_reserved2) {
         this.field_46_reserved2 = field_46_reserved2;
     }
 
@@ -1348,8 +1251,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cDBC field for the DOP record.
      */
     @Internal
-    public int getCDBC()
-    {
+    public int getCDBC() {
         return field_47_cDBC;
     }
 
@@ -1357,8 +1259,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cDBC field for the DOP record.
      */
     @Internal
-    public void setCDBC( int field_47_cDBC )
-    {
+    public void setCDBC(int field_47_cDBC) {
         this.field_47_cDBC = field_47_cDBC;
     }
 
@@ -1366,8 +1267,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the cDBCFtnEdn field for the DOP record.
      */
     @Internal
-    public int getCDBCFtnEdn()
-    {
+    public int getCDBCFtnEdn() {
         return field_48_cDBCFtnEdn;
     }
 
@@ -1375,8 +1275,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the cDBCFtnEdn field for the DOP record.
      */
     @Internal
-    public void setCDBCFtnEdn( int field_48_cDBCFtnEdn )
-    {
+    public void setCDBCFtnEdn(int field_48_cDBCFtnEdn) {
         this.field_48_cDBCFtnEdn = field_48_cDBCFtnEdn;
     }
 
@@ -1384,8 +1283,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the reserved field for the DOP record.
      */
     @Internal
-    public int getReserved()
-    {
+    public int getReserved() {
         return field_49_reserved;
     }
 
@@ -1393,8 +1291,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the reserved field for the DOP record.
      */
     @Internal
-    public void setReserved( int field_49_reserved )
-    {
+    public void setReserved(int field_49_reserved) {
         this.field_49_reserved = field_49_reserved;
     }
 
@@ -1402,8 +1299,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the nfcFtnRef field for the DOP record.
      */
     @Internal
-    public short getNfcFtnRef()
-    {
+    public short getNfcFtnRef() {
         return field_50_nfcFtnRef;
     }
 
@@ -1411,8 +1307,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the nfcFtnRef field for the DOP record.
      */
     @Internal
-    public void setNfcFtnRef( short field_50_nfcFtnRef )
-    {
+    public void setNfcFtnRef(short field_50_nfcFtnRef) {
         this.field_50_nfcFtnRef = field_50_nfcFtnRef;
     }
 
@@ -1420,8 +1315,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the nfcEdnRef field for the DOP record.
      */
     @Internal
-    public short getNfcEdnRef()
-    {
+    public short getNfcEdnRef() {
         return field_51_nfcEdnRef;
     }
 
@@ -1429,8 +1323,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the nfcEdnRef field for the DOP record.
      */
     @Internal
-    public void setNfcEdnRef( short field_51_nfcEdnRef )
-    {
+    public void setNfcEdnRef(short field_51_nfcEdnRef) {
         this.field_51_nfcEdnRef = field_51_nfcEdnRef;
     }
 
@@ -1438,8 +1331,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the hpsZoonFontPag field for the DOP record.
      */
     @Internal
-    public short getHpsZoonFontPag()
-    {
+    public short getHpsZoonFontPag() {
         return field_52_hpsZoonFontPag;
     }
 
@@ -1447,8 +1339,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the hpsZoonFontPag field for the DOP record.
      */
     @Internal
-    public void setHpsZoonFontPag( short field_52_hpsZoonFontPag )
-    {
+    public void setHpsZoonFontPag(short field_52_hpsZoonFontPag) {
         this.field_52_hpsZoonFontPag = field_52_hpsZoonFontPag;
     }
 
@@ -1456,8 +1347,7 @@ public abstract class DOPAbstractType implements HDFType {
      * Get the dywDispPag field for the DOP record.
      */
     @Internal
-    public short getDywDispPag()
-    {
+    public short getDywDispPag() {
         return field_53_dywDispPag;
     }
 
@@ -1465,1849 +1355,1480 @@ public abstract class DOPAbstractType implements HDFType {
      * Set the dywDispPag field for the DOP record.
      */
     @Internal
-    public void setDywDispPag( short field_53_dywDispPag )
-    {
+    public void setDywDispPag(short field_53_dywDispPag) {
         this.field_53_dywDispPag = field_53_dywDispPag;
     }
 
     /**
-     * Sets the fFacingPages field value.
-     * 
+     * @return the fFacingPages field value.
      */
     @Internal
-    public void setFFacingPages( boolean value )
-    {
-        field_1_formatFlags = (byte)fFacingPages.setBoolean(field_1_formatFlags, value);
-    }
-
-    /**
-     * 
-     * @return  the fFacingPages field value.
-     */
-    @Internal
-    public boolean isFFacingPages()
-    {
+    public boolean isFFacingPages() {
         return fFacingPages.isSet(field_1_formatFlags);
     }
 
     /**
-     * Sets the fWidowControl field value.
-     * 
+     * Sets the fFacingPages field value.
      */
     @Internal
-    public void setFWidowControl( boolean value )
-    {
-        field_1_formatFlags = (byte)fWidowControl.setBoolean(field_1_formatFlags, value);
+    public void setFFacingPages(boolean value) {
+        field_1_formatFlags = (byte) fFacingPages.setBoolean(field_1_formatFlags, value);
     }
 
     /**
-     * 
-     * @return  the fWidowControl field value.
+     * @return the fWidowControl field value.
      */
     @Internal
-    public boolean isFWidowControl()
-    {
+    public boolean isFWidowControl() {
         return fWidowControl.isSet(field_1_formatFlags);
     }
 
     /**
-     * Sets the fPMHMainDoc field value.
-     * 
+     * Sets the fWidowControl field value.
      */
     @Internal
-    public void setFPMHMainDoc( boolean value )
-    {
-        field_1_formatFlags = (byte)fPMHMainDoc.setBoolean(field_1_formatFlags, value);
+    public void setFWidowControl(boolean value) {
+        field_1_formatFlags = (byte) fWidowControl.setBoolean(field_1_formatFlags, value);
     }
 
     /**
-     * 
-     * @return  the fPMHMainDoc field value.
+     * @return the fPMHMainDoc field value.
      */
     @Internal
-    public boolean isFPMHMainDoc()
-    {
+    public boolean isFPMHMainDoc() {
         return fPMHMainDoc.isSet(field_1_formatFlags);
     }
 
     /**
-     * Sets the grfSupression field value.
-     * 
+     * Sets the fPMHMainDoc field value.
      */
     @Internal
-    public void setGrfSupression( byte value )
-    {
-        field_1_formatFlags = (byte)grfSupression.setValue(field_1_formatFlags, value);
+    public void setFPMHMainDoc(boolean value) {
+        field_1_formatFlags = (byte) fPMHMainDoc.setBoolean(field_1_formatFlags, value);
     }
 
     /**
-     * 
-     * @return  the grfSupression field value.
+     * @return the grfSupression field value.
      */
     @Internal
-    public byte getGrfSupression()
-    {
-        return ( byte )grfSupression.getValue(field_1_formatFlags);
+    public byte getGrfSupression() {
+        return (byte) grfSupression.getValue(field_1_formatFlags);
+    }
+
+    /**
+     * Sets the grfSupression field value.
+     */
+    @Internal
+    public void setGrfSupression(byte value) {
+        field_1_formatFlags = (byte) grfSupression.setValue(field_1_formatFlags, value);
+    }
+
+    /**
+     * @return the fpc field value.
+     */
+    @Internal
+    public byte getFpc() {
+        return (byte) fpc.getValue(field_1_formatFlags);
     }
 
     /**
      * Sets the fpc field value.
-     * 
      */
     @Internal
-    public void setFpc( byte value )
-    {
-        field_1_formatFlags = (byte)fpc.setValue(field_1_formatFlags, value);
+    public void setFpc(byte value) {
+        field_1_formatFlags = (byte) fpc.setValue(field_1_formatFlags, value);
     }
 
     /**
-     * 
-     * @return  the fpc field value.
+     * @return the unused1 field value.
      */
     @Internal
-    public byte getFpc()
-    {
-        return ( byte )fpc.getValue(field_1_formatFlags);
-    }
-
-    /**
-     * Sets the unused1 field value.
-     * 
-     */
-    @Internal
-    public void setUnused1( boolean value )
-    {
-        field_1_formatFlags = (byte)unused1.setBoolean(field_1_formatFlags, value);
-    }
-
-    /**
-     * 
-     * @return  the unused1 field value.
-     */
-    @Internal
-    public boolean isUnused1()
-    {
+    public boolean isUnused1() {
         return unused1.isSet(field_1_formatFlags);
     }
 
     /**
-     * Sets the rncFtn field value.
-     * 
+     * Sets the unused1 field value.
      */
     @Internal
-    public void setRncFtn( byte value )
-    {
-        field_3_footnoteInfo = (short)rncFtn.setValue(field_3_footnoteInfo, value);
+    public void setUnused1(boolean value) {
+        field_1_formatFlags = (byte) unused1.setBoolean(field_1_formatFlags, value);
     }
 
     /**
-     * 
-     * @return  the rncFtn field value.
+     * @return the rncFtn field value.
      */
     @Internal
-    public byte getRncFtn()
-    {
-        return ( byte )rncFtn.getValue(field_3_footnoteInfo);
+    public byte getRncFtn() {
+        return (byte) rncFtn.getValue(field_3_footnoteInfo);
+    }
+
+    /**
+     * Sets the rncFtn field value.
+     */
+    @Internal
+    public void setRncFtn(byte value) {
+        field_3_footnoteInfo = (short) rncFtn.setValue(field_3_footnoteInfo, value);
+    }
+
+    /**
+     * @return the nFtn field value.
+     */
+    @Internal
+    public short getNFtn() {
+        return (short) nFtn.getValue(field_3_footnoteInfo);
     }
 
     /**
      * Sets the nFtn field value.
-     * 
      */
     @Internal
-    public void setNFtn( short value )
-    {
-        field_3_footnoteInfo = (short)nFtn.setValue(field_3_footnoteInfo, value);
+    public void setNFtn(short value) {
+        field_3_footnoteInfo = (short) nFtn.setValue(field_3_footnoteInfo, value);
     }
 
     /**
-     * 
-     * @return  the nFtn field value.
+     * @return the fOnlyMacPics field value.
      */
     @Internal
-    public short getNFtn()
-    {
-        return ( short )nFtn.getValue(field_3_footnoteInfo);
-    }
-
-    /**
-     * Sets the fOnlyMacPics field value.
-     * 
-     */
-    @Internal
-    public void setFOnlyMacPics( boolean value )
-    {
-        field_5_docinfo = (byte)fOnlyMacPics.setBoolean(field_5_docinfo, value);
-    }
-
-    /**
-     * 
-     * @return  the fOnlyMacPics field value.
-     */
-    @Internal
-    public boolean isFOnlyMacPics()
-    {
+    public boolean isFOnlyMacPics() {
         return fOnlyMacPics.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fOnlyWinPics field value.
-     * 
+     * Sets the fOnlyMacPics field value.
      */
     @Internal
-    public void setFOnlyWinPics( boolean value )
-    {
-        field_5_docinfo = (byte)fOnlyWinPics.setBoolean(field_5_docinfo, value);
+    public void setFOnlyMacPics(boolean value) {
+        field_5_docinfo = (byte) fOnlyMacPics.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fOnlyWinPics field value.
+     * @return the fOnlyWinPics field value.
      */
     @Internal
-    public boolean isFOnlyWinPics()
-    {
+    public boolean isFOnlyWinPics() {
         return fOnlyWinPics.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fLabelDoc field value.
-     * 
+     * Sets the fOnlyWinPics field value.
      */
     @Internal
-    public void setFLabelDoc( boolean value )
-    {
-        field_5_docinfo = (byte)fLabelDoc.setBoolean(field_5_docinfo, value);
+    public void setFOnlyWinPics(boolean value) {
+        field_5_docinfo = (byte) fOnlyWinPics.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fLabelDoc field value.
+     * @return the fLabelDoc field value.
      */
     @Internal
-    public boolean isFLabelDoc()
-    {
+    public boolean isFLabelDoc() {
         return fLabelDoc.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fHyphCapitals field value.
-     * 
+     * Sets the fLabelDoc field value.
      */
     @Internal
-    public void setFHyphCapitals( boolean value )
-    {
-        field_5_docinfo = (byte)fHyphCapitals.setBoolean(field_5_docinfo, value);
+    public void setFLabelDoc(boolean value) {
+        field_5_docinfo = (byte) fLabelDoc.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fHyphCapitals field value.
+     * @return the fHyphCapitals field value.
      */
     @Internal
-    public boolean isFHyphCapitals()
-    {
+    public boolean isFHyphCapitals() {
         return fHyphCapitals.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fAutoHyphen field value.
-     * 
+     * Sets the fHyphCapitals field value.
      */
     @Internal
-    public void setFAutoHyphen( boolean value )
-    {
-        field_5_docinfo = (byte)fAutoHyphen.setBoolean(field_5_docinfo, value);
+    public void setFHyphCapitals(boolean value) {
+        field_5_docinfo = (byte) fHyphCapitals.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fAutoHyphen field value.
+     * @return the fAutoHyphen field value.
      */
     @Internal
-    public boolean isFAutoHyphen()
-    {
+    public boolean isFAutoHyphen() {
         return fAutoHyphen.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fFormNoFields field value.
-     * 
+     * Sets the fAutoHyphen field value.
      */
     @Internal
-    public void setFFormNoFields( boolean value )
-    {
-        field_5_docinfo = (byte)fFormNoFields.setBoolean(field_5_docinfo, value);
+    public void setFAutoHyphen(boolean value) {
+        field_5_docinfo = (byte) fAutoHyphen.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fFormNoFields field value.
+     * @return the fFormNoFields field value.
      */
     @Internal
-    public boolean isFFormNoFields()
-    {
+    public boolean isFFormNoFields() {
         return fFormNoFields.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fLinkStyles field value.
-     * 
+     * Sets the fFormNoFields field value.
      */
     @Internal
-    public void setFLinkStyles( boolean value )
-    {
-        field_5_docinfo = (byte)fLinkStyles.setBoolean(field_5_docinfo, value);
+    public void setFFormNoFields(boolean value) {
+        field_5_docinfo = (byte) fFormNoFields.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fLinkStyles field value.
+     * @return the fLinkStyles field value.
      */
     @Internal
-    public boolean isFLinkStyles()
-    {
+    public boolean isFLinkStyles() {
         return fLinkStyles.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fRevMarking field value.
-     * 
+     * Sets the fLinkStyles field value.
      */
     @Internal
-    public void setFRevMarking( boolean value )
-    {
-        field_5_docinfo = (byte)fRevMarking.setBoolean(field_5_docinfo, value);
+    public void setFLinkStyles(boolean value) {
+        field_5_docinfo = (byte) fLinkStyles.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fRevMarking field value.
+     * @return the fRevMarking field value.
      */
     @Internal
-    public boolean isFRevMarking()
-    {
+    public boolean isFRevMarking() {
         return fRevMarking.isSet(field_5_docinfo);
     }
 
     /**
-     * Sets the fBackup field value.
-     * 
+     * Sets the fRevMarking field value.
      */
     @Internal
-    public void setFBackup( boolean value )
-    {
-        field_6_docinfo1 = (byte)fBackup.setBoolean(field_6_docinfo1, value);
+    public void setFRevMarking(boolean value) {
+        field_5_docinfo = (byte) fRevMarking.setBoolean(field_5_docinfo, value);
     }
 
     /**
-     * 
-     * @return  the fBackup field value.
+     * @return the fBackup field value.
      */
     @Internal
-    public boolean isFBackup()
-    {
+    public boolean isFBackup() {
         return fBackup.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the fExactCWords field value.
-     * 
+     * Sets the fBackup field value.
      */
     @Internal
-    public void setFExactCWords( boolean value )
-    {
-        field_6_docinfo1 = (byte)fExactCWords.setBoolean(field_6_docinfo1, value);
+    public void setFBackup(boolean value) {
+        field_6_docinfo1 = (byte) fBackup.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the fExactCWords field value.
+     * @return the fExactCWords field value.
      */
     @Internal
-    public boolean isFExactCWords()
-    {
+    public boolean isFExactCWords() {
         return fExactCWords.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the fPagHidden field value.
-     * 
+     * Sets the fExactCWords field value.
      */
     @Internal
-    public void setFPagHidden( boolean value )
-    {
-        field_6_docinfo1 = (byte)fPagHidden.setBoolean(field_6_docinfo1, value);
+    public void setFExactCWords(boolean value) {
+        field_6_docinfo1 = (byte) fExactCWords.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the fPagHidden field value.
+     * @return the fPagHidden field value.
      */
     @Internal
-    public boolean isFPagHidden()
-    {
+    public boolean isFPagHidden() {
         return fPagHidden.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the fPagResults field value.
-     * 
+     * Sets the fPagHidden field value.
      */
     @Internal
-    public void setFPagResults( boolean value )
-    {
-        field_6_docinfo1 = (byte)fPagResults.setBoolean(field_6_docinfo1, value);
+    public void setFPagHidden(boolean value) {
+        field_6_docinfo1 = (byte) fPagHidden.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the fPagResults field value.
+     * @return the fPagResults field value.
      */
     @Internal
-    public boolean isFPagResults()
-    {
+    public boolean isFPagResults() {
         return fPagResults.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the fLockAtn field value.
-     * 
+     * Sets the fPagResults field value.
      */
     @Internal
-    public void setFLockAtn( boolean value )
-    {
-        field_6_docinfo1 = (byte)fLockAtn.setBoolean(field_6_docinfo1, value);
+    public void setFPagResults(boolean value) {
+        field_6_docinfo1 = (byte) fPagResults.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the fLockAtn field value.
+     * @return the fLockAtn field value.
      */
     @Internal
-    public boolean isFLockAtn()
-    {
+    public boolean isFLockAtn() {
         return fLockAtn.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the fMirrorMargins field value.
-     * 
+     * Sets the fLockAtn field value.
      */
     @Internal
-    public void setFMirrorMargins( boolean value )
-    {
-        field_6_docinfo1 = (byte)fMirrorMargins.setBoolean(field_6_docinfo1, value);
+    public void setFLockAtn(boolean value) {
+        field_6_docinfo1 = (byte) fLockAtn.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the fMirrorMargins field value.
+     * @return the fMirrorMargins field value.
      */
     @Internal
-    public boolean isFMirrorMargins()
-    {
+    public boolean isFMirrorMargins() {
         return fMirrorMargins.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the unused3 field value.
-     * 
+     * Sets the fMirrorMargins field value.
      */
     @Internal
-    public void setUnused3( boolean value )
-    {
-        field_6_docinfo1 = (byte)unused3.setBoolean(field_6_docinfo1, value);
+    public void setFMirrorMargins(boolean value) {
+        field_6_docinfo1 = (byte) fMirrorMargins.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the unused3 field value.
+     * @return the unused3 field value.
      */
     @Internal
-    public boolean isUnused3()
-    {
+    public boolean isUnused3() {
         return unused3.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the fDfltTrueType field value.
-     * 
+     * Sets the unused3 field value.
      */
     @Internal
-    public void setFDfltTrueType( boolean value )
-    {
-        field_6_docinfo1 = (byte)fDfltTrueType.setBoolean(field_6_docinfo1, value);
+    public void setUnused3(boolean value) {
+        field_6_docinfo1 = (byte) unused3.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the fDfltTrueType field value.
+     * @return the fDfltTrueType field value.
      */
     @Internal
-    public boolean isFDfltTrueType()
-    {
+    public boolean isFDfltTrueType() {
         return fDfltTrueType.isSet(field_6_docinfo1);
     }
 
     /**
-     * Sets the fPagSupressTopSpacing field value.
-     * 
+     * Sets the fDfltTrueType field value.
      */
     @Internal
-    public void setFPagSupressTopSpacing( boolean value )
-    {
-        field_7_docinfo2 = (byte)fPagSupressTopSpacing.setBoolean(field_7_docinfo2, value);
+    public void setFDfltTrueType(boolean value) {
+        field_6_docinfo1 = (byte) fDfltTrueType.setBoolean(field_6_docinfo1, value);
     }
 
     /**
-     * 
-     * @return  the fPagSupressTopSpacing field value.
+     * @return the fPagSupressTopSpacing field value.
      */
     @Internal
-    public boolean isFPagSupressTopSpacing()
-    {
+    public boolean isFPagSupressTopSpacing() {
         return fPagSupressTopSpacing.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the fProtEnabled field value.
-     * 
+     * Sets the fPagSupressTopSpacing field value.
      */
     @Internal
-    public void setFProtEnabled( boolean value )
-    {
-        field_7_docinfo2 = (byte)fProtEnabled.setBoolean(field_7_docinfo2, value);
+    public void setFPagSupressTopSpacing(boolean value) {
+        field_7_docinfo2 = (byte) fPagSupressTopSpacing.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the fProtEnabled field value.
+     * @return the fProtEnabled field value.
      */
     @Internal
-    public boolean isFProtEnabled()
-    {
+    public boolean isFProtEnabled() {
         return fProtEnabled.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the fDispFormFldSel field value.
-     * 
+     * Sets the fProtEnabled field value.
      */
     @Internal
-    public void setFDispFormFldSel( boolean value )
-    {
-        field_7_docinfo2 = (byte)fDispFormFldSel.setBoolean(field_7_docinfo2, value);
+    public void setFProtEnabled(boolean value) {
+        field_7_docinfo2 = (byte) fProtEnabled.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the fDispFormFldSel field value.
+     * @return the fDispFormFldSel field value.
      */
     @Internal
-    public boolean isFDispFormFldSel()
-    {
+    public boolean isFDispFormFldSel() {
         return fDispFormFldSel.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the fRMView field value.
-     * 
+     * Sets the fDispFormFldSel field value.
      */
     @Internal
-    public void setFRMView( boolean value )
-    {
-        field_7_docinfo2 = (byte)fRMView.setBoolean(field_7_docinfo2, value);
+    public void setFDispFormFldSel(boolean value) {
+        field_7_docinfo2 = (byte) fDispFormFldSel.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the fRMView field value.
+     * @return the fRMView field value.
      */
     @Internal
-    public boolean isFRMView()
-    {
+    public boolean isFRMView() {
         return fRMView.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the fRMPrint field value.
-     * 
+     * Sets the fRMView field value.
      */
     @Internal
-    public void setFRMPrint( boolean value )
-    {
-        field_7_docinfo2 = (byte)fRMPrint.setBoolean(field_7_docinfo2, value);
+    public void setFRMView(boolean value) {
+        field_7_docinfo2 = (byte) fRMView.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the fRMPrint field value.
+     * @return the fRMPrint field value.
      */
     @Internal
-    public boolean isFRMPrint()
-    {
+    public boolean isFRMPrint() {
         return fRMPrint.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the unused4 field value.
-     * 
+     * Sets the fRMPrint field value.
      */
     @Internal
-    public void setUnused4( boolean value )
-    {
-        field_7_docinfo2 = (byte)unused4.setBoolean(field_7_docinfo2, value);
+    public void setFRMPrint(boolean value) {
+        field_7_docinfo2 = (byte) fRMPrint.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the unused4 field value.
+     * @return the unused4 field value.
      */
     @Internal
-    public boolean isUnused4()
-    {
+    public boolean isUnused4() {
         return unused4.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the fLockRev field value.
-     * 
+     * Sets the unused4 field value.
      */
     @Internal
-    public void setFLockRev( boolean value )
-    {
-        field_7_docinfo2 = (byte)fLockRev.setBoolean(field_7_docinfo2, value);
+    public void setUnused4(boolean value) {
+        field_7_docinfo2 = (byte) unused4.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the fLockRev field value.
+     * @return the fLockRev field value.
      */
     @Internal
-    public boolean isFLockRev()
-    {
+    public boolean isFLockRev() {
         return fLockRev.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the fEmbedFonts field value.
-     * 
+     * Sets the fLockRev field value.
      */
     @Internal
-    public void setFEmbedFonts( boolean value )
-    {
-        field_7_docinfo2 = (byte)fEmbedFonts.setBoolean(field_7_docinfo2, value);
+    public void setFLockRev(boolean value) {
+        field_7_docinfo2 = (byte) fLockRev.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the fEmbedFonts field value.
+     * @return the fEmbedFonts field value.
      */
     @Internal
-    public boolean isFEmbedFonts()
-    {
+    public boolean isFEmbedFonts() {
         return fEmbedFonts.isSet(field_7_docinfo2);
     }
 
     /**
-     * Sets the oldfNoTabForInd field value.
-     * 
+     * Sets the fEmbedFonts field value.
      */
     @Internal
-    public void setOldfNoTabForInd( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfNoTabForInd.setBoolean(field_8_docinfo3, value);
+    public void setFEmbedFonts(boolean value) {
+        field_7_docinfo2 = (byte) fEmbedFonts.setBoolean(field_7_docinfo2, value);
     }
 
     /**
-     * 
-     * @return  the oldfNoTabForInd field value.
+     * @return the oldfNoTabForInd field value.
      */
     @Internal
-    public boolean isOldfNoTabForInd()
-    {
+    public boolean isOldfNoTabForInd() {
         return oldfNoTabForInd.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfNoSpaceRaiseLower field value.
-     * 
+     * Sets the oldfNoTabForInd field value.
      */
     @Internal
-    public void setOldfNoSpaceRaiseLower( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfNoSpaceRaiseLower.setBoolean(field_8_docinfo3, value);
+    public void setOldfNoTabForInd(boolean value) {
+        field_8_docinfo3 = (short) oldfNoTabForInd.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfNoSpaceRaiseLower field value.
+     * @return the oldfNoSpaceRaiseLower field value.
      */
     @Internal
-    public boolean isOldfNoSpaceRaiseLower()
-    {
+    public boolean isOldfNoSpaceRaiseLower() {
         return oldfNoSpaceRaiseLower.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfSuppressSpbfAfterPageBreak field value.
-     * 
+     * Sets the oldfNoSpaceRaiseLower field value.
      */
     @Internal
-    public void setOldfSuppressSpbfAfterPageBreak( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfSuppressSpbfAfterPageBreak.setBoolean(field_8_docinfo3, value);
+    public void setOldfNoSpaceRaiseLower(boolean value) {
+        field_8_docinfo3 = (short) oldfNoSpaceRaiseLower.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfSuppressSpbfAfterPageBreak field value.
+     * @return the oldfSuppressSpbfAfterPageBreak field value.
      */
     @Internal
-    public boolean isOldfSuppressSpbfAfterPageBreak()
-    {
+    public boolean isOldfSuppressSpbfAfterPageBreak() {
         return oldfSuppressSpbfAfterPageBreak.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfWrapTrailSpaces field value.
-     * 
+     * Sets the oldfSuppressSpbfAfterPageBreak field value.
      */
     @Internal
-    public void setOldfWrapTrailSpaces( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfWrapTrailSpaces.setBoolean(field_8_docinfo3, value);
+    public void setOldfSuppressSpbfAfterPageBreak(boolean value) {
+        field_8_docinfo3 = (short) oldfSuppressSpbfAfterPageBreak.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfWrapTrailSpaces field value.
+     * @return the oldfWrapTrailSpaces field value.
      */
     @Internal
-    public boolean isOldfWrapTrailSpaces()
-    {
+    public boolean isOldfWrapTrailSpaces() {
         return oldfWrapTrailSpaces.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfMapPrintTextColor field value.
-     * 
+     * Sets the oldfWrapTrailSpaces field value.
      */
     @Internal
-    public void setOldfMapPrintTextColor( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfMapPrintTextColor.setBoolean(field_8_docinfo3, value);
+    public void setOldfWrapTrailSpaces(boolean value) {
+        field_8_docinfo3 = (short) oldfWrapTrailSpaces.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfMapPrintTextColor field value.
+     * @return the oldfMapPrintTextColor field value.
      */
     @Internal
-    public boolean isOldfMapPrintTextColor()
-    {
+    public boolean isOldfMapPrintTextColor() {
         return oldfMapPrintTextColor.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfNoColumnBalance field value.
-     * 
+     * Sets the oldfMapPrintTextColor field value.
      */
     @Internal
-    public void setOldfNoColumnBalance( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfNoColumnBalance.setBoolean(field_8_docinfo3, value);
+    public void setOldfMapPrintTextColor(boolean value) {
+        field_8_docinfo3 = (short) oldfMapPrintTextColor.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfNoColumnBalance field value.
+     * @return the oldfNoColumnBalance field value.
      */
     @Internal
-    public boolean isOldfNoColumnBalance()
-    {
+    public boolean isOldfNoColumnBalance() {
         return oldfNoColumnBalance.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfConvMailMergeEsc field value.
-     * 
+     * Sets the oldfNoColumnBalance field value.
      */
     @Internal
-    public void setOldfConvMailMergeEsc( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfConvMailMergeEsc.setBoolean(field_8_docinfo3, value);
+    public void setOldfNoColumnBalance(boolean value) {
+        field_8_docinfo3 = (short) oldfNoColumnBalance.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfConvMailMergeEsc field value.
+     * @return the oldfConvMailMergeEsc field value.
      */
     @Internal
-    public boolean isOldfConvMailMergeEsc()
-    {
+    public boolean isOldfConvMailMergeEsc() {
         return oldfConvMailMergeEsc.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfSupressTopSpacing field value.
-     * 
+     * Sets the oldfConvMailMergeEsc field value.
      */
     @Internal
-    public void setOldfSupressTopSpacing( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfSupressTopSpacing.setBoolean(field_8_docinfo3, value);
+    public void setOldfConvMailMergeEsc(boolean value) {
+        field_8_docinfo3 = (short) oldfConvMailMergeEsc.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfSupressTopSpacing field value.
+     * @return the oldfSupressTopSpacing field value.
      */
     @Internal
-    public boolean isOldfSupressTopSpacing()
-    {
+    public boolean isOldfSupressTopSpacing() {
         return oldfSupressTopSpacing.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfOrigWordTableRules field value.
-     * 
+     * Sets the oldfSupressTopSpacing field value.
      */
     @Internal
-    public void setOldfOrigWordTableRules( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfOrigWordTableRules.setBoolean(field_8_docinfo3, value);
+    public void setOldfSupressTopSpacing(boolean value) {
+        field_8_docinfo3 = (short) oldfSupressTopSpacing.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfOrigWordTableRules field value.
+     * @return the oldfOrigWordTableRules field value.
      */
     @Internal
-    public boolean isOldfOrigWordTableRules()
-    {
+    public boolean isOldfOrigWordTableRules() {
         return oldfOrigWordTableRules.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfTransparentMetafiles field value.
-     * 
+     * Sets the oldfOrigWordTableRules field value.
      */
     @Internal
-    public void setOldfTransparentMetafiles( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfTransparentMetafiles.setBoolean(field_8_docinfo3, value);
+    public void setOldfOrigWordTableRules(boolean value) {
+        field_8_docinfo3 = (short) oldfOrigWordTableRules.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfTransparentMetafiles field value.
+     * @return the oldfTransparentMetafiles field value.
      */
     @Internal
-    public boolean isOldfTransparentMetafiles()
-    {
+    public boolean isOldfTransparentMetafiles() {
         return oldfTransparentMetafiles.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfShowBreaksInFrames field value.
-     * 
+     * Sets the oldfTransparentMetafiles field value.
      */
     @Internal
-    public void setOldfShowBreaksInFrames( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfShowBreaksInFrames.setBoolean(field_8_docinfo3, value);
+    public void setOldfTransparentMetafiles(boolean value) {
+        field_8_docinfo3 = (short) oldfTransparentMetafiles.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfShowBreaksInFrames field value.
+     * @return the oldfShowBreaksInFrames field value.
      */
     @Internal
-    public boolean isOldfShowBreaksInFrames()
-    {
+    public boolean isOldfShowBreaksInFrames() {
         return oldfShowBreaksInFrames.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the oldfSwapBordersFacingPgs field value.
-     * 
+     * Sets the oldfShowBreaksInFrames field value.
      */
     @Internal
-    public void setOldfSwapBordersFacingPgs( boolean value )
-    {
-        field_8_docinfo3 = (short)oldfSwapBordersFacingPgs.setBoolean(field_8_docinfo3, value);
+    public void setOldfShowBreaksInFrames(boolean value) {
+        field_8_docinfo3 = (short) oldfShowBreaksInFrames.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the oldfSwapBordersFacingPgs field value.
+     * @return the oldfSwapBordersFacingPgs field value.
      */
     @Internal
-    public boolean isOldfSwapBordersFacingPgs()
-    {
+    public boolean isOldfSwapBordersFacingPgs() {
         return oldfSwapBordersFacingPgs.isSet(field_8_docinfo3);
     }
 
     /**
-     * Sets the unused5 field value.
-     * 
+     * Sets the oldfSwapBordersFacingPgs field value.
      */
     @Internal
-    public void setUnused5( byte value )
-    {
-        field_8_docinfo3 = (short)unused5.setValue(field_8_docinfo3, value);
+    public void setOldfSwapBordersFacingPgs(boolean value) {
+        field_8_docinfo3 = (short) oldfSwapBordersFacingPgs.setBoolean(field_8_docinfo3, value);
     }
 
     /**
-     * 
-     * @return  the unused5 field value.
+     * @return the unused5 field value.
      */
     @Internal
-    public byte getUnused5()
-    {
-        return ( byte )unused5.getValue(field_8_docinfo3);
+    public byte getUnused5() {
+        return (byte) unused5.getValue(field_8_docinfo3);
+    }
+
+    /**
+     * Sets the unused5 field value.
+     */
+    @Internal
+    public void setUnused5(byte value) {
+        field_8_docinfo3 = (short) unused5.setValue(field_8_docinfo3, value);
+    }
+
+    /**
+     * @return the rncEdn field value.
+     */
+    @Internal
+    public byte getRncEdn() {
+        return (byte) rncEdn.getValue(field_23_Edn);
     }
 
     /**
      * Sets the rncEdn field value.
-     * 
      */
     @Internal
-    public void setRncEdn( byte value )
-    {
-        field_23_Edn = (short)rncEdn.setValue(field_23_Edn, value);
+    public void setRncEdn(byte value) {
+        field_23_Edn = (short) rncEdn.setValue(field_23_Edn, value);
     }
 
     /**
-     * 
-     * @return  the rncEdn field value.
+     * @return the nEdn field value.
      */
     @Internal
-    public byte getRncEdn()
-    {
-        return ( byte )rncEdn.getValue(field_23_Edn);
+    public short getNEdn() {
+        return (short) nEdn.getValue(field_23_Edn);
     }
 
     /**
      * Sets the nEdn field value.
-     * 
      */
     @Internal
-    public void setNEdn( short value )
-    {
-        field_23_Edn = (short)nEdn.setValue(field_23_Edn, value);
+    public void setNEdn(short value) {
+        field_23_Edn = (short) nEdn.setValue(field_23_Edn, value);
     }
 
     /**
-     * 
-     * @return  the nEdn field value.
+     * @return the epc field value.
      */
     @Internal
-    public short getNEdn()
-    {
-        return ( short )nEdn.getValue(field_23_Edn);
+    public byte getEpc() {
+        return (byte) epc.getValue(field_24_Edn1);
     }
 
     /**
      * Sets the epc field value.
-     * 
      */
     @Internal
-    public void setEpc( byte value )
-    {
-        field_24_Edn1 = (short)epc.setValue(field_24_Edn1, value);
+    public void setEpc(byte value) {
+        field_24_Edn1 = (short) epc.setValue(field_24_Edn1, value);
     }
 
     /**
-     * 
-     * @return  the epc field value.
+     * @return the nfcFtnRef1 field value.
      */
     @Internal
-    public byte getEpc()
-    {
-        return ( byte )epc.getValue(field_24_Edn1);
+    public byte getNfcFtnRef1() {
+        return (byte) nfcFtnRef1.getValue(field_24_Edn1);
     }
 
     /**
      * Sets the nfcFtnRef1 field value.
-     * 
      */
     @Internal
-    public void setNfcFtnRef1( byte value )
-    {
-        field_24_Edn1 = (short)nfcFtnRef1.setValue(field_24_Edn1, value);
+    public void setNfcFtnRef1(byte value) {
+        field_24_Edn1 = (short) nfcFtnRef1.setValue(field_24_Edn1, value);
     }
 
     /**
-     * 
-     * @return  the nfcFtnRef1 field value.
+     * @return the nfcEdnRef1 field value.
      */
     @Internal
-    public byte getNfcFtnRef1()
-    {
-        return ( byte )nfcFtnRef1.getValue(field_24_Edn1);
+    public byte getNfcEdnRef1() {
+        return (byte) nfcEdnRef1.getValue(field_24_Edn1);
     }
 
     /**
      * Sets the nfcEdnRef1 field value.
-     * 
      */
     @Internal
-    public void setNfcEdnRef1( byte value )
-    {
-        field_24_Edn1 = (short)nfcEdnRef1.setValue(field_24_Edn1, value);
+    public void setNfcEdnRef1(byte value) {
+        field_24_Edn1 = (short) nfcEdnRef1.setValue(field_24_Edn1, value);
     }
 
     /**
-     * 
-     * @return  the nfcEdnRef1 field value.
+     * @return the fPrintFormData field value.
      */
     @Internal
-    public byte getNfcEdnRef1()
-    {
-        return ( byte )nfcEdnRef1.getValue(field_24_Edn1);
-    }
-
-    /**
-     * Sets the fPrintFormData field value.
-     * 
-     */
-    @Internal
-    public void setFPrintFormData( boolean value )
-    {
-        field_24_Edn1 = (short)fPrintFormData.setBoolean(field_24_Edn1, value);
-    }
-
-    /**
-     * 
-     * @return  the fPrintFormData field value.
-     */
-    @Internal
-    public boolean isFPrintFormData()
-    {
+    public boolean isFPrintFormData() {
         return fPrintFormData.isSet(field_24_Edn1);
     }
 
     /**
-     * Sets the fSaveFormData field value.
-     * 
+     * Sets the fPrintFormData field value.
      */
     @Internal
-    public void setFSaveFormData( boolean value )
-    {
-        field_24_Edn1 = (short)fSaveFormData.setBoolean(field_24_Edn1, value);
+    public void setFPrintFormData(boolean value) {
+        field_24_Edn1 = (short) fPrintFormData.setBoolean(field_24_Edn1, value);
     }
 
     /**
-     * 
-     * @return  the fSaveFormData field value.
+     * @return the fSaveFormData field value.
      */
     @Internal
-    public boolean isFSaveFormData()
-    {
+    public boolean isFSaveFormData() {
         return fSaveFormData.isSet(field_24_Edn1);
     }
 
     /**
-     * Sets the fShadeFormData field value.
-     * 
+     * Sets the fSaveFormData field value.
      */
     @Internal
-    public void setFShadeFormData( boolean value )
-    {
-        field_24_Edn1 = (short)fShadeFormData.setBoolean(field_24_Edn1, value);
+    public void setFSaveFormData(boolean value) {
+        field_24_Edn1 = (short) fSaveFormData.setBoolean(field_24_Edn1, value);
     }
 
     /**
-     * 
-     * @return  the fShadeFormData field value.
+     * @return the fShadeFormData field value.
      */
     @Internal
-    public boolean isFShadeFormData()
-    {
+    public boolean isFShadeFormData() {
         return fShadeFormData.isSet(field_24_Edn1);
     }
 
     /**
-     * Sets the fWCFtnEdn field value.
-     * 
+     * Sets the fShadeFormData field value.
      */
     @Internal
-    public void setFWCFtnEdn( boolean value )
-    {
-        field_24_Edn1 = (short)fWCFtnEdn.setBoolean(field_24_Edn1, value);
+    public void setFShadeFormData(boolean value) {
+        field_24_Edn1 = (short) fShadeFormData.setBoolean(field_24_Edn1, value);
     }
 
     /**
-     * 
-     * @return  the fWCFtnEdn field value.
+     * @return the fWCFtnEdn field value.
      */
     @Internal
-    public boolean isFWCFtnEdn()
-    {
+    public boolean isFWCFtnEdn() {
         return fWCFtnEdn.isSet(field_24_Edn1);
     }
 
     /**
-     * Sets the wvkSaved field value.
-     * 
+     * Sets the fWCFtnEdn field value.
      */
     @Internal
-    public void setWvkSaved( byte value )
-    {
-        field_32_view = (short)wvkSaved.setValue(field_32_view, value);
+    public void setFWCFtnEdn(boolean value) {
+        field_24_Edn1 = (short) fWCFtnEdn.setBoolean(field_24_Edn1, value);
     }
 
     /**
-     * 
-     * @return  the wvkSaved field value.
+     * @return the wvkSaved field value.
      */
     @Internal
-    public byte getWvkSaved()
-    {
-        return ( byte )wvkSaved.getValue(field_32_view);
+    public byte getWvkSaved() {
+        return (byte) wvkSaved.getValue(field_32_view);
+    }
+
+    /**
+     * Sets the wvkSaved field value.
+     */
+    @Internal
+    public void setWvkSaved(byte value) {
+        field_32_view = (short) wvkSaved.setValue(field_32_view, value);
+    }
+
+    /**
+     * @return the wScaleSaved field value.
+     */
+    @Internal
+    public short getWScaleSaved() {
+        return (short) wScaleSaved.getValue(field_32_view);
     }
 
     /**
      * Sets the wScaleSaved field value.
-     * 
      */
     @Internal
-    public void setWScaleSaved( short value )
-    {
-        field_32_view = (short)wScaleSaved.setValue(field_32_view, value);
+    public void setWScaleSaved(short value) {
+        field_32_view = (short) wScaleSaved.setValue(field_32_view, value);
     }
 
     /**
-     * 
-     * @return  the wScaleSaved field value.
+     * @return the zkSaved field value.
      */
     @Internal
-    public short getWScaleSaved()
-    {
-        return ( short )wScaleSaved.getValue(field_32_view);
+    public byte getZkSaved() {
+        return (byte) zkSaved.getValue(field_32_view);
     }
 
     /**
      * Sets the zkSaved field value.
-     * 
      */
     @Internal
-    public void setZkSaved( byte value )
-    {
-        field_32_view = (short)zkSaved.setValue(field_32_view, value);
+    public void setZkSaved(byte value) {
+        field_32_view = (short) zkSaved.setValue(field_32_view, value);
     }
 
     /**
-     * 
-     * @return  the zkSaved field value.
+     * @return the fRotateFontW6 field value.
      */
     @Internal
-    public byte getZkSaved()
-    {
-        return ( byte )zkSaved.getValue(field_32_view);
-    }
-
-    /**
-     * Sets the fRotateFontW6 field value.
-     * 
-     */
-    @Internal
-    public void setFRotateFontW6( boolean value )
-    {
-        field_32_view = (short)fRotateFontW6.setBoolean(field_32_view, value);
-    }
-
-    /**
-     * 
-     * @return  the fRotateFontW6 field value.
-     */
-    @Internal
-    public boolean isFRotateFontW6()
-    {
+    public boolean isFRotateFontW6() {
         return fRotateFontW6.isSet(field_32_view);
     }
 
     /**
-     * Sets the iGutterPos field value.
-     * 
+     * Sets the fRotateFontW6 field value.
      */
     @Internal
-    public void setIGutterPos( boolean value )
-    {
-        field_32_view = (short)iGutterPos.setBoolean(field_32_view, value);
+    public void setFRotateFontW6(boolean value) {
+        field_32_view = (short) fRotateFontW6.setBoolean(field_32_view, value);
     }
 
     /**
-     * 
-     * @return  the iGutterPos field value.
+     * @return the iGutterPos field value.
      */
     @Internal
-    public boolean isIGutterPos()
-    {
+    public boolean isIGutterPos() {
         return iGutterPos.isSet(field_32_view);
     }
 
     /**
-     * Sets the fNoTabForInd field value.
-     * 
+     * Sets the iGutterPos field value.
      */
     @Internal
-    public void setFNoTabForInd( boolean value )
-    {
-        field_33_docinfo4 = (int)fNoTabForInd.setBoolean(field_33_docinfo4, value);
+    public void setIGutterPos(boolean value) {
+        field_32_view = (short) iGutterPos.setBoolean(field_32_view, value);
     }
 
     /**
-     * 
-     * @return  the fNoTabForInd field value.
+     * @return the fNoTabForInd field value.
      */
     @Internal
-    public boolean isFNoTabForInd()
-    {
+    public boolean isFNoTabForInd() {
         return fNoTabForInd.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fNoSpaceRaiseLower field value.
-     * 
+     * Sets the fNoTabForInd field value.
      */
     @Internal
-    public void setFNoSpaceRaiseLower( boolean value )
-    {
-        field_33_docinfo4 = (int)fNoSpaceRaiseLower.setBoolean(field_33_docinfo4, value);
+    public void setFNoTabForInd(boolean value) {
+        field_33_docinfo4 = (int) fNoTabForInd.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fNoSpaceRaiseLower field value.
+     * @return the fNoSpaceRaiseLower field value.
      */
     @Internal
-    public boolean isFNoSpaceRaiseLower()
-    {
+    public boolean isFNoSpaceRaiseLower() {
         return fNoSpaceRaiseLower.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fSupressSpdfAfterPageBreak field value.
-     * 
+     * Sets the fNoSpaceRaiseLower field value.
      */
     @Internal
-    public void setFSupressSpdfAfterPageBreak( boolean value )
-    {
-        field_33_docinfo4 = (int)fSupressSpdfAfterPageBreak.setBoolean(field_33_docinfo4, value);
+    public void setFNoSpaceRaiseLower(boolean value) {
+        field_33_docinfo4 = (int) fNoSpaceRaiseLower.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fSupressSpdfAfterPageBreak field value.
+     * @return the fSupressSpdfAfterPageBreak field value.
      */
     @Internal
-    public boolean isFSupressSpdfAfterPageBreak()
-    {
+    public boolean isFSupressSpdfAfterPageBreak() {
         return fSupressSpdfAfterPageBreak.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fWrapTrailSpaces field value.
-     * 
+     * Sets the fSupressSpdfAfterPageBreak field value.
      */
     @Internal
-    public void setFWrapTrailSpaces( boolean value )
-    {
-        field_33_docinfo4 = (int)fWrapTrailSpaces.setBoolean(field_33_docinfo4, value);
+    public void setFSupressSpdfAfterPageBreak(boolean value) {
+        field_33_docinfo4 = (int) fSupressSpdfAfterPageBreak.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fWrapTrailSpaces field value.
+     * @return the fWrapTrailSpaces field value.
      */
     @Internal
-    public boolean isFWrapTrailSpaces()
-    {
+    public boolean isFWrapTrailSpaces() {
         return fWrapTrailSpaces.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fMapPrintTextColor field value.
-     * 
+     * Sets the fWrapTrailSpaces field value.
      */
     @Internal
-    public void setFMapPrintTextColor( boolean value )
-    {
-        field_33_docinfo4 = (int)fMapPrintTextColor.setBoolean(field_33_docinfo4, value);
+    public void setFWrapTrailSpaces(boolean value) {
+        field_33_docinfo4 = (int) fWrapTrailSpaces.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fMapPrintTextColor field value.
+     * @return the fMapPrintTextColor field value.
      */
     @Internal
-    public boolean isFMapPrintTextColor()
-    {
+    public boolean isFMapPrintTextColor() {
         return fMapPrintTextColor.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fNoColumnBalance field value.
-     * 
+     * Sets the fMapPrintTextColor field value.
      */
     @Internal
-    public void setFNoColumnBalance( boolean value )
-    {
-        field_33_docinfo4 = (int)fNoColumnBalance.setBoolean(field_33_docinfo4, value);
+    public void setFMapPrintTextColor(boolean value) {
+        field_33_docinfo4 = (int) fMapPrintTextColor.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fNoColumnBalance field value.
+     * @return the fNoColumnBalance field value.
      */
     @Internal
-    public boolean isFNoColumnBalance()
-    {
+    public boolean isFNoColumnBalance() {
         return fNoColumnBalance.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fConvMailMergeEsc field value.
-     * 
+     * Sets the fNoColumnBalance field value.
      */
     @Internal
-    public void setFConvMailMergeEsc( boolean value )
-    {
-        field_33_docinfo4 = (int)fConvMailMergeEsc.setBoolean(field_33_docinfo4, value);
+    public void setFNoColumnBalance(boolean value) {
+        field_33_docinfo4 = (int) fNoColumnBalance.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fConvMailMergeEsc field value.
+     * @return the fConvMailMergeEsc field value.
      */
     @Internal
-    public boolean isFConvMailMergeEsc()
-    {
+    public boolean isFConvMailMergeEsc() {
         return fConvMailMergeEsc.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fSupressTopSpacing field value.
-     * 
+     * Sets the fConvMailMergeEsc field value.
      */
     @Internal
-    public void setFSupressTopSpacing( boolean value )
-    {
-        field_33_docinfo4 = (int)fSupressTopSpacing.setBoolean(field_33_docinfo4, value);
+    public void setFConvMailMergeEsc(boolean value) {
+        field_33_docinfo4 = (int) fConvMailMergeEsc.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fSupressTopSpacing field value.
+     * @return the fSupressTopSpacing field value.
      */
     @Internal
-    public boolean isFSupressTopSpacing()
-    {
+    public boolean isFSupressTopSpacing() {
         return fSupressTopSpacing.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fOrigWordTableRules field value.
-     * 
+     * Sets the fSupressTopSpacing field value.
      */
     @Internal
-    public void setFOrigWordTableRules( boolean value )
-    {
-        field_33_docinfo4 = (int)fOrigWordTableRules.setBoolean(field_33_docinfo4, value);
+    public void setFSupressTopSpacing(boolean value) {
+        field_33_docinfo4 = (int) fSupressTopSpacing.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fOrigWordTableRules field value.
+     * @return the fOrigWordTableRules field value.
      */
     @Internal
-    public boolean isFOrigWordTableRules()
-    {
+    public boolean isFOrigWordTableRules() {
         return fOrigWordTableRules.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fTransparentMetafiles field value.
-     * 
+     * Sets the fOrigWordTableRules field value.
      */
     @Internal
-    public void setFTransparentMetafiles( boolean value )
-    {
-        field_33_docinfo4 = (int)fTransparentMetafiles.setBoolean(field_33_docinfo4, value);
+    public void setFOrigWordTableRules(boolean value) {
+        field_33_docinfo4 = (int) fOrigWordTableRules.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fTransparentMetafiles field value.
+     * @return the fTransparentMetafiles field value.
      */
     @Internal
-    public boolean isFTransparentMetafiles()
-    {
+    public boolean isFTransparentMetafiles() {
         return fTransparentMetafiles.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fShowBreaksInFrames field value.
-     * 
+     * Sets the fTransparentMetafiles field value.
      */
     @Internal
-    public void setFShowBreaksInFrames( boolean value )
-    {
-        field_33_docinfo4 = (int)fShowBreaksInFrames.setBoolean(field_33_docinfo4, value);
+    public void setFTransparentMetafiles(boolean value) {
+        field_33_docinfo4 = (int) fTransparentMetafiles.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fShowBreaksInFrames field value.
+     * @return the fShowBreaksInFrames field value.
      */
     @Internal
-    public boolean isFShowBreaksInFrames()
-    {
+    public boolean isFShowBreaksInFrames() {
         return fShowBreaksInFrames.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fSwapBordersFacingPgs field value.
-     * 
+     * Sets the fShowBreaksInFrames field value.
      */
     @Internal
-    public void setFSwapBordersFacingPgs( boolean value )
-    {
-        field_33_docinfo4 = (int)fSwapBordersFacingPgs.setBoolean(field_33_docinfo4, value);
+    public void setFShowBreaksInFrames(boolean value) {
+        field_33_docinfo4 = (int) fShowBreaksInFrames.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fSwapBordersFacingPgs field value.
+     * @return the fSwapBordersFacingPgs field value.
      */
     @Internal
-    public boolean isFSwapBordersFacingPgs()
-    {
+    public boolean isFSwapBordersFacingPgs() {
         return fSwapBordersFacingPgs.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fSuppressTopSPacingMac5 field value.
-     * 
+     * Sets the fSwapBordersFacingPgs field value.
      */
     @Internal
-    public void setFSuppressTopSPacingMac5( boolean value )
-    {
-        field_33_docinfo4 = (int)fSuppressTopSPacingMac5.setBoolean(field_33_docinfo4, value);
+    public void setFSwapBordersFacingPgs(boolean value) {
+        field_33_docinfo4 = (int) fSwapBordersFacingPgs.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fSuppressTopSPacingMac5 field value.
+     * @return the fSuppressTopSPacingMac5 field value.
      */
     @Internal
-    public boolean isFSuppressTopSPacingMac5()
-    {
+    public boolean isFSuppressTopSPacingMac5() {
         return fSuppressTopSPacingMac5.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fTruncDxaExpand field value.
-     * 
+     * Sets the fSuppressTopSPacingMac5 field value.
      */
     @Internal
-    public void setFTruncDxaExpand( boolean value )
-    {
-        field_33_docinfo4 = (int)fTruncDxaExpand.setBoolean(field_33_docinfo4, value);
+    public void setFSuppressTopSPacingMac5(boolean value) {
+        field_33_docinfo4 = (int) fSuppressTopSPacingMac5.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fTruncDxaExpand field value.
+     * @return the fTruncDxaExpand field value.
      */
     @Internal
-    public boolean isFTruncDxaExpand()
-    {
+    public boolean isFTruncDxaExpand() {
         return fTruncDxaExpand.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fPrintBodyBeforeHdr field value.
-     * 
+     * Sets the fTruncDxaExpand field value.
      */
     @Internal
-    public void setFPrintBodyBeforeHdr( boolean value )
-    {
-        field_33_docinfo4 = (int)fPrintBodyBeforeHdr.setBoolean(field_33_docinfo4, value);
+    public void setFTruncDxaExpand(boolean value) {
+        field_33_docinfo4 = (int) fTruncDxaExpand.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fPrintBodyBeforeHdr field value.
+     * @return the fPrintBodyBeforeHdr field value.
      */
     @Internal
-    public boolean isFPrintBodyBeforeHdr()
-    {
+    public boolean isFPrintBodyBeforeHdr() {
         return fPrintBodyBeforeHdr.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fNoLeading field value.
-     * 
+     * Sets the fPrintBodyBeforeHdr field value.
      */
     @Internal
-    public void setFNoLeading( boolean value )
-    {
-        field_33_docinfo4 = (int)fNoLeading.setBoolean(field_33_docinfo4, value);
+    public void setFPrintBodyBeforeHdr(boolean value) {
+        field_33_docinfo4 = (int) fPrintBodyBeforeHdr.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fNoLeading field value.
+     * @return the fNoLeading field value.
      */
     @Internal
-    public boolean isFNoLeading()
-    {
+    public boolean isFNoLeading() {
         return fNoLeading.isSet(field_33_docinfo4);
     }
 
     /**
-     * Sets the fMWSmallCaps field value.
-     * 
+     * Sets the fNoLeading field value.
      */
     @Internal
-    public void setFMWSmallCaps( boolean value )
-    {
-        field_33_docinfo4 = (int)fMWSmallCaps.setBoolean(field_33_docinfo4, value);
+    public void setFNoLeading(boolean value) {
+        field_33_docinfo4 = (int) fNoLeading.setBoolean(field_33_docinfo4, value);
     }
 
     /**
-     * 
-     * @return  the fMWSmallCaps field value.
+     * @return the fMWSmallCaps field value.
      */
     @Internal
-    public boolean isFMWSmallCaps()
-    {
+    public boolean isFMWSmallCaps() {
         return fMWSmallCaps.isSet(field_33_docinfo4);
     }
 
     /**
+     * Sets the fMWSmallCaps field value.
+     */
+    @Internal
+    public void setFMWSmallCaps(boolean value) {
+        field_33_docinfo4 = (int) fMWSmallCaps.setBoolean(field_33_docinfo4, value);
+    }
+
+    /**
+     * @return the lvl field value.
+     */
+    @Internal
+    public byte getLvl() {
+        return (byte) lvl.getValue(field_37_docinfo5);
+    }
+
+    /**
      * Sets the lvl field value.
-     * 
      */
     @Internal
-    public void setLvl( byte value )
-    {
-        field_37_docinfo5 = (short)lvl.setValue(field_37_docinfo5, value);
+    public void setLvl(byte value) {
+        field_37_docinfo5 = (short) lvl.setValue(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the lvl field value.
+     * @return the fGramAllDone field value.
      */
     @Internal
-    public byte getLvl()
-    {
-        return ( byte )lvl.getValue(field_37_docinfo5);
-    }
-
-    /**
-     * Sets the fGramAllDone field value.
-     * 
-     */
-    @Internal
-    public void setFGramAllDone( boolean value )
-    {
-        field_37_docinfo5 = (short)fGramAllDone.setBoolean(field_37_docinfo5, value);
-    }
-
-    /**
-     * 
-     * @return  the fGramAllDone field value.
-     */
-    @Internal
-    public boolean isFGramAllDone()
-    {
+    public boolean isFGramAllDone() {
         return fGramAllDone.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fGramAllClean field value.
-     * 
+     * Sets the fGramAllDone field value.
      */
     @Internal
-    public void setFGramAllClean( boolean value )
-    {
-        field_37_docinfo5 = (short)fGramAllClean.setBoolean(field_37_docinfo5, value);
+    public void setFGramAllDone(boolean value) {
+        field_37_docinfo5 = (short) fGramAllDone.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fGramAllClean field value.
+     * @return the fGramAllClean field value.
      */
     @Internal
-    public boolean isFGramAllClean()
-    {
+    public boolean isFGramAllClean() {
         return fGramAllClean.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fSubsetFonts field value.
-     * 
+     * Sets the fGramAllClean field value.
      */
     @Internal
-    public void setFSubsetFonts( boolean value )
-    {
-        field_37_docinfo5 = (short)fSubsetFonts.setBoolean(field_37_docinfo5, value);
+    public void setFGramAllClean(boolean value) {
+        field_37_docinfo5 = (short) fGramAllClean.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fSubsetFonts field value.
+     * @return the fSubsetFonts field value.
      */
     @Internal
-    public boolean isFSubsetFonts()
-    {
+    public boolean isFSubsetFonts() {
         return fSubsetFonts.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fHideLastVersion field value.
-     * 
+     * Sets the fSubsetFonts field value.
      */
     @Internal
-    public void setFHideLastVersion( boolean value )
-    {
-        field_37_docinfo5 = (short)fHideLastVersion.setBoolean(field_37_docinfo5, value);
+    public void setFSubsetFonts(boolean value) {
+        field_37_docinfo5 = (short) fSubsetFonts.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fHideLastVersion field value.
+     * @return the fHideLastVersion field value.
      */
     @Internal
-    public boolean isFHideLastVersion()
-    {
+    public boolean isFHideLastVersion() {
         return fHideLastVersion.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fHtmlDoc field value.
-     * 
+     * Sets the fHideLastVersion field value.
      */
     @Internal
-    public void setFHtmlDoc( boolean value )
-    {
-        field_37_docinfo5 = (short)fHtmlDoc.setBoolean(field_37_docinfo5, value);
+    public void setFHideLastVersion(boolean value) {
+        field_37_docinfo5 = (short) fHideLastVersion.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fHtmlDoc field value.
+     * @return the fHtmlDoc field value.
      */
     @Internal
-    public boolean isFHtmlDoc()
-    {
+    public boolean isFHtmlDoc() {
         return fHtmlDoc.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fSnapBorder field value.
-     * 
+     * Sets the fHtmlDoc field value.
      */
     @Internal
-    public void setFSnapBorder( boolean value )
-    {
-        field_37_docinfo5 = (short)fSnapBorder.setBoolean(field_37_docinfo5, value);
+    public void setFHtmlDoc(boolean value) {
+        field_37_docinfo5 = (short) fHtmlDoc.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fSnapBorder field value.
+     * @return the fSnapBorder field value.
      */
     @Internal
-    public boolean isFSnapBorder()
-    {
+    public boolean isFSnapBorder() {
         return fSnapBorder.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fIncludeHeader field value.
-     * 
+     * Sets the fSnapBorder field value.
      */
     @Internal
-    public void setFIncludeHeader( boolean value )
-    {
-        field_37_docinfo5 = (short)fIncludeHeader.setBoolean(field_37_docinfo5, value);
+    public void setFSnapBorder(boolean value) {
+        field_37_docinfo5 = (short) fSnapBorder.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fIncludeHeader field value.
+     * @return the fIncludeHeader field value.
      */
     @Internal
-    public boolean isFIncludeHeader()
-    {
+    public boolean isFIncludeHeader() {
         return fIncludeHeader.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fIncludeFooter field value.
-     * 
+     * Sets the fIncludeHeader field value.
      */
     @Internal
-    public void setFIncludeFooter( boolean value )
-    {
-        field_37_docinfo5 = (short)fIncludeFooter.setBoolean(field_37_docinfo5, value);
+    public void setFIncludeHeader(boolean value) {
+        field_37_docinfo5 = (short) fIncludeHeader.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fIncludeFooter field value.
+     * @return the fIncludeFooter field value.
      */
     @Internal
-    public boolean isFIncludeFooter()
-    {
+    public boolean isFIncludeFooter() {
         return fIncludeFooter.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fForcePageSizePag field value.
-     * 
+     * Sets the fIncludeFooter field value.
      */
     @Internal
-    public void setFForcePageSizePag( boolean value )
-    {
-        field_37_docinfo5 = (short)fForcePageSizePag.setBoolean(field_37_docinfo5, value);
+    public void setFIncludeFooter(boolean value) {
+        field_37_docinfo5 = (short) fIncludeFooter.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fForcePageSizePag field value.
+     * @return the fForcePageSizePag field value.
      */
     @Internal
-    public boolean isFForcePageSizePag()
-    {
+    public boolean isFForcePageSizePag() {
         return fForcePageSizePag.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fMinFontSizePag field value.
-     * 
+     * Sets the fForcePageSizePag field value.
      */
     @Internal
-    public void setFMinFontSizePag( boolean value )
-    {
-        field_37_docinfo5 = (short)fMinFontSizePag.setBoolean(field_37_docinfo5, value);
+    public void setFForcePageSizePag(boolean value) {
+        field_37_docinfo5 = (short) fForcePageSizePag.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fMinFontSizePag field value.
+     * @return the fMinFontSizePag field value.
      */
     @Internal
-    public boolean isFMinFontSizePag()
-    {
+    public boolean isFMinFontSizePag() {
         return fMinFontSizePag.isSet(field_37_docinfo5);
     }
 
     /**
-     * Sets the fHaveVersions field value.
-     * 
+     * Sets the fMinFontSizePag field value.
      */
     @Internal
-    public void setFHaveVersions( boolean value )
-    {
-        field_38_docinfo6 = (short)fHaveVersions.setBoolean(field_38_docinfo6, value);
+    public void setFMinFontSizePag(boolean value) {
+        field_37_docinfo5 = (short) fMinFontSizePag.setBoolean(field_37_docinfo5, value);
     }
 
     /**
-     * 
-     * @return  the fHaveVersions field value.
+     * @return the fHaveVersions field value.
      */
     @Internal
-    public boolean isFHaveVersions()
-    {
+    public boolean isFHaveVersions() {
         return fHaveVersions.isSet(field_38_docinfo6);
     }
 
     /**
-     * Sets the fAutoVersions field value.
-     * 
+     * Sets the fHaveVersions field value.
      */
     @Internal
-    public void setFAutoVersions( boolean value )
-    {
-        field_38_docinfo6 = (short)fAutoVersions.setBoolean(field_38_docinfo6, value);
+    public void setFHaveVersions(boolean value) {
+        field_38_docinfo6 = (short) fHaveVersions.setBoolean(field_38_docinfo6, value);
     }
 
     /**
-     * 
-     * @return  the fAutoVersions field value.
+     * @return the fAutoVersions field value.
      */
     @Internal
-    public boolean isFAutoVersions()
-    {
+    public boolean isFAutoVersions() {
         return fAutoVersions.isSet(field_38_docinfo6);
     }
 
     /**
-     * Sets the fVirusPrompted field value.
-     * 
+     * Sets the fAutoVersions field value.
      */
     @Internal
-    public void setFVirusPrompted( boolean value )
-    {
-        field_43_virusinfo = (int)fVirusPrompted.setBoolean(field_43_virusinfo, value);
+    public void setFAutoVersions(boolean value) {
+        field_38_docinfo6 = (short) fAutoVersions.setBoolean(field_38_docinfo6, value);
     }
 
     /**
-     * 
-     * @return  the fVirusPrompted field value.
+     * @return the fVirusPrompted field value.
      */
     @Internal
-    public boolean isFVirusPrompted()
-    {
+    public boolean isFVirusPrompted() {
         return fVirusPrompted.isSet(field_43_virusinfo);
     }
 
     /**
-     * Sets the fVirusLoadSafe field value.
-     * 
+     * Sets the fVirusPrompted field value.
      */
     @Internal
-    public void setFVirusLoadSafe( boolean value )
-    {
-        field_43_virusinfo = (int)fVirusLoadSafe.setBoolean(field_43_virusinfo, value);
+    public void setFVirusPrompted(boolean value) {
+        field_43_virusinfo = (int) fVirusPrompted.setBoolean(field_43_virusinfo, value);
     }
 
     /**
-     * 
-     * @return  the fVirusLoadSafe field value.
+     * @return the fVirusLoadSafe field value.
      */
     @Internal
-    public boolean isFVirusLoadSafe()
-    {
+    public boolean isFVirusLoadSafe() {
         return fVirusLoadSafe.isSet(field_43_virusinfo);
     }
 
     /**
-     * Sets the KeyVirusSession30 field value.
-     * 
+     * Sets the fVirusLoadSafe field value.
      */
     @Internal
-    public void setKeyVirusSession30( int value )
-    {
-        field_43_virusinfo = (int)KeyVirusSession30.setValue(field_43_virusinfo, value);
+    public void setFVirusLoadSafe(boolean value) {
+        field_43_virusinfo = (int) fVirusLoadSafe.setBoolean(field_43_virusinfo, value);
     }
 
     /**
-     * 
-     * @return  the KeyVirusSession30 field value.
+     * @return the KeyVirusSession30 field value.
      */
     @Internal
-    public int getKeyVirusSession30()
-    {
-        return ( int )KeyVirusSession30.getValue(field_43_virusinfo);
+    public int getKeyVirusSession30() {
+        return (int) KeyVirusSession30.getValue(field_43_virusinfo);
+    }
+
+    /**
+     * Sets the KeyVirusSession30 field value.
+     */
+    @Internal
+    public void setKeyVirusSession30(int value) {
+        field_43_virusinfo = (int) KeyVirusSession30.setValue(field_43_virusinfo, value);
     }
 
 }  // END OF CLASS

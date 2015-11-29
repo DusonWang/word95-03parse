@@ -19,36 +19,31 @@ package org.apache.poi.hwpf.usermodel;
 
 import java.util.ArrayList;
 
-public final class Table extends Range
-{
+public final class Table extends Range {
     private ArrayList<TableRow> _rows;
 
     private boolean _rowsFound = false;
 
     private int _tableLevel;
 
-    Table( int startIdxInclusive, int endIdxExclusive, Range parent,
-            int levelNum )
-    {
-        super( startIdxInclusive, endIdxExclusive, parent );
+    Table(int startIdxInclusive, int endIdxExclusive, Range parent,
+          int levelNum) {
+        super(startIdxInclusive, endIdxExclusive, parent);
         _tableLevel = levelNum;
         initRows();
     }
 
-    public TableRow getRow( int index )
-    {
+    public TableRow getRow(int index) {
         initRows();
-        return _rows.get( index );
+        return _rows.get(index);
     }
 
-    public int getTableLevel()
-    {
+    public int getTableLevel() {
         return _tableLevel;
     }
 
-    private void initRows()
-    {
-        if ( _rowsFound )
+    private void initRows() {
+        if (_rowsFound)
             return;
 
         _rows = new ArrayList<TableRow>();
@@ -56,36 +51,31 @@ public final class Table extends Range
         int rowEnd = 0;
 
         int numParagraphs = numParagraphs();
-        while ( rowEnd < numParagraphs )
-        {
-            Paragraph startRowP = getParagraph( rowStart );
-            Paragraph endRowP = getParagraph( rowEnd );
+        while (rowEnd < numParagraphs) {
+            Paragraph startRowP = getParagraph(rowStart);
+            Paragraph endRowP = getParagraph(rowEnd);
             rowEnd++;
-            if ( endRowP.isTableRowEnd()
-                    && endRowP.getTableLevel() == _tableLevel )
-            {
-                _rows.add( new TableRow( startRowP.getStartOffset(), endRowP
-                        .getEndOffset(), this, _tableLevel ) );
+            if (endRowP.isTableRowEnd()
+                    && endRowP.getTableLevel() == _tableLevel) {
+                _rows.add(new TableRow(startRowP.getStartOffset(), endRowP
+                        .getEndOffset(), this, _tableLevel));
                 rowStart = rowEnd;
             }
         }
         _rowsFound = true;
     }
 
-    public int numRows()
-    {
+    public int numRows() {
         initRows();
         return _rows.size();
     }
 
     @Override
-    protected void reset()
-    {
+    protected void reset() {
         _rowsFound = false;
     }
 
-    public int type()
-    {
+    public int type() {
         return TYPE_TABLE;
     }
 }

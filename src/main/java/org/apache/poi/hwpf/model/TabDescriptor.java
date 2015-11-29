@@ -21,25 +21,21 @@ import org.apache.poi.hwpf.usermodel.ParagraphProperties;
 
 /**
  * Tab descriptor. Part of {@link ParagraphProperties}.
- * 
+ *
  * @author vlsergey
  */
-public class TabDescriptor extends TBDAbstractType
-{
+public class TabDescriptor extends TBDAbstractType {
 
-    public TabDescriptor()
-    {
+    public TabDescriptor() {
     }
 
-    public TabDescriptor( byte[] bytes, int offset )
-    {
-        fillFields( bytes, offset );
+    public TabDescriptor(byte[] bytes, int offset) {
+        fillFields(bytes, offset);
     }
 
-    public byte[] toByteArray()
-    {
+    public byte[] toByteArray() {
         byte[] buf = new byte[getSize()];
-        serialize( buf, 0 );
+        serialize(buf, 0);
         return buf;
     }
 

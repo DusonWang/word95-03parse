@@ -18,8 +18,6 @@
 package org.apache.poi.hwpf.model.types;
 
 
-import java.util.Arrays;
-
 import org.apache.poi.hwpf.model.Colorref;
 import org.apache.poi.hwpf.model.Hyphenation;
 import org.apache.poi.hwpf.usermodel.BorderCode;
@@ -28,22 +26,61 @@ import org.apache.poi.hwpf.usermodel.ShadingDescriptor;
 import org.apache.poi.util.BitField;
 import org.apache.poi.util.Internal;
 
+import java.util.Arrays;
+
 /**
  * Character Properties.
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author S. Ryan Ackley
  */
 @Internal
-public abstract class CHPAbstractType
-{
+public abstract class CHPAbstractType {
 
-    protected int field_1_grpfChp;
+    /**/protected final static byte KCD_NON = 0;
+    /**/protected final static byte KCD_DOT = 1;
+    /**/protected final static byte KCD_COMMA = 2;
+    /**/protected final static byte KCD_CIRCLE = 3;
+    /**/protected final static byte KCD_UNDER_DOT = 4;
+    /**/protected final static byte ISS_NONE = 0;
+    /**/protected final static byte ISS_SUPERSCRIPTED = 1;
+    /**/protected final static byte ISS_SUBSCRIPTED = 2;
+    /**/protected final static byte KUL_NONE = 0;
+    /**/protected final static byte KUL_SINGLE = 1;
+    /**/protected final static byte KUL_BY_WORD = 2;
+    /**/protected final static byte KUL_DOUBLE = 3;
+    /**/protected final static byte KUL_DOTTED = 4;
+    /**/protected final static byte KUL_HIDDEN = 5;
+    /**/protected final static byte KUL_THICK = 6;
+    /**/protected final static byte KUL_DASH = 7;
+    /**/protected final static byte KUL_DOT = 8;
+    /**/protected final static byte KUL_DOT_DASH = 9;
+    /**/protected final static byte KUL_DOT_DOT_DASH = 10;
+    /**/protected final static byte KUL_WAVE = 11;
+    /**/protected final static byte KUL_DOTTED_HEAVY = 20;
+    /**/protected final static byte KUL_DASHED_HEAVY = 23;
+    /**/protected final static byte KUL_DOT_DASH_HEAVY = 25;
+    /**/protected final static byte KUL_DOT_DOT_DASH_HEAVY = 26;
+    /**/protected final static byte KUL_WAVE_HEAVY = 27;
+    /**/protected final static byte KUL_DASH_LONG = 39;
+    /**/protected final static byte KUL_WAVE_DOUBLE = 43;
+    /**/protected final static byte KUL_DASH_LONG_HEAVY = 55;
+    /**/protected final static byte SFXTTEXT_NO = 0;
+    /**/protected final static byte SFXTTEXT_LAS_VEGAS_LIGHTS = 1;
+    /**/protected final static byte SFXTTEXT_BACKGROUND_BLINK = 2;
+    /**/protected final static byte SFXTTEXT_SPARKLE_TEXT = 3;
+    /**/protected final static byte SFXTTEXT_MARCHING_ANTS = 4;
+    /**/protected final static byte SFXTTEXT_MARCHING_RED_ANTS = 5;
+    /**/protected final static byte SFXTTEXT_SHIMMER = 6;
+    /**/protected final static byte LBRCRJ_NONE = 0;
+    /**/protected final static byte LBRCRJ_LEFT = 1;
+    /**/protected final static byte LBRCRJ_RIGHT = 2;
+    /**/protected final static byte LBRCRJ_BOTH = 3;
     /**/private static final BitField fBold = new BitField(0x00000001);
     /**/private static final BitField fItalic = new BitField(0x00000002);
     /**/private static final BitField fRMarkDel = new BitField(0x00000004);
@@ -77,6 +114,24 @@ public abstract class CHPAbstractType
     /**/private static final BitField fFitText = new BitField(0x20000000);
     /**/private static final BitField fCalc = new BitField(0x40000000);
     /**/private static final BitField fFmtLineProp = new BitField(0x80000000);
+    /**/private static final BitField itypFELayout = new BitField(0x00ff);
+    /**/private static final BitField fTNY = new BitField(0x0100);
+    /**/private static final BitField fWarichu = new BitField(0x0200);
+    /**/private static final BitField fKumimoji = new BitField(0x0400);
+    /**/private static final BitField fRuby = new BitField(0x0800);
+    /**/private static final BitField fLSFitText = new BitField(0x1000);
+    /**/private static final BitField spare = new BitField(0xe000);
+    /**/private static final BitField iWarichuBracket = new BitField(0x07);
+    /**/private static final BitField fWarichuNoOpenBracket = new BitField(0x08);
+    /**/private static final BitField fTNYCompress = new BitField(0x10);
+    /**/private static final BitField fTNYFetchTxm = new BitField(0x20);
+    /**/private static final BitField fCellFitText = new BitField(0x40);
+    /**/private static final BitField unused = new BitField(0x80);
+    /**/private static final BitField icoHighlight = new BitField(0x001f);
+    /**/private static final BitField fHighlight = new BitField(0x0020);
+    /**/private static final BitField fChsDiff = new BitField(0x0001);
+    /**/private static final BitField fMacChs = new BitField(0x0020);
+    protected int field_1_grpfChp;
     protected int field_2_hps;
     protected int field_3_ftcAscii;
     protected int field_4_ftcFE;
@@ -89,40 +144,12 @@ public abstract class CHPAbstractType
     protected int field_11_lidDefault;
     protected int field_12_lidFE;
     protected byte field_13_kcd;
-    /**/protected final static byte KCD_NON = 0;
-    /**/protected final static byte KCD_DOT = 1;
-    /**/protected final static byte KCD_COMMA = 2;
-    /**/protected final static byte KCD_CIRCLE = 3;
-    /**/protected final static byte KCD_UNDER_DOT = 4;
     protected boolean field_14_fUndetermine;
     protected byte field_15_iss;
-    /**/protected final static byte ISS_NONE = 0;
-    /**/protected final static byte ISS_SUPERSCRIPTED = 1;
-    /**/protected final static byte ISS_SUBSCRIPTED = 2;
     protected boolean field_16_fSpecSymbol;
     protected byte field_17_idct;
     protected byte field_18_idctHint;
     protected byte field_19_kul;
-    /**/protected final static byte KUL_NONE = 0;
-    /**/protected final static byte KUL_SINGLE = 1;
-    /**/protected final static byte KUL_BY_WORD = 2;
-    /**/protected final static byte KUL_DOUBLE = 3;
-    /**/protected final static byte KUL_DOTTED = 4;
-    /**/protected final static byte KUL_HIDDEN = 5;
-    /**/protected final static byte KUL_THICK = 6;
-    /**/protected final static byte KUL_DASH = 7;
-    /**/protected final static byte KUL_DOT = 8;
-    /**/protected final static byte KUL_DOT_DASH = 9;
-    /**/protected final static byte KUL_DOT_DOT_DASH = 10;
-    /**/protected final static byte KUL_WAVE = 11;
-    /**/protected final static byte KUL_DOTTED_HEAVY = 20;
-    /**/protected final static byte KUL_DASHED_HEAVY = 23;
-    /**/protected final static byte KUL_DOT_DASH_HEAVY = 25;
-    /**/protected final static byte KUL_DOT_DOT_DASH_HEAVY = 26;
-    /**/protected final static byte KUL_WAVE_HEAVY = 27;
-    /**/protected final static byte KUL_DASH_LONG = 39;
-    /**/protected final static byte KUL_WAVE_DOUBLE = 43;
-    /**/protected final static byte KUL_DASH_LONG_HEAVY = 55;
     protected Hyphenation field_20_hresi;
     protected int field_21_hpsKern;
     protected short field_22_hpsPos;
@@ -130,30 +157,10 @@ public abstract class CHPAbstractType
     protected BorderCode field_24_brc;
     protected int field_25_ibstRMark;
     protected byte field_26_sfxtText;
-    /**/protected final static byte SFXTTEXT_NO = 0;
-    /**/protected final static byte SFXTTEXT_LAS_VEGAS_LIGHTS = 1;
-    /**/protected final static byte SFXTTEXT_BACKGROUND_BLINK = 2;
-    /**/protected final static byte SFXTTEXT_SPARKLE_TEXT = 3;
-    /**/protected final static byte SFXTTEXT_MARCHING_ANTS = 4;
-    /**/protected final static byte SFXTTEXT_MARCHING_RED_ANTS = 5;
-    /**/protected final static byte SFXTTEXT_SHIMMER = 6;
     protected boolean field_27_fDblBdr;
     protected boolean field_28_fBorderWS;
     protected short field_29_ufel;
-    /**/private static final BitField itypFELayout = new BitField(0x00ff);
-    /**/private static final BitField fTNY = new BitField(0x0100);
-    /**/private static final BitField fWarichu = new BitField(0x0200);
-    /**/private static final BitField fKumimoji = new BitField(0x0400);
-    /**/private static final BitField fRuby = new BitField(0x0800);
-    /**/private static final BitField fLSFitText = new BitField(0x1000);
-    /**/private static final BitField spare = new BitField(0xe000);
     protected byte field_30_copt;
-    /**/private static final BitField iWarichuBracket = new BitField(0x07);
-    /**/private static final BitField fWarichuNoOpenBracket = new BitField(0x08);
-    /**/private static final BitField fTNYCompress = new BitField(0x10);
-    /**/private static final BitField fTNYFetchTxm = new BitField(0x20);
-    /**/private static final BitField fCellFitText = new BitField(0x40);
-    /**/private static final BitField unused = new BitField(0x80);
     protected int field_31_hpsAsci;
     protected int field_32_hpsFE;
     protected int field_33_hpsBi;
@@ -172,11 +179,7 @@ public abstract class CHPAbstractType
     protected int field_46_idslReasonDel;
     protected int field_47_cpg;
     protected short field_48_Highlight;
-    /**/private static final BitField icoHighlight = new BitField(0x001f);
-    /**/private static final BitField fHighlight = new BitField(0x0020);
     protected short field_49_CharsetFlags;
-    /**/private static final BitField fChsDiff = new BitField(0x0001);
-    /**/private static final BitField fMacChs = new BitField(0x0020);
     protected short field_50_chse;
     protected boolean field_51_fPropRMark;
     protected int field_52_ibstPropRMark;
@@ -192,17 +195,12 @@ public abstract class CHPAbstractType
     protected byte[] field_62_xstDispFldRMark;
     protected int field_63_fcObjp;
     protected byte field_64_lbrCRJ;
-    /**/protected final static byte LBRCRJ_NONE = 0;
-    /**/protected final static byte LBRCRJ_LEFT = 1;
-    /**/protected final static byte LBRCRJ_RIGHT = 2;
-    /**/protected final static byte LBRCRJ_BOTH = 3;
     protected boolean field_65_fSpecVanish;
     protected boolean field_66_fHasOldProps;
     protected boolean field_67_fSdtVanish;
     protected int field_68_wCharScale;
 
-    protected CHPAbstractType()
-    {
+    protected CHPAbstractType() {
         this.field_2_hps = 20;
         this.field_8_cv = new Colorref();
         this.field_11_lidDefault = 0x0400;
@@ -224,207 +222,185 @@ public abstract class CHPAbstractType
 
 
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         CHPAbstractType other = (CHPAbstractType) obj;
-        if ( field_1_grpfChp != other.field_1_grpfChp )
+        if (field_1_grpfChp != other.field_1_grpfChp)
             return false;
-        if ( field_2_hps != other.field_2_hps )
+        if (field_2_hps != other.field_2_hps)
             return false;
-        if ( field_3_ftcAscii != other.field_3_ftcAscii )
+        if (field_3_ftcAscii != other.field_3_ftcAscii)
             return false;
-        if ( field_4_ftcFE != other.field_4_ftcFE )
+        if (field_4_ftcFE != other.field_4_ftcFE)
             return false;
-        if ( field_5_ftcOther != other.field_5_ftcOther )
+        if (field_5_ftcOther != other.field_5_ftcOther)
             return false;
-        if ( field_6_ftcBi != other.field_6_ftcBi )
+        if (field_6_ftcBi != other.field_6_ftcBi)
             return false;
-        if ( field_7_dxaSpace != other.field_7_dxaSpace )
+        if (field_7_dxaSpace != other.field_7_dxaSpace)
             return false;
-        if ( field_8_cv == null )
-        {
-            if ( other.field_8_cv != null )
+        if (field_8_cv == null) {
+            if (other.field_8_cv != null)
                 return false;
-        }
-        else if ( !field_8_cv.equals( other.field_8_cv ) )
+        } else if (!field_8_cv.equals(other.field_8_cv))
             return false;
-        if ( field_9_ico != other.field_9_ico )
+        if (field_9_ico != other.field_9_ico)
             return false;
-        if ( field_10_pctCharWidth != other.field_10_pctCharWidth )
+        if (field_10_pctCharWidth != other.field_10_pctCharWidth)
             return false;
-        if ( field_11_lidDefault != other.field_11_lidDefault )
+        if (field_11_lidDefault != other.field_11_lidDefault)
             return false;
-        if ( field_12_lidFE != other.field_12_lidFE )
+        if (field_12_lidFE != other.field_12_lidFE)
             return false;
-        if ( field_13_kcd != other.field_13_kcd )
+        if (field_13_kcd != other.field_13_kcd)
             return false;
-        if ( field_14_fUndetermine != other.field_14_fUndetermine )
+        if (field_14_fUndetermine != other.field_14_fUndetermine)
             return false;
-        if ( field_15_iss != other.field_15_iss )
+        if (field_15_iss != other.field_15_iss)
             return false;
-        if ( field_16_fSpecSymbol != other.field_16_fSpecSymbol )
+        if (field_16_fSpecSymbol != other.field_16_fSpecSymbol)
             return false;
-        if ( field_17_idct != other.field_17_idct )
+        if (field_17_idct != other.field_17_idct)
             return false;
-        if ( field_18_idctHint != other.field_18_idctHint )
+        if (field_18_idctHint != other.field_18_idctHint)
             return false;
-        if ( field_19_kul != other.field_19_kul )
+        if (field_19_kul != other.field_19_kul)
             return false;
-        if ( field_20_hresi == null )
-        {
-            if ( other.field_20_hresi != null )
+        if (field_20_hresi == null) {
+            if (other.field_20_hresi != null)
                 return false;
-        }
-        else if ( !field_20_hresi.equals( other.field_20_hresi ) )
+        } else if (!field_20_hresi.equals(other.field_20_hresi))
             return false;
-        if ( field_21_hpsKern != other.field_21_hpsKern )
+        if (field_21_hpsKern != other.field_21_hpsKern)
             return false;
-        if ( field_22_hpsPos != other.field_22_hpsPos )
+        if (field_22_hpsPos != other.field_22_hpsPos)
             return false;
-        if ( field_23_shd == null )
-        {
-            if ( other.field_23_shd != null )
+        if (field_23_shd == null) {
+            if (other.field_23_shd != null)
                 return false;
-        }
-        else if ( !field_23_shd.equals( other.field_23_shd ) )
+        } else if (!field_23_shd.equals(other.field_23_shd))
             return false;
-        if ( field_24_brc == null )
-        {
-            if ( other.field_24_brc != null )
+        if (field_24_brc == null) {
+            if (other.field_24_brc != null)
                 return false;
-        }
-        else if ( !field_24_brc.equals( other.field_24_brc ) )
+        } else if (!field_24_brc.equals(other.field_24_brc))
             return false;
-        if ( field_25_ibstRMark != other.field_25_ibstRMark )
+        if (field_25_ibstRMark != other.field_25_ibstRMark)
             return false;
-        if ( field_26_sfxtText != other.field_26_sfxtText )
+        if (field_26_sfxtText != other.field_26_sfxtText)
             return false;
-        if ( field_27_fDblBdr != other.field_27_fDblBdr )
+        if (field_27_fDblBdr != other.field_27_fDblBdr)
             return false;
-        if ( field_28_fBorderWS != other.field_28_fBorderWS )
+        if (field_28_fBorderWS != other.field_28_fBorderWS)
             return false;
-        if ( field_29_ufel != other.field_29_ufel )
+        if (field_29_ufel != other.field_29_ufel)
             return false;
-        if ( field_30_copt != other.field_30_copt )
+        if (field_30_copt != other.field_30_copt)
             return false;
-        if ( field_31_hpsAsci != other.field_31_hpsAsci )
+        if (field_31_hpsAsci != other.field_31_hpsAsci)
             return false;
-        if ( field_32_hpsFE != other.field_32_hpsFE )
+        if (field_32_hpsFE != other.field_32_hpsFE)
             return false;
-        if ( field_33_hpsBi != other.field_33_hpsBi )
+        if (field_33_hpsBi != other.field_33_hpsBi)
             return false;
-        if ( field_34_ftcSym != other.field_34_ftcSym )
+        if (field_34_ftcSym != other.field_34_ftcSym)
             return false;
-        if ( field_35_xchSym != other.field_35_xchSym )
+        if (field_35_xchSym != other.field_35_xchSym)
             return false;
-        if ( field_36_fcPic != other.field_36_fcPic )
+        if (field_36_fcPic != other.field_36_fcPic)
             return false;
-        if ( field_37_fcObj != other.field_37_fcObj )
+        if (field_37_fcObj != other.field_37_fcObj)
             return false;
-        if ( field_38_lTagObj != other.field_38_lTagObj )
+        if (field_38_lTagObj != other.field_38_lTagObj)
             return false;
-        if ( field_39_fcData != other.field_39_fcData )
+        if (field_39_fcData != other.field_39_fcData)
             return false;
-        if ( field_40_hresiOld == null )
-        {
-            if ( other.field_40_hresiOld != null )
+        if (field_40_hresiOld == null) {
+            if (other.field_40_hresiOld != null)
                 return false;
-        }
-        else if ( !field_40_hresiOld.equals( other.field_40_hresiOld ) )
+        } else if (!field_40_hresiOld.equals(other.field_40_hresiOld))
             return false;
-        if ( field_41_ibstRMarkDel != other.field_41_ibstRMarkDel )
+        if (field_41_ibstRMarkDel != other.field_41_ibstRMarkDel)
             return false;
-        if ( field_42_dttmRMark == null )
-        {
-            if ( other.field_42_dttmRMark != null )
+        if (field_42_dttmRMark == null) {
+            if (other.field_42_dttmRMark != null)
                 return false;
-        }
-        else if ( !field_42_dttmRMark.equals( other.field_42_dttmRMark ) )
+        } else if (!field_42_dttmRMark.equals(other.field_42_dttmRMark))
             return false;
-        if ( field_43_dttmRMarkDel == null )
-        {
-            if ( other.field_43_dttmRMarkDel != null )
+        if (field_43_dttmRMarkDel == null) {
+            if (other.field_43_dttmRMarkDel != null)
                 return false;
-        }
-        else if ( !field_43_dttmRMarkDel.equals( other.field_43_dttmRMarkDel ) )
+        } else if (!field_43_dttmRMarkDel.equals(other.field_43_dttmRMarkDel))
             return false;
-        if ( field_44_istd != other.field_44_istd )
+        if (field_44_istd != other.field_44_istd)
             return false;
-        if ( field_45_idslRMReason != other.field_45_idslRMReason )
+        if (field_45_idslRMReason != other.field_45_idslRMReason)
             return false;
-        if ( field_46_idslReasonDel != other.field_46_idslReasonDel )
+        if (field_46_idslReasonDel != other.field_46_idslReasonDel)
             return false;
-        if ( field_47_cpg != other.field_47_cpg )
+        if (field_47_cpg != other.field_47_cpg)
             return false;
-        if ( field_48_Highlight != other.field_48_Highlight )
+        if (field_48_Highlight != other.field_48_Highlight)
             return false;
-        if ( field_49_CharsetFlags != other.field_49_CharsetFlags )
+        if (field_49_CharsetFlags != other.field_49_CharsetFlags)
             return false;
-        if ( field_50_chse != other.field_50_chse )
+        if (field_50_chse != other.field_50_chse)
             return false;
-        if ( field_51_fPropRMark != other.field_51_fPropRMark )
+        if (field_51_fPropRMark != other.field_51_fPropRMark)
             return false;
-        if ( field_52_ibstPropRMark != other.field_52_ibstPropRMark )
+        if (field_52_ibstPropRMark != other.field_52_ibstPropRMark)
             return false;
-        if ( field_53_dttmPropRMark == null )
-        {
-            if ( other.field_53_dttmPropRMark != null )
+        if (field_53_dttmPropRMark == null) {
+            if (other.field_53_dttmPropRMark != null)
                 return false;
-        }
-        else if ( !field_53_dttmPropRMark.equals( other.field_53_dttmPropRMark ) )
+        } else if (!field_53_dttmPropRMark.equals(other.field_53_dttmPropRMark))
             return false;
-        if ( field_54_fConflictOrig != other.field_54_fConflictOrig )
+        if (field_54_fConflictOrig != other.field_54_fConflictOrig)
             return false;
-        if ( field_55_fConflictOtherDel != other.field_55_fConflictOtherDel )
+        if (field_55_fConflictOtherDel != other.field_55_fConflictOtherDel)
             return false;
-        if ( field_56_wConflict != other.field_56_wConflict )
+        if (field_56_wConflict != other.field_56_wConflict)
             return false;
-        if ( field_57_IbstConflict != other.field_57_IbstConflict )
+        if (field_57_IbstConflict != other.field_57_IbstConflict)
             return false;
-        if ( field_58_dttmConflict == null )
-        {
-            if ( other.field_58_dttmConflict != null )
+        if (field_58_dttmConflict == null) {
+            if (other.field_58_dttmConflict != null)
                 return false;
-        }
-        else if ( !field_58_dttmConflict.equals( other.field_58_dttmConflict ) )
+        } else if (!field_58_dttmConflict.equals(other.field_58_dttmConflict))
             return false;
-        if ( field_59_fDispFldRMark != other.field_59_fDispFldRMark )
+        if (field_59_fDispFldRMark != other.field_59_fDispFldRMark)
             return false;
-        if ( field_60_ibstDispFldRMark != other.field_60_ibstDispFldRMark )
+        if (field_60_ibstDispFldRMark != other.field_60_ibstDispFldRMark)
             return false;
-        if ( field_61_dttmDispFldRMark == null )
-        {
-            if ( other.field_61_dttmDispFldRMark != null )
+        if (field_61_dttmDispFldRMark == null) {
+            if (other.field_61_dttmDispFldRMark != null)
                 return false;
-        }
-        else if ( !field_61_dttmDispFldRMark.equals( other.field_61_dttmDispFldRMark ) )
+        } else if (!field_61_dttmDispFldRMark.equals(other.field_61_dttmDispFldRMark))
             return false;
-        if ( !Arrays.equals( field_62_xstDispFldRMark, other.field_62_xstDispFldRMark ) )
+        if (!Arrays.equals(field_62_xstDispFldRMark, other.field_62_xstDispFldRMark))
             return false;
-        if ( field_63_fcObjp != other.field_63_fcObjp )
+        if (field_63_fcObjp != other.field_63_fcObjp)
             return false;
-        if ( field_64_lbrCRJ != other.field_64_lbrCRJ )
+        if (field_64_lbrCRJ != other.field_64_lbrCRJ)
             return false;
-        if ( field_65_fSpecVanish != other.field_65_fSpecVanish )
+        if (field_65_fSpecVanish != other.field_65_fSpecVanish)
             return false;
-        if ( field_66_fHasOldProps != other.field_66_fHasOldProps )
+        if (field_66_fHasOldProps != other.field_66_fHasOldProps)
             return false;
-        if ( field_67_fSdtVanish != other.field_67_fSdtVanish )
+        if (field_67_fSdtVanish != other.field_67_fSdtVanish)
             return false;
-        if ( field_68_wCharScale != other.field_68_wCharScale )
+        if (field_68_wCharScale != other.field_68_wCharScale)
             return false;
         return true;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + field_1_grpfChp;
@@ -441,9 +417,9 @@ public abstract class CHPAbstractType
         result = prime * result + field_11_lidDefault;
         result = prime * result + field_12_lidFE;
         result = prime * result + field_13_kcd;
-        result = prime * result + ( field_14_fUndetermine? 1231 : 1237 );
+        result = prime * result + (field_14_fUndetermine ? 1231 : 1237);
         result = prime * result + field_15_iss;
-        result = prime * result + ( field_16_fSpecSymbol? 1231 : 1237 );
+        result = prime * result + (field_16_fSpecSymbol ? 1231 : 1237);
         result = prime * result + field_17_idct;
         result = prime * result + field_18_idctHint;
         result = prime * result + field_19_kul;
@@ -457,8 +433,8 @@ public abstract class CHPAbstractType
                 + ((field_24_brc == null) ? 0 : field_24_brc.hashCode());
         result = prime * result + field_25_ibstRMark;
         result = prime * result + field_26_sfxtText;
-        result = prime * result + ( field_27_fDblBdr? 1231 : 1237 );
-        result = prime * result + ( field_28_fBorderWS? 1231 : 1237 );
+        result = prime * result + (field_27_fDblBdr ? 1231 : 1237);
+        result = prime * result + (field_28_fBorderWS ? 1231 : 1237);
         result = prime * result + field_29_ufel;
         result = prime * result + field_30_copt;
         result = prime * result + field_31_hpsAsci;
@@ -484,32 +460,31 @@ public abstract class CHPAbstractType
         result = prime * result + field_48_Highlight;
         result = prime * result + field_49_CharsetFlags;
         result = prime * result + field_50_chse;
-        result = prime * result + ( field_51_fPropRMark? 1231 : 1237 );
+        result = prime * result + (field_51_fPropRMark ? 1231 : 1237);
         result = prime * result + field_52_ibstPropRMark;
         result = prime * result
                 + ((field_53_dttmPropRMark == null) ? 0 : field_53_dttmPropRMark.hashCode());
-        result = prime * result + ( field_54_fConflictOrig? 1231 : 1237 );
-        result = prime * result + ( field_55_fConflictOtherDel? 1231 : 1237 );
+        result = prime * result + (field_54_fConflictOrig ? 1231 : 1237);
+        result = prime * result + (field_55_fConflictOtherDel ? 1231 : 1237);
         result = prime * result + field_56_wConflict;
         result = prime * result + field_57_IbstConflict;
         result = prime * result
                 + ((field_58_dttmConflict == null) ? 0 : field_58_dttmConflict.hashCode());
-        result = prime * result + ( field_59_fDispFldRMark? 1231 : 1237 );
+        result = prime * result + (field_59_fDispFldRMark ? 1231 : 1237);
         result = prime * result + field_60_ibstDispFldRMark;
         result = prime * result
                 + ((field_61_dttmDispFldRMark == null) ? 0 : field_61_dttmDispFldRMark.hashCode());
-        result = prime * result + Arrays.hashCode( field_62_xstDispFldRMark );
+        result = prime * result + Arrays.hashCode(field_62_xstDispFldRMark);
         result = prime * result + field_63_fcObjp;
         result = prime * result + field_64_lbrCRJ;
-        result = prime * result + ( field_65_fSpecVanish? 1231 : 1237 );
-        result = prime * result + ( field_66_fHasOldProps? 1231 : 1237 );
-        result = prime * result + ( field_67_fSdtVanish? 1231 : 1237 );
+        result = prime * result + (field_65_fSpecVanish ? 1231 : 1237);
+        result = prime * result + (field_66_fHasOldProps ? 1231 : 1237);
+        result = prime * result + (field_67_fSdtVanish ? 1231 : 1237);
         result = prime * result + field_68_wCharScale;
         return result;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[CHP]\n");
         builder.append("    .grpfChp              = ");
@@ -707,8 +682,7 @@ public abstract class CHPAbstractType
      * Collection of the 32 flags.
      */
     @Internal
-    public int getGrpfChp()
-    {
+    public int getGrpfChp() {
         return field_1_grpfChp;
     }
 
@@ -716,8 +690,7 @@ public abstract class CHPAbstractType
      * Collection of the 32 flags.
      */
     @Internal
-    public void setGrpfChp( int field_1_grpfChp )
-    {
+    public void setGrpfChp(int field_1_grpfChp) {
         this.field_1_grpfChp = field_1_grpfChp;
     }
 
@@ -725,8 +698,7 @@ public abstract class CHPAbstractType
      * Font size in half points.
      */
     @Internal
-    public int getHps()
-    {
+    public int getHps() {
         return field_2_hps;
     }
 
@@ -734,8 +706,7 @@ public abstract class CHPAbstractType
      * Font size in half points.
      */
     @Internal
-    public void setHps( int field_2_hps )
-    {
+    public void setHps(int field_2_hps) {
         this.field_2_hps = field_2_hps;
     }
 
@@ -743,8 +714,7 @@ public abstract class CHPAbstractType
      * Font for ASCII text.
      */
     @Internal
-    public int getFtcAscii()
-    {
+    public int getFtcAscii() {
         return field_3_ftcAscii;
     }
 
@@ -752,8 +722,7 @@ public abstract class CHPAbstractType
      * Font for ASCII text.
      */
     @Internal
-    public void setFtcAscii( int field_3_ftcAscii )
-    {
+    public void setFtcAscii(int field_3_ftcAscii) {
         this.field_3_ftcAscii = field_3_ftcAscii;
     }
 
@@ -761,8 +730,7 @@ public abstract class CHPAbstractType
      * Font for East Asian text.
      */
     @Internal
-    public int getFtcFE()
-    {
+    public int getFtcFE() {
         return field_4_ftcFE;
     }
 
@@ -770,8 +738,7 @@ public abstract class CHPAbstractType
      * Font for East Asian text.
      */
     @Internal
-    public void setFtcFE( int field_4_ftcFE )
-    {
+    public void setFtcFE(int field_4_ftcFE) {
         this.field_4_ftcFE = field_4_ftcFE;
     }
 
@@ -779,8 +746,7 @@ public abstract class CHPAbstractType
      * Font for non-East Asian text.
      */
     @Internal
-    public int getFtcOther()
-    {
+    public int getFtcOther() {
         return field_5_ftcOther;
     }
 
@@ -788,8 +754,7 @@ public abstract class CHPAbstractType
      * Font for non-East Asian text.
      */
     @Internal
-    public void setFtcOther( int field_5_ftcOther )
-    {
+    public void setFtcOther(int field_5_ftcOther) {
         this.field_5_ftcOther = field_5_ftcOther;
     }
 
@@ -797,8 +762,7 @@ public abstract class CHPAbstractType
      * Font for Complex Scripts text.
      */
     @Internal
-    public int getFtcBi()
-    {
+    public int getFtcBi() {
         return field_6_ftcBi;
     }
 
@@ -806,8 +770,7 @@ public abstract class CHPAbstractType
      * Font for Complex Scripts text.
      */
     @Internal
-    public void setFtcBi( int field_6_ftcBi )
-    {
+    public void setFtcBi(int field_6_ftcBi) {
         this.field_6_ftcBi = field_6_ftcBi;
     }
 
@@ -815,8 +778,7 @@ public abstract class CHPAbstractType
      * Space following each character in the run expressed in twip units..
      */
     @Internal
-    public int getDxaSpace()
-    {
+    public int getDxaSpace() {
         return field_7_dxaSpace;
     }
 
@@ -824,8 +786,7 @@ public abstract class CHPAbstractType
      * Space following each character in the run expressed in twip units..
      */
     @Internal
-    public void setDxaSpace( int field_7_dxaSpace )
-    {
+    public void setDxaSpace(int field_7_dxaSpace) {
         this.field_7_dxaSpace = field_7_dxaSpace;
     }
 
@@ -833,8 +794,7 @@ public abstract class CHPAbstractType
      * 24-bit color.
      */
     @Internal
-    public Colorref getCv()
-    {
+    public Colorref getCv() {
         return field_8_cv;
     }
 
@@ -842,8 +802,7 @@ public abstract class CHPAbstractType
      * 24-bit color.
      */
     @Internal
-    public void setCv( Colorref field_8_cv )
-    {
+    public void setCv(Colorref field_8_cv) {
         this.field_8_cv = field_8_cv;
     }
 
@@ -851,8 +810,7 @@ public abstract class CHPAbstractType
      * Color of text for Word 97.
      */
     @Internal
-    public byte getIco()
-    {
+    public byte getIco() {
         return field_9_ico;
     }
 
@@ -860,8 +818,7 @@ public abstract class CHPAbstractType
      * Color of text for Word 97.
      */
     @Internal
-    public void setIco( byte field_9_ico )
-    {
+    public void setIco(byte field_9_ico) {
         this.field_9_ico = field_9_ico;
     }
 
@@ -869,8 +826,7 @@ public abstract class CHPAbstractType
      * Character scale.
      */
     @Internal
-    public int getPctCharWidth()
-    {
+    public int getPctCharWidth() {
         return field_10_pctCharWidth;
     }
 
@@ -878,8 +834,7 @@ public abstract class CHPAbstractType
      * Character scale.
      */
     @Internal
-    public void setPctCharWidth( int field_10_pctCharWidth )
-    {
+    public void setPctCharWidth(int field_10_pctCharWidth) {
         this.field_10_pctCharWidth = field_10_pctCharWidth;
     }
 
@@ -887,8 +842,7 @@ public abstract class CHPAbstractType
      * Get the lidDefault field for the CHP record.
      */
     @Internal
-    public int getLidDefault()
-    {
+    public int getLidDefault() {
         return field_11_lidDefault;
     }
 
@@ -896,8 +850,7 @@ public abstract class CHPAbstractType
      * Set the lidDefault field for the CHP record.
      */
     @Internal
-    public void setLidDefault( int field_11_lidDefault )
-    {
+    public void setLidDefault(int field_11_lidDefault) {
         this.field_11_lidDefault = field_11_lidDefault;
     }
 
@@ -905,8 +858,7 @@ public abstract class CHPAbstractType
      * Get the lidFE field for the CHP record.
      */
     @Internal
-    public int getLidFE()
-    {
+    public int getLidFE() {
         return field_12_lidFE;
     }
 
@@ -914,15 +866,14 @@ public abstract class CHPAbstractType
      * Set the lidFE field for the CHP record.
      */
     @Internal
-    public void setLidFE( int field_12_lidFE )
-    {
+    public void setLidFE(int field_12_lidFE) {
         this.field_12_lidFE = field_12_lidFE;
     }
 
     /**
      * Emphasis mark.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #KCD_NON}
      * <li>{@link #KCD_DOT}
      * <li>{@link #KCD_COMMA}
@@ -930,25 +881,22 @@ public abstract class CHPAbstractType
      * <li>{@link #KCD_UNDER_DOT}
      */
     @Internal
-    public byte getKcd()
-    {
+    public byte getKcd() {
         return field_13_kcd;
     }
 
     /**
      * Emphasis mark.
      *
-     * @param field_13_kcd
-     *        One of 
-     * <li>{@link #KCD_NON}
-     * <li>{@link #KCD_DOT}
-     * <li>{@link #KCD_COMMA}
-     * <li>{@link #KCD_CIRCLE}
-     * <li>{@link #KCD_UNDER_DOT}
+     * @param field_13_kcd One of
+     *                     <li>{@link #KCD_NON}
+     *                     <li>{@link #KCD_DOT}
+     *                     <li>{@link #KCD_COMMA}
+     *                     <li>{@link #KCD_CIRCLE}
+     *                     <li>{@link #KCD_UNDER_DOT}
      */
     @Internal
-    public void setKcd( byte field_13_kcd )
-    {
+    public void setKcd(byte field_13_kcd) {
         this.field_13_kcd = field_13_kcd;
     }
 
@@ -956,8 +904,7 @@ public abstract class CHPAbstractType
      * Character is undetermined.
      */
     @Internal
-    public boolean getFUndetermine()
-    {
+    public boolean getFUndetermine() {
         return field_14_fUndetermine;
     }
 
@@ -965,37 +912,33 @@ public abstract class CHPAbstractType
      * Character is undetermined.
      */
     @Internal
-    public void setFUndetermine( boolean field_14_fUndetermine )
-    {
+    public void setFUndetermine(boolean field_14_fUndetermine) {
         this.field_14_fUndetermine = field_14_fUndetermine;
     }
 
     /**
      * Superscript/subscript indices.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #ISS_NONE}
      * <li>{@link #ISS_SUPERSCRIPTED}
      * <li>{@link #ISS_SUBSCRIPTED}
      */
     @Internal
-    public byte getIss()
-    {
+    public byte getIss() {
         return field_15_iss;
     }
 
     /**
      * Superscript/subscript indices.
      *
-     * @param field_15_iss
-     *        One of 
-     * <li>{@link #ISS_NONE}
-     * <li>{@link #ISS_SUPERSCRIPTED}
-     * <li>{@link #ISS_SUBSCRIPTED}
+     * @param field_15_iss One of
+     *                     <li>{@link #ISS_NONE}
+     *                     <li>{@link #ISS_SUPERSCRIPTED}
+     *                     <li>{@link #ISS_SUBSCRIPTED}
      */
     @Internal
-    public void setIss( byte field_15_iss )
-    {
+    public void setIss(byte field_15_iss) {
         this.field_15_iss = field_15_iss;
     }
 
@@ -1003,8 +946,7 @@ public abstract class CHPAbstractType
      * Used by Word internally.
      */
     @Internal
-    public boolean getFSpecSymbol()
-    {
+    public boolean getFSpecSymbol() {
         return field_16_fSpecSymbol;
     }
 
@@ -1012,8 +954,7 @@ public abstract class CHPAbstractType
      * Used by Word internally.
      */
     @Internal
-    public void setFSpecSymbol( boolean field_16_fSpecSymbol )
-    {
+    public void setFSpecSymbol(boolean field_16_fSpecSymbol) {
         this.field_16_fSpecSymbol = field_16_fSpecSymbol;
     }
 
@@ -1021,8 +962,7 @@ public abstract class CHPAbstractType
      * Not stored in file.
      */
     @Internal
-    public byte getIdct()
-    {
+    public byte getIdct() {
         return field_17_idct;
     }
 
@@ -1030,8 +970,7 @@ public abstract class CHPAbstractType
      * Not stored in file.
      */
     @Internal
-    public void setIdct( byte field_17_idct )
-    {
+    public void setIdct(byte field_17_idct) {
         this.field_17_idct = field_17_idct;
     }
 
@@ -1039,8 +978,7 @@ public abstract class CHPAbstractType
      * Identifier of Character type.
      */
     @Internal
-    public byte getIdctHint()
-    {
+    public byte getIdctHint() {
         return field_18_idctHint;
     }
 
@@ -1048,15 +986,14 @@ public abstract class CHPAbstractType
      * Identifier of Character type.
      */
     @Internal
-    public void setIdctHint( byte field_18_idctHint )
-    {
+    public void setIdctHint(byte field_18_idctHint) {
         this.field_18_idctHint = field_18_idctHint;
     }
 
     /**
      * Underline code.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #KUL_NONE}
      * <li>{@link #KUL_SINGLE}
      * <li>{@link #KUL_BY_WORD}
@@ -1079,40 +1016,37 @@ public abstract class CHPAbstractType
      * <li>{@link #KUL_DASH_LONG_HEAVY}
      */
     @Internal
-    public byte getKul()
-    {
+    public byte getKul() {
         return field_19_kul;
     }
 
     /**
      * Underline code.
      *
-     * @param field_19_kul
-     *        One of 
-     * <li>{@link #KUL_NONE}
-     * <li>{@link #KUL_SINGLE}
-     * <li>{@link #KUL_BY_WORD}
-     * <li>{@link #KUL_DOUBLE}
-     * <li>{@link #KUL_DOTTED}
-     * <li>{@link #KUL_HIDDEN}
-     * <li>{@link #KUL_THICK}
-     * <li>{@link #KUL_DASH}
-     * <li>{@link #KUL_DOT}
-     * <li>{@link #KUL_DOT_DASH}
-     * <li>{@link #KUL_DOT_DOT_DASH}
-     * <li>{@link #KUL_WAVE}
-     * <li>{@link #KUL_DOTTED_HEAVY}
-     * <li>{@link #KUL_DASHED_HEAVY}
-     * <li>{@link #KUL_DOT_DASH_HEAVY}
-     * <li>{@link #KUL_DOT_DOT_DASH_HEAVY}
-     * <li>{@link #KUL_WAVE_HEAVY}
-     * <li>{@link #KUL_DASH_LONG}
-     * <li>{@link #KUL_WAVE_DOUBLE}
-     * <li>{@link #KUL_DASH_LONG_HEAVY}
+     * @param field_19_kul One of
+     *                     <li>{@link #KUL_NONE}
+     *                     <li>{@link #KUL_SINGLE}
+     *                     <li>{@link #KUL_BY_WORD}
+     *                     <li>{@link #KUL_DOUBLE}
+     *                     <li>{@link #KUL_DOTTED}
+     *                     <li>{@link #KUL_HIDDEN}
+     *                     <li>{@link #KUL_THICK}
+     *                     <li>{@link #KUL_DASH}
+     *                     <li>{@link #KUL_DOT}
+     *                     <li>{@link #KUL_DOT_DASH}
+     *                     <li>{@link #KUL_DOT_DOT_DASH}
+     *                     <li>{@link #KUL_WAVE}
+     *                     <li>{@link #KUL_DOTTED_HEAVY}
+     *                     <li>{@link #KUL_DASHED_HEAVY}
+     *                     <li>{@link #KUL_DOT_DASH_HEAVY}
+     *                     <li>{@link #KUL_DOT_DOT_DASH_HEAVY}
+     *                     <li>{@link #KUL_WAVE_HEAVY}
+     *                     <li>{@link #KUL_DASH_LONG}
+     *                     <li>{@link #KUL_WAVE_DOUBLE}
+     *                     <li>{@link #KUL_DASH_LONG_HEAVY}
      */
     @Internal
-    public void setKul( byte field_19_kul )
-    {
+    public void setKul(byte field_19_kul) {
         this.field_19_kul = field_19_kul;
     }
 
@@ -1120,8 +1054,7 @@ public abstract class CHPAbstractType
      * Get the hresi field for the CHP record.
      */
     @Internal
-    public Hyphenation getHresi()
-    {
+    public Hyphenation getHresi() {
         return field_20_hresi;
     }
 
@@ -1129,8 +1062,7 @@ public abstract class CHPAbstractType
      * Set the hresi field for the CHP record.
      */
     @Internal
-    public void setHresi( Hyphenation field_20_hresi )
-    {
+    public void setHresi(Hyphenation field_20_hresi) {
         this.field_20_hresi = field_20_hresi;
     }
 
@@ -1138,8 +1070,7 @@ public abstract class CHPAbstractType
      * Kerning distance for characters in run recorded in half points.
      */
     @Internal
-    public int getHpsKern()
-    {
+    public int getHpsKern() {
         return field_21_hpsKern;
     }
 
@@ -1147,8 +1078,7 @@ public abstract class CHPAbstractType
      * Kerning distance for characters in run recorded in half points.
      */
     @Internal
-    public void setHpsKern( int field_21_hpsKern )
-    {
+    public void setHpsKern(int field_21_hpsKern) {
         this.field_21_hpsKern = field_21_hpsKern;
     }
 
@@ -1156,8 +1086,7 @@ public abstract class CHPAbstractType
      * Reserved (actually used as vertical offset(?) value).
      */
     @Internal
-    public short getHpsPos()
-    {
+    public short getHpsPos() {
         return field_22_hpsPos;
     }
 
@@ -1165,8 +1094,7 @@ public abstract class CHPAbstractType
      * Reserved (actually used as vertical offset(?) value).
      */
     @Internal
-    public void setHpsPos( short field_22_hpsPos )
-    {
+    public void setHpsPos(short field_22_hpsPos) {
         this.field_22_hpsPos = field_22_hpsPos;
     }
 
@@ -1174,8 +1102,7 @@ public abstract class CHPAbstractType
      * Shading.
      */
     @Internal
-    public ShadingDescriptor getShd()
-    {
+    public ShadingDescriptor getShd() {
         return field_23_shd;
     }
 
@@ -1183,8 +1110,7 @@ public abstract class CHPAbstractType
      * Shading.
      */
     @Internal
-    public void setShd( ShadingDescriptor field_23_shd )
-    {
+    public void setShd(ShadingDescriptor field_23_shd) {
         this.field_23_shd = field_23_shd;
     }
 
@@ -1192,8 +1118,7 @@ public abstract class CHPAbstractType
      * Border.
      */
     @Internal
-    public BorderCode getBrc()
-    {
+    public BorderCode getBrc() {
         return field_24_brc;
     }
 
@@ -1201,8 +1126,7 @@ public abstract class CHPAbstractType
      * Border.
      */
     @Internal
-    public void setBrc( BorderCode field_24_brc )
-    {
+    public void setBrc(BorderCode field_24_brc) {
         this.field_24_brc = field_24_brc;
     }
 
@@ -1210,8 +1134,7 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when text in run was newly typed when revision marking was enabled.
      */
     @Internal
-    public int getIbstRMark()
-    {
+    public int getIbstRMark() {
         return field_25_ibstRMark;
     }
 
@@ -1219,15 +1142,14 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when text in run was newly typed when revision marking was enabled.
      */
     @Internal
-    public void setIbstRMark( int field_25_ibstRMark )
-    {
+    public void setIbstRMark(int field_25_ibstRMark) {
         this.field_25_ibstRMark = field_25_ibstRMark;
     }
 
     /**
      * Text animation.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #SFXTTEXT_NO}
      * <li>{@link #SFXTTEXT_LAS_VEGAS_LIGHTS}
      * <li>{@link #SFXTTEXT_BACKGROUND_BLINK}
@@ -1237,27 +1159,24 @@ public abstract class CHPAbstractType
      * <li>{@link #SFXTTEXT_SHIMMER}
      */
     @Internal
-    public byte getSfxtText()
-    {
+    public byte getSfxtText() {
         return field_26_sfxtText;
     }
 
     /**
      * Text animation.
      *
-     * @param field_26_sfxtText
-     *        One of 
-     * <li>{@link #SFXTTEXT_NO}
-     * <li>{@link #SFXTTEXT_LAS_VEGAS_LIGHTS}
-     * <li>{@link #SFXTTEXT_BACKGROUND_BLINK}
-     * <li>{@link #SFXTTEXT_SPARKLE_TEXT}
-     * <li>{@link #SFXTTEXT_MARCHING_ANTS}
-     * <li>{@link #SFXTTEXT_MARCHING_RED_ANTS}
-     * <li>{@link #SFXTTEXT_SHIMMER}
+     * @param field_26_sfxtText One of
+     *                          <li>{@link #SFXTTEXT_NO}
+     *                          <li>{@link #SFXTTEXT_LAS_VEGAS_LIGHTS}
+     *                          <li>{@link #SFXTTEXT_BACKGROUND_BLINK}
+     *                          <li>{@link #SFXTTEXT_SPARKLE_TEXT}
+     *                          <li>{@link #SFXTTEXT_MARCHING_ANTS}
+     *                          <li>{@link #SFXTTEXT_MARCHING_RED_ANTS}
+     *                          <li>{@link #SFXTTEXT_SHIMMER}
      */
     @Internal
-    public void setSfxtText( byte field_26_sfxtText )
-    {
+    public void setSfxtText(byte field_26_sfxtText) {
         this.field_26_sfxtText = field_26_sfxtText;
     }
 
@@ -1265,8 +1184,7 @@ public abstract class CHPAbstractType
      * Used internally by Word.
      */
     @Internal
-    public boolean getFDblBdr()
-    {
+    public boolean getFDblBdr() {
         return field_27_fDblBdr;
     }
 
@@ -1274,8 +1192,7 @@ public abstract class CHPAbstractType
      * Used internally by Word.
      */
     @Internal
-    public void setFDblBdr( boolean field_27_fDblBdr )
-    {
+    public void setFDblBdr(boolean field_27_fDblBdr) {
         this.field_27_fDblBdr = field_27_fDblBdr;
     }
 
@@ -1283,8 +1200,7 @@ public abstract class CHPAbstractType
      * Used internally by Word.
      */
     @Internal
-    public boolean getFBorderWS()
-    {
+    public boolean getFBorderWS() {
         return field_28_fBorderWS;
     }
 
@@ -1292,8 +1208,7 @@ public abstract class CHPAbstractType
      * Used internally by Word.
      */
     @Internal
-    public void setFBorderWS( boolean field_28_fBorderWS )
-    {
+    public void setFBorderWS(boolean field_28_fBorderWS) {
         this.field_28_fBorderWS = field_28_fBorderWS;
     }
 
@@ -1301,8 +1216,7 @@ public abstract class CHPAbstractType
      * Collection properties represented by itypFELayout and copt (East Asian layout properties).
      */
     @Internal
-    public short getUfel()
-    {
+    public short getUfel() {
         return field_29_ufel;
     }
 
@@ -1310,8 +1224,7 @@ public abstract class CHPAbstractType
      * Collection properties represented by itypFELayout and copt (East Asian layout properties).
      */
     @Internal
-    public void setUfel( short field_29_ufel )
-    {
+    public void setUfel(short field_29_ufel) {
         this.field_29_ufel = field_29_ufel;
     }
 
@@ -1319,8 +1232,7 @@ public abstract class CHPAbstractType
      * Collection of the 5 flags.
      */
     @Internal
-    public byte getCopt()
-    {
+    public byte getCopt() {
         return field_30_copt;
     }
 
@@ -1328,8 +1240,7 @@ public abstract class CHPAbstractType
      * Collection of the 5 flags.
      */
     @Internal
-    public void setCopt( byte field_30_copt )
-    {
+    public void setCopt(byte field_30_copt) {
         this.field_30_copt = field_30_copt;
     }
 
@@ -1337,8 +1248,7 @@ public abstract class CHPAbstractType
      * Font size for ASCII font.
      */
     @Internal
-    public int getHpsAsci()
-    {
+    public int getHpsAsci() {
         return field_31_hpsAsci;
     }
 
@@ -1346,8 +1256,7 @@ public abstract class CHPAbstractType
      * Font size for ASCII font.
      */
     @Internal
-    public void setHpsAsci( int field_31_hpsAsci )
-    {
+    public void setHpsAsci(int field_31_hpsAsci) {
         this.field_31_hpsAsci = field_31_hpsAsci;
     }
 
@@ -1355,8 +1264,7 @@ public abstract class CHPAbstractType
      * Font size for East Asian text.
      */
     @Internal
-    public int getHpsFE()
-    {
+    public int getHpsFE() {
         return field_32_hpsFE;
     }
 
@@ -1364,8 +1272,7 @@ public abstract class CHPAbstractType
      * Font size for East Asian text.
      */
     @Internal
-    public void setHpsFE( int field_32_hpsFE )
-    {
+    public void setHpsFE(int field_32_hpsFE) {
         this.field_32_hpsFE = field_32_hpsFE;
     }
 
@@ -1373,8 +1280,7 @@ public abstract class CHPAbstractType
      * Font size for Complex Scripts text.
      */
     @Internal
-    public int getHpsBi()
-    {
+    public int getHpsBi() {
         return field_33_hpsBi;
     }
 
@@ -1382,8 +1288,7 @@ public abstract class CHPAbstractType
      * Font size for Complex Scripts text.
      */
     @Internal
-    public void setHpsBi( int field_33_hpsBi )
-    {
+    public void setHpsBi(int field_33_hpsBi) {
         this.field_33_hpsBi = field_33_hpsBi;
     }
 
@@ -1391,8 +1296,7 @@ public abstract class CHPAbstractType
      * an index into the rgffn structure. When chp.fSpec is 1 and the character recorded for the run in the document stream is chSymbol (0x28), chp.ftcSym identifies the font code of the symbol font that will be used to display the symbol character recorded in chp.xchSym..
      */
     @Internal
-    public int getFtcSym()
-    {
+    public int getFtcSym() {
         return field_34_ftcSym;
     }
 
@@ -1400,8 +1304,7 @@ public abstract class CHPAbstractType
      * an index into the rgffn structure. When chp.fSpec is 1 and the character recorded for the run in the document stream is chSymbol (0x28), chp.ftcSym identifies the font code of the symbol font that will be used to display the symbol character recorded in chp.xchSym..
      */
     @Internal
-    public void setFtcSym( int field_34_ftcSym )
-    {
+    public void setFtcSym(int field_34_ftcSym) {
         this.field_34_ftcSym = field_34_ftcSym;
     }
 
@@ -1409,8 +1312,7 @@ public abstract class CHPAbstractType
      * When chp.fSpec==1 and the character recorded for the run in the document stream is chSymbol (0x28), the character stored chp.xchSym will be displayed using the font specified in chp.ftcSym..
      */
     @Internal
-    public int getXchSym()
-    {
+    public int getXchSym() {
         return field_35_xchSym;
     }
 
@@ -1418,8 +1320,7 @@ public abstract class CHPAbstractType
      * When chp.fSpec==1 and the character recorded for the run in the document stream is chSymbol (0x28), the character stored chp.xchSym will be displayed using the font specified in chp.ftcSym..
      */
     @Internal
-    public void setXchSym( int field_35_xchSym )
-    {
+    public void setXchSym(int field_35_xchSym) {
         this.field_35_xchSym = field_35_xchSym;
     }
 
@@ -1427,8 +1328,7 @@ public abstract class CHPAbstractType
      * Offset in data stream pointing to beginning of a picture when character is a picture character (character is 0x01 and chp.fSpec is 1)..
      */
     @Internal
-    public int getFcPic()
-    {
+    public int getFcPic() {
         return field_36_fcPic;
     }
 
@@ -1436,8 +1336,7 @@ public abstract class CHPAbstractType
      * Offset in data stream pointing to beginning of a picture when character is a picture character (character is 0x01 and chp.fSpec is 1)..
      */
     @Internal
-    public void setFcPic( int field_36_fcPic )
-    {
+    public void setFcPic(int field_36_fcPic) {
         this.field_36_fcPic = field_36_fcPic;
     }
 
@@ -1445,8 +1344,7 @@ public abstract class CHPAbstractType
      * Offset in data stream pointing to beginning of a picture when character is an OLE1 object character (character is 0x20 and chp.fSpec is 1, chp.fOle2 is 0)..
      */
     @Internal
-    public int getFcObj()
-    {
+    public int getFcObj() {
         return field_37_fcObj;
     }
 
@@ -1454,8 +1352,7 @@ public abstract class CHPAbstractType
      * Offset in data stream pointing to beginning of a picture when character is an OLE1 object character (character is 0x20 and chp.fSpec is 1, chp.fOle2 is 0)..
      */
     @Internal
-    public void setFcObj( int field_37_fcObj )
-    {
+    public void setFcObj(int field_37_fcObj) {
         this.field_37_fcObj = field_37_fcObj;
     }
 
@@ -1463,8 +1360,7 @@ public abstract class CHPAbstractType
      * An object ID for an OLE object, only set if chp.fSpec and chp.fOle2 are both true, and chp.fObj..
      */
     @Internal
-    public int getLTagObj()
-    {
+    public int getLTagObj() {
         return field_38_lTagObj;
     }
 
@@ -1472,8 +1368,7 @@ public abstract class CHPAbstractType
      * An object ID for an OLE object, only set if chp.fSpec and chp.fOle2 are both true, and chp.fObj..
      */
     @Internal
-    public void setLTagObj( int field_38_lTagObj )
-    {
+    public void setLTagObj(int field_38_lTagObj) {
         this.field_38_lTagObj = field_38_lTagObj;
     }
 
@@ -1481,8 +1376,7 @@ public abstract class CHPAbstractType
      * Points to location of picture data, only if chp.fSpec is true..
      */
     @Internal
-    public int getFcData()
-    {
+    public int getFcData() {
         return field_39_fcData;
     }
 
@@ -1490,8 +1384,7 @@ public abstract class CHPAbstractType
      * Points to location of picture data, only if chp.fSpec is true..
      */
     @Internal
-    public void setFcData( int field_39_fcData )
-    {
+    public void setFcData(int field_39_fcData) {
         this.field_39_fcData = field_39_fcData;
     }
 
@@ -1499,8 +1392,7 @@ public abstract class CHPAbstractType
      * Get the hresiOld field for the CHP record.
      */
     @Internal
-    public Hyphenation getHresiOld()
-    {
+    public Hyphenation getHresiOld() {
         return field_40_hresiOld;
     }
 
@@ -1508,8 +1400,7 @@ public abstract class CHPAbstractType
      * Set the hresiOld field for the CHP record.
      */
     @Internal
-    public void setHresiOld( Hyphenation field_40_hresiOld )
-    {
+    public void setHresiOld(Hyphenation field_40_hresiOld) {
         this.field_40_hresiOld = field_40_hresiOld;
     }
 
@@ -1517,8 +1408,7 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when text in run was deleted when revision marking was enabled..
      */
     @Internal
-    public int getIbstRMarkDel()
-    {
+    public int getIbstRMarkDel() {
         return field_41_ibstRMarkDel;
     }
 
@@ -1526,8 +1416,7 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when text in run was deleted when revision marking was enabled..
      */
     @Internal
-    public void setIbstRMarkDel( int field_41_ibstRMarkDel )
-    {
+    public void setIbstRMarkDel(int field_41_ibstRMarkDel) {
         this.field_41_ibstRMarkDel = field_41_ibstRMarkDel;
     }
 
@@ -1535,8 +1424,7 @@ public abstract class CHPAbstractType
      * Date/time at which this run of text was entered/modified by the author (Only recorded when revision marking is on.).
      */
     @Internal
-    public DateAndTime getDttmRMark()
-    {
+    public DateAndTime getDttmRMark() {
         return field_42_dttmRMark;
     }
 
@@ -1544,8 +1432,7 @@ public abstract class CHPAbstractType
      * Date/time at which this run of text was entered/modified by the author (Only recorded when revision marking is on.).
      */
     @Internal
-    public void setDttmRMark( DateAndTime field_42_dttmRMark )
-    {
+    public void setDttmRMark(DateAndTime field_42_dttmRMark) {
         this.field_42_dttmRMark = field_42_dttmRMark;
     }
 
@@ -1553,8 +1440,7 @@ public abstract class CHPAbstractType
      * Date/time at which this run of text was deleted by the author (Only recorded when revision marking is on.).
      */
     @Internal
-    public DateAndTime getDttmRMarkDel()
-    {
+    public DateAndTime getDttmRMarkDel() {
         return field_43_dttmRMarkDel;
     }
 
@@ -1562,8 +1448,7 @@ public abstract class CHPAbstractType
      * Date/time at which this run of text was deleted by the author (Only recorded when revision marking is on.).
      */
     @Internal
-    public void setDttmRMarkDel( DateAndTime field_43_dttmRMarkDel )
-    {
+    public void setDttmRMarkDel(DateAndTime field_43_dttmRMarkDel) {
         this.field_43_dttmRMarkDel = field_43_dttmRMarkDel;
     }
 
@@ -1571,8 +1456,7 @@ public abstract class CHPAbstractType
      * Index to character style descriptor in the stylesheet that tags this run of text. When istd is istdNormalChar (10 decimal), characters in run are not affected by a character style. If chp.istd contains any other value, chpx of the specified character style are applied to CHP for this run before any other exceptional properties are applied..
      */
     @Internal
-    public int getIstd()
-    {
+    public int getIstd() {
         return field_44_istd;
     }
 
@@ -1580,8 +1464,7 @@ public abstract class CHPAbstractType
      * Index to character style descriptor in the stylesheet that tags this run of text. When istd is istdNormalChar (10 decimal), characters in run are not affected by a character style. If chp.istd contains any other value, chpx of the specified character style are applied to CHP for this run before any other exceptional properties are applied..
      */
     @Internal
-    public void setIstd( int field_44_istd )
-    {
+    public void setIstd(int field_44_istd) {
         this.field_44_istd = field_44_istd;
     }
 
@@ -1589,8 +1472,7 @@ public abstract class CHPAbstractType
      * An index to strings displayed as reasons for actions taken by Word's AutoFormat code.
      */
     @Internal
-    public int getIdslRMReason()
-    {
+    public int getIdslRMReason() {
         return field_45_idslRMReason;
     }
 
@@ -1598,8 +1480,7 @@ public abstract class CHPAbstractType
      * An index to strings displayed as reasons for actions taken by Word's AutoFormat code.
      */
     @Internal
-    public void setIdslRMReason( int field_45_idslRMReason )
-    {
+    public void setIdslRMReason(int field_45_idslRMReason) {
         this.field_45_idslRMReason = field_45_idslRMReason;
     }
 
@@ -1607,8 +1488,7 @@ public abstract class CHPAbstractType
      * An index to strings displayed as reasons for actions taken by Word's AutoFormat code.
      */
     @Internal
-    public int getIdslReasonDel()
-    {
+    public int getIdslReasonDel() {
         return field_46_idslReasonDel;
     }
 
@@ -1616,8 +1496,7 @@ public abstract class CHPAbstractType
      * An index to strings displayed as reasons for actions taken by Word's AutoFormat code.
      */
     @Internal
-    public void setIdslReasonDel( int field_46_idslReasonDel )
-    {
+    public void setIdslReasonDel(int field_46_idslReasonDel) {
         this.field_46_idslReasonDel = field_46_idslReasonDel;
     }
 
@@ -1625,8 +1504,7 @@ public abstract class CHPAbstractType
      * Code page of run in pre-Unicode files.
      */
     @Internal
-    public int getCpg()
-    {
+    public int getCpg() {
         return field_47_cpg;
     }
 
@@ -1634,8 +1512,7 @@ public abstract class CHPAbstractType
      * Code page of run in pre-Unicode files.
      */
     @Internal
-    public void setCpg( int field_47_cpg )
-    {
+    public void setCpg(int field_47_cpg) {
         this.field_47_cpg = field_47_cpg;
     }
 
@@ -1643,8 +1520,7 @@ public abstract class CHPAbstractType
      * Get the Highlight field for the CHP record.
      */
     @Internal
-    public short getHighlight()
-    {
+    public short getHighlight() {
         return field_48_Highlight;
     }
 
@@ -1652,8 +1528,7 @@ public abstract class CHPAbstractType
      * Set the Highlight field for the CHP record.
      */
     @Internal
-    public void setHighlight( short field_48_Highlight )
-    {
+    public void setHighlight(short field_48_Highlight) {
         this.field_48_Highlight = field_48_Highlight;
     }
 
@@ -1661,8 +1536,7 @@ public abstract class CHPAbstractType
      * Get the CharsetFlags field for the CHP record.
      */
     @Internal
-    public short getCharsetFlags()
-    {
+    public short getCharsetFlags() {
         return field_49_CharsetFlags;
     }
 
@@ -1670,8 +1544,7 @@ public abstract class CHPAbstractType
      * Set the CharsetFlags field for the CHP record.
      */
     @Internal
-    public void setCharsetFlags( short field_49_CharsetFlags )
-    {
+    public void setCharsetFlags(short field_49_CharsetFlags) {
         this.field_49_CharsetFlags = field_49_CharsetFlags;
     }
 
@@ -1679,8 +1552,7 @@ public abstract class CHPAbstractType
      * Get the chse field for the CHP record.
      */
     @Internal
-    public short getChse()
-    {
+    public short getChse() {
         return field_50_chse;
     }
 
@@ -1688,8 +1560,7 @@ public abstract class CHPAbstractType
      * Set the chse field for the CHP record.
      */
     @Internal
-    public void setChse( short field_50_chse )
-    {
+    public void setChse(short field_50_chse) {
         this.field_50_chse = field_50_chse;
     }
 
@@ -1697,8 +1568,7 @@ public abstract class CHPAbstractType
      * properties have been changed with revision marking on.
      */
     @Internal
-    public boolean getFPropRMark()
-    {
+    public boolean getFPropRMark() {
         return field_51_fPropRMark;
     }
 
@@ -1706,8 +1576,7 @@ public abstract class CHPAbstractType
      * properties have been changed with revision marking on.
      */
     @Internal
-    public void setFPropRMark( boolean field_51_fPropRMark )
-    {
+    public void setFPropRMark(boolean field_51_fPropRMark) {
         this.field_51_fPropRMark = field_51_fPropRMark;
     }
 
@@ -1715,8 +1584,7 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when properties have been changed when revision marking was enabled..
      */
     @Internal
-    public int getIbstPropRMark()
-    {
+    public int getIbstPropRMark() {
         return field_52_ibstPropRMark;
     }
 
@@ -1724,8 +1592,7 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when properties have been changed when revision marking was enabled..
      */
     @Internal
-    public void setIbstPropRMark( int field_52_ibstPropRMark )
-    {
+    public void setIbstPropRMark(int field_52_ibstPropRMark) {
         this.field_52_ibstPropRMark = field_52_ibstPropRMark;
     }
 
@@ -1733,8 +1600,7 @@ public abstract class CHPAbstractType
      * Date/time at which properties of this were changed for this run of text by the author. (Only recorded when revision marking is on.).
      */
     @Internal
-    public DateAndTime getDttmPropRMark()
-    {
+    public DateAndTime getDttmPropRMark() {
         return field_53_dttmPropRMark;
     }
 
@@ -1742,8 +1608,7 @@ public abstract class CHPAbstractType
      * Date/time at which properties of this were changed for this run of text by the author. (Only recorded when revision marking is on.).
      */
     @Internal
-    public void setDttmPropRMark( DateAndTime field_53_dttmPropRMark )
-    {
+    public void setDttmPropRMark(DateAndTime field_53_dttmPropRMark) {
         this.field_53_dttmPropRMark = field_53_dttmPropRMark;
     }
 
@@ -1751,8 +1616,7 @@ public abstract class CHPAbstractType
      * When chp.wConflict!=0, this is TRUE when text is part of the original version of text. When FALSE, text is alternative introduced by reconciliation operation..
      */
     @Internal
-    public boolean getFConflictOrig()
-    {
+    public boolean getFConflictOrig() {
         return field_54_fConflictOrig;
     }
 
@@ -1760,8 +1624,7 @@ public abstract class CHPAbstractType
      * When chp.wConflict!=0, this is TRUE when text is part of the original version of text. When FALSE, text is alternative introduced by reconciliation operation..
      */
     @Internal
-    public void setFConflictOrig( boolean field_54_fConflictOrig )
-    {
+    public void setFConflictOrig(boolean field_54_fConflictOrig) {
         this.field_54_fConflictOrig = field_54_fConflictOrig;
     }
 
@@ -1769,8 +1632,7 @@ public abstract class CHPAbstractType
      * When fConflictOtherDel==fTrue, the other side of a reconciliation conflict causes this text to be deleted.
      */
     @Internal
-    public boolean getFConflictOtherDel()
-    {
+    public boolean getFConflictOtherDel() {
         return field_55_fConflictOtherDel;
     }
 
@@ -1778,8 +1640,7 @@ public abstract class CHPAbstractType
      * When fConflictOtherDel==fTrue, the other side of a reconciliation conflict causes this text to be deleted.
      */
     @Internal
-    public void setFConflictOtherDel( boolean field_55_fConflictOtherDel )
-    {
+    public void setFConflictOtherDel(boolean field_55_fConflictOtherDel) {
         this.field_55_fConflictOtherDel = field_55_fConflictOtherDel;
     }
 
@@ -1787,8 +1648,7 @@ public abstract class CHPAbstractType
      * When != 0, index number that identifies all text participating in a particular conflict incident.
      */
     @Internal
-    public int getWConflict()
-    {
+    public int getWConflict() {
         return field_56_wConflict;
     }
 
@@ -1796,8 +1656,7 @@ public abstract class CHPAbstractType
      * When != 0, index number that identifies all text participating in a particular conflict incident.
      */
     @Internal
-    public void setWConflict( int field_56_wConflict )
-    {
+    public void setWConflict(int field_56_wConflict) {
         this.field_56_wConflict = field_56_wConflict;
     }
 
@@ -1805,8 +1664,7 @@ public abstract class CHPAbstractType
      * Who made this change for this side of the conflict..
      */
     @Internal
-    public int getIbstConflict()
-    {
+    public int getIbstConflict() {
         return field_57_IbstConflict;
     }
 
@@ -1814,8 +1672,7 @@ public abstract class CHPAbstractType
      * Who made this change for this side of the conflict..
      */
     @Internal
-    public void setIbstConflict( int field_57_IbstConflict )
-    {
+    public void setIbstConflict(int field_57_IbstConflict) {
         this.field_57_IbstConflict = field_57_IbstConflict;
     }
 
@@ -1823,8 +1680,7 @@ public abstract class CHPAbstractType
      * When the change was made.
      */
     @Internal
-    public DateAndTime getDttmConflict()
-    {
+    public DateAndTime getDttmConflict() {
         return field_58_dttmConflict;
     }
 
@@ -1832,8 +1688,7 @@ public abstract class CHPAbstractType
      * When the change was made.
      */
     @Internal
-    public void setDttmConflict( DateAndTime field_58_dttmConflict )
-    {
+    public void setDttmConflict(DateAndTime field_58_dttmConflict) {
         this.field_58_dttmConflict = field_58_dttmConflict;
     }
 
@@ -1841,8 +1696,7 @@ public abstract class CHPAbstractType
      * the number for a ListNum field is being tracked in xstDispFldRMark. If that number is different from the current value, the number has changed. Only valid for ListNum fields..
      */
     @Internal
-    public boolean getFDispFldRMark()
-    {
+    public boolean getFDispFldRMark() {
         return field_59_fDispFldRMark;
     }
 
@@ -1850,8 +1704,7 @@ public abstract class CHPAbstractType
      * the number for a ListNum field is being tracked in xstDispFldRMark. If that number is different from the current value, the number has changed. Only valid for ListNum fields..
      */
     @Internal
-    public void setFDispFldRMark( boolean field_59_fDispFldRMark )
-    {
+    public void setFDispFldRMark(boolean field_59_fDispFldRMark) {
         this.field_59_fDispFldRMark = field_59_fDispFldRMark;
     }
 
@@ -1859,8 +1712,7 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when ListNum field numbering has been changed when revision marking was enabled..
      */
     @Internal
-    public int getIbstDispFldRMark()
-    {
+    public int getIbstDispFldRMark() {
         return field_60_ibstDispFldRMark;
     }
 
@@ -1868,8 +1720,7 @@ public abstract class CHPAbstractType
      * Index to author IDs stored in hsttbfRMark. Used when ListNum field numbering has been changed when revision marking was enabled..
      */
     @Internal
-    public void setIbstDispFldRMark( int field_60_ibstDispFldRMark )
-    {
+    public void setIbstDispFldRMark(int field_60_ibstDispFldRMark) {
         this.field_60_ibstDispFldRMark = field_60_ibstDispFldRMark;
     }
 
@@ -1877,8 +1728,7 @@ public abstract class CHPAbstractType
      * The date for the ListNum field number change.
      */
     @Internal
-    public DateAndTime getDttmDispFldRMark()
-    {
+    public DateAndTime getDttmDispFldRMark() {
         return field_61_dttmDispFldRMark;
     }
 
@@ -1886,8 +1736,7 @@ public abstract class CHPAbstractType
      * The date for the ListNum field number change.
      */
     @Internal
-    public void setDttmDispFldRMark( DateAndTime field_61_dttmDispFldRMark )
-    {
+    public void setDttmDispFldRMark(DateAndTime field_61_dttmDispFldRMark) {
         this.field_61_dttmDispFldRMark = field_61_dttmDispFldRMark;
     }
 
@@ -1895,8 +1744,7 @@ public abstract class CHPAbstractType
      * The string value of the ListNum field when revision mark tracking began.
      */
     @Internal
-    public byte[] getXstDispFldRMark()
-    {
+    public byte[] getXstDispFldRMark() {
         return field_62_xstDispFldRMark;
     }
 
@@ -1904,8 +1752,7 @@ public abstract class CHPAbstractType
      * The string value of the ListNum field when revision mark tracking began.
      */
     @Internal
-    public void setXstDispFldRMark( byte[] field_62_xstDispFldRMark )
-    {
+    public void setXstDispFldRMark(byte[] field_62_xstDispFldRMark) {
         this.field_62_xstDispFldRMark = field_62_xstDispFldRMark;
     }
 
@@ -1913,8 +1760,7 @@ public abstract class CHPAbstractType
      * Offset in the data stream indicating the location of OLE object data.
      */
     @Internal
-    public int getFcObjp()
-    {
+    public int getFcObjp() {
         return field_63_fcObjp;
     }
 
@@ -1922,39 +1768,35 @@ public abstract class CHPAbstractType
      * Offset in the data stream indicating the location of OLE object data.
      */
     @Internal
-    public void setFcObjp( int field_63_fcObjp )
-    {
+    public void setFcObjp(int field_63_fcObjp) {
         this.field_63_fcObjp = field_63_fcObjp;
     }
 
     /**
      * Line BReak code for xchCRJ.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #LBRCRJ_NONE}
      * <li>{@link #LBRCRJ_LEFT}
      * <li>{@link #LBRCRJ_RIGHT}
      * <li>{@link #LBRCRJ_BOTH}
      */
     @Internal
-    public byte getLbrCRJ()
-    {
+    public byte getLbrCRJ() {
         return field_64_lbrCRJ;
     }
 
     /**
      * Line BReak code for xchCRJ.
      *
-     * @param field_64_lbrCRJ
-     *        One of 
-     * <li>{@link #LBRCRJ_NONE}
-     * <li>{@link #LBRCRJ_LEFT}
-     * <li>{@link #LBRCRJ_RIGHT}
-     * <li>{@link #LBRCRJ_BOTH}
+     * @param field_64_lbrCRJ One of
+     *                        <li>{@link #LBRCRJ_NONE}
+     *                        <li>{@link #LBRCRJ_LEFT}
+     *                        <li>{@link #LBRCRJ_RIGHT}
+     *                        <li>{@link #LBRCRJ_BOTH}
      */
     @Internal
-    public void setLbrCRJ( byte field_64_lbrCRJ )
-    {
+    public void setLbrCRJ(byte field_64_lbrCRJ) {
         this.field_64_lbrCRJ = field_64_lbrCRJ;
     }
 
@@ -1962,8 +1804,7 @@ public abstract class CHPAbstractType
      * Special hidden for leading emphasis (always hidden).
      */
     @Internal
-    public boolean getFSpecVanish()
-    {
+    public boolean getFSpecVanish() {
         return field_65_fSpecVanish;
     }
 
@@ -1971,8 +1812,7 @@ public abstract class CHPAbstractType
      * Special hidden for leading emphasis (always hidden).
      */
     @Internal
-    public void setFSpecVanish( boolean field_65_fSpecVanish )
-    {
+    public void setFSpecVanish(boolean field_65_fSpecVanish) {
         this.field_65_fSpecVanish = field_65_fSpecVanish;
     }
 
@@ -1980,8 +1820,7 @@ public abstract class CHPAbstractType
      * Used for character property revision marking. The chp at the time fHasOldProps is set to 1, the is the old chp..
      */
     @Internal
-    public boolean getFHasOldProps()
-    {
+    public boolean getFHasOldProps() {
         return field_66_fHasOldProps;
     }
 
@@ -1989,8 +1828,7 @@ public abstract class CHPAbstractType
      * Used for character property revision marking. The chp at the time fHasOldProps is set to 1, the is the old chp..
      */
     @Internal
-    public void setFHasOldProps( boolean field_66_fHasOldProps )
-    {
+    public void setFHasOldProps(boolean field_66_fHasOldProps) {
         this.field_66_fHasOldProps = field_66_fHasOldProps;
     }
 
@@ -1998,8 +1836,7 @@ public abstract class CHPAbstractType
      * Mark the character as hidden..
      */
     @Internal
-    public boolean getFSdtVanish()
-    {
+    public boolean getFSdtVanish() {
         return field_67_fSdtVanish;
     }
 
@@ -2007,8 +1844,7 @@ public abstract class CHPAbstractType
      * Mark the character as hidden..
      */
     @Internal
-    public void setFSdtVanish( boolean field_67_fSdtVanish )
-    {
+    public void setFSdtVanish(boolean field_67_fSdtVanish) {
         this.field_67_fSdtVanish = field_67_fSdtVanish;
     }
 
@@ -2016,8 +1852,7 @@ public abstract class CHPAbstractType
      * Get the wCharScale field for the CHP record.
      */
     @Internal
-    public int getWCharScale()
-    {
+    public int getWCharScale() {
         return field_68_wCharScale;
     }
 
@@ -2025,9 +1860,18 @@ public abstract class CHPAbstractType
      * Set the wCharScale field for the CHP record.
      */
     @Internal
-    public void setWCharScale( int field_68_wCharScale )
-    {
+    public void setWCharScale(int field_68_wCharScale) {
         this.field_68_wCharScale = field_68_wCharScale;
+    }
+
+    /**
+     * Text is bold
+     *
+     * @return the fBold field value.
+     */
+    @Internal
+    public boolean isFBold() {
+        return fBold.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2035,19 +1879,18 @@ public abstract class CHPAbstractType
      * Text is bold
      */
     @Internal
-    public void setFBold( boolean value )
-    {
+    public void setFBold(boolean value) {
         field_1_grpfChp = fBold.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Text is bold
-     * @return  the fBold field value.
+     * Italic
+     *
+     * @return the fItalic field value.
      */
     @Internal
-    public boolean isFBold()
-    {
-        return fBold.isSet(field_1_grpfChp);
+    public boolean isFItalic() {
+        return fItalic.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2055,19 +1898,18 @@ public abstract class CHPAbstractType
      * Italic
      */
     @Internal
-    public void setFItalic( boolean value )
-    {
+    public void setFItalic(boolean value) {
         field_1_grpfChp = fItalic.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Italic
-     * @return  the fItalic field value.
+     * has been deleted and will be displayed with strikethrough when revision marked text is to be displayed
+     *
+     * @return the fRMarkDel field value.
      */
     @Internal
-    public boolean isFItalic()
-    {
-        return fItalic.isSet(field_1_grpfChp);
+    public boolean isFRMarkDel() {
+        return fRMarkDel.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2075,19 +1917,18 @@ public abstract class CHPAbstractType
      * has been deleted and will be displayed with strikethrough when revision marked text is to be displayed
      */
     @Internal
-    public void setFRMarkDel( boolean value )
-    {
+    public void setFRMarkDel(boolean value) {
         field_1_grpfChp = fRMarkDel.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * has been deleted and will be displayed with strikethrough when revision marked text is to be displayed
-     * @return  the fRMarkDel field value.
+     * Outlined
+     *
+     * @return the fOutline field value.
      */
     @Internal
-    public boolean isFRMarkDel()
-    {
-        return fRMarkDel.isSet(field_1_grpfChp);
+    public boolean isFOutline() {
+        return fOutline.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2095,19 +1936,18 @@ public abstract class CHPAbstractType
      * Outlined
      */
     @Internal
-    public void setFOutline( boolean value )
-    {
+    public void setFOutline(boolean value) {
         field_1_grpfChp = fOutline.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Outlined
-     * @return  the fOutline field value.
+     * Used internally by Word
+     *
+     * @return the fFldVanish field value.
      */
     @Internal
-    public boolean isFOutline()
-    {
-        return fOutline.isSet(field_1_grpfChp);
+    public boolean isFFldVanish() {
+        return fFldVanish.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2115,19 +1955,18 @@ public abstract class CHPAbstractType
      * Used internally by Word
      */
     @Internal
-    public void setFFldVanish( boolean value )
-    {
+    public void setFFldVanish(boolean value) {
         field_1_grpfChp = fFldVanish.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Used internally by Word
-     * @return  the fFldVanish field value.
+     * Displayed with small caps
+     *
+     * @return the fSmallCaps field value.
      */
     @Internal
-    public boolean isFFldVanish()
-    {
-        return fFldVanish.isSet(field_1_grpfChp);
+    public boolean isFSmallCaps() {
+        return fSmallCaps.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2135,19 +1974,18 @@ public abstract class CHPAbstractType
      * Displayed with small caps
      */
     @Internal
-    public void setFSmallCaps( boolean value )
-    {
+    public void setFSmallCaps(boolean value) {
         field_1_grpfChp = fSmallCaps.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Displayed with small caps
-     * @return  the fSmallCaps field value.
+     * Displayed with caps
+     *
+     * @return the fCaps field value.
      */
     @Internal
-    public boolean isFSmallCaps()
-    {
-        return fSmallCaps.isSet(field_1_grpfChp);
+    public boolean isFCaps() {
+        return fCaps.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2155,19 +1993,18 @@ public abstract class CHPAbstractType
      * Displayed with caps
      */
     @Internal
-    public void setFCaps( boolean value )
-    {
+    public void setFCaps(boolean value) {
         field_1_grpfChp = fCaps.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Displayed with caps
-     * @return  the fCaps field value.
+     * text has hidden format, and is not displayed unless fPagHidden is set in the DOP
+     *
+     * @return the fVanish field value.
      */
     @Internal
-    public boolean isFCaps()
-    {
-        return fCaps.isSet(field_1_grpfChp);
+    public boolean isFVanish() {
+        return fVanish.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2175,19 +2012,18 @@ public abstract class CHPAbstractType
      * text has hidden format, and is not displayed unless fPagHidden is set in the DOP
      */
     @Internal
-    public void setFVanish( boolean value )
-    {
+    public void setFVanish(boolean value) {
         field_1_grpfChp = fVanish.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * text has hidden format, and is not displayed unless fPagHidden is set in the DOP
-     * @return  the fVanish field value.
+     * text is newly typed since the last time revision marks have been accepted and will be displayed with an underline when revision marked text is to be displayed
+     *
+     * @return the fRMark field value.
      */
     @Internal
-    public boolean isFVanish()
-    {
-        return fVanish.isSet(field_1_grpfChp);
+    public boolean isFRMark() {
+        return fRMark.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2195,19 +2031,18 @@ public abstract class CHPAbstractType
      * text is newly typed since the last time revision marks have been accepted and will be displayed with an underline when revision marked text is to be displayed
      */
     @Internal
-    public void setFRMark( boolean value )
-    {
+    public void setFRMark(boolean value) {
         field_1_grpfChp = fRMark.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * text is newly typed since the last time revision marks have been accepted and will be displayed with an underline when revision marked text is to be displayed
-     * @return  the fRMark field value.
+     * Character is a Word special character
+     *
+     * @return the fSpec field value.
      */
     @Internal
-    public boolean isFRMark()
-    {
-        return fRMark.isSet(field_1_grpfChp);
+    public boolean isFSpec() {
+        return fSpec.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2215,19 +2050,18 @@ public abstract class CHPAbstractType
      * Character is a Word special character
      */
     @Internal
-    public void setFSpec( boolean value )
-    {
+    public void setFSpec(boolean value) {
         field_1_grpfChp = fSpec.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Character is a Word special character
-     * @return  the fSpec field value.
+     * Displayed with strikethrough
+     *
+     * @return the fStrike field value.
      */
     @Internal
-    public boolean isFSpec()
-    {
-        return fSpec.isSet(field_1_grpfChp);
+    public boolean isFStrike() {
+        return fStrike.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2235,19 +2069,18 @@ public abstract class CHPAbstractType
      * Displayed with strikethrough
      */
     @Internal
-    public void setFStrike( boolean value )
-    {
+    public void setFStrike(boolean value) {
         field_1_grpfChp = fStrike.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Displayed with strikethrough
-     * @return  the fStrike field value.
+     * Embedded objec
+     *
+     * @return the fObj field value.
      */
     @Internal
-    public boolean isFStrike()
-    {
-        return fStrike.isSet(field_1_grpfChp);
+    public boolean isFObj() {
+        return fObj.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2255,19 +2088,18 @@ public abstract class CHPAbstractType
      * Embedded objec
      */
     @Internal
-    public void setFObj( boolean value )
-    {
+    public void setFObj(boolean value) {
         field_1_grpfChp = fObj.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Embedded objec
-     * @return  the fObj field value.
+     * Character is drawn with a shadow
+     *
+     * @return the fShadow field value.
      */
     @Internal
-    public boolean isFObj()
-    {
-        return fObj.isSet(field_1_grpfChp);
+    public boolean isFShadow() {
+        return fShadow.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2275,19 +2107,18 @@ public abstract class CHPAbstractType
      * Character is drawn with a shadow
      */
     @Internal
-    public void setFShadow( boolean value )
-    {
+    public void setFShadow(boolean value) {
         field_1_grpfChp = fShadow.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Character is drawn with a shadow
-     * @return  the fShadow field value.
+     * Character is displayed in lower case. This field may be set to 1 only when chp.fSmallCaps is 1.
+     *
+     * @return the fLowerCase field value.
      */
     @Internal
-    public boolean isFShadow()
-    {
-        return fShadow.isSet(field_1_grpfChp);
+    public boolean isFLowerCase() {
+        return fLowerCase.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2295,19 +2126,18 @@ public abstract class CHPAbstractType
      * Character is displayed in lower case. This field may be set to 1 only when chp.fSmallCaps is 1.
      */
     @Internal
-    public void setFLowerCase( boolean value )
-    {
+    public void setFLowerCase(boolean value) {
         field_1_grpfChp = fLowerCase.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Character is displayed in lower case. This field may be set to 1 only when chp.fSmallCaps is 1.
-     * @return  the fLowerCase field value.
+     * chp.fcPic points to an FFDATA, the data structure binary data used by Word to describe a form field. The bit chp.fData may only be 1 when chp.fSpec is also 1 and the special character in the document stream that has this property is a chPicture (0x01)
+     *
+     * @return the fData field value.
      */
     @Internal
-    public boolean isFLowerCase()
-    {
-        return fLowerCase.isSet(field_1_grpfChp);
+    public boolean isFData() {
+        return fData.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2315,19 +2145,18 @@ public abstract class CHPAbstractType
      * chp.fcPic points to an FFDATA, the data structure binary data used by Word to describe a form field. The bit chp.fData may only be 1 when chp.fSpec is also 1 and the special character in the document stream that has this property is a chPicture (0x01)
      */
     @Internal
-    public void setFData( boolean value )
-    {
+    public void setFData(boolean value) {
         field_1_grpfChp = fData.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * chp.fcPic points to an FFDATA, the data structure binary data used by Word to describe a form field. The bit chp.fData may only be 1 when chp.fSpec is also 1 and the special character in the document stream that has this property is a chPicture (0x01)
-     * @return  the fData field value.
+     * chp.lTagObj specifies a particular object in the object stream that specifies the particular OLE object in the stream that should be displayed when the chPicture fSpec character that is tagged with the fOle2 is encountered. The bit chp.fOle2 may only be 1 when chp.fSpec is also 1 and the special character in the document stream that has this property is a chPicture (0x01).
+     *
+     * @return the fOle2 field value.
      */
     @Internal
-    public boolean isFData()
-    {
-        return fData.isSet(field_1_grpfChp);
+    public boolean isFOle2() {
+        return fOle2.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2335,19 +2164,18 @@ public abstract class CHPAbstractType
      * chp.lTagObj specifies a particular object in the object stream that specifies the particular OLE object in the stream that should be displayed when the chPicture fSpec character that is tagged with the fOle2 is encountered. The bit chp.fOle2 may only be 1 when chp.fSpec is also 1 and the special character in the document stream that has this property is a chPicture (0x01).
      */
     @Internal
-    public void setFOle2( boolean value )
-    {
+    public void setFOle2(boolean value) {
         field_1_grpfChp = fOle2.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * chp.lTagObj specifies a particular object in the object stream that specifies the particular OLE object in the stream that should be displayed when the chPicture fSpec character that is tagged with the fOle2 is encountered. The bit chp.fOle2 may only be 1 when chp.fSpec is also 1 and the special character in the document stream that has this property is a chPicture (0x01).
-     * @return  the fOle2 field value.
+     * Text is embossed
+     *
+     * @return the fEmboss field value.
      */
     @Internal
-    public boolean isFOle2()
-    {
-        return fOle2.isSet(field_1_grpfChp);
+    public boolean isFEmboss() {
+        return fEmboss.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2355,19 +2183,18 @@ public abstract class CHPAbstractType
      * Text is embossed
      */
     @Internal
-    public void setFEmboss( boolean value )
-    {
+    public void setFEmboss(boolean value) {
         field_1_grpfChp = fEmboss.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Text is embossed
-     * @return  the fEmboss field value.
+     * Text is engraved
+     *
+     * @return the fImprint field value.
      */
     @Internal
-    public boolean isFEmboss()
-    {
-        return fEmboss.isSet(field_1_grpfChp);
+    public boolean isFImprint() {
+        return fImprint.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2375,19 +2202,18 @@ public abstract class CHPAbstractType
      * Text is engraved
      */
     @Internal
-    public void setFImprint( boolean value )
-    {
+    public void setFImprint(boolean value) {
         field_1_grpfChp = fImprint.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Text is engraved
-     * @return  the fImprint field value.
+     * Displayed with double strikethrough
+     *
+     * @return the fDStrike field value.
      */
     @Internal
-    public boolean isFImprint()
-    {
-        return fImprint.isSet(field_1_grpfChp);
+    public boolean isFDStrike() {
+        return fDStrike.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2395,19 +2221,18 @@ public abstract class CHPAbstractType
      * Displayed with double strikethrough
      */
     @Internal
-    public void setFDStrike( boolean value )
-    {
+    public void setFDStrike(boolean value) {
         field_1_grpfChp = fDStrike.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Displayed with double strikethrough
-     * @return  the fDStrike field value.
+     * Used internally by Word
+     *
+     * @return the fUsePgsuSettings field value.
      */
     @Internal
-    public boolean isFDStrike()
-    {
-        return fDStrike.isSet(field_1_grpfChp);
+    public boolean isFUsePgsuSettings() {
+        return fUsePgsuSettings.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2415,19 +2240,18 @@ public abstract class CHPAbstractType
      * Used internally by Word
      */
     @Internal
-    public void setFUsePgsuSettings( boolean value )
-    {
+    public void setFUsePgsuSettings(boolean value) {
         field_1_grpfChp = fUsePgsuSettings.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Used internally by Word
-     * @return  the fUsePgsuSettings field value.
+     * Complex Scripts text is bold
+     *
+     * @return the fBoldBi field value.
      */
     @Internal
-    public boolean isFUsePgsuSettings()
-    {
-        return fUsePgsuSettings.isSet(field_1_grpfChp);
+    public boolean isFBoldBi() {
+        return fBoldBi.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2435,19 +2259,18 @@ public abstract class CHPAbstractType
      * Complex Scripts text is bold
      */
     @Internal
-    public void setFBoldBi( boolean value )
-    {
+    public void setFBoldBi(boolean value) {
         field_1_grpfChp = fBoldBi.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Complex Scripts text is bold
-     * @return  the fBoldBi field value.
+     * Complex Scripts text that requires special processing to display and process
+     *
+     * @return the fComplexScripts field value.
      */
     @Internal
-    public boolean isFBoldBi()
-    {
-        return fBoldBi.isSet(field_1_grpfChp);
+    public boolean isFComplexScripts() {
+        return fComplexScripts.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2455,19 +2278,18 @@ public abstract class CHPAbstractType
      * Complex Scripts text that requires special processing to display and process
      */
     @Internal
-    public void setFComplexScripts( boolean value )
-    {
+    public void setFComplexScripts(boolean value) {
         field_1_grpfChp = fComplexScripts.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Complex Scripts text that requires special processing to display and process
-     * @return  the fComplexScripts field value.
+     * Complex Scripts text is italics
+     *
+     * @return the fItalicBi field value.
      */
     @Internal
-    public boolean isFComplexScripts()
-    {
-        return fComplexScripts.isSet(field_1_grpfChp);
+    public boolean isFItalicBi() {
+        return fItalicBi.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2475,19 +2297,18 @@ public abstract class CHPAbstractType
      * Complex Scripts text is italics
      */
     @Internal
-    public void setFItalicBi( boolean value )
-    {
+    public void setFItalicBi(boolean value) {
         field_1_grpfChp = fItalicBi.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Complex Scripts text is italics
-     * @return  the fItalicBi field value.
+     * Complex Scripts right-to-left text that requires special processing to display and process (character reordering; contextual shaping; display of combining characters and diacritics; specialized justification rules; cursor positioning)
+     *
+     * @return the fBiDi field value.
      */
     @Internal
-    public boolean isFItalicBi()
-    {
-        return fItalicBi.isSet(field_1_grpfChp);
+    public boolean isFBiDi() {
+        return fBiDi.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2495,19 +2316,18 @@ public abstract class CHPAbstractType
      * Complex Scripts right-to-left text that requires special processing to display and process (character reordering; contextual shaping; display of combining characters and diacritics; specialized justification rules; cursor positioning)
      */
     @Internal
-    public void setFBiDi( boolean value )
-    {
+    public void setFBiDi(boolean value) {
         field_1_grpfChp = fBiDi.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Complex Scripts right-to-left text that requires special processing to display and process (character reordering; contextual shaping; display of combining characters and diacritics; specialized justification rules; cursor positioning)
-     * @return  the fBiDi field value.
+     * Used internally by Word
+     *
+     * @return the fIcoBi field value.
      */
     @Internal
-    public boolean isFBiDi()
-    {
-        return fBiDi.isSet(field_1_grpfChp);
+    public boolean isFIcoBi() {
+        return fIcoBi.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2515,19 +2335,18 @@ public abstract class CHPAbstractType
      * Used internally by Word
      */
     @Internal
-    public void setFIcoBi( boolean value )
-    {
+    public void setFIcoBi(boolean value) {
         field_1_grpfChp = fIcoBi.setBoolean(field_1_grpfChp, value);
     }
 
     /**
      * Used internally by Word
-     * @return  the fIcoBi field value.
+     *
+     * @return the fNonGlyph field value.
      */
     @Internal
-    public boolean isFIcoBi()
-    {
-        return fIcoBi.isSet(field_1_grpfChp);
+    public boolean isFNonGlyph() {
+        return fNonGlyph.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2535,19 +2354,18 @@ public abstract class CHPAbstractType
      * Used internally by Word
      */
     @Internal
-    public void setFNonGlyph( boolean value )
-    {
+    public void setFNonGlyph(boolean value) {
         field_1_grpfChp = fNonGlyph.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Used internally by Word
-     * @return  the fNonGlyph field value.
+     * Used internally by Word 97 and earlier versions
+     *
+     * @return the fBoldOther field value.
      */
     @Internal
-    public boolean isFNonGlyph()
-    {
-        return fNonGlyph.isSet(field_1_grpfChp);
+    public boolean isFBoldOther() {
+        return fBoldOther.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2555,19 +2373,18 @@ public abstract class CHPAbstractType
      * Used internally by Word 97 and earlier versions
      */
     @Internal
-    public void setFBoldOther( boolean value )
-    {
+    public void setFBoldOther(boolean value) {
         field_1_grpfChp = fBoldOther.setBoolean(field_1_grpfChp, value);
     }
 
     /**
      * Used internally by Word 97 and earlier versions
-     * @return  the fBoldOther field value.
+     *
+     * @return the fItalicOther field value.
      */
     @Internal
-    public boolean isFBoldOther()
-    {
-        return fBoldOther.isSet(field_1_grpfChp);
+    public boolean isFItalicOther() {
+        return fItalicOther.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2575,19 +2392,18 @@ public abstract class CHPAbstractType
      * Used internally by Word 97 and earlier versions
      */
     @Internal
-    public void setFItalicOther( boolean value )
-    {
+    public void setFItalicOther(boolean value) {
         field_1_grpfChp = fItalicOther.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Used internally by Word 97 and earlier versions
-     * @return  the fItalicOther field value.
+     * When set to 1, do not check spelling or grammar
+     *
+     * @return the fNoProof field value.
      */
     @Internal
-    public boolean isFItalicOther()
-    {
-        return fItalicOther.isSet(field_1_grpfChp);
+    public boolean isFNoProof() {
+        return fNoProof.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2595,19 +2411,18 @@ public abstract class CHPAbstractType
      * When set to 1, do not check spelling or grammar
      */
     @Internal
-    public void setFNoProof( boolean value )
-    {
+    public void setFNoProof(boolean value) {
         field_1_grpfChp = fNoProof.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * When set to 1, do not check spelling or grammar
-     * @return  the fNoProof field value.
+     * Text should be hidden in Web View when set to 1
+     *
+     * @return the fWebHidden field value.
      */
     @Internal
-    public boolean isFNoProof()
-    {
-        return fNoProof.isSet(field_1_grpfChp);
+    public boolean isFWebHidden() {
+        return fWebHidden.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2615,19 +2430,18 @@ public abstract class CHPAbstractType
      * Text should be hidden in Web View when set to 1
      */
     @Internal
-    public void setFWebHidden( boolean value )
-    {
+    public void setFWebHidden(boolean value) {
         field_1_grpfChp = fWebHidden.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Text should be hidden in Web View when set to 1
-     * @return  the fWebHidden field value.
+     * Fit text when set to 1
+     *
+     * @return the fFitText field value.
      */
     @Internal
-    public boolean isFWebHidden()
-    {
-        return fWebHidden.isSet(field_1_grpfChp);
+    public boolean isFFitText() {
+        return fFitText.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2635,19 +2449,18 @@ public abstract class CHPAbstractType
      * Fit text when set to 1
      */
     @Internal
-    public void setFFitText( boolean value )
-    {
+    public void setFFitText(boolean value) {
         field_1_grpfChp = fFitText.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Fit text when set to 1
-     * @return  the fFitText field value.
+     * Used internally by Word
+     *
+     * @return the fCalc field value.
      */
     @Internal
-    public boolean isFFitText()
-    {
-        return fFitText.isSet(field_1_grpfChp);
+    public boolean isFCalc() {
+        return fCalc.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2655,19 +2468,18 @@ public abstract class CHPAbstractType
      * Used internally by Word
      */
     @Internal
-    public void setFCalc( boolean value )
-    {
+    public void setFCalc(boolean value) {
         field_1_grpfChp = fCalc.setBoolean(field_1_grpfChp, value);
     }
 
     /**
      * Used internally by Word
-     * @return  the fCalc field value.
+     *
+     * @return the fFmtLineProp field value.
      */
     @Internal
-    public boolean isFCalc()
-    {
-        return fCalc.isSet(field_1_grpfChp);
+    public boolean isFFmtLineProp() {
+        return fFmtLineProp.isSet(field_1_grpfChp);
     }
 
     /**
@@ -2675,39 +2487,34 @@ public abstract class CHPAbstractType
      * Used internally by Word
      */
     @Internal
-    public void setFFmtLineProp( boolean value )
-    {
+    public void setFFmtLineProp(boolean value) {
         field_1_grpfChp = fFmtLineProp.setBoolean(field_1_grpfChp, value);
     }
 
     /**
-     * Used internally by Word
-     * @return  the fFmtLineProp field value.
+     * @return the itypFELayout field value.
      */
     @Internal
-    public boolean isFFmtLineProp()
-    {
-        return fFmtLineProp.isSet(field_1_grpfChp);
+    public short getItypFELayout() {
+        return (short) itypFELayout.getValue(field_29_ufel);
     }
 
     /**
      * Sets the itypFELayout field value.
-     * 
      */
     @Internal
-    public void setItypFELayout( short value )
-    {
-        field_29_ufel = (short)itypFELayout.setValue(field_29_ufel, value);
+    public void setItypFELayout(short value) {
+        field_29_ufel = (short) itypFELayout.setValue(field_29_ufel, value);
     }
 
     /**
-     * 
-     * @return  the itypFELayout field value.
+     * Tatenakayoko: Horizontal-in-vertical (range of text in a direction perpendicular to the text flow) is used
+     *
+     * @return the fTNY field value.
      */
     @Internal
-    public short getItypFELayout()
-    {
-        return ( short )itypFELayout.getValue(field_29_ufel);
+    public boolean isFTNY() {
+        return fTNY.isSet(field_29_ufel);
     }
 
     /**
@@ -2715,19 +2522,18 @@ public abstract class CHPAbstractType
      * Tatenakayoko: Horizontal-in-vertical (range of text in a direction perpendicular to the text flow) is used
      */
     @Internal
-    public void setFTNY( boolean value )
-    {
-        field_29_ufel = (short)fTNY.setBoolean(field_29_ufel, value);
+    public void setFTNY(boolean value) {
+        field_29_ufel = (short) fTNY.setBoolean(field_29_ufel, value);
     }
 
     /**
-     * Tatenakayoko: Horizontal-in-vertical (range of text in a direction perpendicular to the text flow) is used
-     * @return  the fTNY field value.
+     * Two lines in one (text in the group is displayed as two half-height lines within a line)
+     *
+     * @return the fWarichu field value.
      */
     @Internal
-    public boolean isFTNY()
-    {
-        return fTNY.isSet(field_29_ufel);
+    public boolean isFWarichu() {
+        return fWarichu.isSet(field_29_ufel);
     }
 
     /**
@@ -2735,19 +2541,18 @@ public abstract class CHPAbstractType
      * Two lines in one (text in the group is displayed as two half-height lines within a line)
      */
     @Internal
-    public void setFWarichu( boolean value )
-    {
-        field_29_ufel = (short)fWarichu.setBoolean(field_29_ufel, value);
+    public void setFWarichu(boolean value) {
+        field_29_ufel = (short) fWarichu.setBoolean(field_29_ufel, value);
     }
 
     /**
-     * Two lines in one (text in the group is displayed as two half-height lines within a line)
-     * @return  the fWarichu field value.
+     * combine characters
+     *
+     * @return the fKumimoji field value.
      */
     @Internal
-    public boolean isFWarichu()
-    {
-        return fWarichu.isSet(field_29_ufel);
+    public boolean isFKumimoji() {
+        return fKumimoji.isSet(field_29_ufel);
     }
 
     /**
@@ -2755,19 +2560,18 @@ public abstract class CHPAbstractType
      * combine characters
      */
     @Internal
-    public void setFKumimoji( boolean value )
-    {
-        field_29_ufel = (short)fKumimoji.setBoolean(field_29_ufel, value);
+    public void setFKumimoji(boolean value) {
+        field_29_ufel = (short) fKumimoji.setBoolean(field_29_ufel, value);
     }
 
     /**
-     * combine characters
-     * @return  the fKumimoji field value.
+     * Phonetic guide
+     *
+     * @return the fRuby field value.
      */
     @Internal
-    public boolean isFKumimoji()
-    {
-        return fKumimoji.isSet(field_29_ufel);
+    public boolean isFRuby() {
+        return fRuby.isSet(field_29_ufel);
     }
 
     /**
@@ -2775,19 +2579,18 @@ public abstract class CHPAbstractType
      * Phonetic guide
      */
     @Internal
-    public void setFRuby( boolean value )
-    {
-        field_29_ufel = (short)fRuby.setBoolean(field_29_ufel, value);
+    public void setFRuby(boolean value) {
+        field_29_ufel = (short) fRuby.setBoolean(field_29_ufel, value);
     }
 
     /**
-     * Phonetic guide
-     * @return  the fRuby field value.
+     * fit text
+     *
+     * @return the fLSFitText field value.
      */
     @Internal
-    public boolean isFRuby()
-    {
-        return fRuby.isSet(field_29_ufel);
+    public boolean isFLSFitText() {
+        return fLSFitText.isSet(field_29_ufel);
     }
 
     /**
@@ -2795,19 +2598,18 @@ public abstract class CHPAbstractType
      * fit text
      */
     @Internal
-    public void setFLSFitText( boolean value )
-    {
-        field_29_ufel = (short)fLSFitText.setBoolean(field_29_ufel, value);
+    public void setFLSFitText(boolean value) {
+        field_29_ufel = (short) fLSFitText.setBoolean(field_29_ufel, value);
     }
 
     /**
-     * fit text
-     * @return  the fLSFitText field value.
+     * Unused
+     *
+     * @return the spare field value.
      */
     @Internal
-    public boolean isFLSFitText()
-    {
-        return fLSFitText.isSet(field_29_ufel);
+    public byte getSpare() {
+        return (byte) spare.getValue(field_29_ufel);
     }
 
     /**
@@ -2815,19 +2617,18 @@ public abstract class CHPAbstractType
      * Unused
      */
     @Internal
-    public void setSpare( byte value )
-    {
-        field_29_ufel = (short)spare.setValue(field_29_ufel, value);
+    public void setSpare(byte value) {
+        field_29_ufel = (short) spare.setValue(field_29_ufel, value);
     }
 
     /**
-     * Unused
-     * @return  the spare field value.
+     * Bracket character for two-lines-in-one
+     *
+     * @return the iWarichuBracket field value.
      */
     @Internal
-    public byte getSpare()
-    {
-        return ( byte )spare.getValue(field_29_ufel);
+    public byte getIWarichuBracket() {
+        return (byte) iWarichuBracket.getValue(field_30_copt);
     }
 
     /**
@@ -2835,19 +2636,18 @@ public abstract class CHPAbstractType
      * Bracket character for two-lines-in-one
      */
     @Internal
-    public void setIWarichuBracket( byte value )
-    {
-        field_30_copt = (byte)iWarichuBracket.setValue(field_30_copt, value);
+    public void setIWarichuBracket(byte value) {
+        field_30_copt = (byte) iWarichuBracket.setValue(field_30_copt, value);
     }
 
     /**
-     * Bracket character for two-lines-in-one
-     * @return  the iWarichuBracket field value.
+     * Two-lines-in-one uses no open
+     *
+     * @return the fWarichuNoOpenBracket field value.
      */
     @Internal
-    public byte getIWarichuBracket()
-    {
-        return ( byte )iWarichuBracket.getValue(field_30_copt);
+    public boolean isFWarichuNoOpenBracket() {
+        return fWarichuNoOpenBracket.isSet(field_30_copt);
     }
 
     /**
@@ -2855,19 +2655,18 @@ public abstract class CHPAbstractType
      * Two-lines-in-one uses no open
      */
     @Internal
-    public void setFWarichuNoOpenBracket( boolean value )
-    {
-        field_30_copt = (byte)fWarichuNoOpenBracket.setBoolean(field_30_copt, value);
+    public void setFWarichuNoOpenBracket(boolean value) {
+        field_30_copt = (byte) fWarichuNoOpenBracket.setBoolean(field_30_copt, value);
     }
 
     /**
-     * Two-lines-in-one uses no open
-     * @return  the fWarichuNoOpenBracket field value.
+     * fit text in line
+     *
+     * @return the fTNYCompress field value.
      */
     @Internal
-    public boolean isFWarichuNoOpenBracket()
-    {
-        return fWarichuNoOpenBracket.isSet(field_30_copt);
+    public boolean isFTNYCompress() {
+        return fTNYCompress.isSet(field_30_copt);
     }
 
     /**
@@ -2875,19 +2674,18 @@ public abstract class CHPAbstractType
      * fit text in line
      */
     @Internal
-    public void setFTNYCompress( boolean value )
-    {
-        field_30_copt = (byte)fTNYCompress.setBoolean(field_30_copt, value);
+    public void setFTNYCompress(boolean value) {
+        field_30_copt = (byte) fTNYCompress.setBoolean(field_30_copt, value);
     }
 
     /**
-     * fit text in line
-     * @return  the fTNYCompress field value.
+     * fetch text metrics
+     *
+     * @return the fTNYFetchTxm field value.
      */
     @Internal
-    public boolean isFTNYCompress()
-    {
-        return fTNYCompress.isSet(field_30_copt);
+    public boolean isFTNYFetchTxm() {
+        return fTNYFetchTxm.isSet(field_30_copt);
     }
 
     /**
@@ -2895,19 +2693,18 @@ public abstract class CHPAbstractType
      * fetch text metrics
      */
     @Internal
-    public void setFTNYFetchTxm( boolean value )
-    {
-        field_30_copt = (byte)fTNYFetchTxm.setBoolean(field_30_copt, value);
+    public void setFTNYFetchTxm(boolean value) {
+        field_30_copt = (byte) fTNYFetchTxm.setBoolean(field_30_copt, value);
     }
 
     /**
-     * fetch text metrics
-     * @return  the fTNYFetchTxm field value.
+     * Fit text in cell
+     *
+     * @return the fCellFitText field value.
      */
     @Internal
-    public boolean isFTNYFetchTxm()
-    {
-        return fTNYFetchTxm.isSet(field_30_copt);
+    public boolean isFCellFitText() {
+        return fCellFitText.isSet(field_30_copt);
     }
 
     /**
@@ -2915,19 +2712,18 @@ public abstract class CHPAbstractType
      * Fit text in cell
      */
     @Internal
-    public void setFCellFitText( boolean value )
-    {
-        field_30_copt = (byte)fCellFitText.setBoolean(field_30_copt, value);
+    public void setFCellFitText(boolean value) {
+        field_30_copt = (byte) fCellFitText.setBoolean(field_30_copt, value);
     }
 
     /**
-     * Fit text in cell
-     * @return  the fCellFitText field value.
+     * Not used
+     *
+     * @return the unused field value.
      */
     @Internal
-    public boolean isFCellFitText()
-    {
-        return fCellFitText.isSet(field_30_copt);
+    public boolean isUnused() {
+        return unused.isSet(field_30_copt);
     }
 
     /**
@@ -2935,19 +2731,18 @@ public abstract class CHPAbstractType
      * Not used
      */
     @Internal
-    public void setUnused( boolean value )
-    {
-        field_30_copt = (byte)unused.setBoolean(field_30_copt, value);
+    public void setUnused(boolean value) {
+        field_30_copt = (byte) unused.setBoolean(field_30_copt, value);
     }
 
     /**
-     * Not used
-     * @return  the unused field value.
+     * Highlight color (see chp.ico)
+     *
+     * @return the icoHighlight field value.
      */
     @Internal
-    public boolean isUnused()
-    {
-        return unused.isSet(field_30_copt);
+    public byte getIcoHighlight() {
+        return (byte) icoHighlight.getValue(field_48_Highlight);
     }
 
     /**
@@ -2955,19 +2750,18 @@ public abstract class CHPAbstractType
      * Highlight color (see chp.ico)
      */
     @Internal
-    public void setIcoHighlight( byte value )
-    {
-        field_48_Highlight = (short)icoHighlight.setValue(field_48_Highlight, value);
+    public void setIcoHighlight(byte value) {
+        field_48_Highlight = (short) icoHighlight.setValue(field_48_Highlight, value);
     }
 
     /**
-     * Highlight color (see chp.ico)
-     * @return  the icoHighlight field value.
+     * When 1, characters are highlighted with color specified by chp.icoHighlight
+     *
+     * @return the fHighlight field value.
      */
     @Internal
-    public byte getIcoHighlight()
-    {
-        return ( byte )icoHighlight.getValue(field_48_Highlight);
+    public boolean isFHighlight() {
+        return fHighlight.isSet(field_48_Highlight);
     }
 
     /**
@@ -2975,19 +2769,18 @@ public abstract class CHPAbstractType
      * When 1, characters are highlighted with color specified by chp.icoHighlight
      */
     @Internal
-    public void setFHighlight( boolean value )
-    {
-        field_48_Highlight = (short)fHighlight.setBoolean(field_48_Highlight, value);
+    public void setFHighlight(boolean value) {
+        field_48_Highlight = (short) fHighlight.setBoolean(field_48_Highlight, value);
     }
 
     /**
-     * When 1, characters are highlighted with color specified by chp.icoHighlight
-     * @return  the fHighlight field value.
+     * Pre-Unicode files, char's char set different from FIB char set
+     *
+     * @return the fChsDiff field value.
      */
     @Internal
-    public boolean isFHighlight()
-    {
-        return fHighlight.isSet(field_48_Highlight);
+    public boolean isFChsDiff() {
+        return fChsDiff.isSet(field_49_CharsetFlags);
     }
 
     /**
@@ -2995,19 +2788,18 @@ public abstract class CHPAbstractType
      * Pre-Unicode files, char's char set different from FIB char set
      */
     @Internal
-    public void setFChsDiff( boolean value )
-    {
-        field_49_CharsetFlags = (short)fChsDiff.setBoolean(field_49_CharsetFlags, value);
+    public void setFChsDiff(boolean value) {
+        field_49_CharsetFlags = (short) fChsDiff.setBoolean(field_49_CharsetFlags, value);
     }
 
     /**
-     * Pre-Unicode files, char's char set different from FIB char set
-     * @return  the fChsDiff field value.
+     * fTrue if char's are Macintosh char set
+     *
+     * @return the fMacChs field value.
      */
     @Internal
-    public boolean isFChsDiff()
-    {
-        return fChsDiff.isSet(field_49_CharsetFlags);
+    public boolean isFMacChs() {
+        return fMacChs.isSet(field_49_CharsetFlags);
     }
 
     /**
@@ -3015,19 +2807,8 @@ public abstract class CHPAbstractType
      * fTrue if char's are Macintosh char set
      */
     @Internal
-    public void setFMacChs( boolean value )
-    {
-        field_49_CharsetFlags = (short)fMacChs.setBoolean(field_49_CharsetFlags, value);
-    }
-
-    /**
-     * fTrue if char's are Macintosh char set
-     * @return  the fMacChs field value.
-     */
-    @Internal
-    public boolean isFMacChs()
-    {
-        return fMacChs.isSet(field_49_CharsetFlags);
+    public void setFMacChs(boolean value) {
+        field_49_CharsetFlags = (short) fMacChs.setBoolean(field_49_CharsetFlags, value);
     }
 
 }  // END OF CLASS

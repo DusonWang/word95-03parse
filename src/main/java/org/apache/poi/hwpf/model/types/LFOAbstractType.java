@@ -22,22 +22,20 @@ import org.apache.poi.util.LittleEndian;
 
 /**
  * List Format Override (LFO). <p>Class and fields descriptions are quoted from
-        [MS-DOC] --v20110315; Word (.doc) Binary File Format
-    
+ * [MS-DOC] --v20110315; Word (.doc) Binary File Format
+ * <p>
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author Sergey Vladimirov; according to [MS-DOC] --v20110315; Word (.doc) Binary File Format;
-        Copyright (c) Microsoft Corporation
-    
+ *         Copyright (c) Microsoft Corporation
  */
 @Internal
-public abstract class LFOAbstractType
-{
+public abstract class LFOAbstractType {
 
     protected int field_1_lsid;
     protected int field_2_unused1;
@@ -47,83 +45,74 @@ public abstract class LFOAbstractType
     protected Grfhic field_6_grfhic;
     protected byte field_7_unused3;
 
-    protected LFOAbstractType()
-    {
+    protected LFOAbstractType() {
         this.field_6_grfhic = new Grfhic();
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_lsid                   = LittleEndian.getInt( data, 0x0 + offset );
-        field_2_unused1                = LittleEndian.getInt( data, 0x4 + offset );
-        field_3_unused2                = LittleEndian.getInt( data, 0x8 + offset );
-        field_4_clfolvl                = data[ 0xc + offset ];
-        field_5_ibstFltAutoNum         = data[ 0xd + offset ];
-        field_6_grfhic                 = new Grfhic( data, 0xe + offset );
-        field_7_unused3                = data[ 0xf + offset ];
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putInt( data, 0x0 + offset, field_1_lsid );
-        LittleEndian.putInt( data, 0x4 + offset, field_2_unused1 );
-        LittleEndian.putInt( data, 0x8 + offset, field_3_unused2 );
-        data[ 0xc + offset ] = field_4_clfolvl;
-        data[ 0xd + offset ] = field_5_ibstFltAutoNum;
-        field_6_grfhic.serialize( data, 0xe + offset );
-        data[ 0xf + offset ] = field_7_unused3;
-    }
-
-    public byte[] serialize()
-    {
-        final byte[] result = new byte[ getSize() ];
-        serialize( result, 0 );
-        return result;
     }
 
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 4 + 4 + 4 + 1 + 1 + 1 + 1;
     }
 
+    protected void fillFields(byte[] data, int offset) {
+        field_1_lsid = LittleEndian.getInt(data, 0x0 + offset);
+        field_2_unused1 = LittleEndian.getInt(data, 0x4 + offset);
+        field_3_unused2 = LittleEndian.getInt(data, 0x8 + offset);
+        field_4_clfolvl = data[0xc + offset];
+        field_5_ibstFltAutoNum = data[0xd + offset];
+        field_6_grfhic = new Grfhic(data, 0xe + offset);
+        field_7_unused3 = data[0xf + offset];
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putInt(data, 0x0 + offset, field_1_lsid);
+        LittleEndian.putInt(data, 0x4 + offset, field_2_unused1);
+        LittleEndian.putInt(data, 0x8 + offset, field_3_unused2);
+        data[0xc + offset] = field_4_clfolvl;
+        data[0xd + offset] = field_5_ibstFltAutoNum;
+        field_6_grfhic.serialize(data, 0xe + offset);
+        data[0xf + offset] = field_7_unused3;
+    }
+
+    public byte[] serialize() {
+        final byte[] result = new byte[getSize()];
+        serialize(result, 0);
+        return result;
+    }
+
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         LFOAbstractType other = (LFOAbstractType) obj;
-        if ( field_1_lsid != other.field_1_lsid )
+        if (field_1_lsid != other.field_1_lsid)
             return false;
-        if ( field_2_unused1 != other.field_2_unused1 )
+        if (field_2_unused1 != other.field_2_unused1)
             return false;
-        if ( field_3_unused2 != other.field_3_unused2 )
+        if (field_3_unused2 != other.field_3_unused2)
             return false;
-        if ( field_4_clfolvl != other.field_4_clfolvl )
+        if (field_4_clfolvl != other.field_4_clfolvl)
             return false;
-        if ( field_5_ibstFltAutoNum != other.field_5_ibstFltAutoNum )
+        if (field_5_ibstFltAutoNum != other.field_5_ibstFltAutoNum)
             return false;
-        if ( field_6_grfhic == null )
-        {
-            if ( other.field_6_grfhic != null )
+        if (field_6_grfhic == null) {
+            if (other.field_6_grfhic != null)
                 return false;
-        }
-        else if ( !field_6_grfhic.equals( other.field_6_grfhic ) )
+        } else if (!field_6_grfhic.equals(other.field_6_grfhic))
             return false;
-        if ( field_7_unused3 != other.field_7_unused3 )
+        if (field_7_unused3 != other.field_7_unused3)
             return false;
         return true;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + field_1_lsid;
@@ -137,25 +126,24 @@ public abstract class LFOAbstractType
         return result;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
 
         builder.append("[LFO]\n");
-        builder.append( "    .lsid                 = " );
-        builder.append(" ( ").append( field_1_lsid ).append( " )\n" );
-        builder.append( "    .unused1              = " );
-        builder.append(" ( ").append( field_2_unused1 ).append( " )\n" );
-        builder.append( "    .unused2              = " );
-        builder.append(" ( ").append( field_3_unused2 ).append( " )\n" );
-        builder.append( "    .clfolvl              = " );
-        builder.append(" ( ").append( field_4_clfolvl ).append( " )\n" );
-        builder.append( "    .ibstFltAutoNum       = " );
-        builder.append(" ( ").append( field_5_ibstFltAutoNum ).append( " )\n" );
-        builder.append( "    .grfhic               = " );
-        builder.append(" ( ").append( field_6_grfhic == null ? "null" : field_6_grfhic.toString().replaceAll( "\n", "\n    " ) ).append( " )\n" );
-        builder.append( "    .unused3              = " );
-        builder.append(" ( ").append( field_7_unused3 ).append( " )\n" );
+        builder.append("    .lsid                 = ");
+        builder.append(" ( ").append(field_1_lsid).append(" )\n");
+        builder.append("    .unused1              = ");
+        builder.append(" ( ").append(field_2_unused1).append(" )\n");
+        builder.append("    .unused2              = ");
+        builder.append(" ( ").append(field_3_unused2).append(" )\n");
+        builder.append("    .clfolvl              = ");
+        builder.append(" ( ").append(field_4_clfolvl).append(" )\n");
+        builder.append("    .ibstFltAutoNum       = ");
+        builder.append(" ( ").append(field_5_ibstFltAutoNum).append(" )\n");
+        builder.append("    .grfhic               = ");
+        builder.append(" ( ").append(field_6_grfhic == null ? "null" : field_6_grfhic.toString().replaceAll("\n", "\n    ")).append(" )\n");
+        builder.append("    .unused3              = ");
+        builder.append(" ( ").append(field_7_unused3).append(" )\n");
 
         builder.append("[/LFO]");
         return builder.toString();
@@ -165,8 +153,7 @@ public abstract class LFOAbstractType
      * A signed integer that specifies the list identifier of an LSTF. This LFO corresponds to the LSTF in PlfLst.rgLstf that has an lsid whose value is equal to this value..
      */
     @Internal
-    public int getLsid()
-    {
+    public int getLsid() {
         return field_1_lsid;
     }
 
@@ -174,8 +161,7 @@ public abstract class LFOAbstractType
      * A signed integer that specifies the list identifier of an LSTF. This LFO corresponds to the LSTF in PlfLst.rgLstf that has an lsid whose value is equal to this value..
      */
     @Internal
-    public void setLsid( int field_1_lsid )
-    {
+    public void setLsid(int field_1_lsid) {
         this.field_1_lsid = field_1_lsid;
     }
 
@@ -183,8 +169,7 @@ public abstract class LFOAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public int getUnused1()
-    {
+    public int getUnused1() {
         return field_2_unused1;
     }
 
@@ -192,8 +177,7 @@ public abstract class LFOAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public void setUnused1( int field_2_unused1 )
-    {
+    public void setUnused1(int field_2_unused1) {
         this.field_2_unused1 = field_2_unused1;
     }
 
@@ -201,8 +185,7 @@ public abstract class LFOAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public int getUnused2()
-    {
+    public int getUnused2() {
         return field_3_unused2;
     }
 
@@ -210,8 +193,7 @@ public abstract class LFOAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public void setUnused2( int field_3_unused2 )
-    {
+    public void setUnused2(int field_3_unused2) {
         this.field_3_unused2 = field_3_unused2;
     }
 
@@ -219,8 +201,7 @@ public abstract class LFOAbstractType
      * An unsigned integer that specifies the field that this LFO represents..
      */
     @Internal
-    public byte getClfolvl()
-    {
+    public byte getClfolvl() {
         return field_4_clfolvl;
     }
 
@@ -228,8 +209,7 @@ public abstract class LFOAbstractType
      * An unsigned integer that specifies the field that this LFO represents..
      */
     @Internal
-    public void setClfolvl( byte field_4_clfolvl )
-    {
+    public void setClfolvl(byte field_4_clfolvl) {
         this.field_4_clfolvl = field_4_clfolvl;
     }
 
@@ -237,8 +217,7 @@ public abstract class LFOAbstractType
      * Used for AUTONUM field emulation.
      */
     @Internal
-    public byte getIbstFltAutoNum()
-    {
+    public byte getIbstFltAutoNum() {
         return field_5_ibstFltAutoNum;
     }
 
@@ -246,8 +225,7 @@ public abstract class LFOAbstractType
      * Used for AUTONUM field emulation.
      */
     @Internal
-    public void setIbstFltAutoNum( byte field_5_ibstFltAutoNum )
-    {
+    public void setIbstFltAutoNum(byte field_5_ibstFltAutoNum) {
         this.field_5_ibstFltAutoNum = field_5_ibstFltAutoNum;
     }
 
@@ -255,8 +233,7 @@ public abstract class LFOAbstractType
      * HTML compatibility flags.
      */
     @Internal
-    public Grfhic getGrfhic()
-    {
+    public Grfhic getGrfhic() {
         return field_6_grfhic;
     }
 
@@ -264,8 +241,7 @@ public abstract class LFOAbstractType
      * HTML compatibility flags.
      */
     @Internal
-    public void setGrfhic( Grfhic field_6_grfhic )
-    {
+    public void setGrfhic(Grfhic field_6_grfhic) {
         this.field_6_grfhic = field_6_grfhic;
     }
 
@@ -273,8 +249,7 @@ public abstract class LFOAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public byte getUnused3()
-    {
+    public byte getUnused3() {
         return field_7_unused3;
     }
 
@@ -282,8 +257,7 @@ public abstract class LFOAbstractType
      * This field MUST be ignored.
      */
     @Internal
-    public void setUnused3( byte field_7_unused3 )
-    {
+    public void setUnused3(byte field_7_unused3) {
         this.field_7_unused3 = field_7_unused3;
     }
 

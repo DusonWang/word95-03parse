@@ -17,127 +17,106 @@
 
 package org.apache.poi.hwpf.model;
 
-import java.util.Arrays;
-
 import org.apache.poi.util.Internal;
 
+import java.util.Arrays;
+
 @Internal
-public final class ListData
-{
+public final class ListData {
     private ListLevel[] _levels;
 
     private LSTF _lstf;
 
-    ListData( byte[] buf, int offset )
-    {
-        _lstf = new LSTF( buf, offset );
+    ListData(byte[] buf, int offset) {
+        _lstf = new LSTF(buf, offset);
 
-        if ( _lstf.isFSimpleList() )
-        {
+        if (_lstf.isFSimpleList()) {
             _levels = new ListLevel[1];
-        }
-        else
-        {
+        } else {
             _levels = new ListLevel[9];
         }
     }
 
-    public ListData( int listID, boolean numbered )
-    {
+    public ListData(int listID, boolean numbered) {
         _lstf = new LSTF();
-        _lstf.setLsid( listID );
-        _lstf.setRgistdPara( new short[9] );
-        Arrays.fill( _lstf.getRgistdPara(), (short) StyleSheet.NIL_STYLE );
+        _lstf.setLsid(listID);
+        _lstf.setRgistdPara(new short[9]);
+        Arrays.fill(_lstf.getRgistdPara(), (short) StyleSheet.NIL_STYLE);
 
         _levels = new ListLevel[9];
-        for ( int x = 0; x < _levels.length; x++ )
-        {
-            _levels[x] = new ListLevel( x, numbered );
+        for (int x = 0; x < _levels.length; x++) {
+            _levels[x] = new ListLevel(x, numbered);
         }
     }
 
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         ListData other = (ListData) obj;
-        if ( !Arrays.equals( _levels, other._levels ) )
+        if (!Arrays.equals(_levels, other._levels))
             return false;
-        if ( _lstf == null )
-        {
-            if ( other._lstf != null )
+        if (_lstf == null) {
+            if (other._lstf != null)
                 return false;
-        }
-        else if ( !_lstf.equals( other._lstf ) )
+        } else if (!_lstf.equals(other._lstf))
             return false;
         return true;
     }
 
     /**
      * Gets the level associated to a particular List at a particular index.
-     * 
-     * @param index
-     *            1-based index
+     *
+     * @param index 1-based index
      * @return a list level
      */
-    public ListLevel getLevel( int index )
-    {
+    public ListLevel getLevel(int index) {
         return _levels[index - 1];
     }
 
-    public ListLevel[] getLevels()
-    {
+    public ListLevel[] getLevels() {
         return _levels;
     }
 
-    public int getLevelStyle( int index )
-    {
+    public int getLevelStyle(int index) {
         return _lstf.getRgistdPara()[index];
     }
 
-    public int getLsid()
-    {
+    public int getLsid() {
         return _lstf.getLsid();
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + Arrays.hashCode( _levels );
-        result = prime * result + ( ( _lstf == null ) ? 0 : _lstf.hashCode() );
+        result = prime * result + Arrays.hashCode(_levels);
+        result = prime * result + ((_lstf == null) ? 0 : _lstf.hashCode());
         return result;
     }
 
-    public int numLevels()
-    {
+    public int numLevels() {
         return _levels.length;
     }
 
-    int resetListID()
-    {
-        _lstf.setLsid( (int) ( Math.random() * System.currentTimeMillis() ) );
+    int resetListID() {
+        _lstf.setLsid((int) (Math.random() * System.currentTimeMillis()));
         return _lstf.getLsid();
     }
 
-    public void setLevel( int index, ListLevel level )
-    {
+    public void setLevel(int index, ListLevel level) {
         _levels[index] = level;
     }
 
-    public void setLevelStyle( int index, int styleIndex )
-    {
+    public void setLevelStyle(int index, int styleIndex) {
         _lstf.getRgistdPara()[index] = (short) styleIndex;
     }
 
-    public byte[] toByteArray()
-    {
+    public byte[] toByteArray() {
         return _lstf.serialize();
     }
 }

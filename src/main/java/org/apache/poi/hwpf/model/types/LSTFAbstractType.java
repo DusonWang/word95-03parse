@@ -16,127 +16,115 @@
 ==================================================================== */
 package org.apache.poi.hwpf.model.types;
 
-import java.util.Arrays;
-
 import org.apache.poi.hwpf.model.Grfhic;
 import org.apache.poi.util.BitField;
 import org.apache.poi.util.Internal;
 import org.apache.poi.util.LittleEndian;
 
+import java.util.Arrays;
+
 /**
  * The LSTF structure contains formatting properties that apply to an entire list.
-        <p>Class and fields descriptions are quoted from Microsoft Office Word 97-2007 Binary
-        File Format and [MS-DOC] - v20110608 Word (.doc) Binary File Format
-    
+ * <p>Class and fields descriptions are quoted from Microsoft Office Word 97-2007 Binary
+ * File Format and [MS-DOC] - v20110608 Word (.doc) Binary File Format
+ * <p>
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author Sergey Vladimirov; according to Microsoft Office Word 97-2007 Binary File Format
-        Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
-    
+ *         Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
  */
 @Internal
-public abstract class LSTFAbstractType
-{
+public abstract class LSTFAbstractType {
 
-    protected int field_1_lsid;
-    protected int field_2_tplc;
-    protected short[] field_3_rgistdPara;
-    protected byte field_4_flags;
     /**/private static final BitField fSimpleList = new BitField(0x01);
     /**/private static final BitField unused1 = new BitField(0x02);
     /**/private static final BitField fAutoNum = new BitField(0x04);
     /**/private static final BitField unused2 = new BitField(0x08);
     /**/private static final BitField fHybrid = new BitField(0x10);
     /**/private static final BitField reserved1 = new BitField(0xE0);
+    protected int field_1_lsid;
+    protected int field_2_tplc;
+    protected short[] field_3_rgistdPara;
+    protected byte field_4_flags;
     protected Grfhic field_5_grfhic;
 
-    protected LSTFAbstractType()
-    {
+    protected LSTFAbstractType() {
         this.field_3_rgistdPara = new short[0];
         this.field_5_grfhic = new Grfhic();
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_lsid                   = LittleEndian.getInt( data, 0x0 + offset );
-        field_2_tplc                   = LittleEndian.getInt( data, 0x4 + offset );
-        field_3_rgistdPara             = LittleEndian.getShortArray( data, 0x8 + offset, 18 );
-        field_4_flags                  = data[ 0x1a + offset ];
-        field_5_grfhic                 = new Grfhic( data, 0x1b + offset );
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putInt( data, 0x0 + offset, field_1_lsid );
-        LittleEndian.putInt( data, 0x4 + offset, field_2_tplc );
-        LittleEndian.putShortArray( data, 0x8 + offset, field_3_rgistdPara );
-        data[ 0x1a + offset ] = field_4_flags;
-        field_5_grfhic.serialize( data, 0x1b + offset );
-    }
-
-    public byte[] serialize()
-    {
-        final byte[] result = new byte[ getSize() ];
-        serialize( result, 0 );
-        return result;
     }
 
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 4 + 4 + 18 + 1 + 1;
     }
 
+    protected void fillFields(byte[] data, int offset) {
+        field_1_lsid = LittleEndian.getInt(data, 0x0 + offset);
+        field_2_tplc = LittleEndian.getInt(data, 0x4 + offset);
+        field_3_rgistdPara = LittleEndian.getShortArray(data, 0x8 + offset, 18);
+        field_4_flags = data[0x1a + offset];
+        field_5_grfhic = new Grfhic(data, 0x1b + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putInt(data, 0x0 + offset, field_1_lsid);
+        LittleEndian.putInt(data, 0x4 + offset, field_2_tplc);
+        LittleEndian.putShortArray(data, 0x8 + offset, field_3_rgistdPara);
+        data[0x1a + offset] = field_4_flags;
+        field_5_grfhic.serialize(data, 0x1b + offset);
+    }
+
+    public byte[] serialize() {
+        final byte[] result = new byte[getSize()];
+        serialize(result, 0);
+        return result;
+    }
+
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         LSTFAbstractType other = (LSTFAbstractType) obj;
-        if ( field_1_lsid != other.field_1_lsid )
+        if (field_1_lsid != other.field_1_lsid)
             return false;
-        if ( field_2_tplc != other.field_2_tplc )
+        if (field_2_tplc != other.field_2_tplc)
             return false;
-        if ( !Arrays.equals( field_3_rgistdPara, other.field_3_rgistdPara ) )
+        if (!Arrays.equals(field_3_rgistdPara, other.field_3_rgistdPara))
             return false;
-        if ( field_4_flags != other.field_4_flags )
+        if (field_4_flags != other.field_4_flags)
             return false;
-        if ( field_5_grfhic == null )
-        {
-            if ( other.field_5_grfhic != null )
+        if (field_5_grfhic == null) {
+            if (other.field_5_grfhic != null)
                 return false;
-        }
-        else if ( !field_5_grfhic.equals( other.field_5_grfhic ) )
+        } else if (!field_5_grfhic.equals(other.field_5_grfhic))
             return false;
         return true;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + field_1_lsid;
         result = prime * result + field_2_tplc;
-        result = prime * result + Arrays.hashCode( field_3_rgistdPara );
+        result = prime * result + Arrays.hashCode(field_3_rgistdPara);
         result = prime * result + field_4_flags;
         result = prime * result + field_5_grfhic.hashCode();
         return result;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[LSTF]\n");
         builder.append("    .lsid                 = ");
@@ -164,8 +152,7 @@ public abstract class LSTFAbstractType
      * A signed integer that specifies the list identifier. This MUST be unique for each LSTF. This value MUST not be 0xFFFFFFFF.
      */
     @Internal
-    public int getLsid()
-    {
+    public int getLsid() {
         return field_1_lsid;
     }
 
@@ -173,8 +160,7 @@ public abstract class LSTFAbstractType
      * A signed integer that specifies the list identifier. This MUST be unique for each LSTF. This value MUST not be 0xFFFFFFFF.
      */
     @Internal
-    public void setLsid( int field_1_lsid )
-    {
+    public void setLsid(int field_1_lsid) {
         this.field_1_lsid = field_1_lsid;
     }
 
@@ -182,8 +168,7 @@ public abstract class LSTFAbstractType
      * A Tplc that specifies a unique identifier for this LSTF that MAY be used for user interface purposes. If fHybrid is nonzero, this MUST be ignored.
      */
     @Internal
-    public int getTplc()
-    {
+    public int getTplc() {
         return field_2_tplc;
     }
 
@@ -191,8 +176,7 @@ public abstract class LSTFAbstractType
      * A Tplc that specifies a unique identifier for this LSTF that MAY be used for user interface purposes. If fHybrid is nonzero, this MUST be ignored.
      */
     @Internal
-    public void setTplc( int field_2_tplc )
-    {
+    public void setTplc(int field_2_tplc) {
         this.field_2_tplc = field_2_tplc;
     }
 
@@ -200,8 +184,7 @@ public abstract class LSTFAbstractType
      * An array of nine 16-bit signed integers. Each element of rgistdPara specifies the ISTD of the style that is linked to the corresponding level in the list. If no style is linked to a given level, the value of the corresponding element of rgistdPara MUST be 0x0FFF.
      */
     @Internal
-    public short[] getRgistdPara()
-    {
+    public short[] getRgistdPara() {
         return field_3_rgistdPara;
     }
 
@@ -209,8 +192,7 @@ public abstract class LSTFAbstractType
      * An array of nine 16-bit signed integers. Each element of rgistdPara specifies the ISTD of the style that is linked to the corresponding level in the list. If no style is linked to a given level, the value of the corresponding element of rgistdPara MUST be 0x0FFF.
      */
     @Internal
-    public void setRgistdPara( short[] field_3_rgistdPara )
-    {
+    public void setRgistdPara(short[] field_3_rgistdPara) {
         this.field_3_rgistdPara = field_3_rgistdPara;
     }
 
@@ -218,8 +200,7 @@ public abstract class LSTFAbstractType
      * Get the flags field for the LSTF record.
      */
     @Internal
-    public byte getFlags()
-    {
+    public byte getFlags() {
         return field_4_flags;
     }
 
@@ -227,8 +208,7 @@ public abstract class LSTFAbstractType
      * Set the flags field for the LSTF record.
      */
     @Internal
-    public void setFlags( byte field_4_flags )
-    {
+    public void setFlags(byte field_4_flags) {
         this.field_4_flags = field_4_flags;
     }
 
@@ -236,8 +216,7 @@ public abstract class LSTFAbstractType
      * A grfhic that specifies the HTML incompatibilities of the list..
      */
     @Internal
-    public Grfhic getGrfhic()
-    {
+    public Grfhic getGrfhic() {
         return field_5_grfhic;
     }
 
@@ -245,9 +224,18 @@ public abstract class LSTFAbstractType
      * A grfhic that specifies the HTML incompatibilities of the list..
      */
     @Internal
-    public void setGrfhic( Grfhic field_5_grfhic )
-    {
+    public void setGrfhic(Grfhic field_5_grfhic) {
         this.field_5_grfhic = field_5_grfhic;
+    }
+
+    /**
+     * A bit that, when set to 0x1, specifies that this LSTF represents a simple (one-level) list that has one corresponding LVL (see the fcPlfLst field of FibRgFcLcb97). Otherwise, this LSTF represents a multi-level list that has nine corresponding LVLs
+     *
+     * @return the fSimpleList field value.
+     */
+    @Internal
+    public boolean isFSimpleList() {
+        return fSimpleList.isSet(field_4_flags);
     }
 
     /**
@@ -255,19 +243,20 @@ public abstract class LSTFAbstractType
      * A bit that, when set to 0x1, specifies that this LSTF represents a simple (one-level) list that has one corresponding LVL (see the fcPlfLst field of FibRgFcLcb97). Otherwise, this LSTF represents a multi-level list that has nine corresponding LVLs
      */
     @Internal
-    public void setFSimpleList( boolean value )
-    {
-        field_4_flags = (byte)fSimpleList.setBoolean(field_4_flags, value);
+    public void setFSimpleList(boolean value) {
+        field_4_flags = (byte) fSimpleList.setBoolean(field_4_flags, value);
     }
 
     /**
-     * A bit that, when set to 0x1, specifies that this LSTF represents a simple (one-level) list that has one corresponding LVL (see the fcPlfLst field of FibRgFcLcb97). Otherwise, this LSTF represents a multi-level list that has nine corresponding LVLs
-     * @return  the fSimpleList field value.
+     * This bit MUST be ignored
+     *
+     * @return the unused1 field value.
+     * @deprecated This field should not be used according to specification
      */
     @Internal
-    public boolean isFSimpleList()
-    {
-        return fSimpleList.isSet(field_4_flags);
+    @Deprecated
+    public boolean isUnused1() {
+        return unused1.isSet(field_4_flags);
     }
 
     /**
@@ -275,21 +264,18 @@ public abstract class LSTFAbstractType
      * This bit MUST be ignored
      */
     @Internal
-    public void setUnused1( boolean value )
-    {
-        field_4_flags = (byte)unused1.setBoolean(field_4_flags, value);
+    public void setUnused1(boolean value) {
+        field_4_flags = (byte) unused1.setBoolean(field_4_flags, value);
     }
 
     /**
-     * This bit MUST be ignored
-     * @return  the unused1 field value.
-     * @deprecated This field should not be used according to specification
+     * A bit that specifies whether the list that this LSTF represents is used for the AUTONUMOUT, AUTONUMLGL, and AUTONUM fields (see AUTONUMOUT, AUTONUMLGL, and AUTONUM in flt)
+     *
+     * @return the fAutoNum field value.
      */
     @Internal
-    @Deprecated
-    public boolean isUnused1()
-    {
-        return unused1.isSet(field_4_flags);
+    public boolean isFAutoNum() {
+        return fAutoNum.isSet(field_4_flags);
     }
 
     /**
@@ -297,19 +283,20 @@ public abstract class LSTFAbstractType
      * A bit that specifies whether the list that this LSTF represents is used for the AUTONUMOUT, AUTONUMLGL, and AUTONUM fields (see AUTONUMOUT, AUTONUMLGL, and AUTONUM in flt)
      */
     @Internal
-    public void setFAutoNum( boolean value )
-    {
-        field_4_flags = (byte)fAutoNum.setBoolean(field_4_flags, value);
+    public void setFAutoNum(boolean value) {
+        field_4_flags = (byte) fAutoNum.setBoolean(field_4_flags, value);
     }
 
     /**
-     * A bit that specifies whether the list that this LSTF represents is used for the AUTONUMOUT, AUTONUMLGL, and AUTONUM fields (see AUTONUMOUT, AUTONUMLGL, and AUTONUM in flt)
-     * @return  the fAutoNum field value.
+     * This bit MUST be ignored
+     *
+     * @return the unused2 field value.
+     * @deprecated This field should not be used according to specification
      */
     @Internal
-    public boolean isFAutoNum()
-    {
-        return fAutoNum.isSet(field_4_flags);
+    @Deprecated
+    public boolean isUnused2() {
+        return unused2.isSet(field_4_flags);
     }
 
     /**
@@ -317,21 +304,18 @@ public abstract class LSTFAbstractType
      * This bit MUST be ignored
      */
     @Internal
-    public void setUnused2( boolean value )
-    {
-        field_4_flags = (byte)unused2.setBoolean(field_4_flags, value);
+    public void setUnused2(boolean value) {
+        field_4_flags = (byte) unused2.setBoolean(field_4_flags, value);
     }
 
     /**
-     * This bit MUST be ignored
-     * @return  the unused2 field value.
-     * @deprecated This field should not be used according to specification
+     * A bit that specifies whether the list this LSTF defines is a hybrid list
+     *
+     * @return the fHybrid field value.
      */
     @Internal
-    @Deprecated
-    public boolean isUnused2()
-    {
-        return unused2.isSet(field_4_flags);
+    public boolean isFHybrid() {
+        return fHybrid.isSet(field_4_flags);
     }
 
     /**
@@ -339,19 +323,20 @@ public abstract class LSTFAbstractType
      * A bit that specifies whether the list this LSTF defines is a hybrid list
      */
     @Internal
-    public void setFHybrid( boolean value )
-    {
-        field_4_flags = (byte)fHybrid.setBoolean(field_4_flags, value);
+    public void setFHybrid(boolean value) {
+        field_4_flags = (byte) fHybrid.setBoolean(field_4_flags, value);
     }
 
     /**
-     * A bit that specifies whether the list this LSTF defines is a hybrid list
-     * @return  the fHybrid field value.
+     * This MUST be zero, and MUST be ignored.
+     *
+     * @return the reserved1 field value.
+     * @deprecated This field should not be used according to specification
      */
     @Internal
-    public boolean isFHybrid()
-    {
-        return fHybrid.isSet(field_4_flags);
+    @Deprecated
+    public byte getReserved1() {
+        return (byte) reserved1.getValue(field_4_flags);
     }
 
     /**
@@ -359,21 +344,8 @@ public abstract class LSTFAbstractType
      * This MUST be zero, and MUST be ignored.
      */
     @Internal
-    public void setReserved1( byte value )
-    {
-        field_4_flags = (byte)reserved1.setValue(field_4_flags, value);
-    }
-
-    /**
-     * This MUST be zero, and MUST be ignored.
-     * @return  the reserved1 field value.
-     * @deprecated This field should not be used according to specification
-     */
-    @Internal
-    @Deprecated
-    public byte getReserved1()
-    {
-        return ( byte )reserved1.getValue(field_4_flags);
+    public void setReserved1(byte value) {
+        field_4_flags = (byte) reserved1.setValue(field_4_flags, value);
     }
 
 }  // END OF CLASS

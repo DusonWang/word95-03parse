@@ -25,38 +25,59 @@ import org.apache.poi.util.Internal;
 /**
  * Section Properties.
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/records/definitions.
+ * remove the record in src/records/definitions.
  *
  * @author S. Ryan Ackley
  */
 @Internal
-public abstract class SEPAbstractType
-{
+public abstract class SEPAbstractType {
 
-    protected byte field_1_bkc;
-    /** No break */
+    /**
+     * No break
+     */
     /**/public final static byte BKC_NO_BREAK = 0;
-    /** New column */
+    /**
+     * New column
+     */
     /**/public final static byte BKC_NEW_COLUMN = 1;
-    /** New page */
+    /**
+     * New page
+     */
     /**/public final static byte BKC_NEW_PAGE = 2;
-    /** Even page */
+    /**
+     * Even page
+     */
     /**/public final static byte BKC_EVEN_PAGE = 3;
-    /** Odd page */
+    /**
+     * Odd page
+     */
     /**/public final static byte BKC_ODD_PAGE = 4;
+    /**
+     * Arabic
+     */
+    /**/public final static byte NFCPGN_ARABIC = 0;
+    /**
+     * Roman (upper case)
+     */
+    /**/public final static byte NFCPGN_ROMAN_UPPER_CASE = 1;
+    /**
+     * Roman (lower case)
+     */
+    /**/public final static byte NFCPGN_ROMAN_LOWER_CASE = 2;
+    /**
+     * Letter (upper case)
+     */
+    /**/public final static byte NFCPGN_LETTER_UPPER_CASE = 3;
+    /**
+     * Letter (lower case)
+     */
+    /**/public final static byte NFCPGN_LETTER_LOWER_CASE = 4;
+    /**/public final static boolean DMORIENTPAGE_LANDSCAPE = false;
+    /**/public final static boolean DMORIENTPAGE_PORTRAIT = true;
+    protected byte field_1_bkc;
     protected boolean field_2_fTitlePage;
     protected boolean field_3_fAutoPgn;
     protected byte field_4_nfcPgn;
-    /** Arabic */
-    /**/public final static byte NFCPGN_ARABIC = 0;
-    /** Roman (upper case) */
-    /**/public final static byte NFCPGN_ROMAN_UPPER_CASE = 1;
-    /** Roman (lower case) */
-    /**/public final static byte NFCPGN_ROMAN_LOWER_CASE = 2;
-    /** Letter (upper case) */
-    /**/public final static byte NFCPGN_LETTER_UPPER_CASE = 3;
-    /** Letter (lower case) */
-    /**/public final static byte NFCPGN_LETTER_LOWER_CASE = 4;
     protected boolean field_5_fUnlocked;
     protected byte field_6_cnsPgn;
     protected boolean field_7_fPgnRestart;
@@ -84,8 +105,6 @@ public abstract class SEPAbstractType
     protected int field_29_clm;
     protected int field_30_unused2;
     protected boolean field_31_dmOrientPage;
-    /**/public final static boolean DMORIENTPAGE_LANDSCAPE = false;
-    /**/public final static boolean DMORIENTPAGE_PORTRAIT = true;
     protected byte field_32_iHeadingPgn;
     protected int field_33_pgnStart;
     protected int field_34_lnnMin;
@@ -115,8 +134,7 @@ public abstract class SEPAbstractType
     protected short field_58_unused6;
     protected byte[] field_59_olstAnm;
 
-    protected SEPAbstractType()
-    {
+    protected SEPAbstractType() {
         this.field_1_bkc = 2;
         this.field_8_fEndNote = true;
         this.field_13_dxaPgn = 720;
@@ -138,8 +156,7 @@ public abstract class SEPAbstractType
     }
 
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[SEP]\n");
         builder.append("    .bkc                  = ");
@@ -268,983 +285,862 @@ public abstract class SEPAbstractType
     /**
      * Break code.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #BKC_NO_BREAK}
      * <li>{@link #BKC_NEW_COLUMN}
      * <li>{@link #BKC_NEW_PAGE}
      * <li>{@link #BKC_EVEN_PAGE}
      * <li>{@link #BKC_ODD_PAGE}
      */
-    public byte getBkc()
-    {
+    public byte getBkc() {
         return field_1_bkc;
     }
 
     /**
      * Break code.
      *
-     * @param field_1_bkc
-     *        One of 
-     * <li>{@link #BKC_NO_BREAK}
-     * <li>{@link #BKC_NEW_COLUMN}
-     * <li>{@link #BKC_NEW_PAGE}
-     * <li>{@link #BKC_EVEN_PAGE}
-     * <li>{@link #BKC_ODD_PAGE}
+     * @param field_1_bkc One of
+     *                    <li>{@link #BKC_NO_BREAK}
+     *                    <li>{@link #BKC_NEW_COLUMN}
+     *                    <li>{@link #BKC_NEW_PAGE}
+     *                    <li>{@link #BKC_EVEN_PAGE}
+     *                    <li>{@link #BKC_ODD_PAGE}
      */
-    public void setBkc(byte field_1_bkc)
-    {
+    public void setBkc(byte field_1_bkc) {
         this.field_1_bkc = field_1_bkc;
     }
 
     /**
      * Set to 1 when a title page is to be displayed.
      */
-    public boolean getFTitlePage()
-    {
+    public boolean getFTitlePage() {
         return field_2_fTitlePage;
     }
 
     /**
      * Set to 1 when a title page is to be displayed.
      */
-    public void setFTitlePage(boolean field_2_fTitlePage)
-    {
+    public void setFTitlePage(boolean field_2_fTitlePage) {
         this.field_2_fTitlePage = field_2_fTitlePage;
     }
 
     /**
      * Only for Macintosh compatibility, used only during open, when 1, sep.dxaPgn and sep.dyaPgn are valid page number locations.
      */
-    public boolean getFAutoPgn()
-    {
+    public boolean getFAutoPgn() {
         return field_3_fAutoPgn;
     }
 
     /**
      * Only for Macintosh compatibility, used only during open, when 1, sep.dxaPgn and sep.dyaPgn are valid page number locations.
      */
-    public void setFAutoPgn(boolean field_3_fAutoPgn)
-    {
+    public void setFAutoPgn(boolean field_3_fAutoPgn) {
         this.field_3_fAutoPgn = field_3_fAutoPgn;
     }
 
     /**
      * Page number format code.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #NFCPGN_ARABIC}
      * <li>{@link #NFCPGN_ROMAN_UPPER_CASE}
      * <li>{@link #NFCPGN_ROMAN_LOWER_CASE}
      * <li>{@link #NFCPGN_LETTER_UPPER_CASE}
      * <li>{@link #NFCPGN_LETTER_LOWER_CASE}
      */
-    public byte getNfcPgn()
-    {
+    public byte getNfcPgn() {
         return field_4_nfcPgn;
     }
 
     /**
      * Page number format code.
      *
-     * @param field_4_nfcPgn
-     *        One of 
-     * <li>{@link #NFCPGN_ARABIC}
-     * <li>{@link #NFCPGN_ROMAN_UPPER_CASE}
-     * <li>{@link #NFCPGN_ROMAN_LOWER_CASE}
-     * <li>{@link #NFCPGN_LETTER_UPPER_CASE}
-     * <li>{@link #NFCPGN_LETTER_LOWER_CASE}
+     * @param field_4_nfcPgn One of
+     *                       <li>{@link #NFCPGN_ARABIC}
+     *                       <li>{@link #NFCPGN_ROMAN_UPPER_CASE}
+     *                       <li>{@link #NFCPGN_ROMAN_LOWER_CASE}
+     *                       <li>{@link #NFCPGN_LETTER_UPPER_CASE}
+     *                       <li>{@link #NFCPGN_LETTER_LOWER_CASE}
      */
-    public void setNfcPgn(byte field_4_nfcPgn)
-    {
+    public void setNfcPgn(byte field_4_nfcPgn) {
         this.field_4_nfcPgn = field_4_nfcPgn;
     }
 
     /**
      * Get the fUnlocked field for the SEP record.
      */
-    public boolean getFUnlocked()
-    {
+    public boolean getFUnlocked() {
         return field_5_fUnlocked;
     }
 
     /**
      * Set the fUnlocked field for the SEP record.
      */
-    public void setFUnlocked(boolean field_5_fUnlocked)
-    {
+    public void setFUnlocked(boolean field_5_fUnlocked) {
         this.field_5_fUnlocked = field_5_fUnlocked;
     }
 
     /**
      * Get the cnsPgn field for the SEP record.
      */
-    public byte getCnsPgn()
-    {
+    public byte getCnsPgn() {
         return field_6_cnsPgn;
     }
 
     /**
      * Set the cnsPgn field for the SEP record.
      */
-    public void setCnsPgn(byte field_6_cnsPgn)
-    {
+    public void setCnsPgn(byte field_6_cnsPgn) {
         this.field_6_cnsPgn = field_6_cnsPgn;
     }
 
     /**
      * Get the fPgnRestart field for the SEP record.
      */
-    public boolean getFPgnRestart()
-    {
+    public boolean getFPgnRestart() {
         return field_7_fPgnRestart;
     }
 
     /**
      * Set the fPgnRestart field for the SEP record.
      */
-    public void setFPgnRestart(boolean field_7_fPgnRestart)
-    {
+    public void setFPgnRestart(boolean field_7_fPgnRestart) {
         this.field_7_fPgnRestart = field_7_fPgnRestart;
     }
 
     /**
      * Get the fEndNote field for the SEP record.
      */
-    public boolean getFEndNote()
-    {
+    public boolean getFEndNote() {
         return field_8_fEndNote;
     }
 
     /**
      * Set the fEndNote field for the SEP record.
      */
-    public void setFEndNote(boolean field_8_fEndNote)
-    {
+    public void setFEndNote(boolean field_8_fEndNote) {
         this.field_8_fEndNote = field_8_fEndNote;
     }
 
     /**
      * Get the lnc field for the SEP record.
      */
-    public byte getLnc()
-    {
+    public byte getLnc() {
         return field_9_lnc;
     }
 
     /**
      * Set the lnc field for the SEP record.
      */
-    public void setLnc(byte field_9_lnc)
-    {
+    public void setLnc(byte field_9_lnc) {
         this.field_9_lnc = field_9_lnc;
     }
 
     /**
      * Get the grpfIhdt field for the SEP record.
      */
-    public byte getGrpfIhdt()
-    {
+    public byte getGrpfIhdt() {
         return field_10_grpfIhdt;
     }
 
     /**
      * Set the grpfIhdt field for the SEP record.
      */
-    public void setGrpfIhdt(byte field_10_grpfIhdt)
-    {
+    public void setGrpfIhdt(byte field_10_grpfIhdt) {
         this.field_10_grpfIhdt = field_10_grpfIhdt;
     }
 
     /**
      * Get the nLnnMod field for the SEP record.
      */
-    public int getNLnnMod()
-    {
+    public int getNLnnMod() {
         return field_11_nLnnMod;
     }
 
     /**
      * Set the nLnnMod field for the SEP record.
      */
-    public void setNLnnMod(int field_11_nLnnMod)
-    {
+    public void setNLnnMod(int field_11_nLnnMod) {
         this.field_11_nLnnMod = field_11_nLnnMod;
     }
 
     /**
      * Get the dxaLnn field for the SEP record.
      */
-    public int getDxaLnn()
-    {
+    public int getDxaLnn() {
         return field_12_dxaLnn;
     }
 
     /**
      * Set the dxaLnn field for the SEP record.
      */
-    public void setDxaLnn(int field_12_dxaLnn)
-    {
+    public void setDxaLnn(int field_12_dxaLnn) {
         this.field_12_dxaLnn = field_12_dxaLnn;
     }
 
     /**
      * Get the dxaPgn field for the SEP record.
      */
-    public int getDxaPgn()
-    {
+    public int getDxaPgn() {
         return field_13_dxaPgn;
     }
 
     /**
      * Set the dxaPgn field for the SEP record.
      */
-    public void setDxaPgn(int field_13_dxaPgn)
-    {
+    public void setDxaPgn(int field_13_dxaPgn) {
         this.field_13_dxaPgn = field_13_dxaPgn;
     }
 
     /**
      * Get the dyaPgn field for the SEP record.
      */
-    public int getDyaPgn()
-    {
+    public int getDyaPgn() {
         return field_14_dyaPgn;
     }
 
     /**
      * Set the dyaPgn field for the SEP record.
      */
-    public void setDyaPgn(int field_14_dyaPgn)
-    {
+    public void setDyaPgn(int field_14_dyaPgn) {
         this.field_14_dyaPgn = field_14_dyaPgn;
     }
 
     /**
      * Get the fLBetween field for the SEP record.
      */
-    public boolean getFLBetween()
-    {
+    public boolean getFLBetween() {
         return field_15_fLBetween;
     }
 
     /**
      * Set the fLBetween field for the SEP record.
      */
-    public void setFLBetween(boolean field_15_fLBetween)
-    {
+    public void setFLBetween(boolean field_15_fLBetween) {
         this.field_15_fLBetween = field_15_fLBetween;
     }
 
     /**
      * Get the vjc field for the SEP record.
      */
-    public byte getVjc()
-    {
+    public byte getVjc() {
         return field_16_vjc;
     }
 
     /**
      * Set the vjc field for the SEP record.
      */
-    public void setVjc(byte field_16_vjc)
-    {
+    public void setVjc(byte field_16_vjc) {
         this.field_16_vjc = field_16_vjc;
     }
 
     /**
      * Get the dmBinFirst field for the SEP record.
      */
-    public int getDmBinFirst()
-    {
+    public int getDmBinFirst() {
         return field_17_dmBinFirst;
     }
 
     /**
      * Set the dmBinFirst field for the SEP record.
      */
-    public void setDmBinFirst(int field_17_dmBinFirst)
-    {
+    public void setDmBinFirst(int field_17_dmBinFirst) {
         this.field_17_dmBinFirst = field_17_dmBinFirst;
     }
 
     /**
      * Get the dmBinOther field for the SEP record.
      */
-    public int getDmBinOther()
-    {
+    public int getDmBinOther() {
         return field_18_dmBinOther;
     }
 
     /**
      * Set the dmBinOther field for the SEP record.
      */
-    public void setDmBinOther(int field_18_dmBinOther)
-    {
+    public void setDmBinOther(int field_18_dmBinOther) {
         this.field_18_dmBinOther = field_18_dmBinOther;
     }
 
     /**
      * Get the dmPaperReq field for the SEP record.
      */
-    public int getDmPaperReq()
-    {
+    public int getDmPaperReq() {
         return field_19_dmPaperReq;
     }
 
     /**
      * Set the dmPaperReq field for the SEP record.
      */
-    public void setDmPaperReq(int field_19_dmPaperReq)
-    {
+    public void setDmPaperReq(int field_19_dmPaperReq) {
         this.field_19_dmPaperReq = field_19_dmPaperReq;
     }
 
     /**
      * Get the brcTop field for the SEP record.
      */
-    public BorderCode getBrcTop()
-    {
+    public BorderCode getBrcTop() {
         return field_20_brcTop;
     }
 
     /**
      * Set the brcTop field for the SEP record.
      */
-    public void setBrcTop(BorderCode field_20_brcTop)
-    {
+    public void setBrcTop(BorderCode field_20_brcTop) {
         this.field_20_brcTop = field_20_brcTop;
     }
 
     /**
      * Get the brcLeft field for the SEP record.
      */
-    public BorderCode getBrcLeft()
-    {
+    public BorderCode getBrcLeft() {
         return field_21_brcLeft;
     }
 
     /**
      * Set the brcLeft field for the SEP record.
      */
-    public void setBrcLeft(BorderCode field_21_brcLeft)
-    {
+    public void setBrcLeft(BorderCode field_21_brcLeft) {
         this.field_21_brcLeft = field_21_brcLeft;
     }
 
     /**
      * Get the brcBottom field for the SEP record.
      */
-    public BorderCode getBrcBottom()
-    {
+    public BorderCode getBrcBottom() {
         return field_22_brcBottom;
     }
 
     /**
      * Set the brcBottom field for the SEP record.
      */
-    public void setBrcBottom(BorderCode field_22_brcBottom)
-    {
+    public void setBrcBottom(BorderCode field_22_brcBottom) {
         this.field_22_brcBottom = field_22_brcBottom;
     }
 
     /**
      * Get the brcRight field for the SEP record.
      */
-    public BorderCode getBrcRight()
-    {
+    public BorderCode getBrcRight() {
         return field_23_brcRight;
     }
 
     /**
      * Set the brcRight field for the SEP record.
      */
-    public void setBrcRight(BorderCode field_23_brcRight)
-    {
+    public void setBrcRight(BorderCode field_23_brcRight) {
         this.field_23_brcRight = field_23_brcRight;
     }
 
     /**
      * Get the fPropMark field for the SEP record.
      */
-    public boolean getFPropMark()
-    {
+    public boolean getFPropMark() {
         return field_24_fPropMark;
     }
 
     /**
      * Set the fPropMark field for the SEP record.
      */
-    public void setFPropMark(boolean field_24_fPropMark)
-    {
+    public void setFPropMark(boolean field_24_fPropMark) {
         this.field_24_fPropMark = field_24_fPropMark;
     }
 
     /**
      * Get the ibstPropRMark field for the SEP record.
      */
-    public int getIbstPropRMark()
-    {
+    public int getIbstPropRMark() {
         return field_25_ibstPropRMark;
     }
 
     /**
      * Set the ibstPropRMark field for the SEP record.
      */
-    public void setIbstPropRMark(int field_25_ibstPropRMark)
-    {
+    public void setIbstPropRMark(int field_25_ibstPropRMark) {
         this.field_25_ibstPropRMark = field_25_ibstPropRMark;
     }
 
     /**
      * Get the dttmPropRMark field for the SEP record.
      */
-    public DateAndTime getDttmPropRMark()
-    {
+    public DateAndTime getDttmPropRMark() {
         return field_26_dttmPropRMark;
     }
 
     /**
      * Set the dttmPropRMark field for the SEP record.
      */
-    public void setDttmPropRMark(DateAndTime field_26_dttmPropRMark)
-    {
+    public void setDttmPropRMark(DateAndTime field_26_dttmPropRMark) {
         this.field_26_dttmPropRMark = field_26_dttmPropRMark;
     }
 
     /**
      * Get the dxtCharSpace field for the SEP record.
      */
-    public int getDxtCharSpace()
-    {
+    public int getDxtCharSpace() {
         return field_27_dxtCharSpace;
     }
 
     /**
      * Set the dxtCharSpace field for the SEP record.
      */
-    public void setDxtCharSpace(int field_27_dxtCharSpace)
-    {
+    public void setDxtCharSpace(int field_27_dxtCharSpace) {
         this.field_27_dxtCharSpace = field_27_dxtCharSpace;
     }
 
     /**
      * Get the dyaLinePitch field for the SEP record.
      */
-    public int getDyaLinePitch()
-    {
+    public int getDyaLinePitch() {
         return field_28_dyaLinePitch;
     }
 
     /**
      * Set the dyaLinePitch field for the SEP record.
      */
-    public void setDyaLinePitch(int field_28_dyaLinePitch)
-    {
+    public void setDyaLinePitch(int field_28_dyaLinePitch) {
         this.field_28_dyaLinePitch = field_28_dyaLinePitch;
     }
 
     /**
      * Get the clm field for the SEP record.
      */
-    public int getClm()
-    {
+    public int getClm() {
         return field_29_clm;
     }
 
     /**
      * Set the clm field for the SEP record.
      */
-    public void setClm(int field_29_clm)
-    {
+    public void setClm(int field_29_clm) {
         this.field_29_clm = field_29_clm;
     }
 
     /**
      * Get the unused2 field for the SEP record.
      */
-    public int getUnused2()
-    {
+    public int getUnused2() {
         return field_30_unused2;
     }
 
     /**
      * Set the unused2 field for the SEP record.
      */
-    public void setUnused2(int field_30_unused2)
-    {
+    public void setUnused2(int field_30_unused2) {
         this.field_30_unused2 = field_30_unused2;
     }
 
     /**
      * Get the dmOrientPage field for the SEP record.
      *
-     * @return One of 
+     * @return One of
      * <li>{@link #DMORIENTPAGE_LANDSCAPE}
      * <li>{@link #DMORIENTPAGE_PORTRAIT}
      */
-    public boolean getDmOrientPage()
-    {
+    public boolean getDmOrientPage() {
         return field_31_dmOrientPage;
     }
 
     /**
      * Set the dmOrientPage field for the SEP record.
      *
-     * @param field_31_dmOrientPage
-     *        One of 
-     * <li>{@link #DMORIENTPAGE_LANDSCAPE}
-     * <li>{@link #DMORIENTPAGE_PORTRAIT}
+     * @param field_31_dmOrientPage One of
+     *                              <li>{@link #DMORIENTPAGE_LANDSCAPE}
+     *                              <li>{@link #DMORIENTPAGE_PORTRAIT}
      */
-    public void setDmOrientPage(boolean field_31_dmOrientPage)
-    {
+    public void setDmOrientPage(boolean field_31_dmOrientPage) {
         this.field_31_dmOrientPage = field_31_dmOrientPage;
     }
 
     /**
      * Get the iHeadingPgn field for the SEP record.
      */
-    public byte getIHeadingPgn()
-    {
+    public byte getIHeadingPgn() {
         return field_32_iHeadingPgn;
     }
 
     /**
      * Set the iHeadingPgn field for the SEP record.
      */
-    public void setIHeadingPgn(byte field_32_iHeadingPgn)
-    {
+    public void setIHeadingPgn(byte field_32_iHeadingPgn) {
         this.field_32_iHeadingPgn = field_32_iHeadingPgn;
     }
 
     /**
      * Get the pgnStart field for the SEP record.
      */
-    public int getPgnStart()
-    {
+    public int getPgnStart() {
         return field_33_pgnStart;
     }
 
     /**
      * Set the pgnStart field for the SEP record.
      */
-    public void setPgnStart(int field_33_pgnStart)
-    {
+    public void setPgnStart(int field_33_pgnStart) {
         this.field_33_pgnStart = field_33_pgnStart;
     }
 
     /**
      * Get the lnnMin field for the SEP record.
      */
-    public int getLnnMin()
-    {
+    public int getLnnMin() {
         return field_34_lnnMin;
     }
 
     /**
      * Set the lnnMin field for the SEP record.
      */
-    public void setLnnMin(int field_34_lnnMin)
-    {
+    public void setLnnMin(int field_34_lnnMin) {
         this.field_34_lnnMin = field_34_lnnMin;
     }
 
     /**
      * Get the wTextFlow field for the SEP record.
      */
-    public int getWTextFlow()
-    {
+    public int getWTextFlow() {
         return field_35_wTextFlow;
     }
 
     /**
      * Set the wTextFlow field for the SEP record.
      */
-    public void setWTextFlow(int field_35_wTextFlow)
-    {
+    public void setWTextFlow(int field_35_wTextFlow) {
         this.field_35_wTextFlow = field_35_wTextFlow;
     }
 
     /**
      * Get the unused3 field for the SEP record.
      */
-    public short getUnused3()
-    {
+    public short getUnused3() {
         return field_36_unused3;
     }
 
     /**
      * Set the unused3 field for the SEP record.
      */
-    public void setUnused3(short field_36_unused3)
-    {
+    public void setUnused3(short field_36_unused3) {
         this.field_36_unused3 = field_36_unused3;
     }
 
     /**
      * Get the pgbProp field for the SEP record.
      */
-    public int getPgbProp()
-    {
+    public int getPgbProp() {
         return field_37_pgbProp;
     }
 
     /**
      * Set the pgbProp field for the SEP record.
      */
-    public void setPgbProp(int field_37_pgbProp)
-    {
+    public void setPgbProp(int field_37_pgbProp) {
         this.field_37_pgbProp = field_37_pgbProp;
     }
 
     /**
      * Get the unused4 field for the SEP record.
      */
-    public short getUnused4()
-    {
+    public short getUnused4() {
         return field_38_unused4;
     }
 
     /**
      * Set the unused4 field for the SEP record.
      */
-    public void setUnused4(short field_38_unused4)
-    {
+    public void setUnused4(short field_38_unused4) {
         this.field_38_unused4 = field_38_unused4;
     }
 
     /**
      * Get the xaPage field for the SEP record.
      */
-    public int getXaPage()
-    {
+    public int getXaPage() {
         return field_39_xaPage;
     }
 
     /**
      * Set the xaPage field for the SEP record.
      */
-    public void setXaPage(int field_39_xaPage)
-    {
+    public void setXaPage(int field_39_xaPage) {
         this.field_39_xaPage = field_39_xaPage;
     }
 
     /**
      * Get the yaPage field for the SEP record.
      */
-    public int getYaPage()
-    {
+    public int getYaPage() {
         return field_40_yaPage;
     }
 
     /**
      * Set the yaPage field for the SEP record.
      */
-    public void setYaPage(int field_40_yaPage)
-    {
+    public void setYaPage(int field_40_yaPage) {
         this.field_40_yaPage = field_40_yaPage;
     }
 
     /**
      * Get the xaPageNUp field for the SEP record.
      */
-    public int getXaPageNUp()
-    {
+    public int getXaPageNUp() {
         return field_41_xaPageNUp;
     }
 
     /**
      * Set the xaPageNUp field for the SEP record.
      */
-    public void setXaPageNUp(int field_41_xaPageNUp)
-    {
+    public void setXaPageNUp(int field_41_xaPageNUp) {
         this.field_41_xaPageNUp = field_41_xaPageNUp;
     }
 
     /**
      * Get the yaPageNUp field for the SEP record.
      */
-    public int getYaPageNUp()
-    {
+    public int getYaPageNUp() {
         return field_42_yaPageNUp;
     }
 
     /**
      * Set the yaPageNUp field for the SEP record.
      */
-    public void setYaPageNUp(int field_42_yaPageNUp)
-    {
+    public void setYaPageNUp(int field_42_yaPageNUp) {
         this.field_42_yaPageNUp = field_42_yaPageNUp;
     }
 
     /**
      * Get the dxaLeft field for the SEP record.
      */
-    public int getDxaLeft()
-    {
+    public int getDxaLeft() {
         return field_43_dxaLeft;
     }
 
     /**
      * Set the dxaLeft field for the SEP record.
      */
-    public void setDxaLeft(int field_43_dxaLeft)
-    {
+    public void setDxaLeft(int field_43_dxaLeft) {
         this.field_43_dxaLeft = field_43_dxaLeft;
     }
 
     /**
      * Get the dxaRight field for the SEP record.
      */
-    public int getDxaRight()
-    {
+    public int getDxaRight() {
         return field_44_dxaRight;
     }
 
     /**
      * Set the dxaRight field for the SEP record.
      */
-    public void setDxaRight(int field_44_dxaRight)
-    {
+    public void setDxaRight(int field_44_dxaRight) {
         this.field_44_dxaRight = field_44_dxaRight;
     }
 
     /**
      * Get the dyaTop field for the SEP record.
      */
-    public int getDyaTop()
-    {
+    public int getDyaTop() {
         return field_45_dyaTop;
     }
 
     /**
      * Set the dyaTop field for the SEP record.
      */
-    public void setDyaTop(int field_45_dyaTop)
-    {
+    public void setDyaTop(int field_45_dyaTop) {
         this.field_45_dyaTop = field_45_dyaTop;
     }
 
     /**
      * Get the dyaBottom field for the SEP record.
      */
-    public int getDyaBottom()
-    {
+    public int getDyaBottom() {
         return field_46_dyaBottom;
     }
 
     /**
      * Set the dyaBottom field for the SEP record.
      */
-    public void setDyaBottom(int field_46_dyaBottom)
-    {
+    public void setDyaBottom(int field_46_dyaBottom) {
         this.field_46_dyaBottom = field_46_dyaBottom;
     }
 
     /**
      * Get the dzaGutter field for the SEP record.
      */
-    public int getDzaGutter()
-    {
+    public int getDzaGutter() {
         return field_47_dzaGutter;
     }
 
     /**
      * Set the dzaGutter field for the SEP record.
      */
-    public void setDzaGutter(int field_47_dzaGutter)
-    {
+    public void setDzaGutter(int field_47_dzaGutter) {
         this.field_47_dzaGutter = field_47_dzaGutter;
     }
 
     /**
      * Get the dyaHdrTop field for the SEP record.
      */
-    public int getDyaHdrTop()
-    {
+    public int getDyaHdrTop() {
         return field_48_dyaHdrTop;
     }
 
     /**
      * Set the dyaHdrTop field for the SEP record.
      */
-    public void setDyaHdrTop(int field_48_dyaHdrTop)
-    {
+    public void setDyaHdrTop(int field_48_dyaHdrTop) {
         this.field_48_dyaHdrTop = field_48_dyaHdrTop;
     }
 
     /**
      * Get the dyaHdrBottom field for the SEP record.
      */
-    public int getDyaHdrBottom()
-    {
+    public int getDyaHdrBottom() {
         return field_49_dyaHdrBottom;
     }
 
     /**
      * Set the dyaHdrBottom field for the SEP record.
      */
-    public void setDyaHdrBottom(int field_49_dyaHdrBottom)
-    {
+    public void setDyaHdrBottom(int field_49_dyaHdrBottom) {
         this.field_49_dyaHdrBottom = field_49_dyaHdrBottom;
     }
 
     /**
      * Get the ccolM1 field for the SEP record.
      */
-    public int getCcolM1()
-    {
+    public int getCcolM1() {
         return field_50_ccolM1;
     }
 
     /**
      * Set the ccolM1 field for the SEP record.
      */
-    public void setCcolM1(int field_50_ccolM1)
-    {
+    public void setCcolM1(int field_50_ccolM1) {
         this.field_50_ccolM1 = field_50_ccolM1;
     }
 
     /**
      * Get the fEvenlySpaced field for the SEP record.
      */
-    public boolean getFEvenlySpaced()
-    {
+    public boolean getFEvenlySpaced() {
         return field_51_fEvenlySpaced;
     }
 
     /**
      * Set the fEvenlySpaced field for the SEP record.
      */
-    public void setFEvenlySpaced(boolean field_51_fEvenlySpaced)
-    {
+    public void setFEvenlySpaced(boolean field_51_fEvenlySpaced) {
         this.field_51_fEvenlySpaced = field_51_fEvenlySpaced;
     }
 
     /**
      * Get the unused5 field for the SEP record.
      */
-    public byte getUnused5()
-    {
+    public byte getUnused5() {
         return field_52_unused5;
     }
 
     /**
      * Set the unused5 field for the SEP record.
      */
-    public void setUnused5(byte field_52_unused5)
-    {
+    public void setUnused5(byte field_52_unused5) {
         this.field_52_unused5 = field_52_unused5;
     }
 
     /**
      * Get the dxaColumns field for the SEP record.
      */
-    public int getDxaColumns()
-    {
+    public int getDxaColumns() {
         return field_53_dxaColumns;
     }
 
     /**
      * Set the dxaColumns field for the SEP record.
      */
-    public void setDxaColumns(int field_53_dxaColumns)
-    {
+    public void setDxaColumns(int field_53_dxaColumns) {
         this.field_53_dxaColumns = field_53_dxaColumns;
     }
 
     /**
      * Get the rgdxaColumn field for the SEP record.
      */
-    public int[] getRgdxaColumn()
-    {
+    public int[] getRgdxaColumn() {
         return field_54_rgdxaColumn;
     }
 
     /**
      * Set the rgdxaColumn field for the SEP record.
      */
-    public void setRgdxaColumn(int[] field_54_rgdxaColumn)
-    {
+    public void setRgdxaColumn(int[] field_54_rgdxaColumn) {
         this.field_54_rgdxaColumn = field_54_rgdxaColumn;
     }
 
     /**
      * Get the dxaColumnWidth field for the SEP record.
      */
-    public int getDxaColumnWidth()
-    {
+    public int getDxaColumnWidth() {
         return field_55_dxaColumnWidth;
     }
 
     /**
      * Set the dxaColumnWidth field for the SEP record.
      */
-    public void setDxaColumnWidth(int field_55_dxaColumnWidth)
-    {
+    public void setDxaColumnWidth(int field_55_dxaColumnWidth) {
         this.field_55_dxaColumnWidth = field_55_dxaColumnWidth;
     }
 
     /**
      * Get the dmOrientFirst field for the SEP record.
      */
-    public byte getDmOrientFirst()
-    {
+    public byte getDmOrientFirst() {
         return field_56_dmOrientFirst;
     }
 
     /**
      * Set the dmOrientFirst field for the SEP record.
      */
-    public void setDmOrientFirst(byte field_56_dmOrientFirst)
-    {
+    public void setDmOrientFirst(byte field_56_dmOrientFirst) {
         this.field_56_dmOrientFirst = field_56_dmOrientFirst;
     }
 
     /**
      * Get the fLayout field for the SEP record.
      */
-    public byte getFLayout()
-    {
+    public byte getFLayout() {
         return field_57_fLayout;
     }
 
     /**
      * Set the fLayout field for the SEP record.
      */
-    public void setFLayout(byte field_57_fLayout)
-    {
+    public void setFLayout(byte field_57_fLayout) {
         this.field_57_fLayout = field_57_fLayout;
     }
 
     /**
      * Get the unused6 field for the SEP record.
      */
-    public short getUnused6()
-    {
+    public short getUnused6() {
         return field_58_unused6;
     }
 
     /**
      * Set the unused6 field for the SEP record.
      */
-    public void setUnused6(short field_58_unused6)
-    {
+    public void setUnused6(short field_58_unused6) {
         this.field_58_unused6 = field_58_unused6;
     }
 
     /**
      * Get the olstAnm field for the SEP record.
      */
-    public byte[] getOlstAnm()
-    {
+    public byte[] getOlstAnm() {
         return field_59_olstAnm;
     }
 
     /**
      * Set the olstAnm field for the SEP record.
      */
-    public void setOlstAnm(byte[] field_59_olstAnm)
-    {
+    public void setOlstAnm(byte[] field_59_olstAnm) {
         this.field_59_olstAnm = field_59_olstAnm;
     }
 

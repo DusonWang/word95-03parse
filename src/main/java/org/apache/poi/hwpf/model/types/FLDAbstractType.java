@@ -26,182 +26,176 @@ import org.apache.poi.util.Internal;
  * <p>
  * Class and fields descriptions are quoted from Microsoft Office Word 97-2007
  * Binary File Format
- * 
+ * <p>
  * NOTE: This source is automatically generated please do not modify this file.
  * Either subclass or remove the record in src/records/definitions.
- * 
+ *
  * @author Sergey Vladimirov; according to Microsoft Office Word 97-2007 Binary
  *         File Format Specification [*.doc]
  */
 @Internal
-public abstract class FLDAbstractType implements HDFType
-{
+public abstract class FLDAbstractType implements HDFType {
 
+    private static BitField ch = new BitField(0x1f);
+    private static BitField reserved = new BitField(0xe0);
+    private static BitField fDiffer = new BitField(0x01);
+    private static BitField fZombieEmbed = new BitField(0x02);
+    private static BitField fResultDirty = new BitField(0x04);
+    private static BitField fResultEdited = new BitField(0x08);
+    private static BitField fLocked = new BitField(0x10);
+    private static BitField fPrivateResult = new BitField(0x20);
+    private static BitField fNested = new BitField(0x40);
+    private static BitField fHasSep = new BitField(0x40);
     protected byte field_1_chHolder;
-    private static BitField ch = new BitField( 0x1f );
-    private static BitField reserved = new BitField( 0xe0 );
     protected byte field_2_flt;
-    private static BitField fDiffer = new BitField( 0x01 );
-    private static BitField fZombieEmbed = new BitField( 0x02 );
-    private static BitField fResultDirty = new BitField( 0x04 );
-    private static BitField fResultEdited = new BitField( 0x08 );
-    private static BitField fLocked = new BitField( 0x10 );
-    private static BitField fPrivateResult = new BitField( 0x20 );
-    private static BitField fNested = new BitField( 0x40 );
-    private static BitField fHasSep = new BitField( 0x40 );
 
-    public FLDAbstractType()
-    {
+    public FLDAbstractType() {
 
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_chHolder = data[0x0 + offset];
-        field_2_flt = data[0x1 + offset];
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        data[0x0 + offset] = field_1_chHolder;
-        data[0x1 + offset] = field_2_flt;
-    }
-
-    public String toString()
-    {
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append( "[FLD]\n" );
-
-        buffer.append( "    .chHolder             = " );
-        buffer.append( " (" ).append( getChHolder() ).append( " )\n" );
-        buffer.append( "         .ch                       = " )
-                .append( getCh() ).append( '\n' );
-        buffer.append( "         .reserved                 = " )
-                .append( getReserved() ).append( '\n' );
-
-        buffer.append( "    .flt                  = " );
-        buffer.append( " (" ).append( getFlt() ).append( " )\n" );
-        buffer.append( "         .fDiffer                  = " )
-                .append( isFDiffer() ).append( '\n' );
-        buffer.append( "         .fZombieEmbed             = " )
-                .append( isFZombieEmbed() ).append( '\n' );
-        buffer.append( "         .fResultDirty             = " )
-                .append( isFResultDirty() ).append( '\n' );
-        buffer.append( "         .fResultEdited            = " )
-                .append( isFResultEdited() ).append( '\n' );
-        buffer.append( "         .fLocked                  = " )
-                .append( isFLocked() ).append( '\n' );
-        buffer.append( "         .fPrivateResult           = " )
-                .append( isFPrivateResult() ).append( '\n' );
-        buffer.append( "         .fNested                  = " )
-                .append( isFNested() ).append( '\n' );
-        buffer.append( "         .fHasSep                  = " )
-                .append( isFHasSep() ).append( '\n' );
-
-        buffer.append( "[/FLD]\n" );
-        return buffer.toString();
     }
 
     /**
      * Size of record (exluding 4 byte header)
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 4 + +1 + 1;
+    }
+
+    protected void fillFields(byte[] data, int offset) {
+        field_1_chHolder = data[0x0 + offset];
+        field_2_flt = data[0x1 + offset];
+    }
+
+    public void serialize(byte[] data, int offset) {
+        data[0x0 + offset] = field_1_chHolder;
+        data[0x1 + offset] = field_2_flt;
+    }
+
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("[FLD]\n");
+
+        buffer.append("    .chHolder             = ");
+        buffer.append(" (").append(getChHolder()).append(" )\n");
+        buffer.append("         .ch                       = ")
+                .append(getCh()).append('\n');
+        buffer.append("         .reserved                 = ")
+                .append(getReserved()).append('\n');
+
+        buffer.append("    .flt                  = ");
+        buffer.append(" (").append(getFlt()).append(" )\n");
+        buffer.append("         .fDiffer                  = ")
+                .append(isFDiffer()).append('\n');
+        buffer.append("         .fZombieEmbed             = ")
+                .append(isFZombieEmbed()).append('\n');
+        buffer.append("         .fResultDirty             = ")
+                .append(isFResultDirty()).append('\n');
+        buffer.append("         .fResultEdited            = ")
+                .append(isFResultEdited()).append('\n');
+        buffer.append("         .fLocked                  = ")
+                .append(isFLocked()).append('\n');
+        buffer.append("         .fPrivateResult           = ")
+                .append(isFPrivateResult()).append('\n');
+        buffer.append("         .fNested                  = ")
+                .append(isFNested()).append('\n');
+        buffer.append("         .fHasSep                  = ")
+                .append(isFHasSep()).append('\n');
+
+        buffer.append("[/FLD]\n");
+        return buffer.toString();
     }
 
     /**
      * ch field holder (along with reserved bits).
      */
-    public byte getChHolder()
-    {
+    public byte getChHolder() {
         return field_1_chHolder;
     }
 
     /**
      * ch field holder (along with reserved bits).
      */
-    public void setChHolder( byte field_1_chHolder )
-    {
+    public void setChHolder(byte field_1_chHolder) {
         this.field_1_chHolder = field_1_chHolder;
     }
 
     /**
      * Field type when ch == 19 OR field flags when ch == 21 .
      */
-    public byte getFlt()
-    {
+    public byte getFlt() {
         return field_2_flt;
     }
 
     /**
      * Field type when ch == 19 OR field flags when ch == 21 .
      */
-    public void setFlt( byte field_2_flt )
-    {
+    public void setFlt(byte field_2_flt) {
         this.field_2_flt = field_2_flt;
+    }
+
+    /**
+     * Type of field boundary the FLD describes: 19 -- field begin mark, 20 --
+     * field separation mark; 21 -- field end mark
+     *
+     * @return the ch field value.
+     */
+    public byte getCh() {
+        return (byte) ch.getValue(field_1_chHolder);
+
     }
 
     /**
      * Sets the ch field value. Type of field boundary the FLD describes: 19 --
      * field begin mark, 20 -- field separation mark; 21 -- field end mark
      */
-    public void setCh( byte value )
-    {
-        field_1_chHolder = (byte) ch.setValue( field_1_chHolder, value );
+    public void setCh(byte value) {
+        field_1_chHolder = (byte) ch.setValue(field_1_chHolder, value);
 
     }
 
     /**
-     * Type of field boundary the FLD describes: 19 -- field begin mark, 20 --
-     * field separation mark; 21 -- field end mark
-     * 
-     * @return the ch field value.
+     * Reserved
+     *
+     * @return the reserved field value.
      */
-    public byte getCh()
-    {
-        return (byte) ch.getValue( field_1_chHolder );
+    public byte getReserved() {
+        return (byte) reserved.getValue(field_1_chHolder);
 
     }
 
     /**
      * Sets the reserved field value. Reserved
      */
-    public void setReserved( byte value )
-    {
-        field_1_chHolder = (byte) reserved.setValue( field_1_chHolder, value );
+    public void setReserved(byte value) {
+        field_1_chHolder = (byte) reserved.setValue(field_1_chHolder, value);
 
     }
 
     /**
-     * Reserved
-     * 
-     * @return the reserved field value.
+     * Ignored for saved file
+     *
+     * @return the fDiffer field value.
      */
-    public byte getReserved()
-    {
-        return (byte) reserved.getValue( field_1_chHolder );
+    public boolean isFDiffer() {
+        return fDiffer.isSet(field_2_flt);
 
     }
 
     /**
      * Sets the fDiffer field value. Ignored for saved file
      */
-    public void setFDiffer( boolean value )
-    {
-        field_2_flt = (byte) fDiffer.setBoolean( field_2_flt, value );
+    public void setFDiffer(boolean value) {
+        field_2_flt = (byte) fDiffer.setBoolean(field_2_flt, value);
 
     }
 
     /**
-     * Ignored for saved file
-     * 
-     * @return the fDiffer field value.
+     * ==1 when result still believes this field is an EMBED or LINK field
+     *
+     * @return the fZombieEmbed field value.
      */
-    public boolean isFDiffer()
-    {
-        return fDiffer.isSet( field_2_flt );
+    public boolean isFZombieEmbed() {
+        return fZombieEmbed.isSet(field_2_flt);
 
     }
 
@@ -209,20 +203,18 @@ public abstract class FLDAbstractType implements HDFType
      * Sets the fZombieEmbed field value. ==1 when result still believes this
      * field is an EMBED or LINK field
      */
-    public void setFZombieEmbed( boolean value )
-    {
-        field_2_flt = (byte) fZombieEmbed.setBoolean( field_2_flt, value );
+    public void setFZombieEmbed(boolean value) {
+        field_2_flt = (byte) fZombieEmbed.setBoolean(field_2_flt, value);
 
     }
 
     /**
-     * ==1 when result still believes this field is an EMBED or LINK field
-     * 
-     * @return the fZombieEmbed field value.
+     * ==1 when user has edited or formatted the result. == 0 otherwise
+     *
+     * @return the fResultDirty field value.
      */
-    public boolean isFZombieEmbed()
-    {
-        return fZombieEmbed.isSet( field_2_flt );
+    public boolean isFResultDirty() {
+        return fResultDirty.isSet(field_2_flt);
 
     }
 
@@ -230,20 +222,18 @@ public abstract class FLDAbstractType implements HDFType
      * Sets the fResultDirty field value. ==1 when user has edited or formatted
      * the result. == 0 otherwise
      */
-    public void setFResultDirty( boolean value )
-    {
-        field_2_flt = (byte) fResultDirty.setBoolean( field_2_flt, value );
+    public void setFResultDirty(boolean value) {
+        field_2_flt = (byte) fResultDirty.setBoolean(field_2_flt, value);
 
     }
 
     /**
-     * ==1 when user has edited or formatted the result. == 0 otherwise
-     * 
-     * @return the fResultDirty field value.
+     * ==1 when user has inserted text into or deleted text from the result
+     *
+     * @return the fResultEdited field value.
      */
-    public boolean isFResultDirty()
-    {
-        return fResultDirty.isSet( field_2_flt );
+    public boolean isFResultEdited() {
+        return fResultEdited.isSet(field_2_flt);
 
     }
 
@@ -251,40 +241,36 @@ public abstract class FLDAbstractType implements HDFType
      * Sets the fResultEdited field value. ==1 when user has inserted text into
      * or deleted text from the result
      */
-    public void setFResultEdited( boolean value )
-    {
-        field_2_flt = (byte) fResultEdited.setBoolean( field_2_flt, value );
+    public void setFResultEdited(boolean value) {
+        field_2_flt = (byte) fResultEdited.setBoolean(field_2_flt, value);
 
     }
 
     /**
-     * ==1 when user has inserted text into or deleted text from the result
-     * 
-     * @return the fResultEdited field value.
+     * ==1 when field is locked from recalculation
+     *
+     * @return the fLocked field value.
      */
-    public boolean isFResultEdited()
-    {
-        return fResultEdited.isSet( field_2_flt );
+    public boolean isFLocked() {
+        return fLocked.isSet(field_2_flt);
 
     }
 
     /**
      * Sets the fLocked field value. ==1 when field is locked from recalculation
      */
-    public void setFLocked( boolean value )
-    {
-        field_2_flt = (byte) fLocked.setBoolean( field_2_flt, value );
+    public void setFLocked(boolean value) {
+        field_2_flt = (byte) fLocked.setBoolean(field_2_flt, value);
 
     }
 
     /**
-     * ==1 when field is locked from recalculation
-     * 
-     * @return the fLocked field value.
+     * ==1 whenever the result of the field is never to be shown
+     *
+     * @return the fPrivateResult field value.
      */
-    public boolean isFLocked()
-    {
-        return fLocked.isSet( field_2_flt );
+    public boolean isFPrivateResult() {
+        return fPrivateResult.isSet(field_2_flt);
 
     }
 
@@ -292,20 +278,18 @@ public abstract class FLDAbstractType implements HDFType
      * Sets the fPrivateResult field value. ==1 whenever the result of the field
      * is never to be shown
      */
-    public void setFPrivateResult( boolean value )
-    {
-        field_2_flt = (byte) fPrivateResult.setBoolean( field_2_flt, value );
+    public void setFPrivateResult(boolean value) {
+        field_2_flt = (byte) fPrivateResult.setBoolean(field_2_flt, value);
 
     }
 
     /**
-     * ==1 whenever the result of the field is never to be shown
-     * 
-     * @return the fPrivateResult field value.
+     * ==1 when field is nested within another field
+     *
+     * @return the fNested field value.
      */
-    public boolean isFPrivateResult()
-    {
-        return fPrivateResult.isSet( field_2_flt );
+    public boolean isFNested() {
+        return fNested.isSet(field_2_flt);
 
     }
 
@@ -313,40 +297,26 @@ public abstract class FLDAbstractType implements HDFType
      * Sets the fNested field value. ==1 when field is nested within another
      * field
      */
-    public void setFNested( boolean value )
-    {
-        field_2_flt = (byte) fNested.setBoolean( field_2_flt, value );
+    public void setFNested(boolean value) {
+        field_2_flt = (byte) fNested.setBoolean(field_2_flt, value);
 
     }
 
     /**
-     * ==1 when field is nested within another field
-     * 
-     * @return the fNested field value.
+     * ==1 when field has a field separator
+     *
+     * @return the fHasSep field value.
      */
-    public boolean isFNested()
-    {
-        return fNested.isSet( field_2_flt );
+    public boolean isFHasSep() {
+        return fHasSep.isSet(field_2_flt);
 
     }
 
     /**
      * Sets the fHasSep field value. ==1 when field has a field separator
      */
-    public void setFHasSep( boolean value )
-    {
-        field_2_flt = (byte) fHasSep.setBoolean( field_2_flt, value );
-
-    }
-
-    /**
-     * ==1 when field has a field separator
-     * 
-     * @return the fHasSep field value.
-     */
-    public boolean isFHasSep()
-    {
-        return fHasSep.isSet( field_2_flt );
+    public void setFHasSep(boolean value) {
+        field_2_flt = (byte) fHasSep.setBoolean(field_2_flt, value);
 
     }
 } // END OF CLASS

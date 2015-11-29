@@ -27,11 +27,81 @@ import org.apache.poi.ddf.EscherContainerRecord;
  * <li>[MS-ODRAW] -- v20110608; Office Drawing Binary File Format; Copyright (c)
  * 2011 Microsoft Corporation.
  * </ul>
- * 
+ *
  * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
  */
-public interface OfficeDrawing
-{
+public interface OfficeDrawing {
+
+    /**
+     * Returns the type of horizontal positioning to use for a shape
+     *
+     * @return the type of horizontal positioning to use for a shape
+     */
+    public HorizontalPositioning getHorizontalPositioning();
+
+    /**
+     * Specifies a page element relative to which a shape is horizontally
+     * positioned
+     *
+     * @return a page element relative to which a shape is horizontally
+     * positioned
+     */
+    public HorizontalRelativeElement getHorizontalRelative();
+
+    /**
+     * Returns escher record that represent shape container (record type is
+     * <tt>0xF004</tt>). Returned record has a child with record type
+     * <tt>0xF00A</tt> and value of shape id equals to {@link #getShapeId()}.
+     *
+     * @return Returns office art shape container or <tt>null</tt> if not found
+     */
+    public EscherContainerRecord getOfficeArtSpContainer();
+
+    /**
+     * Returns picture data if this shape has (single?) associated picture data
+     */
+    byte[] getPictureData();
+
+    /**
+     * Bottom of the rectangle enclosing shape relative to the origin of the
+     * shape
+     */
+    int getRectangleBottom();
+
+    /**
+     * Left of rectangle enclosing shape relative to the origin of the shape
+     */
+    int getRectangleLeft();
+
+    /**
+     * Right of rectangle enclosing shape relative to the origin of the shape
+     */
+    int getRectangleRight();
+
+    /**
+     * Top of rectangle enclosing shape relative to the origin of the shape
+     */
+    int getRectangleTop();
+
+    /**
+     * Shape Identifier
+     */
+    int getShapeId();
+
+    /**
+     * Specifies the type of vertical positioning to use for a shape
+     *
+     * @return return the type of vertical positioning to use for a shape
+     */
+    public VerticalPositioning getVerticalPositioning();
+
+    /**
+     * Specifies a page element relative to which a shape is vertically
+     * positioned
+     *
+     * @return a page element relative to which a shape is vertically positioned
+     */
+    public VerticalRelativeElement getVerticalRelativeElement();
 
     public enum HorizontalPositioning {
 
@@ -115,76 +185,5 @@ public interface OfficeDrawing
     public enum VerticalRelativeElement {
         LINE, MARGIN, PAGE, TEXT;
     }
-
-    /**
-     * Returns the type of horizontal positioning to use for a shape
-     * 
-     * @return the type of horizontal positioning to use for a shape
-     */
-    public HorizontalPositioning getHorizontalPositioning();
-
-    /**
-     * Specifies a page element relative to which a shape is horizontally
-     * positioned
-     * 
-     * @return a page element relative to which a shape is horizontally
-     *         positioned
-     */
-    public HorizontalRelativeElement getHorizontalRelative();
-
-    /**
-     * Returns escher record that represent shape container (record type is
-     * <tt>0xF004</tt>). Returned record has a child with record type
-     * <tt>0xF00A</tt> and value of shape id equals to {@link #getShapeId()}.
-     * 
-     * @return Returns office art shape container or <tt>null</tt> if not found
-     */
-    public EscherContainerRecord getOfficeArtSpContainer();
-
-    /**
-     * Returns picture data if this shape has (single?) associated picture data
-     */
-    byte[] getPictureData();
-
-    /**
-     * Bottom of the rectangle enclosing shape relative to the origin of the
-     * shape
-     */
-    int getRectangleBottom();
-
-    /**
-     * Left of rectangle enclosing shape relative to the origin of the shape
-     */
-    int getRectangleLeft();
-
-    /**
-     * Right of rectangle enclosing shape relative to the origin of the shape
-     */
-    int getRectangleRight();
-
-    /**
-     * Top of rectangle enclosing shape relative to the origin of the shape
-     */
-    int getRectangleTop();
-
-    /**
-     * Shape Identifier
-     */
-    int getShapeId();
-
-    /**
-     * Specifies the type of vertical positioning to use for a shape
-     * 
-     * @return return the type of vertical positioning to use for a shape
-     */
-    public VerticalPositioning getVerticalPositioning();
-
-    /**
-     * Specifies a page element relative to which a shape is vertically
-     * positioned
-     * 
-     * @return a page element relative to which a shape is vertically positioned
-     */
-    public VerticalRelativeElement getVerticalRelativeElement();
 
 }

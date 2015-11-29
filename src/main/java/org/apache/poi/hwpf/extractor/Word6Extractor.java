@@ -17,119 +17,111 @@
 
 package org.apache.poi.hwpf.extractor;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.poi.hwpf.converter.WordToTextConverter;
-
 import org.apache.poi.POIOLE2TextExtractor;
 import org.apache.poi.hwpf.HWPFOldDocument;
+import org.apache.poi.hwpf.converter.WordToTextConverter;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * Class to extract the text from old (Word 6 / Word 95) Word Documents.
- *
+ * <p>
  * This should only be used on the older files, for most uses you
- *  should call {@link WordExtractor} which deals properly 
- *  with HWPF.
+ * should call {@link WordExtractor} which deals properly
+ * with HWPF.
  *
  * @author Nick Burch
  */
 public final class Word6Extractor extends POIOLE2TextExtractor {
-	private POIFSFileSystem fs;
-	private HWPFOldDocument doc;
-
-	/**
-	 * Create a new Word Extractor
-	 * @param is InputStream containing the word file
-	 */
-	public Word6Extractor(InputStream is) throws IOException {
-		this( new POIFSFileSystem(is) );
-	}
+    private POIFSFileSystem fs;
+    private HWPFOldDocument doc;
 
     /**
      * Create a new Word Extractor
-     * 
-     * @param fs
-     *            POIFSFileSystem containing the word file
+     *
+     * @param is InputStream containing the word file
      */
-    public Word6Extractor( POIFSFileSystem fs ) throws IOException
-    {
-        this( fs.getRoot() );
+    public Word6Extractor(InputStream is) throws IOException {
+        this(new POIFSFileSystem(is));
+    }
+
+    /**
+     * Create a new Word Extractor
+     *
+     * @param fs POIFSFileSystem containing the word file
+     */
+    public Word6Extractor(POIFSFileSystem fs) throws IOException {
+        this(fs.getRoot());
     }
 
     /**
      * @deprecated Use {@link #Word6Extractor(DirectoryNode)} instead
      */
     @Deprecated
-    @SuppressWarnings( "unused" )
-    public Word6Extractor( DirectoryNode dir, POIFSFileSystem fs )
-            throws IOException
-    {
-        this( dir );
+    @SuppressWarnings("unused")
+    public Word6Extractor(DirectoryNode dir, POIFSFileSystem fs)
+            throws IOException {
+        this(dir);
     }
 
-    public Word6Extractor( DirectoryNode dir ) throws IOException
-    {
-        this( new HWPFOldDocument( dir ) );
+    public Word6Extractor(DirectoryNode dir) throws IOException {
+        this(new HWPFOldDocument(dir));
     }
 
-	/**
-	 * Create a new Word Extractor
-	 * @param doc The HWPFOldDocument to extract from
-	 */
-	public Word6Extractor(HWPFOldDocument doc) {
-		super(doc);
-		this.doc = doc;
-	}
+    /**
+     * Create a new Word Extractor
+     *
+     * @param doc The HWPFOldDocument to extract from
+     */
+    public Word6Extractor(HWPFOldDocument doc) {
+        super(doc);
+        this.doc = doc;
+    }
 
     /**
      * Get the text from the word file, as an array with one String
-     *  per paragraph
+     * per paragraph
      */
-	@Deprecated
-	public String[] getParagraphText() {
-	    String[] ret;
+    @Deprecated
+    public String[] getParagraphText() {
+        String[] ret;
 
-	    // Extract using the model code
-	    try {
-	        Range r = doc.getRange();
+        // Extract using the model code
+        try {
+            Range r = doc.getRange();
 
-	        ret = WordExtractor.getParagraphText(r);
-	    } catch (Exception e) {
+            ret = WordExtractor.getParagraphText(r);
+        } catch (Exception e) {
             // Something's up with turning the text pieces into paragraphs
             // Fall back to ripping out the text pieces
-	        ret = new String[doc.getTextTable().getTextPieces().size()];
-	        for(int i=0; i<ret.length; i++) {
-	            ret[i] = doc.getTextTable().getTextPieces().get(i).getStringBuilder().toString();
-	            
-	            // Fix the line endings
-	            ret[i].replaceAll("\r", "\ufffe");
-                ret[i].replaceAll("\ufffe","\r\n");
-	        }
-	    }
+            ret = new String[doc.getTextTable().getTextPieces().size()];
+            for (int i = 0; i < ret.length; i++) {
+                ret[i] = doc.getTextTable().getTextPieces().get(i).getStringBuilder().toString();
 
-	    return ret;
-	}
-
-    public String getText()
-    {
-        try
-        {
-            WordToTextConverter wordToTextConverter = new WordToTextConverter();
-            wordToTextConverter.processDocument( doc );
-            return wordToTextConverter.getText();
+                // Fix the line endings
+                ret[i].replaceAll("\r", "\ufffe");
+                ret[i].replaceAll("\ufffe", "\r\n");
+            }
         }
-        catch ( Exception exc )
-        {
+
+        return ret;
+    }
+
+    public String getText() {
+        try {
+            WordToTextConverter wordToTextConverter = new WordToTextConverter();
+            wordToTextConverter.processDocument(doc);
+            return wordToTextConverter.getText();
+        } catch (Exception exc) {
             // fall-back
             StringBuffer text = new StringBuffer();
 
-            for ( String t : getParagraphText() )
-            {
-                text.append( t );
+            for (String t : getParagraphText()) {
+                text.append(t);
             }
 
             return text.toString();

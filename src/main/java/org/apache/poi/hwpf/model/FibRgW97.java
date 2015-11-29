@@ -24,70 +24,65 @@ import org.apache.poi.util.Internal;
  * <p>
  * Class and fields descriptions are quoted from Microsoft Office Word 97-2007
  * Binary File Format and [MS-DOC] - v20110608 Word (.doc) Binary File Format.
- * 
+ *
  * @author Sergey Vladimirov; according to Microsoft Office Word 97-2007 Binary
  *         File Format Specification [*.doc] and [MS-DOC] - v20110608 Word
  *         (.doc) Binary File Format
  */
 @Internal
-public class FibRgW97 extends FibRgW97AbstractType
-{
+public class FibRgW97 extends FibRgW97AbstractType {
 
-    public FibRgW97()
-    {
+    public FibRgW97() {
     }
 
-    public FibRgW97( byte[] std, int offset )
-    {
-        fillFields( std, offset );
+    public FibRgW97(byte[] std, int offset) {
+        fillFields(std, offset);
     }
 
     @Override
-    @SuppressWarnings( "deprecation" )
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    @SuppressWarnings("deprecation")
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         FibRgW97 other = (FibRgW97) obj;
-        if ( field_10_reserved10 != other.field_10_reserved10 )
+        if (field_10_reserved10 != other.field_10_reserved10)
             return false;
-        if ( field_11_reserved11 != other.field_11_reserved11 )
+        if (field_11_reserved11 != other.field_11_reserved11)
             return false;
-        if ( field_12_reserved12 != other.field_12_reserved12 )
+        if (field_12_reserved12 != other.field_12_reserved12)
             return false;
-        if ( field_13_reserved13 != other.field_13_reserved13 )
+        if (field_13_reserved13 != other.field_13_reserved13)
             return false;
-        if ( field_14_lidFE != other.field_14_lidFE )
+        if (field_14_lidFE != other.field_14_lidFE)
             return false;
-        if ( field_1_reserved1 != other.field_1_reserved1 )
+        if (field_1_reserved1 != other.field_1_reserved1)
             return false;
-        if ( field_2_reserved2 != other.field_2_reserved2 )
+        if (field_2_reserved2 != other.field_2_reserved2)
             return false;
-        if ( field_3_reserved3 != other.field_3_reserved3 )
+        if (field_3_reserved3 != other.field_3_reserved3)
             return false;
-        if ( field_4_reserved4 != other.field_4_reserved4 )
+        if (field_4_reserved4 != other.field_4_reserved4)
             return false;
-        if ( field_5_reserved5 != other.field_5_reserved5 )
+        if (field_5_reserved5 != other.field_5_reserved5)
             return false;
-        if ( field_6_reserved6 != other.field_6_reserved6 )
+        if (field_6_reserved6 != other.field_6_reserved6)
             return false;
-        if ( field_7_reserved7 != other.field_7_reserved7 )
+        if (field_7_reserved7 != other.field_7_reserved7)
             return false;
-        if ( field_8_reserved8 != other.field_8_reserved8 )
+        if (field_8_reserved8 != other.field_8_reserved8)
             return false;
-        if ( field_9_reserved9 != other.field_9_reserved9 )
+        if (field_9_reserved9 != other.field_9_reserved9)
             return false;
         return true;
     }
 
     @Override
-    @SuppressWarnings( "deprecation" )
-    public int hashCode()
-    {
+    @SuppressWarnings("deprecation")
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + field_10_reserved10;

@@ -17,11 +17,6 @@
 
 package org.apache.poi.hwpf.model;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.poi.hwpf.model.io.HWPFFileSystem;
 import org.apache.poi.hwpf.model.io.HWPFOutputStream;
 import org.apache.poi.util.Internal;
@@ -29,40 +24,43 @@ import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.POILogFactory;
 import org.apache.poi.util.POILogger;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Ryan Ackley
  */
 @Internal
-public class SectionTable
-{
-  private final static POILogger _logger = POILogFactory.getLogger(SectionTable.class);
-  private static final int SED_SIZE = 12;
+public class SectionTable {
+    private final static POILogger _logger = POILogFactory.getLogger(SectionTable.class);
+    private static final int SED_SIZE = 12;
 
-  protected ArrayList<SEPX> _sections = new ArrayList<SEPX>();
-  protected List<TextPiece> _text;
+    protected ArrayList<SEPX> _sections = new ArrayList<SEPX>();
+    protected List<TextPiece> _text;
 
-  /** So we can know if things are unicode or not */
-  private TextPieceTable tpt;
+    /**
+     * So we can know if things are unicode or not
+     */
+    private TextPieceTable tpt;
 
-  public SectionTable()
-  {
-  }
+    public SectionTable() {
+    }
 
 
-  public SectionTable(byte[] documentStream, byte[] tableStream, int offset,
-                      int size, int fcMin,
-                      TextPieceTable tpt, int mainLength)
-  {
-    PlexOfCps sedPlex = new PlexOfCps(tableStream, offset, size, SED_SIZE);
-    this.tpt = tpt;
-    this._text = tpt.getTextPieces();
+    public SectionTable(byte[] documentStream, byte[] tableStream, int offset,
+                        int size, int fcMin,
+                        TextPieceTable tpt, int mainLength) {
+        PlexOfCps sedPlex = new PlexOfCps(tableStream, offset, size, SED_SIZE);
+        this.tpt = tpt;
+        this._text = tpt.getTextPieces();
 
-    int length = sedPlex.length();
+        int length = sedPlex.length();
 
-    for (int x = 0; x < length; x++)
-    {
-      GenericPropertyNode node = sedPlex.getProperty(x);
-      SectionDescriptor sed = new SectionDescriptor(node.getBytes(), 0);
+        for (int x = 0; x < length; x++) {
+            GenericPropertyNode node = sedPlex.getProperty(x);
+            SectionDescriptor sed = new SectionDescriptor(node.getBytes(), 0);
 
             int fileOffset = sed.getFc();
             // int startAt = CPtoFC(node.getStart());
@@ -70,75 +68,70 @@ public class SectionTable
             int startAt = node.getStart();
             int endAt = node.getEnd();
 
-      // check for the optimization
-      if (fileOffset == 0xffffffff)
-      {
-        _sections.add(new SEPX(sed, startAt, endAt, new byte[0]));
-      }
-      else
-      {
-        // The first short at the offset is the size of the grpprl.
-        int sepxSize = LittleEndian.getShort(documentStream, fileOffset);
-        byte[] buf = new byte[sepxSize];
-        fileOffset += LittleEndian.SHORT_SIZE;
-        System.arraycopy(documentStream, fileOffset, buf, 0, buf.length);
-        _sections.add(new SEPX(sed, startAt, endAt, buf));
-      }
-    }
+            // check for the optimization
+            if (fileOffset == 0xffffffff) {
+                _sections.add(new SEPX(sed, startAt, endAt, new byte[0]));
+            } else {
+                // The first short at the offset is the size of the grpprl.
+                int sepxSize = LittleEndian.getShort(documentStream, fileOffset);
+                byte[] buf = new byte[sepxSize];
+                fileOffset += LittleEndian.SHORT_SIZE;
+                System.arraycopy(documentStream, fileOffset, buf, 0, buf.length);
+                _sections.add(new SEPX(sed, startAt, endAt, buf));
+            }
+        }
 
-    // Some files seem to lie about their unicode status, which
-    //  is very very pesky. Try to work around these, but this
-    //  is getting on for black magic...
-    int mainEndsAt = mainLength;
-    boolean matchAt = false;
-    boolean matchHalf = false;
-    for(int i=0; i<_sections.size(); i++) {
-    	SEPX s = _sections.get(i);
-    	if(s.getEnd() == mainEndsAt) {
-    		matchAt = true;
-    	} else if(s.getEnd() == mainEndsAt || s.getEnd() == mainEndsAt-1) {
-    		matchHalf = true;
-    	}
-    }
-    if(! matchAt && matchHalf) {
-    	_logger.log(POILogger.WARN, "Your document seemed to be mostly unicode, but the section definition was in bytes! Trying anyway, but things may well go wrong!");
-        for(int i=0; i<_sections.size(); i++) {
-        	SEPX s = _sections.get(i);
-            GenericPropertyNode node = sedPlex.getProperty(i);
+        // Some files seem to lie about their unicode status, which
+        //  is very very pesky. Try to work around these, but this
+        //  is getting on for black magic...
+        int mainEndsAt = mainLength;
+        boolean matchAt = false;
+        boolean matchHalf = false;
+        for (int i = 0; i < _sections.size(); i++) {
+            SEPX s = _sections.get(i);
+            if (s.getEnd() == mainEndsAt) {
+                matchAt = true;
+            } else if (s.getEnd() == mainEndsAt || s.getEnd() == mainEndsAt - 1) {
+                matchHalf = true;
+            }
+        }
+        if (!matchAt && matchHalf) {
+            _logger.log(POILogger.WARN, "Your document seemed to be mostly unicode, but the section definition was in bytes! Trying anyway, but things may well go wrong!");
+            for (int i = 0; i < _sections.size(); i++) {
+                SEPX s = _sections.get(i);
+                GenericPropertyNode node = sedPlex.getProperty(i);
 
                 // s.setStart( CPtoFC(node.getStart()) );
                 // s.setEnd( CPtoFC(node.getEnd()) );
                 int startAt = node.getStart();
                 int endAt = node.getEnd();
-                s.setStart( startAt );
-                s.setEnd( endAt );
+                s.setStart(startAt);
+                s.setEnd(endAt);
+            }
+        }
+
+        Collections.sort(_sections, PropertyNode.StartComparator.instance);
+    }
+
+    public void adjustForInsert(int listIndex, int length) {
+        int size = _sections.size();
+        SEPX sepx = _sections.get(listIndex);
+        sepx.setEnd(sepx.getEnd() + length);
+
+        for (int x = listIndex + 1; x < size; x++) {
+            sepx = _sections.get(x);
+            sepx.setStart(sepx.getStart() + length);
+            sepx.setEnd(sepx.getEnd() + length);
         }
     }
 
-    Collections.sort( _sections, PropertyNode.StartComparator.instance );
-  }
-
-  public void adjustForInsert(int listIndex, int length)
-  {
-    int size = _sections.size();
-    SEPX sepx = _sections.get(listIndex);
-    sepx.setEnd(sepx.getEnd() + length);
-
-    for (int x = listIndex + 1; x < size; x++)
-    {
-      sepx = _sections.get(x);
-      sepx.setStart(sepx.getStart() + length);
-      sepx.setEnd(sepx.getEnd() + length);
-    }
-  }
-
-  // goss version of CPtoFC - this takes into account non-contiguous textpieces
-  // that we have come across in real world documents. Tests against the example
-  // code in HWPFDocument show no variation to Ryan's version of the code in
-  // normal use, but this version works with our non-contiguous test case.
-  // So far unable to get this test case to be written out as well due to
-  // other issues. - piers
-  //
+    // goss version of CPtoFC - this takes into account non-contiguous textpieces
+    // that we have come across in real world documents. Tests against the example
+    // code in HWPFDocument show no variation to Ryan's version of the code in
+    // normal use, but this version works with our non-contiguous test case.
+    // So far unable to get this test case to be written out as well due to
+    // other issues. - piers
+    //
     // i'm commenting this out, because it just doesn't work with non-contiguous
     // textpieces :( Usual (as for PAPX and CHPX) call to TextPiecesTable does.
     // private int CPtoFC(int CP)
@@ -160,50 +153,46 @@ public class SectionTable
     // return FC;
     // }
 
-  public ArrayList<SEPX> getSections()
-  {
-    return _sections;
-  }
-
-    @Deprecated
-    public void writeTo( HWPFFileSystem sys, int fcMin ) throws IOException
-    {
-        HWPFOutputStream docStream = sys.getStream( "WordDocument" );
-        HWPFOutputStream tableStream = sys.getStream( "1Table" );
-
-        writeTo( docStream, tableStream );
+    public ArrayList<SEPX> getSections() {
+        return _sections;
     }
 
-    public void writeTo( HWPFOutputStream wordDocumentStream,
-            HWPFOutputStream tableStream ) throws IOException
-    {
+    @Deprecated
+    public void writeTo(HWPFFileSystem sys, int fcMin) throws IOException {
+        HWPFOutputStream docStream = sys.getStream("WordDocument");
+        HWPFOutputStream tableStream = sys.getStream("1Table");
 
-    int offset = wordDocumentStream.getOffset();
-    int len = _sections.size();
-    PlexOfCps plex = new PlexOfCps(SED_SIZE);
+        writeTo(docStream, tableStream);
+    }
 
-    for (int x = 0; x < len; x++)
-    {
-      SEPX sepx = _sections.get(x);
-      byte[] grpprl = sepx.getGrpprl();
+    public void writeTo(HWPFOutputStream wordDocumentStream,
+                        HWPFOutputStream tableStream) throws IOException {
 
-      // write the sepx to the document stream. starts with a 2 byte size
-      // followed by the grpprl
-      byte[] shortBuf = new byte[2];
-      LittleEndian.putShort(shortBuf, (short)grpprl.length);
+        int offset = wordDocumentStream.getOffset();
+        int len = _sections.size();
+        PlexOfCps plex = new PlexOfCps(SED_SIZE);
 
-      wordDocumentStream.write(shortBuf);
-      wordDocumentStream.write(grpprl);
+        for (int x = 0; x < len; x++) {
+            SEPX sepx = _sections.get(x);
+            byte[] grpprl = sepx.getGrpprl();
 
-      // set the fc in the section descriptor
-      SectionDescriptor sed = sepx.getSectionDescriptor();
-      sed.setFc(offset);
+            // write the sepx to the document stream. starts with a 2 byte size
+            // followed by the grpprl
+            byte[] shortBuf = new byte[2];
+            LittleEndian.putShort(shortBuf, (short) grpprl.length);
 
-      // add the section descriptor bytes to the PlexOfCps.
+            wordDocumentStream.write(shortBuf);
+            wordDocumentStream.write(grpprl);
+
+            // set the fc in the section descriptor
+            SectionDescriptor sed = sepx.getSectionDescriptor();
+            sed.setFc(offset);
+
+            // add the section descriptor bytes to the PlexOfCps.
 
             /* original line */
             GenericPropertyNode property = new GenericPropertyNode(
-                    sepx.getStart(), sepx.getEnd(), sed.toByteArray() );
+                    sepx.getStart(), sepx.getEnd(), sed.toByteArray());
             /*
              * Line using Ryan's FCtoCP() conversion method - unable to observe
              * any effect on our testcases when using this code - piers
@@ -217,10 +206,10 @@ public class SectionTable
             // tpt.getCharIndex( sepx.getStartBytes() ),
             // tpt.getCharIndex( sepx.getEndBytes() ), sed.toByteArray() );
 
-      plex.addProperty(property);
+            plex.addProperty(property);
 
-      offset = wordDocumentStream.getOffset();
+            offset = wordDocumentStream.getOffset();
+        }
+        tableStream.write(plex.toByteArray());
     }
-    tableStream.write(plex.toByteArray());
-  }
 }

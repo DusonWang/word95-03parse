@@ -23,20 +23,18 @@ import org.apache.poi.util.LittleEndian;
 
 /**
  * The FibRgLw95 structure is the third section of the FIB for Word95.
-    
+ * <p>
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author Sergey Vladimirov
-    
  */
 @Internal
-public abstract class FibRgLw95AbstractType
-{
+public abstract class FibRgLw95AbstractType {
 
     protected int field_1_cbMac;
     @Deprecated
@@ -58,105 +56,98 @@ public abstract class FibRgLw95AbstractType
     @Deprecated
     protected int field_14_reserved5;
 
-    protected FibRgLw95AbstractType()
-    {
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_cbMac                  = LittleEndian.getInt( data, 0x0 + offset );
-        field_2_reserved1              = LittleEndian.getInt( data, 0x4 + offset );
-        field_3_reserved2              = LittleEndian.getInt( data, 0x8 + offset );
-        field_4_reserved3              = LittleEndian.getInt( data, 0xc + offset );
-        field_5_reserved4              = LittleEndian.getInt( data, 0x10 + offset );
-        field_6_ccpText                = LittleEndian.getInt( data, 0x14 + offset );
-        field_7_ccpFtn                 = LittleEndian.getInt( data, 0x18 + offset );
-        field_8_ccpHdd                 = LittleEndian.getInt( data, 0x1c + offset );
-        field_9_ccpMcr                 = LittleEndian.getInt( data, 0x20 + offset );
-        field_10_ccpAtn                = LittleEndian.getInt( data, 0x24 + offset );
-        field_11_ccpEdn                = LittleEndian.getInt( data, 0x28 + offset );
-        field_12_ccpTxbx               = LittleEndian.getInt( data, 0x2c + offset );
-        field_13_ccpHdrTxbx            = LittleEndian.getInt( data, 0x30 + offset );
-        field_14_reserved5             = LittleEndian.getInt( data, 0x34 + offset );
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putInt( data, 0x0 + offset, field_1_cbMac );
-        LittleEndian.putInt( data, 0x4 + offset, field_2_reserved1 );
-        LittleEndian.putInt( data, 0x8 + offset, field_3_reserved2 );
-        LittleEndian.putInt( data, 0xc + offset, field_4_reserved3 );
-        LittleEndian.putInt( data, 0x10 + offset, field_5_reserved4 );
-        LittleEndian.putInt( data, 0x14 + offset, field_6_ccpText );
-        LittleEndian.putInt( data, 0x18 + offset, field_7_ccpFtn );
-        LittleEndian.putInt( data, 0x1c + offset, field_8_ccpHdd );
-        LittleEndian.putInt( data, 0x20 + offset, field_9_ccpMcr );
-        LittleEndian.putInt( data, 0x24 + offset, field_10_ccpAtn );
-        LittleEndian.putInt( data, 0x28 + offset, field_11_ccpEdn );
-        LittleEndian.putInt( data, 0x2c + offset, field_12_ccpTxbx );
-        LittleEndian.putInt( data, 0x30 + offset, field_13_ccpHdrTxbx );
-        LittleEndian.putInt( data, 0x34 + offset, field_14_reserved5 );
-    }
-
-    public byte[] serialize()
-    {
-        final byte[] result = new byte[ getSize() ];
-        serialize( result, 0 );
-        return result;
+    protected FibRgLw95AbstractType() {
     }
 
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4;
     }
 
+    protected void fillFields(byte[] data, int offset) {
+        field_1_cbMac = LittleEndian.getInt(data, 0x0 + offset);
+        field_2_reserved1 = LittleEndian.getInt(data, 0x4 + offset);
+        field_3_reserved2 = LittleEndian.getInt(data, 0x8 + offset);
+        field_4_reserved3 = LittleEndian.getInt(data, 0xc + offset);
+        field_5_reserved4 = LittleEndian.getInt(data, 0x10 + offset);
+        field_6_ccpText = LittleEndian.getInt(data, 0x14 + offset);
+        field_7_ccpFtn = LittleEndian.getInt(data, 0x18 + offset);
+        field_8_ccpHdd = LittleEndian.getInt(data, 0x1c + offset);
+        field_9_ccpMcr = LittleEndian.getInt(data, 0x20 + offset);
+        field_10_ccpAtn = LittleEndian.getInt(data, 0x24 + offset);
+        field_11_ccpEdn = LittleEndian.getInt(data, 0x28 + offset);
+        field_12_ccpTxbx = LittleEndian.getInt(data, 0x2c + offset);
+        field_13_ccpHdrTxbx = LittleEndian.getInt(data, 0x30 + offset);
+        field_14_reserved5 = LittleEndian.getInt(data, 0x34 + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putInt(data, 0x0 + offset, field_1_cbMac);
+        LittleEndian.putInt(data, 0x4 + offset, field_2_reserved1);
+        LittleEndian.putInt(data, 0x8 + offset, field_3_reserved2);
+        LittleEndian.putInt(data, 0xc + offset, field_4_reserved3);
+        LittleEndian.putInt(data, 0x10 + offset, field_5_reserved4);
+        LittleEndian.putInt(data, 0x14 + offset, field_6_ccpText);
+        LittleEndian.putInt(data, 0x18 + offset, field_7_ccpFtn);
+        LittleEndian.putInt(data, 0x1c + offset, field_8_ccpHdd);
+        LittleEndian.putInt(data, 0x20 + offset, field_9_ccpMcr);
+        LittleEndian.putInt(data, 0x24 + offset, field_10_ccpAtn);
+        LittleEndian.putInt(data, 0x28 + offset, field_11_ccpEdn);
+        LittleEndian.putInt(data, 0x2c + offset, field_12_ccpTxbx);
+        LittleEndian.putInt(data, 0x30 + offset, field_13_ccpHdrTxbx);
+        LittleEndian.putInt(data, 0x34 + offset, field_14_reserved5);
+    }
+
+    public byte[] serialize() {
+        final byte[] result = new byte[getSize()];
+        serialize(result, 0);
+        return result;
+    }
+
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         FibRgLw95AbstractType other = (FibRgLw95AbstractType) obj;
-        if ( field_1_cbMac != other.field_1_cbMac )
+        if (field_1_cbMac != other.field_1_cbMac)
             return false;
-        if ( field_2_reserved1 != other.field_2_reserved1 )
+        if (field_2_reserved1 != other.field_2_reserved1)
             return false;
-        if ( field_3_reserved2 != other.field_3_reserved2 )
+        if (field_3_reserved2 != other.field_3_reserved2)
             return false;
-        if ( field_4_reserved3 != other.field_4_reserved3 )
+        if (field_4_reserved3 != other.field_4_reserved3)
             return false;
-        if ( field_5_reserved4 != other.field_5_reserved4 )
+        if (field_5_reserved4 != other.field_5_reserved4)
             return false;
-        if ( field_6_ccpText != other.field_6_ccpText )
+        if (field_6_ccpText != other.field_6_ccpText)
             return false;
-        if ( field_7_ccpFtn != other.field_7_ccpFtn )
+        if (field_7_ccpFtn != other.field_7_ccpFtn)
             return false;
-        if ( field_8_ccpHdd != other.field_8_ccpHdd )
+        if (field_8_ccpHdd != other.field_8_ccpHdd)
             return false;
-        if ( field_9_ccpMcr != other.field_9_ccpMcr )
+        if (field_9_ccpMcr != other.field_9_ccpMcr)
             return false;
-        if ( field_10_ccpAtn != other.field_10_ccpAtn )
+        if (field_10_ccpAtn != other.field_10_ccpAtn)
             return false;
-        if ( field_11_ccpEdn != other.field_11_ccpEdn )
+        if (field_11_ccpEdn != other.field_11_ccpEdn)
             return false;
-        if ( field_12_ccpTxbx != other.field_12_ccpTxbx )
+        if (field_12_ccpTxbx != other.field_12_ccpTxbx)
             return false;
-        if ( field_13_ccpHdrTxbx != other.field_13_ccpHdrTxbx )
+        if (field_13_ccpHdrTxbx != other.field_13_ccpHdrTxbx)
             return false;
-        if ( field_14_reserved5 != other.field_14_reserved5 )
+        if (field_14_reserved5 != other.field_14_reserved5)
             return false;
         return true;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + field_1_cbMac;
@@ -176,8 +167,7 @@ public abstract class FibRgLw95AbstractType
         return result;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[FibRgLw95]\n");
         builder.append("    .cbMac                = ");
@@ -217,8 +207,7 @@ public abstract class FibRgLw95AbstractType
      * Get the cbMac field for the FibRgLw95 record.
      */
     @Internal
-    public int getCbMac()
-    {
+    public int getCbMac() {
         return field_1_cbMac;
     }
 
@@ -226,8 +215,7 @@ public abstract class FibRgLw95AbstractType
      * Set the cbMac field for the FibRgLw95 record.
      */
     @Internal
-    public void setCbMac( int field_1_cbMac )
-    {
+    public void setCbMac(int field_1_cbMac) {
         this.field_1_cbMac = field_1_cbMac;
     }
 
@@ -235,8 +223,7 @@ public abstract class FibRgLw95AbstractType
      * Get the reserved1 field for the FibRgLw95 record.
      */
     @Internal
-    public int getReserved1()
-    {
+    public int getReserved1() {
         return field_2_reserved1;
     }
 
@@ -244,8 +231,7 @@ public abstract class FibRgLw95AbstractType
      * Set the reserved1 field for the FibRgLw95 record.
      */
     @Internal
-    public void setReserved1( int field_2_reserved1 )
-    {
+    public void setReserved1(int field_2_reserved1) {
         this.field_2_reserved1 = field_2_reserved1;
     }
 
@@ -253,8 +239,7 @@ public abstract class FibRgLw95AbstractType
      * Get the reserved2 field for the FibRgLw95 record.
      */
     @Internal
-    public int getReserved2()
-    {
+    public int getReserved2() {
         return field_3_reserved2;
     }
 
@@ -262,8 +247,7 @@ public abstract class FibRgLw95AbstractType
      * Set the reserved2 field for the FibRgLw95 record.
      */
     @Internal
-    public void setReserved2( int field_3_reserved2 )
-    {
+    public void setReserved2(int field_3_reserved2) {
         this.field_3_reserved2 = field_3_reserved2;
     }
 
@@ -271,8 +255,7 @@ public abstract class FibRgLw95AbstractType
      * Get the reserved3 field for the FibRgLw95 record.
      */
     @Internal
-    public int getReserved3()
-    {
+    public int getReserved3() {
         return field_4_reserved3;
     }
 
@@ -280,8 +263,7 @@ public abstract class FibRgLw95AbstractType
      * Set the reserved3 field for the FibRgLw95 record.
      */
     @Internal
-    public void setReserved3( int field_4_reserved3 )
-    {
+    public void setReserved3(int field_4_reserved3) {
         this.field_4_reserved3 = field_4_reserved3;
     }
 
@@ -289,8 +271,7 @@ public abstract class FibRgLw95AbstractType
      * Get the reserved4 field for the FibRgLw95 record.
      */
     @Internal
-    public int getReserved4()
-    {
+    public int getReserved4() {
         return field_5_reserved4;
     }
 
@@ -298,8 +279,7 @@ public abstract class FibRgLw95AbstractType
      * Set the reserved4 field for the FibRgLw95 record.
      */
     @Internal
-    public void setReserved4( int field_5_reserved4 )
-    {
+    public void setReserved4(int field_5_reserved4) {
         this.field_5_reserved4 = field_5_reserved4;
     }
 
@@ -307,8 +287,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpText field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpText()
-    {
+    public int getCcpText() {
         return field_6_ccpText;
     }
 
@@ -316,8 +295,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpText field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpText( int field_6_ccpText )
-    {
+    public void setCcpText(int field_6_ccpText) {
         this.field_6_ccpText = field_6_ccpText;
     }
 
@@ -325,8 +303,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpFtn field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpFtn()
-    {
+    public int getCcpFtn() {
         return field_7_ccpFtn;
     }
 
@@ -334,8 +311,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpFtn field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpFtn( int field_7_ccpFtn )
-    {
+    public void setCcpFtn(int field_7_ccpFtn) {
         this.field_7_ccpFtn = field_7_ccpFtn;
     }
 
@@ -343,8 +319,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpHdd field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpHdd()
-    {
+    public int getCcpHdd() {
         return field_8_ccpHdd;
     }
 
@@ -352,8 +327,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpHdd field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpHdd( int field_8_ccpHdd )
-    {
+    public void setCcpHdd(int field_8_ccpHdd) {
         this.field_8_ccpHdd = field_8_ccpHdd;
     }
 
@@ -361,8 +335,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpMcr field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpMcr()
-    {
+    public int getCcpMcr() {
         return field_9_ccpMcr;
     }
 
@@ -370,8 +343,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpMcr field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpMcr( int field_9_ccpMcr )
-    {
+    public void setCcpMcr(int field_9_ccpMcr) {
         this.field_9_ccpMcr = field_9_ccpMcr;
     }
 
@@ -379,8 +351,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpAtn field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpAtn()
-    {
+    public int getCcpAtn() {
         return field_10_ccpAtn;
     }
 
@@ -388,8 +359,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpAtn field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpAtn( int field_10_ccpAtn )
-    {
+    public void setCcpAtn(int field_10_ccpAtn) {
         this.field_10_ccpAtn = field_10_ccpAtn;
     }
 
@@ -397,8 +367,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpEdn field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpEdn()
-    {
+    public int getCcpEdn() {
         return field_11_ccpEdn;
     }
 
@@ -406,8 +375,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpEdn field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpEdn( int field_11_ccpEdn )
-    {
+    public void setCcpEdn(int field_11_ccpEdn) {
         this.field_11_ccpEdn = field_11_ccpEdn;
     }
 
@@ -415,8 +383,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpTxbx field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpTxbx()
-    {
+    public int getCcpTxbx() {
         return field_12_ccpTxbx;
     }
 
@@ -424,8 +391,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpTxbx field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpTxbx( int field_12_ccpTxbx )
-    {
+    public void setCcpTxbx(int field_12_ccpTxbx) {
         this.field_12_ccpTxbx = field_12_ccpTxbx;
     }
 
@@ -433,8 +399,7 @@ public abstract class FibRgLw95AbstractType
      * Get the ccpHdrTxbx field for the FibRgLw95 record.
      */
     @Internal
-    public int getCcpHdrTxbx()
-    {
+    public int getCcpHdrTxbx() {
         return field_13_ccpHdrTxbx;
     }
 
@@ -442,8 +407,7 @@ public abstract class FibRgLw95AbstractType
      * Set the ccpHdrTxbx field for the FibRgLw95 record.
      */
     @Internal
-    public void setCcpHdrTxbx( int field_13_ccpHdrTxbx )
-    {
+    public void setCcpHdrTxbx(int field_13_ccpHdrTxbx) {
         this.field_13_ccpHdrTxbx = field_13_ccpHdrTxbx;
     }
 
@@ -451,8 +415,7 @@ public abstract class FibRgLw95AbstractType
      * Get the reserved5 field for the FibRgLw95 record.
      */
     @Internal
-    public int getReserved5()
-    {
+    public int getReserved5() {
         return field_14_reserved5;
     }
 
@@ -460,8 +423,7 @@ public abstract class FibRgLw95AbstractType
      * Set the reserved5 field for the FibRgLw95 record.
      */
     @Internal
-    public void setReserved5( int field_14_reserved5 )
-    {
+    public void setReserved5(int field_14_reserved5) {
         this.field_14_reserved5 = field_14_reserved5;
     }
 

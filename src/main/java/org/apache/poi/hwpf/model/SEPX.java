@@ -24,58 +24,48 @@ import org.apache.poi.hwpf.usermodel.SectionProperties;
 import org.apache.poi.util.Internal;
 
 @Internal
-public final class SEPX extends PropertyNode<SEPX>
-{
+public final class SEPX extends PropertyNode<SEPX> {
 
     SectionProperties sectionProperties;
 
     SectionDescriptor _sed;
 
-    public SEPX( SectionDescriptor sed, int start, int end, byte[] grpprl )
-    {
-        super( start, end, new SprmBuffer( grpprl, 0 ) );
+    public SEPX(SectionDescriptor sed, int start, int end, byte[] grpprl) {
+        super(start, end, new SprmBuffer(grpprl, 0));
         _sed = sed;
     }
 
-    public byte[] getGrpprl()
-    {
-        if ( sectionProperties != null )
-        {
+    public byte[] getGrpprl() {
+        if (sectionProperties != null) {
             byte[] grpprl = SectionSprmCompressor
-                    .compressSectionProperty( sectionProperties );
-            _buf = new SprmBuffer( grpprl, 0 );
+                    .compressSectionProperty(sectionProperties);
+            _buf = new SprmBuffer(grpprl, 0);
         }
 
-        return ( (SprmBuffer) _buf ).toByteArray();
+        return ((SprmBuffer) _buf).toByteArray();
     }
 
-    public SectionDescriptor getSectionDescriptor()
-    {
+    public SectionDescriptor getSectionDescriptor() {
         return _sed;
     }
 
-    public SectionProperties getSectionProperties()
-    {
-        if ( sectionProperties == null )
-        {
+    public SectionProperties getSectionProperties() {
+        if (sectionProperties == null) {
             sectionProperties = SectionSprmUncompressor.uncompressSEP(
-                    ( (SprmBuffer) _buf ).toByteArray(), 0 );
+                    ((SprmBuffer) _buf).toByteArray(), 0);
         }
         return sectionProperties;
     }
 
-    public boolean equals( Object o )
-    {
+    public boolean equals(Object o) {
         SEPX sepx = (SEPX) o;
-        if ( super.equals( o ) )
-        {
-            return sepx._sed.equals( _sed );
+        if (super.equals(o)) {
+            return sepx._sed.equals(_sed);
         }
         return false;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "SEPX from " + getStart() + " to " + getEnd();
     }
 }

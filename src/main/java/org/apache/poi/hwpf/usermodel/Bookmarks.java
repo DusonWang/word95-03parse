@@ -21,19 +21,16 @@ import java.util.Map;
 
 /**
  * User-friendly interface to access document bookmarks
- * 
+ *
  * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
  */
-public interface Bookmarks
-{
+public interface Bookmarks {
     /**
-     * @param index
-     *            bookmark document index
+     * @param index bookmark document index
      * @return {@link Bookmark} with specified index
-     * @throws IndexOutOfBoundsException
-     *             if bookmark with specified index not present in document
+     * @throws IndexOutOfBoundsException if bookmark with specified index not present in document
      */
-    Bookmark getBookmark( int index ) throws IndexOutOfBoundsException;
+    Bookmark getBookmark(int index) throws IndexOutOfBoundsException;
 
     /**
      * @return count of {@link Bookmark}s in document
@@ -42,17 +39,16 @@ public interface Bookmarks
 
     /**
      * @return {@link Map} of bookmarks started in specified range, where key is
-     *         start position and value is sorted {@link List} of
-     *         {@link Bookmark}
+     * start position and value is sorted {@link List} of
+     * {@link Bookmark}
      */
     Map<Integer, List<Bookmark>> getBookmarksStartedBetween(
-            int startInclusive, int endExclusive );
+            int startInclusive, int endExclusive);
 
     /**
      * Remove bookmark from document (but not the bookmark text)
-     * 
-     * @param index
-     *            bookmark document index to be removed
+     *
+     * @param index bookmark document index to be removed
      */
-    void remove( int index );
+    void remove(int index);
 }

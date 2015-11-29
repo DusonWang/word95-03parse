@@ -23,84 +23,74 @@ import org.apache.poi.util.LittleEndian;
 
 /**
  * The Shd80 structure specifies the colors and pattern that are used for background
-        shading. As an exception to the constraints that are specified by Ico and Ipat, a Shd80 can
-        be set to Shd80Nil and specifies that no shading is applied. <p>Class and fields
-        descriptions are quoted from Word (.doc) Binary File Format by Microsoft Corporation
-    
+ * shading. As an exception to the constraints that are specified by Ico and Ipat, a Shd80 can
+ * be set to Shd80Nil and specifies that no shading is applied. <p>Class and fields
+ * descriptions are quoted from Word (.doc) Binary File Format by Microsoft Corporation
+ * <p>
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author Sergey Vladimirov; according to Word (.doc) Binary File Format by Microsoft Corporation.
-    
  */
 @Internal
-public abstract class SHD80AbstractType
-{
+public abstract class SHD80AbstractType {
 
-    protected short field_1_value;
     /**/private static final BitField icoFore = new BitField(0x001F);
     /**/private static final BitField icoBack = new BitField(0x03E0);
     /**/private static final BitField ipat = new BitField(0xFC00);
+    protected short field_1_value;
 
-    protected SHD80AbstractType()
-    {
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_value                  = LittleEndian.getShort( data, 0x0 + offset );
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putShort( data, 0x0 + offset, field_1_value );
-    }
-
-    public byte[] serialize()
-    {
-        final byte[] result = new byte[ getSize() ];
-        serialize( result, 0 );
-        return result;
+    protected SHD80AbstractType() {
     }
 
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 2;
     }
 
+    protected void fillFields(byte[] data, int offset) {
+        field_1_value = LittleEndian.getShort(data, 0x0 + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putShort(data, 0x0 + offset, field_1_value);
+    }
+
+    public byte[] serialize() {
+        final byte[] result = new byte[getSize()];
+        serialize(result, 0);
+        return result;
+    }
+
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         SHD80AbstractType other = (SHD80AbstractType) obj;
-        if ( field_1_value != other.field_1_value )
+        if (field_1_value != other.field_1_value)
             return false;
         return true;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + field_1_value;
         return result;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[SHD80]\n");
         builder.append("    .value                = ");
@@ -117,8 +107,7 @@ public abstract class SHD80AbstractType
      * Get the value field for the SHD80 record.
      */
     @Internal
-    public short getValue()
-    {
+    public short getValue() {
         return field_1_value;
     }
 
@@ -126,9 +115,18 @@ public abstract class SHD80AbstractType
      * Set the value field for the SHD80 record.
      */
     @Internal
-    public void setValue( short field_1_value )
-    {
+    public void setValue(short field_1_value) {
         this.field_1_value = field_1_value;
+    }
+
+    /**
+     * Foreground color
+     *
+     * @return the icoFore field value.
+     */
+    @Internal
+    public byte getIcoFore() {
+        return (byte) icoFore.getValue(field_1_value);
     }
 
     /**
@@ -136,19 +134,18 @@ public abstract class SHD80AbstractType
      * Foreground color
      */
     @Internal
-    public void setIcoFore( byte value )
-    {
-        field_1_value = (short)icoFore.setValue(field_1_value, value);
+    public void setIcoFore(byte value) {
+        field_1_value = (short) icoFore.setValue(field_1_value, value);
     }
 
     /**
-     * Foreground color
-     * @return  the icoFore field value.
+     * Background color
+     *
+     * @return the icoBack field value.
      */
     @Internal
-    public byte getIcoFore()
-    {
-        return ( byte )icoFore.getValue(field_1_value);
+    public byte getIcoBack() {
+        return (byte) icoBack.getValue(field_1_value);
     }
 
     /**
@@ -156,19 +153,18 @@ public abstract class SHD80AbstractType
      * Background color
      */
     @Internal
-    public void setIcoBack( byte value )
-    {
-        field_1_value = (short)icoBack.setValue(field_1_value, value);
+    public void setIcoBack(byte value) {
+        field_1_value = (short) icoBack.setValue(field_1_value, value);
     }
 
     /**
-     * Background color
-     * @return  the icoBack field value.
+     * Shading pattern
+     *
+     * @return the ipat field value.
      */
     @Internal
-    public byte getIcoBack()
-    {
-        return ( byte )icoBack.getValue(field_1_value);
+    public byte getIpat() {
+        return (byte) ipat.getValue(field_1_value);
     }
 
     /**
@@ -176,19 +172,8 @@ public abstract class SHD80AbstractType
      * Shading pattern
      */
     @Internal
-    public void setIpat( byte value )
-    {
-        field_1_value = (short)ipat.setValue(field_1_value, value);
-    }
-
-    /**
-     * Shading pattern
-     * @return  the ipat field value.
-     */
-    @Internal
-    public byte getIpat()
-    {
-        return ( byte )ipat.getValue(field_1_value);
+    public void setIpat(byte value) {
+        field_1_value = (short) ipat.setValue(field_1_value, value);
     }
 
 }  // END OF CLASS

@@ -24,47 +24,45 @@ public enum FieldsDocumentPart {
     /**
      * annotation subdocument
      */
-    ANNOTATIONS( FIBFieldHandler.PLCFFLDATN ),
+    ANNOTATIONS(FIBFieldHandler.PLCFFLDATN),
 
     /**
      * endnote subdocument
      */
-    ENDNOTES( FIBFieldHandler.PLCFFLDEDN ),
+    ENDNOTES(FIBFieldHandler.PLCFFLDEDN),
 
     /**
      * footnote subdocument
      */
-    FOOTNOTES( FIBFieldHandler.PLCFFLDFTN ),
+    FOOTNOTES(FIBFieldHandler.PLCFFLDFTN),
 
     /**
      * header subdocument
      */
-    HEADER( FIBFieldHandler.PLCFFLDHDR ),
+    HEADER(FIBFieldHandler.PLCFFLDHDR),
 
     /**
      * header textbox subdoc
      */
-    HEADER_TEXTBOX( FIBFieldHandler.PLCFFLDHDRTXBX ),
+    HEADER_TEXTBOX(FIBFieldHandler.PLCFFLDHDRTXBX),
 
     /**
      * main document
      */
-    MAIN( FIBFieldHandler.PLCFFLDMOM ),
+    MAIN(FIBFieldHandler.PLCFFLDMOM),
 
     /**
      * textbox subdoc
      */
-    TEXTBOX( FIBFieldHandler.PLCFFLDTXBX );
+    TEXTBOX(FIBFieldHandler.PLCFFLDTXBX);
 
     private final int fibFieldsField;
 
-    private FieldsDocumentPart( final int fibHandlerField )
-    {
+    private FieldsDocumentPart(final int fibHandlerField) {
         this.fibFieldsField = fibHandlerField;
     }
 
-    public int getFibFieldsField()
-    {
+    public int getFibFieldsField() {
         return fibFieldsField;
     }
 

@@ -18,73 +18,64 @@
  */
 package org.apache.poi.hwpf.model;
 
-import java.io.IOException;
-
 import org.apache.poi.hwpf.model.io.HWPFOutputStream;
 import org.apache.poi.util.Internal;
 import org.apache.poi.util.LittleEndian;
 
+import java.io.IOException;
+
 /**
  * The LFOData structure contains the Main Document CP of the corresponding LFO,
  * as well as an array of LVL override data.
- * 
+ *
  * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
  */
 @Internal
-public class LFOData
-{
+public class LFOData {
     private int _cp;
 
     private ListFormatOverrideLevel[] _rgLfoLvl;
 
-    public LFOData()
-    {
+    public LFOData() {
         _cp = 0;
         _rgLfoLvl = new ListFormatOverrideLevel[0];
     }
 
-    LFOData( byte[] buf, int startOffset, int cLfolvl )
-    {
+    LFOData(byte[] buf, int startOffset, int cLfolvl) {
         int offset = startOffset;
 
-        _cp = LittleEndian.getInt( buf, offset );
+        _cp = LittleEndian.getInt(buf, offset);
         offset += LittleEndian.INT_SIZE;
 
         _rgLfoLvl = new ListFormatOverrideLevel[cLfolvl];
-        for ( int x = 0; x < cLfolvl; x++ )
-        {
-            _rgLfoLvl[x] = new ListFormatOverrideLevel( buf, offset );
+        for (int x = 0; x < cLfolvl; x++) {
+            _rgLfoLvl[x] = new ListFormatOverrideLevel(buf, offset);
             offset += _rgLfoLvl[x].getSizeInBytes();
         }
     }
 
-    public int getCp()
-    {
+    public int getCp() {
         return _cp;
     }
 
-    public ListFormatOverrideLevel[] getRgLfoLvl()
-    {
+    public ListFormatOverrideLevel[] getRgLfoLvl() {
         return _rgLfoLvl;
     }
 
-    public int getSizeInBytes()
-    {
+    public int getSizeInBytes() {
         int result = 0;
         result += LittleEndian.INT_SIZE;
 
-        for ( ListFormatOverrideLevel lfolvl : _rgLfoLvl )
+        for (ListFormatOverrideLevel lfolvl : _rgLfoLvl)
             result += lfolvl.getSizeInBytes();
 
         return result;
     }
 
-    void writeTo( HWPFOutputStream tableStream ) throws IOException
-    {
-        LittleEndian.putInt( _cp, tableStream );
-        for ( ListFormatOverrideLevel lfolvl : _rgLfoLvl )
-        {
-            tableStream.write( lfolvl.toByteArray() );
+    void writeTo(HWPFOutputStream tableStream) throws IOException {
+        LittleEndian.putInt(_cp, tableStream);
+        for (ListFormatOverrideLevel lfolvl : _rgLfoLvl) {
+            tableStream.write(lfolvl.toByteArray());
         }
     }
 

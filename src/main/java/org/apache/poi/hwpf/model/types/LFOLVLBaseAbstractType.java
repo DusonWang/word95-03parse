@@ -22,85 +22,76 @@ import org.apache.poi.util.LittleEndian;
 
 /**
  * The LFOLVL structure contains information that is used to override the formatting
-        information of a corresponding LVL. <p>Class and fields descriptions are quoted from
-        Microsoft Office Word 97-2007 Binary File Format and [MS-DOC] - v20110608 Word (.doc) Binary
-        File Format
-    
+ * information of a corresponding LVL. <p>Class and fields descriptions are quoted from
+ * Microsoft Office Word 97-2007 Binary File Format and [MS-DOC] - v20110608 Word (.doc) Binary
+ * File Format
+ * <p>
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author Sergey Vladimirov; according to Microsoft Office Word 97-2007 Binary File Format
-        Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
-    
+ *         Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
  */
 @Internal
-public abstract class LFOLVLBaseAbstractType
-{
+public abstract class LFOLVLBaseAbstractType {
 
-    protected int field_1_iStartAt;
-    protected int field_2_flags;
     /**/private static final BitField iLvl = new BitField(0x0000000F);
     /**/private static final BitField fStartAt = new BitField(0x00000010);
     /**/private static final BitField fFormatting = new BitField(0x00000020);
     /**/private static final BitField grfhic = new BitField(0x00003FC0);
     /**/private static final BitField unused1 = new BitField(0x1FFFC000);
     /**/private static final BitField unused2 = new BitField(0xE0000000);
+    protected int field_1_iStartAt;
+    protected int field_2_flags;
 
-    protected LFOLVLBaseAbstractType()
-    {
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_iStartAt               = LittleEndian.getInt( data, 0x0 + offset );
-        field_2_flags                  = LittleEndian.getInt( data, 0x4 + offset );
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putInt( data, 0x0 + offset, field_1_iStartAt );
-        LittleEndian.putInt( data, 0x4 + offset, field_2_flags );
-    }
-
-    public byte[] serialize()
-    {
-        final byte[] result = new byte[ getSize() ];
-        serialize( result, 0 );
-        return result;
+    protected LFOLVLBaseAbstractType() {
     }
 
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 4 + 4;
     }
 
+    protected void fillFields(byte[] data, int offset) {
+        field_1_iStartAt = LittleEndian.getInt(data, 0x0 + offset);
+        field_2_flags = LittleEndian.getInt(data, 0x4 + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putInt(data, 0x0 + offset, field_1_iStartAt);
+        LittleEndian.putInt(data, 0x4 + offset, field_2_flags);
+    }
+
+    public byte[] serialize() {
+        final byte[] result = new byte[getSize()];
+        serialize(result, 0);
+        return result;
+    }
+
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         LFOLVLBaseAbstractType other = (LFOLVLBaseAbstractType) obj;
-        if ( field_1_iStartAt != other.field_1_iStartAt )
+        if (field_1_iStartAt != other.field_1_iStartAt)
             return false;
-        if ( field_2_flags != other.field_2_flags )
+        if (field_2_flags != other.field_2_flags)
             return false;
         return true;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + field_1_iStartAt;
@@ -108,8 +99,7 @@ public abstract class LFOLVLBaseAbstractType
         return result;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[LFOLVLBase]\n");
         builder.append("    .iStartAt             = ");
@@ -131,8 +121,7 @@ public abstract class LFOLVLBaseAbstractType
      * If fStartAt is set to 0x1, this is a signed integer that specifies the start-at value that overrides lvlf.iStartAt of the corresponding LVL. This value MUST be less than or equal to 0x7FFF and MUST be greater than or equal to zero. If both fStartAt and fFormatting are set to 0x1, or if fStartAt is set to 0x0, this value is undefined and MUST be ignored.
      */
     @Internal
-    public int getIStartAt()
-    {
+    public int getIStartAt() {
         return field_1_iStartAt;
     }
 
@@ -140,8 +129,7 @@ public abstract class LFOLVLBaseAbstractType
      * If fStartAt is set to 0x1, this is a signed integer that specifies the start-at value that overrides lvlf.iStartAt of the corresponding LVL. This value MUST be less than or equal to 0x7FFF and MUST be greater than or equal to zero. If both fStartAt and fFormatting are set to 0x1, or if fStartAt is set to 0x0, this value is undefined and MUST be ignored.
      */
     @Internal
-    public void setIStartAt( int field_1_iStartAt )
-    {
+    public void setIStartAt(int field_1_iStartAt) {
         this.field_1_iStartAt = field_1_iStartAt;
     }
 
@@ -149,8 +137,7 @@ public abstract class LFOLVLBaseAbstractType
      * Get the flags field for the LFOLVLBase record.
      */
     @Internal
-    public int getFlags()
-    {
+    public int getFlags() {
         return field_2_flags;
     }
 
@@ -158,9 +145,18 @@ public abstract class LFOLVLBaseAbstractType
      * Set the flags field for the LFOLVLBase record.
      */
     @Internal
-    public void setFlags( int field_2_flags )
-    {
+    public void setFlags(int field_2_flags) {
         this.field_2_flags = field_2_flags;
+    }
+
+    /**
+     * An unsigned integer that specifies the zero-based level of the list that this overrides. This LFOLVL overrides the LVL that specifies the level formatting of this level of the LSTF that is specified by the lsid field of the LFO to which this LFOLVL corresponds. This value MUST be less than or equal to 0x08
+     *
+     * @return the iLvl field value.
+     */
+    @Internal
+    public byte getILvl() {
+        return (byte) iLvl.getValue(field_2_flags);
     }
 
     /**
@@ -168,19 +164,18 @@ public abstract class LFOLVLBaseAbstractType
      * An unsigned integer that specifies the zero-based level of the list that this overrides. This LFOLVL overrides the LVL that specifies the level formatting of this level of the LSTF that is specified by the lsid field of the LFO to which this LFOLVL corresponds. This value MUST be less than or equal to 0x08
      */
     @Internal
-    public void setILvl( byte value )
-    {
+    public void setILvl(byte value) {
         field_2_flags = iLvl.setValue(field_2_flags, value);
     }
 
     /**
-     * An unsigned integer that specifies the zero-based level of the list that this overrides. This LFOLVL overrides the LVL that specifies the level formatting of this level of the LSTF that is specified by the lsid field of the LFO to which this LFOLVL corresponds. This value MUST be less than or equal to 0x08
-     * @return  the iLvl field value.
+     * A bit that specifies whether this LFOLVL overrides the start-at value of the level.
+     *
+     * @return the fStartAt field value.
      */
     @Internal
-    public byte getILvl()
-    {
-        return ( byte )iLvl.getValue(field_2_flags);
+    public boolean isFStartAt() {
+        return fStartAt.isSet(field_2_flags);
     }
 
     /**
@@ -188,19 +183,18 @@ public abstract class LFOLVLBaseAbstractType
      * A bit that specifies whether this LFOLVL overrides the start-at value of the level.
      */
     @Internal
-    public void setFStartAt( boolean value )
-    {
+    public void setFStartAt(boolean value) {
         field_2_flags = fStartAt.setBoolean(field_2_flags, value);
     }
 
     /**
-     * A bit that specifies whether this LFOLVL overrides the start-at value of the level.
-     * @return  the fStartAt field value.
+     * A bit that specifies whether lvl is an LVL that overrides the corresponding LVL
+     *
+     * @return the fFormatting field value.
      */
     @Internal
-    public boolean isFStartAt()
-    {
-        return fStartAt.isSet(field_2_flags);
+    public boolean isFFormatting() {
+        return fFormatting.isSet(field_2_flags);
     }
 
     /**
@@ -208,19 +202,18 @@ public abstract class LFOLVLBaseAbstractType
      * A bit that specifies whether lvl is an LVL that overrides the corresponding LVL
      */
     @Internal
-    public void setFFormatting( boolean value )
-    {
+    public void setFFormatting(boolean value) {
         field_2_flags = fFormatting.setBoolean(field_2_flags, value);
     }
 
     /**
-     * A bit that specifies whether lvl is an LVL that overrides the corresponding LVL
-     * @return  the fFormatting field value.
+     * A grfhic that specifies the HTML incompatibilities of the overriding level formatting
+     *
+     * @return the grfhic field value.
      */
     @Internal
-    public boolean isFFormatting()
-    {
-        return fFormatting.isSet(field_2_flags);
+    public short getGrfhic() {
+        return (short) grfhic.getValue(field_2_flags);
     }
 
     /**
@@ -228,19 +221,20 @@ public abstract class LFOLVLBaseAbstractType
      * A grfhic that specifies the HTML incompatibilities of the overriding level formatting
      */
     @Internal
-    public void setGrfhic( short value )
-    {
+    public void setGrfhic(short value) {
         field_2_flags = grfhic.setValue(field_2_flags, value);
     }
 
     /**
-     * A grfhic that specifies the HTML incompatibilities of the overriding level formatting
-     * @return  the grfhic field value.
+     * This MUST be ignored
+     *
+     * @return the unused1 field value.
+     * @deprecated This field should not be used according to specification
      */
     @Internal
-    public short getGrfhic()
-    {
-        return ( short )grfhic.getValue(field_2_flags);
+    @Deprecated
+    public short getUnused1() {
+        return (short) unused1.getValue(field_2_flags);
     }
 
     /**
@@ -248,21 +242,20 @@ public abstract class LFOLVLBaseAbstractType
      * This MUST be ignored
      */
     @Internal
-    public void setUnused1( short value )
-    {
+    public void setUnused1(short value) {
         field_2_flags = unused1.setValue(field_2_flags, value);
     }
 
     /**
      * This MUST be ignored
-     * @return  the unused1 field value.
+     *
+     * @return the unused2 field value.
      * @deprecated This field should not be used according to specification
      */
     @Internal
     @Deprecated
-    public short getUnused1()
-    {
-        return ( short )unused1.getValue(field_2_flags);
+    public byte getUnused2() {
+        return (byte) unused2.getValue(field_2_flags);
     }
 
     /**
@@ -270,21 +263,8 @@ public abstract class LFOLVLBaseAbstractType
      * This MUST be ignored
      */
     @Internal
-    public void setUnused2( byte value )
-    {
+    public void setUnused2(byte value) {
         field_2_flags = unused2.setValue(field_2_flags, value);
-    }
-
-    /**
-     * This MUST be ignored
-     * @return  the unused2 field value.
-     * @deprecated This field should not be used according to specification
-     */
-    @Internal
-    @Deprecated
-    public byte getUnused2()
-    {
-        return ( byte )unused2.getValue(field_2_flags);
     }
 
 }  // END OF CLASS

@@ -30,27 +30,23 @@ import org.apache.poi.util.Internal;
  * <p>
  * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
- * 
+ *
  * @author Sergey Vladimirov; according to [MS-DOC] -- v20110315 Word (.doc)
  *         Binary File Format specification
  */
 @Internal
-public class Grfhic extends GrfhicAbstractType
-{
+public class Grfhic extends GrfhicAbstractType {
 
-    public Grfhic()
-    {
+    public Grfhic() {
     }
 
-    public Grfhic( byte[] bytes, int offset )
-    {
-        fillFields( bytes, offset );
+    public Grfhic(byte[] bytes, int offset) {
+        fillFields(bytes, offset);
     }
 
-    public byte[] toByteArray()
-    {
+    public byte[] toByteArray() {
         byte[] buf = new byte[getSize()];
-        serialize( buf, 0 );
+        serialize(buf, 0);
         return buf;
     }
 

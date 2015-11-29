@@ -16,65 +16,51 @@
 ==================================================================== */
 package org.apache.poi.hwpf.converter;
 
-import org.apache.poi.hwpf.usermodel.BorderCode;
-import org.apache.poi.hwpf.usermodel.CharacterRun;
-import org.apache.poi.hwpf.usermodel.Paragraph;
-import org.apache.poi.hwpf.usermodel.Picture;
-import org.apache.poi.hwpf.usermodel.TableCell;
-import org.apache.poi.hwpf.usermodel.TableRow;
+import org.apache.poi.hwpf.usermodel.*;
 import org.apache.poi.util.Beta;
 import org.w3c.dom.Element;
 
 @Beta
-public class WordToFoUtils extends AbstractWordUtils
-{
-    static void compactInlines( Element blockElement )
-    {
-        compactChildNodesR( blockElement, "fo:inline" );
+public class WordToFoUtils extends AbstractWordUtils {
+    static void compactInlines(Element blockElement) {
+        compactChildNodesR(blockElement, "fo:inline");
     }
 
-    public static void setBold( final Element element, final boolean bold )
-    {
-        element.setAttribute( "font-weight", bold ? "bold" : "normal" );
+    public static void setBold(final Element element, final boolean bold) {
+        element.setAttribute("font-weight", bold ? "bold" : "normal");
     }
 
-    public static void setBorder( Element element, BorderCode borderCode,
-            String where )
-    {
-        if ( element == null )
-            throw new IllegalArgumentException( "element is null" );
+    public static void setBorder(Element element, BorderCode borderCode,
+                                 String where) {
+        if (element == null)
+            throw new IllegalArgumentException("element is null");
 
-        if ( borderCode == null || borderCode.isEmpty() )
+        if (borderCode == null || borderCode.isEmpty())
             return;
 
-        if ( isEmpty( where ) )
-        {
-            element.setAttribute( "border-style", getBorderType( borderCode ) );
-            element.setAttribute( "border-color",
-                    getColor( borderCode.getColor() ) );
-            element.setAttribute( "border-width", getBorderWidth( borderCode ) );
-        }
-        else
-        {
-            element.setAttribute( "border-" + where + "-style",
-                    getBorderType( borderCode ) );
-            element.setAttribute( "border-" + where + "-color",
-                    getColor( borderCode.getColor() ) );
-            element.setAttribute( "border-" + where + "-width",
-                    getBorderWidth( borderCode ) );
+        if (isEmpty(where)) {
+            element.setAttribute("border-style", getBorderType(borderCode));
+            element.setAttribute("border-color",
+                    getColor(borderCode.getColor()));
+            element.setAttribute("border-width", getBorderWidth(borderCode));
+        } else {
+            element.setAttribute("border-" + where + "-style",
+                    getBorderType(borderCode));
+            element.setAttribute("border-" + where + "-color",
+                    getColor(borderCode.getColor()));
+            element.setAttribute("border-" + where + "-width",
+                    getBorderWidth(borderCode));
         }
     }
 
     public static void setCharactersProperties(
-            final CharacterRun characterRun, final Element inline )
-    {
+            final CharacterRun characterRun, final Element inline) {
         StringBuilder textDecorations = new StringBuilder();
 
-        setBorder( inline, characterRun.getBorder(), EMPTY );
+        setBorder(inline, characterRun.getBorder(), EMPTY);
 
-        if ( characterRun.getIco24() != -1 )
-        {
-            inline.setAttribute( "color", getColor24( characterRun.getIco24() ) );
+        if (characterRun.getIco24() != -1) {
+            inline.setAttribute("color", getColor24(characterRun.getIco24()));
         }
         /* XLS FO 1.1 doesn't support opacity -- sergey */
         // final int opacity = (int) ( characterRun.getIco24() & 0xFF000000l )
@@ -84,230 +70,196 @@ public class WordToFoUtils extends AbstractWordUtils
         // inline.setAttribute( "opacity",
         // getOpacity( characterRun.getIco24() ) );
         // }
-        if ( characterRun.isCapitalized() )
-        {
-            inline.setAttribute( "text-transform", "uppercase" );
+        if (characterRun.isCapitalized()) {
+            inline.setAttribute("text-transform", "uppercase");
         }
-        if ( characterRun.isHighlighted() )
-        {
-            inline.setAttribute( "background-color",
-                    getColor( characterRun.getHighlightedColor() ) );
+        if (characterRun.isHighlighted()) {
+            inline.setAttribute("background-color",
+                    getColor(characterRun.getHighlightedColor()));
         }
-        if ( characterRun.isStrikeThrough() )
-        {
-            if ( textDecorations.length() > 0 )
-                textDecorations.append( " " );
-            textDecorations.append( "line-through" );
+        if (characterRun.isStrikeThrough()) {
+            if (textDecorations.length() > 0)
+                textDecorations.append(" ");
+            textDecorations.append("line-through");
         }
-        if ( characterRun.isShadowed() )
-        {
-            inline.setAttribute( "text-shadow", characterRun.getFontSize() / 24
-                    + "pt" );
+        if (characterRun.isShadowed()) {
+            inline.setAttribute("text-shadow", characterRun.getFontSize() / 24
+                    + "pt");
         }
-        if ( characterRun.isSmallCaps() )
-        {
-            inline.setAttribute( "font-variant", "small-caps" );
+        if (characterRun.isSmallCaps()) {
+            inline.setAttribute("font-variant", "small-caps");
         }
-        if ( characterRun.getSubSuperScriptIndex() == 1 )
-        {
-            inline.setAttribute( "baseline-shift", "super" );
-            inline.setAttribute( "font-size", "smaller" );
+        if (characterRun.getSubSuperScriptIndex() == 1) {
+            inline.setAttribute("baseline-shift", "super");
+            inline.setAttribute("font-size", "smaller");
         }
-        if ( characterRun.getSubSuperScriptIndex() == 2 )
-        {
-            inline.setAttribute( "baseline-shift", "sub" );
-            inline.setAttribute( "font-size", "smaller" );
+        if (characterRun.getSubSuperScriptIndex() == 2) {
+            inline.setAttribute("baseline-shift", "sub");
+            inline.setAttribute("font-size", "smaller");
         }
-        if ( characterRun.getUnderlineCode() > 0 )
-        {
-            if ( textDecorations.length() > 0 )
-                textDecorations.append( " " );
-            textDecorations.append( "underline" );
+        if (characterRun.getUnderlineCode() > 0) {
+            if (textDecorations.length() > 0)
+                textDecorations.append(" ");
+            textDecorations.append("underline");
         }
-        if ( characterRun.isVanished() )
-        {
-            inline.setAttribute( "visibility", "hidden" );
+        if (characterRun.isVanished()) {
+            inline.setAttribute("visibility", "hidden");
         }
-        if ( textDecorations.length() > 0 )
-        {
-            inline.setAttribute( "text-decoration", textDecorations.toString() );
+        if (textDecorations.length() > 0) {
+            inline.setAttribute("text-decoration", textDecorations.toString());
         }
     }
 
-    public static void setFontFamily( final Element element,
-            final String fontFamily )
-    {
-        if ( isEmpty( fontFamily ) )
+    public static void setFontFamily(final Element element,
+                                     final String fontFamily) {
+        if (isEmpty(fontFamily))
             return;
 
-        element.setAttribute( "font-family", fontFamily );
+        element.setAttribute("font-family", fontFamily);
     }
 
-    public static void setFontSize( final Element element, final int fontSize )
-    {
-        element.setAttribute( "font-size", String.valueOf( fontSize ) );
+    public static void setFontSize(final Element element, final int fontSize) {
+        element.setAttribute("font-size", String.valueOf(fontSize));
     }
 
-    public static void setIndent( Paragraph paragraph, Element block )
-    {
-        if ( paragraph.getFirstLineIndent() != 0 )
-        {
+    public static void setIndent(Paragraph paragraph, Element block) {
+        if (paragraph.getFirstLineIndent() != 0) {
             block.setAttribute(
                     "text-indent",
-                    String.valueOf( paragraph.getFirstLineIndent()
-                            / TWIPS_PER_PT )
-                            + "pt" );
+                    String.valueOf(paragraph.getFirstLineIndent()
+                            / TWIPS_PER_PT)
+                            + "pt");
         }
-        if ( paragraph.getIndentFromLeft() != 0 )
-        {
+        if (paragraph.getIndentFromLeft() != 0) {
             block.setAttribute(
                     "start-indent",
-                    String.valueOf( paragraph.getIndentFromLeft()
-                            / TWIPS_PER_PT )
-                            + "pt" );
+                    String.valueOf(paragraph.getIndentFromLeft()
+                            / TWIPS_PER_PT)
+                            + "pt");
         }
-        if ( paragraph.getIndentFromRight() != 0 )
-        {
+        if (paragraph.getIndentFromRight() != 0) {
             block.setAttribute(
                     "end-indent",
-                    String.valueOf( paragraph.getIndentFromRight()
-                            / TWIPS_PER_PT )
-                            + "pt" );
+                    String.valueOf(paragraph.getIndentFromRight()
+                            / TWIPS_PER_PT)
+                            + "pt");
         }
-        if ( paragraph.getSpacingBefore() != 0 )
-        {
+        if (paragraph.getSpacingBefore() != 0) {
             block.setAttribute(
                     "space-before",
-                    String.valueOf( paragraph.getSpacingBefore() / TWIPS_PER_PT )
-                            + "pt" );
+                    String.valueOf(paragraph.getSpacingBefore() / TWIPS_PER_PT)
+                            + "pt");
         }
-        if ( paragraph.getSpacingAfter() != 0 )
-        {
-            block.setAttribute( "space-after",
-                    String.valueOf( paragraph.getSpacingAfter() / TWIPS_PER_PT )
-                            + "pt" );
-        }
-    }
-
-    public static void setItalic( final Element element, final boolean italic )
-    {
-        element.setAttribute( "font-style", italic ? "italic" : "normal" );
-    }
-
-    public static void setJustification( Paragraph paragraph,
-            final Element element )
-    {
-        String justification = getJustification( paragraph.getJustification() );
-        if ( isNotEmpty( justification ) )
-            element.setAttribute( "text-align", justification );
-    }
-
-    public static void setLanguage( final CharacterRun characterRun,
-            final Element inline )
-    {
-        if ( characterRun.getLanguageCode() != 0 )
-        {
-            final String language = getLanguage( characterRun.getLanguageCode() );
-            if ( isNotEmpty( language ) )
-                inline.setAttribute( "language", language );
+        if (paragraph.getSpacingAfter() != 0) {
+            block.setAttribute("space-after",
+                    String.valueOf(paragraph.getSpacingAfter() / TWIPS_PER_PT)
+                            + "pt");
         }
     }
 
-    public static void setParagraphProperties( Paragraph paragraph,
-            Element block )
-    {
-        setIndent( paragraph, block );
-        setJustification( paragraph, block );
-
-        setBorder( block, paragraph.getBottomBorder(), "bottom" );
-        setBorder( block, paragraph.getLeftBorder(), "left" );
-        setBorder( block, paragraph.getRightBorder(), "right" );
-        setBorder( block, paragraph.getTopBorder(), "top" );
-
-        if ( paragraph.pageBreakBefore() )
-        {
-            block.setAttribute( "break-before", "page" );
-        }
-
-        block.setAttribute( "hyphenate",
-                String.valueOf( paragraph.isAutoHyphenated() ) );
-
-        if ( paragraph.keepOnPage() )
-        {
-            block.setAttribute( "keep-together.within-page", "always" );
-        }
-
-        if ( paragraph.keepWithNext() )
-        {
-            block.setAttribute( "keep-with-next.within-page", "always" );
-        }
-
-        block.setAttribute( "linefeed-treatment", "preserve" );
-        block.setAttribute( "white-space-collapse", "false" );
+    public static void setItalic(final Element element, final boolean italic) {
+        element.setAttribute("font-style", italic ? "italic" : "normal");
     }
 
-    public static void setPictureProperties( Picture picture,
-            Element graphicElement )
-    {
+    public static void setJustification(Paragraph paragraph,
+                                        final Element element) {
+        String justification = getJustification(paragraph.getJustification());
+        if (isNotEmpty(justification))
+            element.setAttribute("text-align", justification);
+    }
+
+    public static void setLanguage(final CharacterRun characterRun,
+                                   final Element inline) {
+        if (characterRun.getLanguageCode() != 0) {
+            final String language = getLanguage(characterRun.getLanguageCode());
+            if (isNotEmpty(language))
+                inline.setAttribute("language", language);
+        }
+    }
+
+    public static void setParagraphProperties(Paragraph paragraph,
+                                              Element block) {
+        setIndent(paragraph, block);
+        setJustification(paragraph, block);
+
+        setBorder(block, paragraph.getBottomBorder(), "bottom");
+        setBorder(block, paragraph.getLeftBorder(), "left");
+        setBorder(block, paragraph.getRightBorder(), "right");
+        setBorder(block, paragraph.getTopBorder(), "top");
+
+        if (paragraph.pageBreakBefore()) {
+            block.setAttribute("break-before", "page");
+        }
+
+        block.setAttribute("hyphenate",
+                String.valueOf(paragraph.isAutoHyphenated()));
+
+        if (paragraph.keepOnPage()) {
+            block.setAttribute("keep-together.within-page", "always");
+        }
+
+        if (paragraph.keepWithNext()) {
+            block.setAttribute("keep-with-next.within-page", "always");
+        }
+
+        block.setAttribute("linefeed-treatment", "preserve");
+        block.setAttribute("white-space-collapse", "false");
+    }
+
+    public static void setPictureProperties(Picture picture,
+                                            Element graphicElement) {
         final int horizontalScale = picture.getHorizontalScalingFactor();
         final int verticalScale = picture.getVerticalScalingFactor();
 
-        if ( horizontalScale > 0 )
-        {
+        if (horizontalScale > 0) {
             graphicElement
-                    .setAttribute( "content-width", ( ( picture.getDxaGoal()
-                            * horizontalScale / 1000 ) / TWIPS_PER_PT )
-                            + "pt" );
-        }
-        else
-            graphicElement.setAttribute( "content-width",
-                    ( picture.getDxaGoal() / TWIPS_PER_PT ) + "pt" );
+                    .setAttribute("content-width", ((picture.getDxaGoal()
+                            * horizontalScale / 1000) / TWIPS_PER_PT)
+                            + "pt");
+        } else
+            graphicElement.setAttribute("content-width",
+                    (picture.getDxaGoal() / TWIPS_PER_PT) + "pt");
 
-        if ( verticalScale > 0 )
+        if (verticalScale > 0)
             graphicElement
-                    .setAttribute( "content-height", ( ( picture.getDyaGoal()
-                            * verticalScale / 1000 ) / TWIPS_PER_PT )
-                            + "pt" );
+                    .setAttribute("content-height", ((picture.getDyaGoal()
+                            * verticalScale / 1000) / TWIPS_PER_PT)
+                            + "pt");
         else
-            graphicElement.setAttribute( "content-height",
-                    ( picture.getDyaGoal() / TWIPS_PER_PT ) + "pt" );
+            graphicElement.setAttribute("content-height",
+                    (picture.getDyaGoal() / TWIPS_PER_PT) + "pt");
 
-        if ( horizontalScale <= 0 || verticalScale <= 0 )
-        {
-            graphicElement.setAttribute( "scaling", "uniform" );
-        }
-        else
-        {
-            graphicElement.setAttribute( "scaling", "non-uniform" );
+        if (horizontalScale <= 0 || verticalScale <= 0) {
+            graphicElement.setAttribute("scaling", "uniform");
+        } else {
+            graphicElement.setAttribute("scaling", "non-uniform");
         }
 
-        graphicElement.setAttribute( "vertical-align", "text-bottom" );
+        graphicElement.setAttribute("vertical-align", "text-bottom");
 
-        if ( picture.getDyaCropTop() != 0 || picture.getDxaCropRight() != 0
+        if (picture.getDyaCropTop() != 0 || picture.getDxaCropRight() != 0
                 || picture.getDyaCropBottom() != 0
-                || picture.getDxaCropLeft() != 0 )
-        {
+                || picture.getDxaCropLeft() != 0) {
             int rectTop = picture.getDyaCropTop() / TWIPS_PER_PT;
             int rectRight = picture.getDxaCropRight() / TWIPS_PER_PT;
             int rectBottom = picture.getDyaCropBottom() / TWIPS_PER_PT;
             int rectLeft = picture.getDxaCropLeft() / TWIPS_PER_PT;
-            graphicElement.setAttribute( "clip", "rect(" + rectTop + "pt, "
+            graphicElement.setAttribute("clip", "rect(" + rectTop + "pt, "
                     + rectRight + "pt, " + rectBottom + "pt, " + rectLeft
-                    + "pt)" );
-            graphicElement.setAttribute( "overflow", "hidden" );
+                    + "pt)");
+            graphicElement.setAttribute("overflow", "hidden");
         }
     }
 
-    public static void setTableCellProperties( TableRow tableRow,
-            TableCell tableCell, Element element, boolean toppest,
-            boolean bottomest, boolean leftest, boolean rightest )
-    {
-        element.setAttribute( "width", ( tableCell.getWidth() / TWIPS_PER_INCH )
-                + "in" );
-        element.setAttribute( "padding-start",
-                ( tableRow.getGapHalf() / TWIPS_PER_INCH ) + "in" );
-        element.setAttribute( "padding-end",
-                ( tableRow.getGapHalf() / TWIPS_PER_INCH ) + "in" );
+    public static void setTableCellProperties(TableRow tableRow,
+                                              TableCell tableCell, Element element, boolean toppest,
+                                              boolean bottomest, boolean leftest, boolean rightest) {
+        element.setAttribute("width", (tableCell.getWidth() / TWIPS_PER_INCH)
+                + "in");
+        element.setAttribute("padding-start",
+                (tableRow.getGapHalf() / TWIPS_PER_INCH) + "in");
+        element.setAttribute("padding-end",
+                (tableRow.getGapHalf() / TWIPS_PER_INCH) + "in");
 
         BorderCode top = tableCell.getBrcTop() != null
                 && tableCell.getBrcTop().getBorderType() != 0 ? tableCell
@@ -327,24 +279,21 @@ public class WordToFoUtils extends AbstractWordUtils
                 .getBrcRight() : rightest ? tableRow.getRightBorder()
                 : tableRow.getVerticalBorder();
 
-        setBorder( element, bottom, "bottom" );
-        setBorder( element, left, "left" );
-        setBorder( element, right, "right" );
-        setBorder( element, top, "top" );
+        setBorder(element, bottom, "bottom");
+        setBorder(element, left, "left");
+        setBorder(element, right, "right");
+        setBorder(element, top, "top");
     }
 
-    public static void setTableRowProperties( TableRow tableRow,
-            Element tableRowElement )
-    {
-        if ( tableRow.getRowHeight() > 0 )
-        {
-            tableRowElement.setAttribute( "height",
-                    ( tableRow.getRowHeight() / TWIPS_PER_INCH ) + "in" );
+    public static void setTableRowProperties(TableRow tableRow,
+                                             Element tableRowElement) {
+        if (tableRow.getRowHeight() > 0) {
+            tableRowElement.setAttribute("height",
+                    (tableRow.getRowHeight() / TWIPS_PER_INCH) + "in");
         }
-        if ( !tableRow.cantSplit() )
-        {
-            tableRowElement.setAttribute( "keep-together.within-column",
-                    "always" );
+        if (!tableRow.cantSplit()) {
+            tableRowElement.setAttribute("keep-together.within-column",
+                    "always");
         }
     }
 

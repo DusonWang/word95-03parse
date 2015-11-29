@@ -26,50 +26,44 @@ import org.apache.poi.util.LittleEndian;
  * <p>
  * Class and fields descriptions are quoted from Microsoft Office Word 97-2007
  * Binary File Format (.doc) Specification
- * 
+ * <p>
  * NOTE: This source is automatically generated please do not modify this file.
  * Either subclass or remove the record in src/types/definitions.
- * 
+ *
  * @author Sergey Vladimirov; according to Microsoft Office Word 97-2007 Binary
  *         File Format (.doc) Specification
  */
 @Internal
-public abstract class BKFAbstractType
-{
+public abstract class BKFAbstractType {
 
+    /**/private static BitField itcFirst = new BitField(0x007F);
+    /**/private static BitField fPub = new BitField(0x0080);
+    /**/private static BitField itcLim = new BitField(0x7F00);
+    /**/private static BitField fCol = new BitField(0x8000);
     protected short field_1_ibkl;
     protected short field_2_bkf_flags;
-    /**/private static BitField itcFirst = new BitField( 0x007F );
-    /**/private static BitField fPub = new BitField( 0x0080 );
-    /**/private static BitField itcLim = new BitField( 0x7F00 );
-    /**/private static BitField fCol = new BitField( 0x8000 );
 
-    protected BKFAbstractType()
-    {
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_ibkl                   = LittleEndian.getShort(data, 0x0 + offset);
-        field_2_bkf_flags              = LittleEndian.getShort(data, 0x2 + offset);
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putShort(data, 0x0 + offset, field_1_ibkl);
-        LittleEndian.putShort(data, 0x2 + offset, field_2_bkf_flags);
+    protected BKFAbstractType() {
     }
 
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 2 + 2;
     }
 
-    public String toString()
-    {
+    protected void fillFields(byte[] data, int offset) {
+        field_1_ibkl = LittleEndian.getShort(data, 0x0 + offset);
+        field_2_bkf_flags = LittleEndian.getShort(data, 0x2 + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putShort(data, 0x0 + offset, field_1_ibkl);
+        LittleEndian.putShort(data, 0x2 + offset, field_2_bkf_flags);
+    }
+
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[BKF]\n");
         builder.append("    .ibkl                 = ");
@@ -88,105 +82,97 @@ public abstract class BKFAbstractType
     /**
      * Index to BKL entry in plcfbkl that describes the ending position of this bookmark in the CP stream.
      */
-    public short getIbkl()
-    {
+    public short getIbkl() {
         return field_1_ibkl;
     }
 
     /**
      * Index to BKL entry in plcfbkl that describes the ending position of this bookmark in the CP stream.
      */
-    public void setIbkl( short field_1_ibkl )
-    {
+    public void setIbkl(short field_1_ibkl) {
         this.field_1_ibkl = field_1_ibkl;
     }
 
     /**
      * Get the bkf_flags field for the BKF record.
      */
-    public short getBkf_flags()
-    {
+    public short getBkf_flags() {
         return field_2_bkf_flags;
     }
 
     /**
      * Set the bkf_flags field for the BKF record.
      */
-    public void setBkf_flags( short field_2_bkf_flags )
-    {
+    public void setBkf_flags(short field_2_bkf_flags) {
         this.field_2_bkf_flags = field_2_bkf_flags;
+    }
+
+    /**
+     * When bkf.fCol==1, this is the index to the first column of a table column bookmark
+     *
+     * @return the itcFirst field value.
+     */
+    public byte getItcFirst() {
+        return (byte) itcFirst.getValue(field_2_bkf_flags);
     }
 
     /**
      * Sets the itcFirst field value.
      * When bkf.fCol==1, this is the index to the first column of a table column bookmark
      */
-    public void setItcFirst( byte value )
-    {
-        field_2_bkf_flags = (short)itcFirst.setValue(field_2_bkf_flags, value);
+    public void setItcFirst(byte value) {
+        field_2_bkf_flags = (short) itcFirst.setValue(field_2_bkf_flags, value);
     }
 
     /**
-     * When bkf.fCol==1, this is the index to the first column of a table column bookmark
-     * @return  the itcFirst field value.
+     * When 1, this indicates that this bookmark is marking the range of a Macintosh Publisher section
+     *
+     * @return the fPub field value.
      */
-    public byte getItcFirst()
-    {
-        return ( byte )itcFirst.getValue(field_2_bkf_flags);
+    public boolean isFPub() {
+        return fPub.isSet(field_2_bkf_flags);
     }
 
     /**
      * Sets the fPub field value.
      * When 1, this indicates that this bookmark is marking the range of a Macintosh Publisher section
      */
-    public void setFPub( boolean value )
-    {
-        field_2_bkf_flags = (short)fPub.setBoolean(field_2_bkf_flags, value);
+    public void setFPub(boolean value) {
+        field_2_bkf_flags = (short) fPub.setBoolean(field_2_bkf_flags, value);
     }
 
     /**
-     * When 1, this indicates that this bookmark is marking the range of a Macintosh Publisher section
-     * @return  the fPub field value.
+     * When bkf.fCol==1, this is the index to limit column of a table column bookmark
+     *
+     * @return the itcLim field value.
      */
-    public boolean isFPub()
-    {
-        return fPub.isSet(field_2_bkf_flags);
+    public byte getItcLim() {
+        return (byte) itcLim.getValue(field_2_bkf_flags);
     }
 
     /**
      * Sets the itcLim field value.
      * When bkf.fCol==1, this is the index to limit column of a table column bookmark
      */
-    public void setItcLim( byte value )
-    {
-        field_2_bkf_flags = (short)itcLim.setValue(field_2_bkf_flags, value);
+    public void setItcLim(byte value) {
+        field_2_bkf_flags = (short) itcLim.setValue(field_2_bkf_flags, value);
     }
 
     /**
-     * When bkf.fCol==1, this is the index to limit column of a table column bookmark
-     * @return  the itcLim field value.
+     * When 1, this bookmark marks a range of columns in a table specified by (bkf.itcFirst, bkf.itcLim)
+     *
+     * @return the fCol field value.
      */
-    public byte getItcLim()
-    {
-        return ( byte )itcLim.getValue(field_2_bkf_flags);
+    public boolean isFCol() {
+        return fCol.isSet(field_2_bkf_flags);
     }
 
     /**
      * Sets the fCol field value.
      * When 1, this bookmark marks a range of columns in a table specified by (bkf.itcFirst, bkf.itcLim)
      */
-    public void setFCol( boolean value )
-    {
-        field_2_bkf_flags = (short)fCol.setBoolean(field_2_bkf_flags, value);
-    }
-
-    /**
-     * When 1, this bookmark marks a range of columns in a table specified by (bkf.itcFirst, bkf.itcLim)
-     * @return  the fCol field value.
-     */
-    public boolean isFCol()
-    {
-        return fCol.isSet(field_2_bkf_flags);
+    public void setFCol(boolean value) {
+        field_2_bkf_flags = (short) fCol.setBoolean(field_2_bkf_flags, value);
     }
 
 }  // END OF CLASS

@@ -22,23 +22,21 @@ import org.apache.poi.util.LittleEndian;
 
 /**
  * The FibRgW97 structure is a variable-length portion of the Fib. <p>Class and
-        fields descriptions are quoted from Microsoft Office Word 97-2007 Binary File Format and
-        [MS-DOC] - v20110608 Word (.doc) Binary File Format
-    
+ * fields descriptions are quoted from Microsoft Office Word 97-2007 Binary File Format and
+ * [MS-DOC] - v20110608 Word (.doc) Binary File Format
+ * <p>
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author Sergey Vladimirov; according to Microsoft Office Word 97-2007 Binary File Format
-        Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
-    
+ *         Specification [*.doc] and [MS-DOC] - v20110608 Word (.doc) Binary File Format
  */
 @Internal
-public abstract class FibRgW97AbstractType
-{
+public abstract class FibRgW97AbstractType {
 
     @Deprecated
     protected short field_1_reserved1;
@@ -68,63 +66,57 @@ public abstract class FibRgW97AbstractType
     protected short field_13_reserved13;
     protected short field_14_lidFE;
 
-    protected FibRgW97AbstractType()
-    {
-    }
-
-    protected void fillFields( byte[] data, int offset )
-    {
-        field_1_reserved1              = LittleEndian.getShort( data, 0x0 + offset );
-        field_2_reserved2              = LittleEndian.getShort( data, 0x2 + offset );
-        field_3_reserved3              = LittleEndian.getShort( data, 0x4 + offset );
-        field_4_reserved4              = LittleEndian.getShort( data, 0x6 + offset );
-        field_5_reserved5              = LittleEndian.getShort( data, 0x8 + offset );
-        field_6_reserved6              = LittleEndian.getShort( data, 0xa + offset );
-        field_7_reserved7              = LittleEndian.getShort( data, 0xc + offset );
-        field_8_reserved8              = LittleEndian.getShort( data, 0xe + offset );
-        field_9_reserved9              = LittleEndian.getShort( data, 0x10 + offset );
-        field_10_reserved10            = LittleEndian.getShort( data, 0x12 + offset );
-        field_11_reserved11            = LittleEndian.getShort( data, 0x14 + offset );
-        field_12_reserved12            = LittleEndian.getShort( data, 0x16 + offset );
-        field_13_reserved13            = LittleEndian.getShort( data, 0x18 + offset );
-        field_14_lidFE                 = LittleEndian.getShort( data, 0x1a + offset );
-    }
-
-    public void serialize( byte[] data, int offset )
-    {
-        LittleEndian.putShort( data, 0x0 + offset, field_1_reserved1 );
-        LittleEndian.putShort( data, 0x2 + offset, field_2_reserved2 );
-        LittleEndian.putShort( data, 0x4 + offset, field_3_reserved3 );
-        LittleEndian.putShort( data, 0x6 + offset, field_4_reserved4 );
-        LittleEndian.putShort( data, 0x8 + offset, field_5_reserved5 );
-        LittleEndian.putShort( data, 0xa + offset, field_6_reserved6 );
-        LittleEndian.putShort( data, 0xc + offset, field_7_reserved7 );
-        LittleEndian.putShort( data, 0xe + offset, field_8_reserved8 );
-        LittleEndian.putShort( data, 0x10 + offset, field_9_reserved9 );
-        LittleEndian.putShort( data, 0x12 + offset, field_10_reserved10 );
-        LittleEndian.putShort( data, 0x14 + offset, field_11_reserved11 );
-        LittleEndian.putShort( data, 0x16 + offset, field_12_reserved12 );
-        LittleEndian.putShort( data, 0x18 + offset, field_13_reserved13 );
-        LittleEndian.putShort( data, 0x1a + offset, field_14_lidFE );
-    }
-
-    public byte[] serialize()
-    {
-        final byte[] result = new byte[ getSize() ];
-        serialize( result, 0 );
-        return result;
+    protected FibRgW97AbstractType() {
     }
 
     /**
      * Size of record
      */
-    public static int getSize()
-    {
+    public static int getSize() {
         return 0 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2;
     }
 
-    public String toString()
-    {
+    protected void fillFields(byte[] data, int offset) {
+        field_1_reserved1 = LittleEndian.getShort(data, 0x0 + offset);
+        field_2_reserved2 = LittleEndian.getShort(data, 0x2 + offset);
+        field_3_reserved3 = LittleEndian.getShort(data, 0x4 + offset);
+        field_4_reserved4 = LittleEndian.getShort(data, 0x6 + offset);
+        field_5_reserved5 = LittleEndian.getShort(data, 0x8 + offset);
+        field_6_reserved6 = LittleEndian.getShort(data, 0xa + offset);
+        field_7_reserved7 = LittleEndian.getShort(data, 0xc + offset);
+        field_8_reserved8 = LittleEndian.getShort(data, 0xe + offset);
+        field_9_reserved9 = LittleEndian.getShort(data, 0x10 + offset);
+        field_10_reserved10 = LittleEndian.getShort(data, 0x12 + offset);
+        field_11_reserved11 = LittleEndian.getShort(data, 0x14 + offset);
+        field_12_reserved12 = LittleEndian.getShort(data, 0x16 + offset);
+        field_13_reserved13 = LittleEndian.getShort(data, 0x18 + offset);
+        field_14_lidFE = LittleEndian.getShort(data, 0x1a + offset);
+    }
+
+    public void serialize(byte[] data, int offset) {
+        LittleEndian.putShort(data, 0x0 + offset, field_1_reserved1);
+        LittleEndian.putShort(data, 0x2 + offset, field_2_reserved2);
+        LittleEndian.putShort(data, 0x4 + offset, field_3_reserved3);
+        LittleEndian.putShort(data, 0x6 + offset, field_4_reserved4);
+        LittleEndian.putShort(data, 0x8 + offset, field_5_reserved5);
+        LittleEndian.putShort(data, 0xa + offset, field_6_reserved6);
+        LittleEndian.putShort(data, 0xc + offset, field_7_reserved7);
+        LittleEndian.putShort(data, 0xe + offset, field_8_reserved8);
+        LittleEndian.putShort(data, 0x10 + offset, field_9_reserved9);
+        LittleEndian.putShort(data, 0x12 + offset, field_10_reserved10);
+        LittleEndian.putShort(data, 0x14 + offset, field_11_reserved11);
+        LittleEndian.putShort(data, 0x16 + offset, field_12_reserved12);
+        LittleEndian.putShort(data, 0x18 + offset, field_13_reserved13);
+        LittleEndian.putShort(data, 0x1a + offset, field_14_lidFE);
+    }
+
+    public byte[] serialize() {
+        final byte[] result = new byte[getSize()];
+        serialize(result, 0);
+        return result;
+    }
+
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[FibRgW97]\n");
         builder.append("    .reserved1            = ");
@@ -164,8 +156,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved1()
-    {
+    public short getReserved1() {
         return field_1_reserved1;
     }
 
@@ -173,8 +164,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved1( short field_1_reserved1 )
-    {
+    public void setReserved1(short field_1_reserved1) {
         this.field_1_reserved1 = field_1_reserved1;
     }
 
@@ -182,8 +172,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved2()
-    {
+    public short getReserved2() {
         return field_2_reserved2;
     }
 
@@ -191,8 +180,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved2( short field_2_reserved2 )
-    {
+    public void setReserved2(short field_2_reserved2) {
         this.field_2_reserved2 = field_2_reserved2;
     }
 
@@ -200,8 +188,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved3()
-    {
+    public short getReserved3() {
         return field_3_reserved3;
     }
 
@@ -209,8 +196,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved3( short field_3_reserved3 )
-    {
+    public void setReserved3(short field_3_reserved3) {
         this.field_3_reserved3 = field_3_reserved3;
     }
 
@@ -218,8 +204,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved4()
-    {
+    public short getReserved4() {
         return field_4_reserved4;
     }
 
@@ -227,8 +212,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved4( short field_4_reserved4 )
-    {
+    public void setReserved4(short field_4_reserved4) {
         this.field_4_reserved4 = field_4_reserved4;
     }
 
@@ -236,8 +220,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved5()
-    {
+    public short getReserved5() {
         return field_5_reserved5;
     }
 
@@ -245,8 +228,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved5( short field_5_reserved5 )
-    {
+    public void setReserved5(short field_5_reserved5) {
         this.field_5_reserved5 = field_5_reserved5;
     }
 
@@ -254,8 +236,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved6()
-    {
+    public short getReserved6() {
         return field_6_reserved6;
     }
 
@@ -263,8 +244,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved6( short field_6_reserved6 )
-    {
+    public void setReserved6(short field_6_reserved6) {
         this.field_6_reserved6 = field_6_reserved6;
     }
 
@@ -272,8 +252,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved7()
-    {
+    public short getReserved7() {
         return field_7_reserved7;
     }
 
@@ -281,8 +260,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved7( short field_7_reserved7 )
-    {
+    public void setReserved7(short field_7_reserved7) {
         this.field_7_reserved7 = field_7_reserved7;
     }
 
@@ -290,8 +268,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved8()
-    {
+    public short getReserved8() {
         return field_8_reserved8;
     }
 
@@ -299,8 +276,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved8( short field_8_reserved8 )
-    {
+    public void setReserved8(short field_8_reserved8) {
         this.field_8_reserved8 = field_8_reserved8;
     }
 
@@ -308,8 +284,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved9()
-    {
+    public short getReserved9() {
         return field_9_reserved9;
     }
 
@@ -317,8 +292,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved9( short field_9_reserved9 )
-    {
+    public void setReserved9(short field_9_reserved9) {
         this.field_9_reserved9 = field_9_reserved9;
     }
 
@@ -326,8 +300,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved10()
-    {
+    public short getReserved10() {
         return field_10_reserved10;
     }
 
@@ -335,8 +308,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved10( short field_10_reserved10 )
-    {
+    public void setReserved10(short field_10_reserved10) {
         this.field_10_reserved10 = field_10_reserved10;
     }
 
@@ -344,8 +316,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved11()
-    {
+    public short getReserved11() {
         return field_11_reserved11;
     }
 
@@ -353,8 +324,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved11( short field_11_reserved11 )
-    {
+    public void setReserved11(short field_11_reserved11) {
         this.field_11_reserved11 = field_11_reserved11;
     }
 
@@ -362,8 +332,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved12()
-    {
+    public short getReserved12() {
         return field_12_reserved12;
     }
 
@@ -371,8 +340,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved12( short field_12_reserved12 )
-    {
+    public void setReserved12(short field_12_reserved12) {
         this.field_12_reserved12 = field_12_reserved12;
     }
 
@@ -380,8 +348,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public short getReserved13()
-    {
+    public short getReserved13() {
         return field_13_reserved13;
     }
 
@@ -389,8 +356,7 @@ public abstract class FibRgW97AbstractType
      * This value is undefined and MUST be ignored.
      */
     @Internal
-    public void setReserved13( short field_13_reserved13 )
-    {
+    public void setReserved13(short field_13_reserved13) {
         this.field_13_reserved13 = field_13_reserved13;
     }
 
@@ -398,8 +364,7 @@ public abstract class FibRgW97AbstractType
      * A LID whose meaning depends on the nFib value.
      */
     @Internal
-    public short getLidFE()
-    {
+    public short getLidFE() {
         return field_14_lidFE;
     }
 
@@ -407,8 +372,7 @@ public abstract class FibRgW97AbstractType
      * A LID whose meaning depends on the nFib value.
      */
     @Internal
-    public void setLidFE( short field_14_lidFE )
-    {
+    public void setLidFE(short field_14_lidFE) {
         this.field_14_lidFE = field_14_lidFE;
     }
 

@@ -23,22 +23,20 @@ import org.apache.poi.util.Internal;
 public interface CharIndexTranslator {
     /**
      * Calculates the byte index of the given char index.
-     * 
-     * @param charPos
-     *            The char position
+     *
+     * @param charPos The char position
      * @return The byte index
      */
-    int getByteIndex( int charPos );
+    int getByteIndex(int charPos);
 
     /**
      * Calculates the char index of the given byte index. Look forward if index
      * is not in table
-     * 
-     * @param bytePos
-     *            The character offset to check
+     *
+     * @param bytePos The character offset to check
      * @return the char index
      * @deprecated This API were based on incorrect assumption that single byte
-     *             offset corresponds to single char offset
+     * offset corresponds to single char offset
      */
     @Deprecated
     int getCharIndex(int bytePos);
@@ -48,28 +46,26 @@ public interface CharIndexTranslator {
      * Look forward if index is not in table
      *
      * @param bytePos The character offset to check
-     * @param startCP look from this characted position 
+     * @param startCP look from this characted position
      * @return the char index
      * @deprecated This API were based on incorrect assumption that single byte
-     *             offset corresponds to single char offset
+     * offset corresponds to single char offset
      */
     @Deprecated
     int getCharIndex(int bytePos, int startCP);
 
     /**
      * Finds character ranges that includes specified byte range.
-     * 
-     * @param startBytePosInclusive
-     *            start byte range
-     * @param endBytePosExclusive
-     *            end byte range
+     *
+     * @param startBytePosInclusive start byte range
+     * @param endBytePosExclusive   end byte range
      */
-    int[][] getCharIndexRanges( int startBytePosInclusive,
-            int endBytePosExclusive );
+    int[][] getCharIndexRanges(int startBytePosInclusive,
+                               int endBytePosExclusive);
 
     /**
      * Check if index is in table
-     * 
+     *
      * @param bytePos
      * @return true if index in table, false if not
      */
@@ -79,7 +75,7 @@ public interface CharIndexTranslator {
      * Return first index >= bytePos that is in table
      *
      * @param bytePos
-     * @return  first index greater or equal to bytePos that is in table
+     * @return first index greater or equal to bytePos that is in table
      */
     public int lookIndexForward(int bytePos);
 

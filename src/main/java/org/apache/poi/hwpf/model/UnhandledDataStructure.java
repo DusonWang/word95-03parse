@@ -17,40 +17,34 @@
 
 package org.apache.poi.hwpf.model;
 
-import java.util.Arrays;
-
 import org.apache.poi.util.Internal;
 
 /**
  * A data structure used to hold some data we don't
- *  understand / can't handle, so we have it available
- *  for when we come to write back out again 
+ * understand / can't handle, so we have it available
+ * for when we come to write back out again
  */
 @Internal
-public final class UnhandledDataStructure
-{
-  byte[] _buf;
+public final class UnhandledDataStructure {
+    byte[] _buf;
 
-  public UnhandledDataStructure(byte[] buf, int offset, int length)
-  {
-    // Sanity check the size they've asked for
-    int offsetEnd = offset + length;
-    if (offsetEnd > buf.length || offsetEnd < 0)
-    {
-      throw new IndexOutOfBoundsException("Buffer Length is " + buf.length + " " +
-                                          "but code is tried to read " + length + " " + 
-                                          "from offset " + offset + " to " + offsetEnd);
-    }
-    if (offset < 0 || length < 0)
-    {
-       throw new IndexOutOfBoundsException("Offset and Length must both be >= 0, negative " +
-       		"indicies are not permitted - code is tried to read " + length + " from offset " + offset);
-    }
-    
-    // Save that requested portion of the data 
-    _buf = copyOfRange(buf, offset, offsetEnd);
+    public UnhandledDataStructure(byte[] buf, int offset, int length) {
+        // Sanity check the size they've asked for
+        int offsetEnd = offset + length;
+        if (offsetEnd > buf.length || offsetEnd < 0) {
+            throw new IndexOutOfBoundsException("Buffer Length is " + buf.length + " " +
+                    "but code is tried to read " + length + " " +
+                    "from offset " + offset + " to " + offsetEnd);
+        }
+        if (offset < 0 || length < 0) {
+            throw new IndexOutOfBoundsException("Offset and Length must both be >= 0, negative " +
+                    "indicies are not permitted - code is tried to read " + length + " from offset " + offset);
+        }
 
-  }
+        // Save that requested portion of the data
+        _buf = copyOfRange(buf, offset, offsetEnd);
+
+    }
 
     /**
      * YK: Arrays.copyOfRange is not in JDK 1.5
@@ -65,8 +59,7 @@ public final class UnhandledDataStructure
         return copy;
     }
 
-  byte[] getBuf()
-  {
-    return _buf;
-  }
+    byte[] getBuf() {
+        return _buf;
+    }
 }

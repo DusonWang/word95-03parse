@@ -20,8 +20,7 @@ package org.apache.poi.hwpf.model;
 import org.apache.poi.util.Internal;
 
 /**
- *
- * @author  andy
+ * @author andy
  */
 @Internal
 @Deprecated

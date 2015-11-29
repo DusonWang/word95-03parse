@@ -31,82 +31,71 @@ import org.apache.poi.util.StringUtil;
  * <p>
  * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
- * 
+ *
  * @author Sergey Vladimirov; according to [MS-DOC] -- v20121003 Word (.doc)
  *         Binary File Format; Copyright (c) 2012 Microsoft Corporation;
  *         Release: October 8, 2012
  */
-public class Sttb
-{
-
-    private int _cbExtra;
+public class Sttb {
 
     private final int _cDataLength;
-
+    private final boolean _fExtend = true;
+    private int _cbExtra;
     private String[] _data;
-
     private byte[][] _extraData;
 
-    private final boolean _fExtend = true;
-
-    public Sttb( byte[] buffer, int startOffset )
-    {
-        this( 2, buffer, startOffset );
+    public Sttb(byte[] buffer, int startOffset) {
+        this(2, buffer, startOffset);
     }
 
-    public Sttb( int cDataLength, byte[] buffer, int startOffset )
-    {
+    public Sttb(int cDataLength, byte[] buffer, int startOffset) {
         this._cDataLength = cDataLength;
-        fillFields( buffer, startOffset );
+        fillFields(buffer, startOffset);
     }
 
-    public Sttb( int cDataLength, String[] data )
-    {
+    public Sttb(int cDataLength, String[] data) {
         this._cDataLength = cDataLength;
 
-        this._data = ArrayUtil.copyOf( data, new String[data.length] );
+        this._data = ArrayUtil.copyOf(data, new String[data.length]);
 
         this._cbExtra = 0;
         this._extraData = null;
     }
 
-    public void fillFields( byte[] buffer, int startOffset )
-    {
-        short ffff = LittleEndian.getShort( buffer, startOffset );
+    public void fillFields(byte[] buffer, int startOffset) {
+        short ffff = LittleEndian.getShort(buffer, startOffset);
         int offset = startOffset + LittleEndian.SHORT_SIZE;
 
-        if ( ffff != (short) 0xffff )
-        {
+        if (ffff != (short) 0xffff) {
             // Non-extended character Pascal strings
             throw new UnsupportedOperationException(
                     "Non-extended character Pascal strings are not supported right now. "
-                            + "Please, contact POI developers for update." );
+                            + "Please, contact POI developers for update.");
         }
         // strings are extended character strings
 
-        int cData = _cDataLength == 2 ? LittleEndian.getUShort( buffer, offset )
-                : LittleEndian.getInt( buffer, offset );
+        int cData = _cDataLength == 2 ? LittleEndian.getUShort(buffer, offset)
+                : LittleEndian.getInt(buffer, offset);
         offset += _cDataLength;
 
-        this._cbExtra = LittleEndian.getUShort( buffer, offset );
+        this._cbExtra = LittleEndian.getUShort(buffer, offset);
         offset += 2;
 
         _data = new String[cData];
         _extraData = new byte[cData][];
 
-        for ( int i = 0; i < cData; i++ )
-        {
-            int cchData = LittleEndian.getShort( buffer, offset );
+        for (int i = 0; i < cData; i++) {
+            int cchData = LittleEndian.getShort(buffer, offset);
             offset += 2;
 
-            if ( cchData < 0 )
+            if (cchData < 0)
                 continue;
 
-            _data[i] = StringUtil.getFromUnicodeLE( buffer, offset, cchData );
+            _data[i] = StringUtil.getFromUnicodeLE(buffer, offset, cchData);
             offset += cchData * 2;
 
             _extraData[i] = LittleEndian
-                    .getByteArray( buffer, offset, _cbExtra );
+                    .getByteArray(buffer, offset, _cbExtra);
             offset += _cbExtra;
         }
     }
@@ -119,13 +108,11 @@ public class Sttb
      * of this field is cchData bytes and it is an ANSI string, unless otherwise
      * specified by the STTB definition.
      */
-    public String[] getData()
-    {
+    public String[] getData() {
         return _data;
     }
 
-    public int getSize()
-    {
+    public int getSize() {
         // ffff
         int size = LittleEndian.SHORT_SIZE;
 
@@ -135,20 +122,15 @@ public class Sttb
         // cbExtra
         size += LittleEndian.SHORT_SIZE;
 
-        if ( this._fExtend )
-        {
-            for ( String data : _data )
-            {
+        if (this._fExtend) {
+            for (String data : _data) {
                 // cchData
                 size += LittleEndian.SHORT_SIZE;
                 // data
                 size += 2 * data.length();
             }
-        }
-        else
-        {
-            for ( String data : _data )
-            {
+        } else {
+            for (String data : _data) {
                 // cchData
                 size += LittleEndian.BYTE_SIZE;
                 // data
@@ -157,53 +139,44 @@ public class Sttb
         }
 
         // extraData
-        if ( _extraData != null )
-        {
+        if (_extraData != null) {
             size += _cbExtra * _data.length;
         }
 
         return size;
     }
 
-    public byte[] serialize()
-    {
+    public byte[] serialize() {
         final byte[] buffer = new byte[getSize()];
 
-        LittleEndian.putShort( buffer, 0, (short) 0xffff );
+        LittleEndian.putShort(buffer, 0, (short) 0xffff);
 
-        if ( _data == null || _data.length == 0 )
-        {
-            if ( _cDataLength == 4 )
-            {
-                LittleEndian.putInt( buffer, 2, 0 );
-                LittleEndian.putUShort( buffer, 6, _cbExtra );
+        if (_data == null || _data.length == 0) {
+            if (_cDataLength == 4) {
+                LittleEndian.putInt(buffer, 2, 0);
+                LittleEndian.putUShort(buffer, 6, _cbExtra);
                 return buffer;
             }
 
-            LittleEndian.putUShort( buffer, 2, 0 );
-            LittleEndian.putUShort( buffer, 4, _cbExtra );
+            LittleEndian.putUShort(buffer, 2, 0);
+            LittleEndian.putUShort(buffer, 4, _cbExtra);
             return buffer;
         }
 
         int offset;
-        if ( _cDataLength == 4 )
-        {
-            LittleEndian.putInt( buffer, 2, _data.length );
-            LittleEndian.putUShort( buffer, 6, _cbExtra );
+        if (_cDataLength == 4) {
+            LittleEndian.putInt(buffer, 2, _data.length);
+            LittleEndian.putUShort(buffer, 6, _cbExtra);
             offset = 2 + LittleEndian.INT_SIZE + LittleEndian.SHORT_SIZE;
-        }
-        else
-        {
-            LittleEndian.putUShort( buffer, 2, _data.length );
-            LittleEndian.putUShort( buffer, 4, _cbExtra );
+        } else {
+            LittleEndian.putUShort(buffer, 2, _data.length);
+            LittleEndian.putUShort(buffer, 4, _cbExtra);
             offset = 2 + LittleEndian.SHORT_SIZE + LittleEndian.SHORT_SIZE;
         }
 
-        for ( int i = 0; i < _data.length; i++ )
-        {
+        for (int i = 0; i < _data.length; i++) {
             String entry = _data[i];
-            if ( entry == null )
-            {
+            if (entry == null) {
                 // is it correct?
                 buffer[offset] = -1;
                 buffer[offset + 1] = 0;
@@ -211,26 +184,21 @@ public class Sttb
                 continue;
             }
 
-            if ( _fExtend )
-            {
-                LittleEndian.putUShort( buffer, offset, (int) entry.length() );
+            if (_fExtend) {
+                LittleEndian.putUShort(buffer, offset, (int) entry.length());
                 offset += LittleEndian.SHORT_SIZE;
 
-                StringUtil.putUnicodeLE( entry, buffer, offset );
+                StringUtil.putUnicodeLE(entry, buffer, offset);
                 offset += 2 * entry.length();
-            }
-            else
-            {
+            } else {
                 throw new UnsupportedOperationException(
-                        "ANSI STTB is not supported yet" );
+                        "ANSI STTB is not supported yet");
             }
 
-            if ( _cbExtra != 0 )
-            {
-                if ( _extraData[i] != null && _extraData[i].length != 0 )
-                {
-                    System.arraycopy( _extraData[i], 0, buffer, offset,
-                            Math.min( _extraData[i].length, _cbExtra ) );
+            if (_cbExtra != 0) {
+                if (_extraData[i] != null && _extraData[i].length != 0) {
+                    System.arraycopy(_extraData[i], 0, buffer, offset,
+                            Math.min(_extraData[i].length, _cbExtra));
                 }
                 offset += _cbExtra;
             }
@@ -239,10 +207,9 @@ public class Sttb
         return buffer;
     }
 
-    public int serialize( byte[] buffer, int offset )
-    {
+    public int serialize(byte[] buffer, int offset) {
         byte[] bs = serialize();
-        System.arraycopy( bs, 0, buffer, offset, bs.length );
+        System.arraycopy(bs, 0, buffer, offset, bs.length);
         return bs.length;
     }
 }

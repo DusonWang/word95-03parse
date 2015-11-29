@@ -18,27 +18,26 @@
 package org.apache.poi.hwpf.model.types;
 
 
-import org.apache.poi.hwpf.usermodel.*;
-import org.apache.poi.util.*;
+import org.apache.poi.hwpf.usermodel.BorderCode;
+import org.apache.poi.hwpf.usermodel.ShadingDescriptor;
+import org.apache.poi.util.BitField;
+import org.apache.poi.util.Internal;
 
 /**
  * Table Cell Descriptor.
  * <p>
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/types/definitions.
+ * remove the record in src/types/definitions.
  * <p>
- * This class is internal. It content or properties may change without notice 
+ * This class is internal. It content or properties may change without notice
  * due to changes in our knowledge of internal Microsoft Word binary structures.
-
+ *
  * @author S. Ryan Ackley. Field descriptions are quoted from Microsoft Office Word 97-2007 Binary
-        File Format (.doc) Specification
-    
+ *         File Format (.doc) Specification
  */
 @Internal
-public abstract class TCAbstractType
-{
+public abstract class TCAbstractType {
 
-    protected short field_1_rgf;
     /**/private static BitField fFirstMerged = new BitField(0x0001);
     /**/private static BitField fMerged = new BitField(0x0002);
     /**/private static BitField fVertical = new BitField(0x0004);
@@ -51,6 +50,7 @@ public abstract class TCAbstractType
     /**/private static BitField fFitText = new BitField(0x1000);
     /**/private static BitField fNoWrap = new BitField(0x2000);
     /**/private static BitField fUnused = new BitField(0xC000);
+    protected short field_1_rgf;
     protected short field_2_wWidth;
     protected ShadingDescriptor field_3_shd;
     protected short field_4_wCellPaddingLeft;
@@ -74,8 +74,7 @@ public abstract class TCAbstractType
     protected BorderCode field_22_brcBottom;
     protected BorderCode field_23_brcRight;
 
-    protected TCAbstractType()
-    {
+    protected TCAbstractType() {
         this.field_3_shd = new ShadingDescriptor();
         this.field_20_brcTop = new BorderCode();
         this.field_21_brcLeft = new BorderCode();
@@ -84,8 +83,7 @@ public abstract class TCAbstractType
     }
 
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[TC]\n");
         builder.append("    .rgf                  = ");
@@ -155,8 +153,7 @@ public abstract class TCAbstractType
      * Get the rgf field for the TC record.
      */
     @Internal
-    public short getRgf()
-    {
+    public short getRgf() {
         return field_1_rgf;
     }
 
@@ -164,8 +161,7 @@ public abstract class TCAbstractType
      * Set the rgf field for the TC record.
      */
     @Internal
-    public void setRgf( short field_1_rgf )
-    {
+    public void setRgf(short field_1_rgf) {
         this.field_1_rgf = field_1_rgf;
     }
 
@@ -173,8 +169,7 @@ public abstract class TCAbstractType
      * Preferred cell width.
      */
     @Internal
-    public short getWWidth()
-    {
+    public short getWWidth() {
         return field_2_wWidth;
     }
 
@@ -182,8 +177,7 @@ public abstract class TCAbstractType
      * Preferred cell width.
      */
     @Internal
-    public void setWWidth( short field_2_wWidth )
-    {
+    public void setWWidth(short field_2_wWidth) {
         this.field_2_wWidth = field_2_wWidth;
     }
 
@@ -191,8 +185,7 @@ public abstract class TCAbstractType
      * Cell shading.
      */
     @Internal
-    public ShadingDescriptor getShd()
-    {
+    public ShadingDescriptor getShd() {
         return field_3_shd;
     }
 
@@ -200,8 +193,7 @@ public abstract class TCAbstractType
      * Cell shading.
      */
     @Internal
-    public void setShd( ShadingDescriptor field_3_shd )
-    {
+    public void setShd(ShadingDescriptor field_3_shd) {
         this.field_3_shd = field_3_shd;
     }
 
@@ -209,8 +201,7 @@ public abstract class TCAbstractType
      * Left cell margin/padding.
      */
     @Internal
-    public short getWCellPaddingLeft()
-    {
+    public short getWCellPaddingLeft() {
         return field_4_wCellPaddingLeft;
     }
 
@@ -218,8 +209,7 @@ public abstract class TCAbstractType
      * Left cell margin/padding.
      */
     @Internal
-    public void setWCellPaddingLeft( short field_4_wCellPaddingLeft )
-    {
+    public void setWCellPaddingLeft(short field_4_wCellPaddingLeft) {
         this.field_4_wCellPaddingLeft = field_4_wCellPaddingLeft;
     }
 
@@ -227,8 +217,7 @@ public abstract class TCAbstractType
      * Top cell margin/padding.
      */
     @Internal
-    public short getWCellPaddingTop()
-    {
+    public short getWCellPaddingTop() {
         return field_5_wCellPaddingTop;
     }
 
@@ -236,8 +225,7 @@ public abstract class TCAbstractType
      * Top cell margin/padding.
      */
     @Internal
-    public void setWCellPaddingTop( short field_5_wCellPaddingTop )
-    {
+    public void setWCellPaddingTop(short field_5_wCellPaddingTop) {
         this.field_5_wCellPaddingTop = field_5_wCellPaddingTop;
     }
 
@@ -245,8 +233,7 @@ public abstract class TCAbstractType
      * Bottom cell margin/padding.
      */
     @Internal
-    public short getWCellPaddingBottom()
-    {
+    public short getWCellPaddingBottom() {
         return field_6_wCellPaddingBottom;
     }
 
@@ -254,8 +241,7 @@ public abstract class TCAbstractType
      * Bottom cell margin/padding.
      */
     @Internal
-    public void setWCellPaddingBottom( short field_6_wCellPaddingBottom )
-    {
+    public void setWCellPaddingBottom(short field_6_wCellPaddingBottom) {
         this.field_6_wCellPaddingBottom = field_6_wCellPaddingBottom;
     }
 
@@ -263,8 +249,7 @@ public abstract class TCAbstractType
      * Right cell margin/padding.
      */
     @Internal
-    public short getWCellPaddingRight()
-    {
+    public short getWCellPaddingRight() {
         return field_7_wCellPaddingRight;
     }
 
@@ -272,8 +257,7 @@ public abstract class TCAbstractType
      * Right cell margin/padding.
      */
     @Internal
-    public void setWCellPaddingRight( short field_7_wCellPaddingRight )
-    {
+    public void setWCellPaddingRight(short field_7_wCellPaddingRight) {
         this.field_7_wCellPaddingRight = field_7_wCellPaddingRight;
     }
 
@@ -281,8 +265,7 @@ public abstract class TCAbstractType
      * Left cell margin/padding units.
      */
     @Internal
-    public byte getFtsCellPaddingLeft()
-    {
+    public byte getFtsCellPaddingLeft() {
         return field_8_ftsCellPaddingLeft;
     }
 
@@ -290,8 +273,7 @@ public abstract class TCAbstractType
      * Left cell margin/padding units.
      */
     @Internal
-    public void setFtsCellPaddingLeft( byte field_8_ftsCellPaddingLeft )
-    {
+    public void setFtsCellPaddingLeft(byte field_8_ftsCellPaddingLeft) {
         this.field_8_ftsCellPaddingLeft = field_8_ftsCellPaddingLeft;
     }
 
@@ -299,8 +281,7 @@ public abstract class TCAbstractType
      * Top cell margin/padding units.
      */
     @Internal
-    public byte getFtsCellPaddingTop()
-    {
+    public byte getFtsCellPaddingTop() {
         return field_9_ftsCellPaddingTop;
     }
 
@@ -308,8 +289,7 @@ public abstract class TCAbstractType
      * Top cell margin/padding units.
      */
     @Internal
-    public void setFtsCellPaddingTop( byte field_9_ftsCellPaddingTop )
-    {
+    public void setFtsCellPaddingTop(byte field_9_ftsCellPaddingTop) {
         this.field_9_ftsCellPaddingTop = field_9_ftsCellPaddingTop;
     }
 
@@ -317,8 +297,7 @@ public abstract class TCAbstractType
      * Bottom cell margin/padding units.
      */
     @Internal
-    public byte getFtsCellPaddingBottom()
-    {
+    public byte getFtsCellPaddingBottom() {
         return field_10_ftsCellPaddingBottom;
     }
 
@@ -326,8 +305,7 @@ public abstract class TCAbstractType
      * Bottom cell margin/padding units.
      */
     @Internal
-    public void setFtsCellPaddingBottom( byte field_10_ftsCellPaddingBottom )
-    {
+    public void setFtsCellPaddingBottom(byte field_10_ftsCellPaddingBottom) {
         this.field_10_ftsCellPaddingBottom = field_10_ftsCellPaddingBottom;
     }
 
@@ -335,8 +313,7 @@ public abstract class TCAbstractType
      * Right cell margin/padding units.
      */
     @Internal
-    public byte getFtsCellPaddingRight()
-    {
+    public byte getFtsCellPaddingRight() {
         return field_11_ftsCellPaddingRight;
     }
 
@@ -344,8 +321,7 @@ public abstract class TCAbstractType
      * Right cell margin/padding units.
      */
     @Internal
-    public void setFtsCellPaddingRight( byte field_11_ftsCellPaddingRight )
-    {
+    public void setFtsCellPaddingRight(byte field_11_ftsCellPaddingRight) {
         this.field_11_ftsCellPaddingRight = field_11_ftsCellPaddingRight;
     }
 
@@ -353,8 +329,7 @@ public abstract class TCAbstractType
      * Left cell spacing.
      */
     @Internal
-    public short getWCellSpacingLeft()
-    {
+    public short getWCellSpacingLeft() {
         return field_12_wCellSpacingLeft;
     }
 
@@ -362,8 +337,7 @@ public abstract class TCAbstractType
      * Left cell spacing.
      */
     @Internal
-    public void setWCellSpacingLeft( short field_12_wCellSpacingLeft )
-    {
+    public void setWCellSpacingLeft(short field_12_wCellSpacingLeft) {
         this.field_12_wCellSpacingLeft = field_12_wCellSpacingLeft;
     }
 
@@ -371,8 +345,7 @@ public abstract class TCAbstractType
      * Top cell spacing.
      */
     @Internal
-    public short getWCellSpacingTop()
-    {
+    public short getWCellSpacingTop() {
         return field_13_wCellSpacingTop;
     }
 
@@ -380,8 +353,7 @@ public abstract class TCAbstractType
      * Top cell spacing.
      */
     @Internal
-    public void setWCellSpacingTop( short field_13_wCellSpacingTop )
-    {
+    public void setWCellSpacingTop(short field_13_wCellSpacingTop) {
         this.field_13_wCellSpacingTop = field_13_wCellSpacingTop;
     }
 
@@ -389,8 +361,7 @@ public abstract class TCAbstractType
      * Bottom cell spacing.
      */
     @Internal
-    public short getWCellSpacingBottom()
-    {
+    public short getWCellSpacingBottom() {
         return field_14_wCellSpacingBottom;
     }
 
@@ -398,8 +369,7 @@ public abstract class TCAbstractType
      * Bottom cell spacing.
      */
     @Internal
-    public void setWCellSpacingBottom( short field_14_wCellSpacingBottom )
-    {
+    public void setWCellSpacingBottom(short field_14_wCellSpacingBottom) {
         this.field_14_wCellSpacingBottom = field_14_wCellSpacingBottom;
     }
 
@@ -407,8 +377,7 @@ public abstract class TCAbstractType
      * Right cell spacing.
      */
     @Internal
-    public short getWCellSpacingRight()
-    {
+    public short getWCellSpacingRight() {
         return field_15_wCellSpacingRight;
     }
 
@@ -416,8 +385,7 @@ public abstract class TCAbstractType
      * Right cell spacing.
      */
     @Internal
-    public void setWCellSpacingRight( short field_15_wCellSpacingRight )
-    {
+    public void setWCellSpacingRight(short field_15_wCellSpacingRight) {
         this.field_15_wCellSpacingRight = field_15_wCellSpacingRight;
     }
 
@@ -425,8 +393,7 @@ public abstract class TCAbstractType
      * Left cell spacing units.
      */
     @Internal
-    public byte getFtsCellSpacingLeft()
-    {
+    public byte getFtsCellSpacingLeft() {
         return field_16_ftsCellSpacingLeft;
     }
 
@@ -434,8 +401,7 @@ public abstract class TCAbstractType
      * Left cell spacing units.
      */
     @Internal
-    public void setFtsCellSpacingLeft( byte field_16_ftsCellSpacingLeft )
-    {
+    public void setFtsCellSpacingLeft(byte field_16_ftsCellSpacingLeft) {
         this.field_16_ftsCellSpacingLeft = field_16_ftsCellSpacingLeft;
     }
 
@@ -443,8 +409,7 @@ public abstract class TCAbstractType
      * Top cell spacing units.
      */
     @Internal
-    public byte getFtsCellSpacingTop()
-    {
+    public byte getFtsCellSpacingTop() {
         return field_17_ftsCellSpacingTop;
     }
 
@@ -452,8 +417,7 @@ public abstract class TCAbstractType
      * Top cell spacing units.
      */
     @Internal
-    public void setFtsCellSpacingTop( byte field_17_ftsCellSpacingTop )
-    {
+    public void setFtsCellSpacingTop(byte field_17_ftsCellSpacingTop) {
         this.field_17_ftsCellSpacingTop = field_17_ftsCellSpacingTop;
     }
 
@@ -461,8 +425,7 @@ public abstract class TCAbstractType
      * Bottom cell spacing units.
      */
     @Internal
-    public byte getFtsCellSpacingBottom()
-    {
+    public byte getFtsCellSpacingBottom() {
         return field_18_ftsCellSpacingBottom;
     }
 
@@ -470,8 +433,7 @@ public abstract class TCAbstractType
      * Bottom cell spacing units.
      */
     @Internal
-    public void setFtsCellSpacingBottom( byte field_18_ftsCellSpacingBottom )
-    {
+    public void setFtsCellSpacingBottom(byte field_18_ftsCellSpacingBottom) {
         this.field_18_ftsCellSpacingBottom = field_18_ftsCellSpacingBottom;
     }
 
@@ -479,8 +441,7 @@ public abstract class TCAbstractType
      * Right cell spacing units.
      */
     @Internal
-    public byte getFtsCellSpacingRight()
-    {
+    public byte getFtsCellSpacingRight() {
         return field_19_ftsCellSpacingRight;
     }
 
@@ -488,8 +449,7 @@ public abstract class TCAbstractType
      * Right cell spacing units.
      */
     @Internal
-    public void setFtsCellSpacingRight( byte field_19_ftsCellSpacingRight )
-    {
+    public void setFtsCellSpacingRight(byte field_19_ftsCellSpacingRight) {
         this.field_19_ftsCellSpacingRight = field_19_ftsCellSpacingRight;
     }
 
@@ -497,8 +457,7 @@ public abstract class TCAbstractType
      * Top border.
      */
     @Internal
-    public BorderCode getBrcTop()
-    {
+    public BorderCode getBrcTop() {
         return field_20_brcTop;
     }
 
@@ -506,8 +465,7 @@ public abstract class TCAbstractType
      * Top border.
      */
     @Internal
-    public void setBrcTop( BorderCode field_20_brcTop )
-    {
+    public void setBrcTop(BorderCode field_20_brcTop) {
         this.field_20_brcTop = field_20_brcTop;
     }
 
@@ -515,8 +473,7 @@ public abstract class TCAbstractType
      * Left border.
      */
     @Internal
-    public BorderCode getBrcLeft()
-    {
+    public BorderCode getBrcLeft() {
         return field_21_brcLeft;
     }
 
@@ -524,8 +481,7 @@ public abstract class TCAbstractType
      * Left border.
      */
     @Internal
-    public void setBrcLeft( BorderCode field_21_brcLeft )
-    {
+    public void setBrcLeft(BorderCode field_21_brcLeft) {
         this.field_21_brcLeft = field_21_brcLeft;
     }
 
@@ -533,8 +489,7 @@ public abstract class TCAbstractType
      * Bottom border.
      */
     @Internal
-    public BorderCode getBrcBottom()
-    {
+    public BorderCode getBrcBottom() {
         return field_22_brcBottom;
     }
 
@@ -542,8 +497,7 @@ public abstract class TCAbstractType
      * Bottom border.
      */
     @Internal
-    public void setBrcBottom( BorderCode field_22_brcBottom )
-    {
+    public void setBrcBottom(BorderCode field_22_brcBottom) {
         this.field_22_brcBottom = field_22_brcBottom;
     }
 
@@ -551,8 +505,7 @@ public abstract class TCAbstractType
      * Right border.
      */
     @Internal
-    public BorderCode getBrcRight()
-    {
+    public BorderCode getBrcRight() {
         return field_23_brcRight;
     }
 
@@ -560,9 +513,18 @@ public abstract class TCAbstractType
      * Right border.
      */
     @Internal
-    public void setBrcRight( BorderCode field_23_brcRight )
-    {
+    public void setBrcRight(BorderCode field_23_brcRight) {
         this.field_23_brcRight = field_23_brcRight;
+    }
+
+    /**
+     * When 1, cell is first cell of a range of cells that have been merged. When a cell is merged, the display areas of the merged cells are consolidated and the text within the cells is interpreted as belonging to one text stream for purposes of calculating line breaks.
+     *
+     * @return the fFirstMerged field value.
+     */
+    @Internal
+    public boolean isFFirstMerged() {
+        return fFirstMerged.isSet(field_1_rgf);
     }
 
     /**
@@ -570,19 +532,18 @@ public abstract class TCAbstractType
      * When 1, cell is first cell of a range of cells that have been merged. When a cell is merged, the display areas of the merged cells are consolidated and the text within the cells is interpreted as belonging to one text stream for purposes of calculating line breaks.
      */
     @Internal
-    public void setFFirstMerged( boolean value )
-    {
-        field_1_rgf = (short)fFirstMerged.setBoolean(field_1_rgf, value);
+    public void setFFirstMerged(boolean value) {
+        field_1_rgf = (short) fFirstMerged.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, cell is first cell of a range of cells that have been merged. When a cell is merged, the display areas of the merged cells are consolidated and the text within the cells is interpreted as belonging to one text stream for purposes of calculating line breaks.
-     * @return  the fFirstMerged field value.
+     * When 1, cell has been merged with preceding cell
+     *
+     * @return the fMerged field value.
      */
     @Internal
-    public boolean isFFirstMerged()
-    {
-        return fFirstMerged.isSet(field_1_rgf);
+    public boolean isFMerged() {
+        return fMerged.isSet(field_1_rgf);
     }
 
     /**
@@ -590,19 +551,18 @@ public abstract class TCAbstractType
      * When 1, cell has been merged with preceding cell
      */
     @Internal
-    public void setFMerged( boolean value )
-    {
-        field_1_rgf = (short)fMerged.setBoolean(field_1_rgf, value);
+    public void setFMerged(boolean value) {
+        field_1_rgf = (short) fMerged.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, cell has been merged with preceding cell
-     * @return  the fMerged field value.
+     * When 1, cell has vertical text flow
+     *
+     * @return the fVertical field value.
      */
     @Internal
-    public boolean isFMerged()
-    {
-        return fMerged.isSet(field_1_rgf);
+    public boolean isFVertical() {
+        return fVertical.isSet(field_1_rgf);
     }
 
     /**
@@ -610,19 +570,18 @@ public abstract class TCAbstractType
      * When 1, cell has vertical text flow
      */
     @Internal
-    public void setFVertical( boolean value )
-    {
-        field_1_rgf = (short)fVertical.setBoolean(field_1_rgf, value);
+    public void setFVertical(boolean value) {
+        field_1_rgf = (short) fVertical.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, cell has vertical text flow
-     * @return  the fVertical field value.
+     * For a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0
+     *
+     * @return the fBackward field value.
      */
     @Internal
-    public boolean isFVertical()
-    {
-        return fVertical.isSet(field_1_rgf);
+    public boolean isFBackward() {
+        return fBackward.isSet(field_1_rgf);
     }
 
     /**
@@ -630,19 +589,18 @@ public abstract class TCAbstractType
      * For a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0
      */
     @Internal
-    public void setFBackward( boolean value )
-    {
-        field_1_rgf = (short)fBackward.setBoolean(field_1_rgf, value);
+    public void setFBackward(boolean value) {
+        field_1_rgf = (short) fBackward.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * For a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0
-     * @return  the fBackward field value.
+     * When 1, cell has rotated characters (i.e. uses @font)
+     *
+     * @return the fRotateFont field value.
      */
     @Internal
-    public boolean isFBackward()
-    {
-        return fBackward.isSet(field_1_rgf);
+    public boolean isFRotateFont() {
+        return fRotateFont.isSet(field_1_rgf);
     }
 
     /**
@@ -650,19 +608,18 @@ public abstract class TCAbstractType
      * When 1, cell has rotated characters (i.e. uses @font)
      */
     @Internal
-    public void setFRotateFont( boolean value )
-    {
-        field_1_rgf = (short)fRotateFont.setBoolean(field_1_rgf, value);
+    public void setFRotateFont(boolean value) {
+        field_1_rgf = (short) fRotateFont.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, cell has rotated characters (i.e. uses @font)
-     * @return  the fRotateFont field value.
+     * When 1, cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
+     *
+     * @return the fVertMerge field value.
      */
     @Internal
-    public boolean isFRotateFont()
-    {
-        return fRotateFont.isSet(field_1_rgf);
+    public boolean isFVertMerge() {
+        return fVertMerge.isSet(field_1_rgf);
     }
 
     /**
@@ -670,19 +627,18 @@ public abstract class TCAbstractType
      * When 1, cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
      */
     @Internal
-    public void setFVertMerge( boolean value )
-    {
-        field_1_rgf = (short)fVertMerge.setBoolean(field_1_rgf, value);
+    public void setFVertMerge(boolean value) {
+        field_1_rgf = (short) fVertMerge.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
-     * @return  the fVertMerge field value.
+     * When 1, the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
+     *
+     * @return the fVertRestart field value.
      */
     @Internal
-    public boolean isFVertMerge()
-    {
-        return fVertMerge.isSet(field_1_rgf);
+    public boolean isFVertRestart() {
+        return fVertRestart.isSet(field_1_rgf);
     }
 
     /**
@@ -690,19 +646,18 @@ public abstract class TCAbstractType
      * When 1, the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
      */
     @Internal
-    public void setFVertRestart( boolean value )
-    {
-        field_1_rgf = (short)fVertRestart.setBoolean(field_1_rgf, value);
+    public void setFVertRestart(boolean value) {
+        field_1_rgf = (short) fVertRestart.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
-     * @return  the fVertRestart field value.
+     * Specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary)
+     *
+     * @return the vertAlign field value.
      */
     @Internal
-    public boolean isFVertRestart()
-    {
-        return fVertRestart.isSet(field_1_rgf);
+    public byte getVertAlign() {
+        return (byte) vertAlign.getValue(field_1_rgf);
     }
 
     /**
@@ -710,19 +665,18 @@ public abstract class TCAbstractType
      * Specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary)
      */
     @Internal
-    public void setVertAlign( byte value )
-    {
-        field_1_rgf = (short)vertAlign.setValue(field_1_rgf, value);
+    public void setVertAlign(byte value) {
+        field_1_rgf = (short) vertAlign.setValue(field_1_rgf, value);
     }
 
     /**
-     * Specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary)
-     * @return  the vertAlign field value.
+     * Units for wWidth
+     *
+     * @return the ftsWidth field value.
      */
     @Internal
-    public byte getVertAlign()
-    {
-        return ( byte )vertAlign.getValue(field_1_rgf);
+    public byte getFtsWidth() {
+        return (byte) ftsWidth.getValue(field_1_rgf);
     }
 
     /**
@@ -730,19 +684,18 @@ public abstract class TCAbstractType
      * Units for wWidth
      */
     @Internal
-    public void setFtsWidth( byte value )
-    {
-        field_1_rgf = (short)ftsWidth.setValue(field_1_rgf, value);
+    public void setFtsWidth(byte value) {
+        field_1_rgf = (short) ftsWidth.setValue(field_1_rgf, value);
     }
 
     /**
-     * Units for wWidth
-     * @return  the ftsWidth field value.
+     * When 1, make the text fit the table cell
+     *
+     * @return the fFitText field value.
      */
     @Internal
-    public byte getFtsWidth()
-    {
-        return ( byte )ftsWidth.getValue(field_1_rgf);
+    public boolean isFFitText() {
+        return fFitText.isSet(field_1_rgf);
     }
 
     /**
@@ -750,19 +703,18 @@ public abstract class TCAbstractType
      * When 1, make the text fit the table cell
      */
     @Internal
-    public void setFFitText( boolean value )
-    {
-        field_1_rgf = (short)fFitText.setBoolean(field_1_rgf, value);
+    public void setFFitText(boolean value) {
+        field_1_rgf = (short) fFitText.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, make the text fit the table cell
-     * @return  the fFitText field value.
+     * When 1, do not allow text to wrap in the table cell
+     *
+     * @return the fNoWrap field value.
      */
     @Internal
-    public boolean isFFitText()
-    {
-        return fFitText.isSet(field_1_rgf);
+    public boolean isFNoWrap() {
+        return fNoWrap.isSet(field_1_rgf);
     }
 
     /**
@@ -770,19 +722,18 @@ public abstract class TCAbstractType
      * When 1, do not allow text to wrap in the table cell
      */
     @Internal
-    public void setFNoWrap( boolean value )
-    {
-        field_1_rgf = (short)fNoWrap.setBoolean(field_1_rgf, value);
+    public void setFNoWrap(boolean value) {
+        field_1_rgf = (short) fNoWrap.setBoolean(field_1_rgf, value);
     }
 
     /**
-     * When 1, do not allow text to wrap in the table cell
-     * @return  the fNoWrap field value.
+     * Not used
+     *
+     * @return the fUnused field value.
      */
     @Internal
-    public boolean isFNoWrap()
-    {
-        return fNoWrap.isSet(field_1_rgf);
+    public byte getFUnused() {
+        return (byte) fUnused.getValue(field_1_rgf);
     }
 
     /**
@@ -790,19 +741,8 @@ public abstract class TCAbstractType
      * Not used
      */
     @Internal
-    public void setFUnused( byte value )
-    {
-        field_1_rgf = (short)fUnused.setValue(field_1_rgf, value);
-    }
-
-    /**
-     * Not used
-     * @return  the fUnused field value.
-     */
-    @Internal
-    public byte getFUnused()
-    {
-        return ( byte )fUnused.getValue(field_1_rgf);
+    public void setFUnused(byte value) {
+        field_1_rgf = (short) fUnused.setValue(field_1_rgf, value);
     }
 
 }  // END OF CLASS

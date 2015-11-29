@@ -23,200 +23,163 @@ import org.apache.poi.util.Internal;
  * <p>
  * For iterating through our fields. Used during model classes autogeneration.
  * </p>
- * 
+ *
  * @author Glen Stampoultzis (glens at apache.org)
  */
 @Internal
-public class FieldIterator
-{
+public class FieldIterator {
 
     protected int offset;
 
-    public FieldIterator()
-    {
+    public FieldIterator() {
     }
 
-    public String calcSize( int fieldNumber, String fieldName, String size,
-            String type )
-    {
+    public String calcSize(int fieldNumber, String fieldName, String size,
+                           String type) {
         String result = " + ";
-        if ( type.startsWith( "custom:" ) )
-        {
-            String javaFieldName = RecordUtil.getFieldName( fieldNumber,
-                    fieldName, 0 );
+        if (type.startsWith("custom:")) {
+            String javaFieldName = RecordUtil.getFieldName(fieldNumber,
+                    fieldName, 0);
             return result + javaFieldName + ".getSize()";
-        }
-        else if ( "var".equals( size ) )
-        {
-            String javaFieldName = RecordUtil.getFieldName( fieldNumber,
-                    fieldName, 0 );
+        } else if ("var".equals(size)) {
+            String javaFieldName = RecordUtil.getFieldName(fieldNumber,
+                    fieldName, 0);
             return result + " ( " + javaFieldName + ".length() *2)";
-        }
-        else if ( "varword".equals( size ) )
-        {
-            String javaFieldName = RecordUtil.getFieldName( fieldNumber,
-                    fieldName, 0 );
+        } else if ("varword".equals(size)) {
+            String javaFieldName = RecordUtil.getFieldName(fieldNumber,
+                    fieldName, 0);
             return result + javaFieldName + ".length * 2 + 2";
-        }
-        else
-        {
+        } else {
             return result + size;
         }
     }
 
-    public String fillDecoder( String size, String type )
-    {
+    public String fillDecoder(String size, String type) {
 
         String result = "";
 
-        if ( type.equals( "short[]" ) )
+        if (type.equals("short[]"))
             result = "LittleEndian.getShortArray( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset, " + size
+                    + Integer.toHexString(offset) + " + offset, " + size
                     + " )";
-        else if ( type.equals( "byte[]" ) )
+        else if (type.equals("byte[]"))
             result = "LittleEndian.getByteArray( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset," + size
+                    + Integer.toHexString(offset) + " + offset," + size
                     + " )";
-        else if ( type.equals( "BorderCode" ) )
-            result = "new BorderCode( data, 0x" + Integer.toHexString( offset )
+        else if (type.equals("BorderCode"))
+            result = "new BorderCode( data, 0x" + Integer.toHexString(offset)
                     + " + offset )";
-        else if ( type.equals( "Colorref" ) )
-            result = "new Colorref( data, 0x" + Integer.toHexString( offset )
+        else if (type.equals("Colorref"))
+            result = "new Colorref( data, 0x" + Integer.toHexString(offset)
                     + " + offset )";
-        else if ( type.equals( "DateAndTime" ) )
-            result = "new DateAndTime( data, 0x" + Integer.toHexString( offset )
+        else if (type.equals("DateAndTime"))
+            result = "new DateAndTime( data, 0x" + Integer.toHexString(offset)
                     + " + offset )";
-        else if ( type.equals( "Grfhic" ) )
-            result = "new Grfhic( data, 0x" + Integer.toHexString( offset )
+        else if (type.equals("Grfhic"))
+            result = "new Grfhic( data, 0x" + Integer.toHexString(offset)
                     + " + offset )";
-        else if ( size.equals( "2" ) )
+        else if (size.equals("2"))
             result = "LittleEndian.getShort( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset )";
-        else if ( size.equals( "4" ) )
-            if ( type.equals( "long" ) )
-            {
+                    + Integer.toHexString(offset) + " + offset )";
+        else if (size.equals("4"))
+            if (type.equals("long")) {
                 result = "LittleEndian.getUInt( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset )";
-            }
-            else
-            {
+                        + Integer.toHexString(offset) + " + offset )";
+            } else {
                 result = "LittleEndian.getInt( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset )";
+                        + Integer.toHexString(offset) + " + offset )";
             }
-        else if ( size.equals( "1" ) )
-            if ( type.equals( "short" ) )
-            {
+        else if (size.equals("1"))
+            if (type.equals("short")) {
                 result = "LittleEndian.getUByte( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset )";
-            }
-            else if ( type.equals( "int" ) || type.equals( "long" ) )
-            {
+                        + Integer.toHexString(offset) + " + offset )";
+            } else if (type.equals("int") || type.equals("long")) {
                 result = "LittleEndian.getUnsignedByte( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset )";
-            }
-            else
-            {
-                result = "data[ 0x" + Integer.toHexString( offset )
+                        + Integer.toHexString(offset) + " + offset )";
+            } else {
+                result = "data[ 0x" + Integer.toHexString(offset)
                         + " + offset ]";
             }
-        else if ( type.equals( "double" ) )
+        else if (type.equals("double"))
             result = "LittleEndian.getDouble(data, 0x"
-                    + Integer.toHexString( offset ) + " + offset )";
+                    + Integer.toHexString(offset) + " + offset )";
 
-        try
-        {
-            offset += Integer.parseInt( size );
-        }
-        catch ( NumberFormatException ignore )
-        {
+        try {
+            offset += Integer.parseInt(size);
+        } catch (NumberFormatException ignore) {
         }
         return result;
     }
 
-    public String serialiseEncoder( int fieldNumber, String fieldName,
-            String size, String type )
-    {
+    public String serialiseEncoder(int fieldNumber, String fieldName,
+                                   String size, String type) {
         // String javaType = RecordUtil.getType(size, type, 0);
-        String javaFieldName = RecordUtil.getFieldName( fieldNumber, fieldName,
-                0 );
+        String javaFieldName = RecordUtil.getFieldName(fieldNumber, fieldName,
+                0);
 
         String result = "";
 
-        if ( type.equals( "short[]" ) )
+        if (type.equals("short[]"))
             result = "LittleEndian.putShortArray( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset, "
+                    + Integer.toHexString(offset) + " + offset, "
                     + javaFieldName + " );";
-        else if ( type.equals( "byte[]" ) )
+        else if (type.equals("byte[]"))
             result = "System.arraycopy( " + javaFieldName + ", 0, data, 0x"
-                    + Integer.toHexString( offset ) + " + offset, "
+                    + Integer.toHexString(offset) + " + offset, "
                     + javaFieldName + ".length );";
-        else if ( type.equals( "BorderCode" ) )
+        else if (type.equals("BorderCode"))
             result = javaFieldName + ".serialize( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset );";
-        else if ( type.equals( "Colorref" ) )
+                    + Integer.toHexString(offset) + " + offset );";
+        else if (type.equals("Colorref"))
             result = javaFieldName + ".serialize( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset );";
-        else if ( type.equals( "DateAndTime" ) )
+                    + Integer.toHexString(offset) + " + offset );";
+        else if (type.equals("DateAndTime"))
             result = javaFieldName + ".serialize( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset );";
-        else if ( type.equals( "Grfhic" ) )
+                    + Integer.toHexString(offset) + " + offset );";
+        else if (type.equals("Grfhic"))
             result = javaFieldName + ".serialize( data, 0x"
-                    + Integer.toHexString( offset ) + " + offset );";
-        else if ( size.equals( "2" ) )
-            if ( type.equals( "short" ) )
-            {
+                    + Integer.toHexString(offset) + " + offset );";
+        else if (size.equals("2"))
+            if (type.equals("short")) {
                 result = "LittleEndian.putShort( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset, "
+                        + Integer.toHexString(offset) + " + offset, "
                         + javaFieldName + " );";
-            }
-            else if ( type.equals( "int" ) )
-            {
+            } else if (type.equals("int")) {
                 result = "LittleEndian.putUShort( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset, "
+                        + Integer.toHexString(offset) + " + offset, "
                         + javaFieldName + " );";
-            }
-            else
-            {
+            } else {
                 result = "LittleEndian.putShort( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset, (short)"
+                        + Integer.toHexString(offset) + " + offset, (short)"
                         + javaFieldName + " );";
             }
-        else if ( size.equals( "4" ) )
-            if ( type.equals( "long" ) )
-            {
+        else if (size.equals("4"))
+            if (type.equals("long")) {
                 result = "LittleEndian.putUInt( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset, "
+                        + Integer.toHexString(offset) + " + offset, "
                         + javaFieldName + " );";
-            }
-            else
-            {
+            } else {
                 result = "LittleEndian.putInt( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset, "
+                        + Integer.toHexString(offset) + " + offset, "
                         + javaFieldName + " );";
             }
-        else if ( size.equals( "1" ) )
-            if ( type.equals( "byte" ) )
-            {
-                result = "data[ 0x" + Integer.toHexString( offset )
+        else if (size.equals("1"))
+            if (type.equals("byte")) {
+                result = "data[ 0x" + Integer.toHexString(offset)
                         + " + offset ] = " + javaFieldName + ";";
-            }
-            else
-            {
+            } else {
                 result = "LittleEndian.putUByte( data, 0x"
-                        + Integer.toHexString( offset ) + " + offset, "
+                        + Integer.toHexString(offset) + " + offset, "
                         + javaFieldName + " );";
             }
-        else if ( type.equals( "double" ) )
+        else if (type.equals("double"))
             result = "LittleEndian.putDouble(data, 0x"
-                    + Integer.toHexString( offset ) + " + offset, "
+                    + Integer.toHexString(offset) + " + offset, "
                     + javaFieldName + " );";
 
-        try
-        {
-            offset += Integer.parseInt( size );
-        }
-        catch ( NumberFormatException ignore )
-        {
+        try {
+            offset += Integer.parseInt(size);
+        } catch (NumberFormatException ignore) {
         }
         return result;
 

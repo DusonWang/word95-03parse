@@ -22,68 +22,60 @@ import org.apache.poi.util.Internal;
 
 /**
  * TODO: document me
- * 
+ *
  * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
  */
 @Internal
-class FieldImpl implements Field
-{
+class FieldImpl implements Field {
     private PlexOfField endPlex;
     private PlexOfField separatorPlex;
     private PlexOfField startPlex;
 
-    public FieldImpl( PlexOfField startPlex, PlexOfField separatorPlex,
-            PlexOfField endPlex )
-    {
-        if ( startPlex == null )
-            throw new IllegalArgumentException( "startPlex == null" );
-        if ( endPlex == null )
-            throw new IllegalArgumentException( "endPlex == null" );
+    public FieldImpl(PlexOfField startPlex, PlexOfField separatorPlex,
+                     PlexOfField endPlex) {
+        if (startPlex == null)
+            throw new IllegalArgumentException("startPlex == null");
+        if (endPlex == null)
+            throw new IllegalArgumentException("endPlex == null");
 
-        if ( startPlex.getFld().getBoundaryType() != FieldDescriptor.FIELD_BEGIN_MARK )
-            throw new IllegalArgumentException( "startPlex (" + startPlex
-                    + ") is not type of FIELD_BEGIN" );
+        if (startPlex.getFld().getBoundaryType() != FieldDescriptor.FIELD_BEGIN_MARK)
+            throw new IllegalArgumentException("startPlex (" + startPlex
+                    + ") is not type of FIELD_BEGIN");
 
-        if ( separatorPlex != null
-                && separatorPlex.getFld().getBoundaryType() != FieldDescriptor.FIELD_SEPARATOR_MARK )
-            throw new IllegalArgumentException( "separatorPlex" + separatorPlex
-                    + ") is not type of FIELD_SEPARATOR" );
+        if (separatorPlex != null
+                && separatorPlex.getFld().getBoundaryType() != FieldDescriptor.FIELD_SEPARATOR_MARK)
+            throw new IllegalArgumentException("separatorPlex" + separatorPlex
+                    + ") is not type of FIELD_SEPARATOR");
 
-        if ( endPlex.getFld().getBoundaryType() != FieldDescriptor.FIELD_END_MARK )
-            throw new IllegalArgumentException( "endPlex (" + endPlex
-                    + ") is not type of FIELD_END" );
+        if (endPlex.getFld().getBoundaryType() != FieldDescriptor.FIELD_END_MARK)
+            throw new IllegalArgumentException("endPlex (" + endPlex
+                    + ") is not type of FIELD_END");
 
         this.startPlex = startPlex;
         this.separatorPlex = separatorPlex;
         this.endPlex = endPlex;
     }
 
-    public Range firstSubrange( Range parent )
-    {
-        if ( hasSeparator() )
-        {
-            if ( getMarkStartOffset() + 1 == getMarkSeparatorOffset() )
+    public Range firstSubrange(Range parent) {
+        if (hasSeparator()) {
+            if (getMarkStartOffset() + 1 == getMarkSeparatorOffset())
                 return null;
 
-            return new Range( getMarkStartOffset() + 1,
-                    getMarkSeparatorOffset(), parent )
-            {
+            return new Range(getMarkStartOffset() + 1,
+                    getMarkSeparatorOffset(), parent) {
                 @Override
-                public String toString()
-                {
+                public String toString() {
                     return "FieldSubrange1 (" + super.toString() + ")";
                 }
             };
         }
 
-        if ( getMarkStartOffset() + 1 == getMarkEndOffset() )
+        if (getMarkStartOffset() + 1 == getMarkEndOffset())
             return null;
 
-        return new Range( getMarkStartOffset() + 1, getMarkEndOffset(), parent )
-        {
+        return new Range(getMarkStartOffset() + 1, getMarkEndOffset(), parent) {
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return "FieldSubrange1 (" + super.toString() + ")";
             }
         };
@@ -91,10 +83,9 @@ class FieldImpl implements Field
 
     /**
      * @return character position of first character after field (i.e.
-     *         {@link #getMarkEndOffset()} + 1)
+     * {@link #getMarkEndOffset()} + 1)
      */
-    public int getFieldEndOffset()
-    {
+    public int getFieldEndOffset() {
         /*
          * sometimes plex looks like [100, 2000), where 100 is the position of
          * field-end character, and 2000 - some other char position, far away
@@ -105,126 +96,106 @@ class FieldImpl implements Field
 
     /**
      * @return character position of first character in field (i.e.
-     *         {@link #getFieldStartOffset()})
+     * {@link #getFieldStartOffset()})
      */
-    public int getFieldStartOffset()
-    {
+    public int getFieldStartOffset() {
         return startPlex.getFcStart();
     }
 
-    public CharacterRun getMarkEndCharacterRun( Range parent )
-    {
-        return new Range( getMarkEndOffset(), getMarkEndOffset() + 1, parent )
-                .getCharacterRun( 0 );
+    public CharacterRun getMarkEndCharacterRun(Range parent) {
+        return new Range(getMarkEndOffset(), getMarkEndOffset() + 1, parent)
+                .getCharacterRun(0);
     }
 
     /**
      * @return character position of end field mark
      */
-    public int getMarkEndOffset()
-    {
+    public int getMarkEndOffset() {
         return endPlex.getFcStart();
     }
 
-    public CharacterRun getMarkSeparatorCharacterRun( Range parent )
-    {
-        if ( !hasSeparator() )
+    public CharacterRun getMarkSeparatorCharacterRun(Range parent) {
+        if (!hasSeparator())
             return null;
 
-        return new Range( getMarkSeparatorOffset(),
-                getMarkSeparatorOffset() + 1, parent ).getCharacterRun( 0 );
+        return new Range(getMarkSeparatorOffset(),
+                getMarkSeparatorOffset() + 1, parent).getCharacterRun(0);
     }
 
     /**
      * @return character position of separator field mark (if present,
-     *         {@link NullPointerException} otherwise)
+     * {@link NullPointerException} otherwise)
      */
-    public int getMarkSeparatorOffset()
-    {
+    public int getMarkSeparatorOffset() {
         return separatorPlex.getFcStart();
     }
 
-    public CharacterRun getMarkStartCharacterRun( Range parent )
-    {
-        return new Range( getMarkStartOffset(), getMarkStartOffset() + 1,
-                parent ).getCharacterRun( 0 );
+    public CharacterRun getMarkStartCharacterRun(Range parent) {
+        return new Range(getMarkStartOffset(), getMarkStartOffset() + 1,
+                parent).getCharacterRun(0);
     }
 
     /**
      * @return character position of start field mark
      */
-    public int getMarkStartOffset()
-    {
+    public int getMarkStartOffset() {
         return startPlex.getFcStart();
     }
 
-    public int getType()
-    {
+    public int getType() {
         return startPlex.getFld().getFieldType();
     }
 
-    public boolean hasSeparator()
-    {
+    public boolean hasSeparator() {
         return separatorPlex != null;
     }
 
-    public boolean isHasSep()
-    {
+    public boolean isHasSep() {
         return endPlex.getFld().isFHasSep();
     }
 
-    public boolean isLocked()
-    {
+    public boolean isLocked() {
         return endPlex.getFld().isFLocked();
     }
 
-    public boolean isNested()
-    {
+    public boolean isNested() {
         return endPlex.getFld().isFNested();
     }
 
-    public boolean isPrivateResult()
-    {
+    public boolean isPrivateResult() {
         return endPlex.getFld().isFPrivateResult();
     }
 
-    public boolean isResultDirty()
-    {
+    public boolean isResultDirty() {
         return endPlex.getFld().isFResultDirty();
     }
 
-    public boolean isResultEdited()
-    {
+    public boolean isResultEdited() {
         return endPlex.getFld().isFResultEdited();
     }
 
-    public boolean isZombieEmbed()
-    {
+    public boolean isZombieEmbed() {
         return endPlex.getFld().isFZombieEmbed();
     }
 
-    public Range secondSubrange( Range parent )
-    {
-        if ( !hasSeparator()
-                || getMarkSeparatorOffset() + 1 == getMarkEndOffset() )
+    public Range secondSubrange(Range parent) {
+        if (!hasSeparator()
+                || getMarkSeparatorOffset() + 1 == getMarkEndOffset())
             return null;
 
-        return new Range( getMarkSeparatorOffset() + 1, getMarkEndOffset(),
-                parent )
-        {
+        return new Range(getMarkSeparatorOffset() + 1, getMarkEndOffset(),
+                parent) {
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return "FieldSubrange2 (" + super.toString() + ")";
             }
         };
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Field [" + getFieldStartOffset() + "; " + getFieldEndOffset()
-                + "] (type: 0x" + Integer.toHexString( getType() ) + " = "
+                + "] (type: 0x" + Integer.toHexString(getType()) + " = "
                 + getType() + " )";
     }
 }

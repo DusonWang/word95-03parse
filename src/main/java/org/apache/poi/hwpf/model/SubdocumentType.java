@@ -20,7 +20,7 @@ import org.apache.poi.util.Internal;
 
 /**
  * Document text parts that can have text pieces (CPs)
- * 
+ *
  * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
  */
 @Internal
@@ -46,12 +46,11 @@ public enum SubdocumentType {
      * Array of {@link SubdocumentType}s ordered by document position and FIB
      * field order
      */
-    public static final SubdocumentType[] ORDERED = new SubdocumentType[] {
+    public static final SubdocumentType[] ORDERED = new SubdocumentType[]{
             MAIN, FOOTNOTE, HEADER, MACRO, ANNOTATION, ENDNOTE, TEXTBOX,
-            HEADER_TEXTBOX };
+            HEADER_TEXTBOX};
 
-    private SubdocumentType()
-    {
+    private SubdocumentType() {
     }
 
 }

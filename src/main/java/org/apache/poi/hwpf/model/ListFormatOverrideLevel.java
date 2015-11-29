@@ -26,95 +26,78 @@ import org.apache.poi.util.Internal;
  * Binary File Format and [MS-DOC] - v20110608 Word (.doc) Binary File Format
  */
 @Internal
-public final class ListFormatOverrideLevel
-{
+public final class ListFormatOverrideLevel {
     private LFOLVLBase _base;
     private ListLevel _lvl;
 
-    public ListFormatOverrideLevel( byte[] buf, int offset )
-    {
-        _base = new LFOLVLBase( buf, offset );
+    public ListFormatOverrideLevel(byte[] buf, int offset) {
+        _base = new LFOLVLBase(buf, offset);
         offset += LFOLVLBase.getSize();
 
-        if ( _base.isFFormatting() )
-        {
-            _lvl = new ListLevel( buf, offset );
+        if (_base.isFFormatting()) {
+            _lvl = new ListLevel(buf, offset);
         }
     }
 
-    public boolean equals( Object obj )
-    {
-        if ( obj == null )
-        {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
         ListFormatOverrideLevel lfolvl = (ListFormatOverrideLevel) obj;
         boolean lvlEquality = false;
-        if ( _lvl != null )
-        {
-            lvlEquality = _lvl.equals( lfolvl._lvl );
-        }
-        else
-        {
+        if (_lvl != null) {
+            lvlEquality = _lvl.equals(lfolvl._lvl);
+        } else {
             lvlEquality = lfolvl._lvl == null;
         }
 
-        return lvlEquality && lfolvl._base.equals( _base );
+        return lvlEquality && lfolvl._base.equals(_base);
     }
 
-    public int getIStartAt()
-    {
+    public int getIStartAt() {
         return _base.getIStartAt();
     }
 
-    public ListLevel getLevel()
-    {
+    public ListLevel getLevel() {
         return _lvl;
     }
 
-    public int getLevelNum()
-    {
+    public int getLevelNum() {
         return _base.getILvl();
     }
 
-    public int getSizeInBytes()
-    {
+    public int getSizeInBytes() {
         return _lvl == null ? LFOLVLBase.getSize() : LFOLVLBase.getSize()
                 + _lvl.getSizeInBytes();
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + _base.hashCode();
-        result = prime * result + ( _lvl != null ? _lvl.hashCode() : 0 );
+        result = prime * result + (_lvl != null ? _lvl.hashCode() : 0);
         return result;
     }
 
-    public boolean isFormatting()
-    {
+    public boolean isFormatting() {
         return _base.isFFormatting();
     }
 
-    public boolean isStartAt()
-    {
+    public boolean isStartAt() {
         return _base.isFStartAt();
     }
 
-    public byte[] toByteArray()
-    {
+    public byte[] toByteArray() {
         int offset = 0;
 
         byte[] buf = new byte[getSizeInBytes()];
-        _base.serialize( buf, offset );
+        _base.serialize(buf, offset);
         offset += LFOLVLBase.getSize();
 
-        if ( _lvl != null )
-        {
+        if (_lvl != null) {
             byte[] levelBuf = _lvl.toByteArray();
-            System.arraycopy( levelBuf, 0, buf, offset, levelBuf.length );
+            System.arraycopy(levelBuf, 0, buf, offset, levelBuf.length);
         }
 
         return buf;
