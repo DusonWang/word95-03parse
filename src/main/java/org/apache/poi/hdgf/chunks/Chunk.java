@@ -208,15 +208,13 @@ public final class Chunk {
                     case 6:
                     case 7:
                         int val = contents[offset] & (1 << type);
-                        command.value = Boolean.valueOf(val > 0);
+                        command.value = val > 0;
                         break;
                     case 8:
-                        command.value = Byte.valueOf(contents[offset]);
+                        command.value = contents[offset];
                         break;
                     case 9:
-                        command.value = new Double(
-                                LittleEndian.getDouble(contents, offset)
-                        );
+                        command.value = LittleEndian.getDouble(contents, offset);
                         break;
                     case 12:
                         // A Little Endian String
@@ -245,14 +243,10 @@ public final class Chunk {
                         command.value = new String(contents, startsAt, strLen, header.getChunkCharset().name());
                         break;
                     case 25:
-                        command.value = Short.valueOf(
-                                LittleEndian.getShort(contents, offset)
-                        );
+                        command.value = LittleEndian.getShort(contents, offset);
                         break;
                     case 26:
-                        command.value = Integer.valueOf(
-                                LittleEndian.getInt(contents, offset)
-                        );
+                        command.value = LittleEndian.getInt(contents, offset);
                         break;
 
                     // Types 11 and 21 hold the offset to the blocks
@@ -337,7 +331,7 @@ public final class Chunk {
 
         private void setOffset(int offset) {
             this.offset = offset;
-            value = Integer.valueOf(offset);
+            value = offset;
         }
     }
 }

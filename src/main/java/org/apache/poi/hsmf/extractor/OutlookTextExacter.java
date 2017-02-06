@@ -35,38 +35,38 @@ import java.util.TimeZone;
  * A text extractor for HSMF (Outlook) .msg files.
  * Outputs in a format somewhat like a plain text email.
  */
-public class OutlookTextExtactor extends POIOLE2TextExtractor {
-    public OutlookTextExtactor(MAPIMessage msg) {
+public class OutlookTextExacter extends POIOLE2TextExtractor {
+    public OutlookTextExacter(MAPIMessage msg) {
         super(msg);
     }
 
     /**
-     * Use {@link #OutlookTextExtactor(DirectoryNode)} instead
+     * Use {@link #OutlookTextExacter(DirectoryNode)} instead
      */
     @Deprecated
-    public OutlookTextExtactor(DirectoryNode poifsDir, POIFSFileSystem fs) throws IOException {
+    public OutlookTextExacter(DirectoryNode poifsDir, POIFSFileSystem fs) throws IOException {
         this(new MAPIMessage(poifsDir, fs));
     }
 
-    public OutlookTextExtactor(DirectoryNode poifsDir) throws IOException {
+    public OutlookTextExacter(DirectoryNode poifsDir) throws IOException {
         this(new MAPIMessage(poifsDir));
     }
 
-    public OutlookTextExtactor(POIFSFileSystem fs) throws IOException {
+    public OutlookTextExacter(POIFSFileSystem fs) throws IOException {
         this(new MAPIMessage(fs));
     }
 
-    public OutlookTextExtactor(NPOIFSFileSystem fs) throws IOException {
+    public OutlookTextExacter(NPOIFSFileSystem fs) throws IOException {
         this(new MAPIMessage(fs));
     }
 
-    public OutlookTextExtactor(InputStream inp) throws IOException {
+    public OutlookTextExacter(InputStream inp) throws IOException {
         this(new MAPIMessage(inp));
     }
 
     public static void main(String[] args) throws Exception {
         for (String filename : args) {
-            OutlookTextExtactor extractor = new OutlookTextExtactor(
+            OutlookTextExacter extractor = new OutlookTextExacter(
                     new NPOIFSFileSystem(new File(filename))
             );
             System.out.println(extractor.getText());
@@ -102,7 +102,7 @@ public class OutlookTextExtactor extends POIOLE2TextExtractor {
         }
 
         try {
-            s.append("From: " + msg.getDisplayFrom() + "\n");
+            s.append("From: ").append(msg.getDisplayFrom()).append("\n");
         } catch (ChunkNotFoundException e) {
         }
 
@@ -128,7 +128,7 @@ public class OutlookTextExtactor extends POIOLE2TextExtractor {
             // First try via the proper chunk
             SimpleDateFormat f = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z");
             f.setTimeZone(TimeZone.getTimeZone("UTC"));
-            s.append("Date: " + f.format(msg.getMessageDate().getTime()) + "\n");
+            s.append("Date: ").append(f.format(msg.getMessageDate().getTime())).append("\n");
         } catch (ChunkNotFoundException e) {
             try {
                 // Failing that try via the raw headers
@@ -149,7 +149,7 @@ public class OutlookTextExtactor extends POIOLE2TextExtractor {
         }
 
         try {
-            s.append("Subject: " + msg.getSubject() + "\n");
+            s.append("Subject: ").append(msg.getSubject()).append("\n");
         } catch (ChunkNotFoundException e) {
         }
 

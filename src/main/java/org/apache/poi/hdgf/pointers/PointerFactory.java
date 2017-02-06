@@ -38,7 +38,7 @@ public final class PointerFactory {
         Pointer p;
         if (version >= 6) {
             p = new PointerV6();
-            p.type = LittleEndian.getInt(data, offset + 0);
+            p.type = LittleEndian.getInt(data, offset);
             p.address = (int) LittleEndian.getUInt(data, offset + 4);
             p.offset = (int) LittleEndian.getUInt(data, offset + 8);
             p.length = (int) LittleEndian.getUInt(data, offset + 12);

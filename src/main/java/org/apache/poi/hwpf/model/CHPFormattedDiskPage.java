@@ -45,7 +45,7 @@ import java.util.List;
 public final class CHPFormattedDiskPage extends FormattedDiskPage {
     private static final int FC_SIZE = 4;
 
-    private ArrayList<CHPX> _chpxList = new ArrayList<CHPX>();
+    private ArrayList<CHPX> _chpxList = new ArrayList<>();
     private ArrayList<CHPX> _overFlow;
 
 
@@ -199,8 +199,10 @@ public final class CHPFormattedDiskPage extends FormattedDiskPage {
             fcOffset += FC_SIZE;
         }
         // put the last chpx's end in
-        LittleEndian.putInt(buf, fcOffset,
-                translator.getByteIndex(chpx.getEnd()));
+        if (chpx != null) {
+            LittleEndian.putInt(buf, fcOffset,
+                    translator.getByteIndex(chpx.getEnd()));
+        }
         return buf;
     }
 

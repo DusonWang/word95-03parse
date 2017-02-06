@@ -105,8 +105,7 @@ public class FFData {
 
         if (_base.getIType() == FFDataBase.ITYPE_CHCK
                 || _base.getIType() == FFDataBase.ITYPE_DROP) {
-            this._wDef = Integer
-                    .valueOf(LittleEndian.getUShort(std, offset));
+            this._wDef = LittleEndian.getUShort(std, offset);
             offset += LittleEndian.SHORT_SIZE;
         } else {
             this._wDef = null;
@@ -137,7 +136,7 @@ public class FFData {
      * specify the default item selected (zero-based index).
      */
     public int getDefaultDropDownItemIndex() {
-        return _wDef.intValue();
+        return _wDef;
     }
 
     public String[] getDropList() {

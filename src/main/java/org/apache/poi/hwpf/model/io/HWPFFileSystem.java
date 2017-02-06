@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Internal
 public final class HWPFFileSystem {
-    Map<String, HWPFOutputStream> _streams = new HashMap<String, HWPFOutputStream>();
+    Map<String, HWPFOutputStream> _streams = new HashMap<>();
 
     public HWPFFileSystem() {
         _streams.put("WordDocument", new HWPFOutputStream());

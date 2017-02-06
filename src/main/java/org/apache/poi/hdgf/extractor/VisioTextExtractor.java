@@ -89,7 +89,7 @@ public final class VisioTextExtractor extends POIOLE2TextExtractor {
      * contents.
      */
     public String[] getAllText() {
-        ArrayList<String> text = new ArrayList<String>();
+        ArrayList<String> text = new ArrayList<>();
         for (int i = 0; i < hdgf.getTopLevelStreams().length; i++) {
             findText(hdgf.getTopLevelStreams()[i], text);
         }
@@ -135,12 +135,12 @@ public final class VisioTextExtractor extends POIOLE2TextExtractor {
      * by a newline
      */
     public String getText() {
-        StringBuffer text = new StringBuffer();
+        StringBuilder text = new StringBuilder();
         String[] allText = getAllText();
-        for (int i = 0; i < allText.length; i++) {
-            text.append(allText[i]);
-            if (!allText[i].endsWith("\r") &&
-                    !allText[i].endsWith("\n")) {
+        for (String anAllText : allText) {
+            text.append(anAllText);
+            if (!anAllText.endsWith("\r") &&
+                    !anAllText.endsWith("\n")) {
                 text.append("\n");
             }
         }

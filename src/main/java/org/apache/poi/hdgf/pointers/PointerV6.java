@@ -26,9 +26,7 @@ public final class PointerV6 extends Pointer {
     }
 
     public boolean destinationHasPointers() {
-        if (type == 20) return true;
-        if (format == 0x1d || format == 0x1e) return true;
-        return (0x50 <= format && format < 0x60);
+        return type == 20 || format == 0x1d || format == 0x1e || (0x50 <= format && format < 0x60);
     }
 
     public boolean destinationHasChunks() {

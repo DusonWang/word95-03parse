@@ -41,7 +41,7 @@ public final class POIFSChunkParser {
     public static ChunkGroup[] parse(DirectoryNode node) throws IOException {
         Chunks mainChunks = new Chunks();
 
-        ArrayList<ChunkGroup> groups = new ArrayList<ChunkGroup>();
+        ArrayList<ChunkGroup> groups = new ArrayList<>();
         groups.add(mainChunks);
 
         // Find our top level children
@@ -66,8 +66,6 @@ public final class POIFSChunkParser {
                 if (group != null) {
                     processChunks(dir, group);
                     groups.add(group);
-                } else {
-                    // Unknown directory, skip silently
                 }
             }
         }
@@ -77,9 +75,7 @@ public final class POIFSChunkParser {
 
         // All chunks are now processed, have the ChunkGroup
         // match up variable-length properties and their chunks
-        for (ChunkGroup group : groups) {
-            group.chunksComplete();
-        }
+        groups.forEach(ChunkGroup::chunksComplete);
 
         // Finish
         return groups.toArray(new ChunkGroup[groups.size()]);
@@ -172,8 +168,6 @@ public final class POIFSChunkParser {
                     } else if (type == Types.ASCII_STRING ||
                             type == Types.UNICODE_STRING) {
                         chunk = new StringChunk(namePrefix, chunkId, type);
-                    } else {
-                        // Type of an unsupported type! Skipping...
                     }
                 }
             } catch (NumberFormatException e) {

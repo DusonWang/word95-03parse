@@ -54,7 +54,7 @@ import static org.apache.poi.hwpf.converter.AbstractWordUtils.TWIPS_PER_INCH;
 public class WordToHtmlConverter extends AbstractWordConverter {
     private static final POILogger logger = POILogFactory
             .getLogger(WordToHtmlConverter.class);
-    private final Stack<BlockProperies> blocksProperies = new Stack<BlockProperies>();
+    private final Stack<BlockProperties> blocksProperties = new Stack<>();
     private final HtmlDocumentFacade htmlDocumentFacade;
     private Element notes = null;
 
@@ -160,16 +160,16 @@ public class WordToHtmlConverter extends AbstractWordConverter {
         pElement.appendChild(span);
 
         StringBuilder style = new StringBuilder();
-        BlockProperies blockProperies = this.blocksProperies.peek();
+        BlockProperties blockProperties = this.blocksProperties.peek();
         Triplet triplet = getCharacterRunTriplet(characterRun);
 
         if (WordToHtmlUtils.isNotEmpty(triplet.fontName)
                 && !WordToHtmlUtils.equals(triplet.fontName,
-                blockProperies.pFontName)) {
-            style.append("font-family:" + triplet.fontName + ";");
+                blockProperties.pFontName)) {
+            style.append("font-family:").append(triplet.fontName).append(";");
         }
-        if (characterRun.getFontSize() / 2 != blockProperies.pFontSize) {
-            style.append("font-size:" + characterRun.getFontSize() / 2 + "pt;");
+        if (characterRun.getFontSize() / 2 != blockProperties.pFontSize) {
+            style.append("font-size:").append(characterRun.getFontSize() / 2).append("pt;");
         }
         if (triplet.bold) {
             style.append("font-weight:bold;");
@@ -398,11 +398,11 @@ public class WordToHtmlConverter extends AbstractWordConverter {
         span.setAttribute("class", type + "notetext");
         note.appendChild(span);
 
-        this.blocksProperies.add(new BlockProperies("", -1));
+        this.blocksProperties.add(new BlockProperties("", -1));
         try {
             processCharacters(doc, Integer.MIN_VALUE, noteTextRange, span);
         } finally {
-            this.blocksProperies.pop();
+            this.blocksProperties.pop();
         }
     }
 
@@ -451,7 +451,7 @@ public class WordToHtmlConverter extends AbstractWordConverter {
                 pFontSize = -1;
                 pFontName = WordToHtmlUtils.EMPTY;
             }
-            blocksProperies.push(new BlockProperies(pFontName, pFontSize));
+            blocksProperties.push(new BlockProperties(pFontName, pFontSize));
         }
         try {
             if (WordToHtmlUtils.isNotEmpty(bulletText)) {
@@ -494,14 +494,13 @@ public class WordToHtmlConverter extends AbstractWordConverter {
             processCharacters(hwpfDocument, currentTableLevel, paragraph,
                     pElement);
         } finally {
-            blocksProperies.pop();
+            blocksProperties.pop();
         }
 
         if (style.length() > 0)
             htmlDocumentFacade.addStyleClass(pElement, "p", style.toString());
 
         WordToHtmlUtils.compactSpans(pElement);
-        return;
     }
 
     protected void processSection(HWPFDocumentCore wordDocument,
@@ -627,8 +626,8 @@ public class WordToHtmlConverter extends AbstractWordConverter {
             flow.appendChild(tableElement);
         } else {
             logger.log(POILogger.WARN, "Table without body starting at [",
-                    Integer.valueOf(table.getStartOffset()), "; ",
-                    Integer.valueOf(table.getEndOffset()), ")");
+                    table.getStartOffset(), "; ",
+                    table.getEndOffset(), ")");
         }
     }
 
@@ -636,11 +635,11 @@ public class WordToHtmlConverter extends AbstractWordConverter {
      * Holds properties values, applied to current <tt>p</tt> element. Those
      * properties shall not be doubled in children <tt>span</tt> elements.
      */
-    private static class BlockProperies {
+    private static class BlockProperties {
         final String pFontName;
         final int pFontSize;
 
-        public BlockProperies(String pFontName, int pFontSize) {
+        public BlockProperties(String pFontName, int pFontSize) {
             this.pFontName = pFontName;
             this.pFontSize = pFontSize;
         }

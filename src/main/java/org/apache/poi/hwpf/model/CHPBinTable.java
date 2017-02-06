@@ -174,7 +174,7 @@ public class CHPBinTable {
             start = System.currentTimeMillis();
         }
 
-        List<CHPX> oldChpxSortedByStartPos = new ArrayList<CHPX>(_textRuns);
+        List<CHPX> oldChpxSortedByStartPos = new ArrayList<>(_textRuns);
         Collections.sort(oldChpxSortedByStartPos,
                 PropertyNode.StartComparator.instance);
 
@@ -182,7 +182,7 @@ public class CHPBinTable {
                 System.currentTimeMillis() - start, " ms");
         start = System.currentTimeMillis();
 
-        final Map<CHPX, Integer> chpxToFileOrder = new IdentityHashMap<CHPX, Integer>();
+        final Map<CHPX, Integer> chpxToFileOrder = new IdentityHashMap<>();
         {
             int counter = 0;
             for (CHPX chpx : _textRuns) {
@@ -279,7 +279,7 @@ public class CHPBinTable {
             newChpxs.add(newChpx);
 
         }
-        this._textRuns = new ArrayList<CHPX>(newChpxs);
+        this._textRuns = new ArrayList<>(newChpxs);
 
         logger.log(POILogger.DEBUG, "CHPX rebuilded in ",
                 System.currentTimeMillis() - start, " ms (",

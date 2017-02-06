@@ -49,10 +49,9 @@ public class BookmarksTables {
             GenericPropertyNode endNode = descriptorsLim.getProperty(i);
             if (startNode.getStart() == endNode.getStart()) {
                 logger.log(POILogger.DEBUG, "Removing bookmark #",
-                        Integer.valueOf(i), "...");
+                        i, "...");
                 remove(i);
                 i--;
-                continue;
             }
         }
     }

@@ -55,7 +55,7 @@ public abstract class PropertiesChunk extends Chunk {
      * Holds properties, indexed by type. Properties can be multi-valued
      */
     private Map<MAPIProperty, List<PropertyValue>> properties =
-            new HashMap<MAPIProperty, List<PropertyValue>>();
+            new HashMap<>();
 
     /**
      * The ChunkGroup that these properties apply to. Used when
@@ -220,7 +220,7 @@ public abstract class PropertiesChunk extends Chunk {
                 }
 
                 if (properties.get(prop) == null) {
-                    properties.put(prop, new ArrayList<PropertyValue>());
+                    properties.put(prop, new ArrayList<>());
                 }
                 properties.get(prop).add(propVal);
             } catch (BufferUnderrunException e) {

@@ -37,12 +37,6 @@ import java.util.StringTokenizer;
  */
 public final class ChunkFactory {
     /**
-     * What the name is of the chunk table definitions file?
-     * This file comes from the scratchpad resources directory.
-     */
-    private static String chunkTableName =
-            "/org/apache/poi/hdgf/chunks_parse_cmds.tbl";
-    /**
      * For logging problems we spot with the file
      */
     private static POILogger logger = POILogFactory.getLogger(ChunkFactory.class);
@@ -68,6 +62,11 @@ public final class ChunkFactory {
      */
     private void processChunkParseCommands() throws IOException {
         String line;
+        /*
+      What the name is of the chunk table definitions file?
+      This file comes from the scratchpad resources directory.
+     */
+        String chunkTableName = "/org/apache/poi/hdgf/chunks_parse_cmds.tbl";
         InputStream cpd = ChunkFactory.class.getResourceAsStream(chunkTableName);
         if (cpd == null) {
             throw new IllegalStateException("Unable to find HDGF chunk definition on the classpath - " + chunkTableName);
@@ -102,7 +101,7 @@ public final class ChunkFactory {
                     defsL.toArray(new CommandDefinition[defsL.size()]);
 
             // Add to the hashtable
-            chunkCommandDefinitions.put(Integer.valueOf(chunkType), defs);
+            chunkCommandDefinitions.put(chunkType, defs);
         }
         inp.close();
         cpd.close();

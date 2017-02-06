@@ -187,7 +187,6 @@ public final class WordExtractor extends POIOLE2TextExtractor {
             return;
         }
         out.append(text);
-        return;
     }
 
     /**

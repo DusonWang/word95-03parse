@@ -267,7 +267,7 @@ public final class PowerPointExtractor extends POIOLE2TextExtractor {
                 if (getCommentText) {
                     Comment[] comments = slide.getComments();
                     for (Comment comment : comments) {
-                        ret.append(comment.getAuthor() + " - " + comment.getText() + "\n");
+                        ret.append(comment.getAuthor()).append(" - ").append(comment.getText()).append("\n");
                     }
                 }
             }

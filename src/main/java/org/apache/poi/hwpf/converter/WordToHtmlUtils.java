@@ -96,7 +96,7 @@ public class WordToHtmlUtils extends AbstractWordUtils {
         if (isEmpty(fontFamily))
             return;
 
-        style.append("font-family:" + fontFamily + ";");
+        style.append("font-family:").append(fontFamily).append(";");
     }
 
     public static void addFontSize(final int fontSize, StringBuilder style) {

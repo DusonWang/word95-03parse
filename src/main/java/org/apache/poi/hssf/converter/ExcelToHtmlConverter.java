@@ -135,14 +135,12 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
             final HSSFColor foregroundColor = cellStyle
                     .getFillForegroundColorColor();
             if (foregroundColor != null)
-                style.append("background-color:"
-                        + ExcelToHtmlUtils.getColor(foregroundColor) + ";");
+                style.append("background-color:").append(ExcelToHtmlUtils.getColor(foregroundColor)).append(";");
         } else {
             final HSSFColor backgroundColor = cellStyle
                     .getFillBackgroundColorColor();
             if (backgroundColor != null)
-                style.append("background-color:"
-                        + ExcelToHtmlUtils.getColor(backgroundColor) + ";");
+                style.append("background-color:").append(ExcelToHtmlUtils.getColor(backgroundColor)).append(";");
         }
 
         buildStyle_border(workbook, style, "top", cellStyle.getBorderTop(),
@@ -244,7 +242,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
 
     protected String getStyleClassName(HSSFWorkbook workbook,
                                        HSSFCellStyle cellStyle) {
-        final Short cellStyleKey = Short.valueOf(cellStyle.getIndex());
+        final Short cellStyleKey = cellStyle.getIndex();
 
         String knownClass = excelStyleToClass.get(cellStyleKey);
         if (knownClass != null)
@@ -294,13 +292,12 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
                         }
                         break;
                     case HSSFCell.CELL_TYPE_NUMERIC:
-                        HSSFCellStyle style = cellStyle;
-                        if (style == null) {
+                        if (cellStyle == null) {
                             value = String.valueOf(cell.getNumericCellValue());
                         } else {
                             value = (_formatter.formatRawCellContents(
-                                    cell.getNumericCellValue(), style.getDataFormat(),
-                                    style.getDataFormatString()));
+                                    cell.getNumericCellValue(), cellStyle.getDataFormat(),
+                                    cellStyle.getDataFormatString()));
                         }
                         break;
                     case HSSFCell.CELL_TYPE_BOOLEAN:
@@ -482,7 +479,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         if (maxColIx <= 0)
             return 0;
 
-        final List<Element> emptyCells = new ArrayList<Element>(maxColIx);
+        final List<Element> emptyCells = new ArrayList<>(maxColIx);
 
         if (isOutputRowNumbers()) {
             Element tableRowNumberCellElement = htmlDocumentFacade
@@ -545,13 +542,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
             }
 
             boolean emptyCell;
-            if (cell != null) {
-                emptyCell = processCell(cell, tableCellElement,
-                        getColumnWidth(sheet, colIx), divWidthPx,
-                        row.getHeight() / 20f);
-            } else {
-                emptyCell = true;
-            }
+            emptyCell = cell == null || processCell(cell, tableCellElement, getColumnWidth(sheet, colIx), divWidthPx, row.getHeight() / 20f);
 
             if (emptyCell) {
                 emptyCells.add(tableCellElement);
@@ -592,7 +583,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         final CellRangeAddress[][] mergedRanges = ExcelToHtmlUtils
                 .buildMergedRangesMap(sheet);
 
-        final List<Element> emptyRowElements = new ArrayList<Element>(
+        final List<Element> emptyRowElements = new ArrayList<>(
                 physicalNumberOfRows);
         int maxSheetColumns = 1;
         for (int r = sheet.getFirstRowNum(); r <= sheet.getLastRowNum(); r++) {

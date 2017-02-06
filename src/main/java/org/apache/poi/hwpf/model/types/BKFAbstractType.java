@@ -50,33 +50,31 @@ public abstract class BKFAbstractType {
      * Size of record
      */
     public static int getSize() {
-        return 0 + 2 + 2;
+        return 2 + 2;
     }
 
     protected void fillFields(byte[] data, int offset) {
-        field_1_ibkl = LittleEndian.getShort(data, 0x0 + offset);
+        field_1_ibkl = LittleEndian.getShort(data, offset);
         field_2_bkf_flags = LittleEndian.getShort(data, 0x2 + offset);
     }
 
     public void serialize(byte[] data, int offset) {
-        LittleEndian.putShort(data, 0x0 + offset, field_1_ibkl);
+        LittleEndian.putShort(data, offset, field_1_ibkl);
         LittleEndian.putShort(data, 0x2 + offset, field_2_bkf_flags);
     }
 
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("[BKF]\n");
-        builder.append("    .ibkl                 = ");
-        builder.append(" (").append(getIbkl()).append(" )\n");
-        builder.append("    .bkf_flags            = ");
-        builder.append(" (").append(getBkf_flags()).append(" )\n");
-        builder.append("         .itcFirst                 = ").append(getItcFirst()).append('\n');
-        builder.append("         .fPub                     = ").append(isFPub()).append('\n');
-        builder.append("         .itcLim                   = ").append(getItcLim()).append('\n');
-        builder.append("         .fCol                     = ").append(isFCol()).append('\n');
 
-        builder.append("[/BKF]\n");
-        return builder.toString();
+        return "[BKF]\n" +
+                "    .ibkl                 = " +
+                " (" + getIbkl() + " )\n" +
+                "    .bkf_flags            = " +
+                " (" + getBkf_flags() + " )\n" +
+                "         .itcFirst                 = " + getItcFirst() + '\n' +
+                "         .fPub                     = " + isFPub() + '\n' +
+                "         .itcLim                   = " + getItcLim() + '\n' +
+                "         .fCol                     = " + isFCol() + '\n' +
+                "[/BKF]\n";
     }
 
     /**

@@ -72,25 +72,33 @@ public final class HSSFChart {
                 lastChart = new HSSFChart(sheet, (ChartRecord) r);
                 charts.add(lastChart);
             } else if (r instanceof LegendRecord) {
-                lastChart.legendRecord = (LegendRecord) r;
+                if (lastChart != null) {
+                    lastChart.legendRecord = (LegendRecord) r;
+                }
             } else if (r instanceof SeriesRecord) {
                 HSSFSeries series = lastChart.new HSSFSeries((SeriesRecord) r);
-                lastChart.series.add(series);
+                if (lastChart != null) {
+                    lastChart.series.add(series);
+                }
                 lastSeries = series;
             } else if (r instanceof ChartTitleFormatRecord) {
-                lastChart.chartTitleFormat =
-                        (ChartTitleFormatRecord) r;
+                if (lastChart != null) {
+                    lastChart.chartTitleFormat =
+                            (ChartTitleFormatRecord) r;
+                }
             } else if (r instanceof SeriesTextRecord) {
                 // Applies to a series, unless we've seen
                 //  a legend already
                 SeriesTextRecord str = (SeriesTextRecord) r;
-                if (lastChart.legendRecord == null &&
-                        lastChart.series.size() > 0) {
-                    HSSFSeries series = (HSSFSeries)
-                            lastChart.series.get(lastChart.series.size() - 1);
-                    series.seriesTitleText = str;
-                } else {
-                    lastChart.chartTitleText = str;
+                if (lastChart != null) {
+                    if (lastChart.legendRecord == null &&
+                            lastChart.series.size() > 0) {
+                        HSSFSeries series = (HSSFSeries)
+                                lastChart.series.get(lastChart.series.size() - 1);
+                        series.seriesTitleText = str;
+                    } else {
+                        lastChart.chartTitleText = str;
+                    }
                 }
             } else if (r instanceof LinkedDataRecord) {
                 LinkedDataRecord linkedDataRecord = (LinkedDataRecord) r;
@@ -98,7 +106,9 @@ public final class HSSFChart {
                     lastSeries.insertData(linkedDataRecord);
                 }
             } else if (r instanceof ValueRangeRecord) {
-                lastChart.valueRanges.add((ValueRangeRecord) r);
+                if (lastChart != null) {
+                    lastChart.valueRanges.add((ValueRangeRecord) r);
+                }
             } else if (r instanceof Record) {
                 if (lastChart != null) {
                     Record record = (Record) r;
@@ -127,7 +137,7 @@ public final class HSSFChart {
      */
     public void createBarChart(HSSFWorkbook workbook, HSSFSheet sheet) {
 
-        List<Record> records = new ArrayList<Record>();
+        List<Record> records = new ArrayList<>();
         records.add(createMSDrawingObjectRecord());
         records.add(createOBJRecord());
         records.add(createBOFRecord());
@@ -535,8 +545,7 @@ public final class HSSFChart {
     }
 
     private PlotAreaRecord createPlotAreaRecord() {
-        PlotAreaRecord r = new PlotAreaRecord();
-        return r;
+        return new PlotAreaRecord();
     }
 
     private AxisLineFormatRecord createAxisLineFormatRecord(short format) {

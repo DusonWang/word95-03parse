@@ -133,8 +133,8 @@ public class MAPIMessage extends POIDocument {
         ChunkGroup[] chunkGroups = POIFSChunkParser.parse(poifsDir);
 
         // Grab interesting bits
-        ArrayList<AttachmentChunks> attachments = new ArrayList<AttachmentChunks>();
-        ArrayList<RecipientChunks> recipients = new ArrayList<RecipientChunks>();
+        ArrayList<AttachmentChunks> attachments = new ArrayList<>();
+        ArrayList<RecipientChunks> recipients = new ArrayList<>();
         for (ChunkGroup group : chunkGroups) {
             // Should only ever be one of these
             if (group instanceof Chunks) {
@@ -441,7 +441,6 @@ public class MAPIMessage extends POIDocument {
                     // Found it! Tell all the string chunks
                     String charset = m.group(1);
                     set7BitEncoding(charset);
-                    return;
                 }
             }
         } catch (ChunkNotFoundException e) {
@@ -639,7 +638,7 @@ public class MAPIMessage extends POIDocument {
 
 
     private String toSemicolonList(String[] l) {
-        StringBuffer list = new StringBuffer();
+        StringBuilder list = new StringBuilder();
         boolean first = true;
 
         for (String s : l) {

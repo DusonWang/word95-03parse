@@ -47,14 +47,7 @@ public class ChunkHeaderV6 extends ChunkHeader {
      * Does the chunk have a trailer?
      */
     public boolean hasTrailer() {
-        if (unknown1 != 0 || type == 0x71 || type == 0x70) {
-            return true;
-        }
-        if (type == 0x6b || type == 0x6a || type == 0x69 || type == 0x66
-                || type == 0x65 || type == 0x2c) {
-            return true;
-        }
-        return false;
+        return unknown1 != 0 || type == 0x71 || type == 0x70 || type == 0x6b || type == 0x6a || type == 0x69 || type == 0x66 || type == 0x65 || type == 0x2c;
     }
 
     /**

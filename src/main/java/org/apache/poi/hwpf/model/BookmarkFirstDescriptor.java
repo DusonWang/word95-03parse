@@ -47,11 +47,7 @@ public final class BookmarkFirstDescriptor extends BKFAbstractType implements
         if (getClass() != obj.getClass())
             return false;
         BookmarkFirstDescriptor other = (BookmarkFirstDescriptor) obj;
-        if (field_1_ibkl != other.field_1_ibkl)
-            return false;
-        if (field_2_bkf_flags != other.field_2_bkf_flags)
-            return false;
-        return true;
+        return field_1_ibkl == other.field_1_ibkl && field_2_bkf_flags == other.field_2_bkf_flags;
     }
 
     @Override

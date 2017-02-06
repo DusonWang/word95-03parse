@@ -82,9 +82,6 @@ public final class NumberFormatter {
                 maxPower++;
                 boundary = boundary * base + base;
 
-                if (boundary > Integer.MAX_VALUE)
-                    throw new IllegalArgumentException("Unsupported number: "
-                            + toProcess);
             }
         }
         maxPower--;

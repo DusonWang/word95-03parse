@@ -42,7 +42,7 @@ public abstract class ChunkHeader {
             } else {
                 ch = new ChunkHeaderV6();
             }
-            ch.type = (int) LittleEndian.getUInt(data, offset + 0);
+            ch.type = (int) LittleEndian.getUInt(data, offset);
             ch.id = (int) LittleEndian.getUInt(data, offset + 4);
             ch.unknown1 = (int) LittleEndian.getUInt(data, offset + 8);
             ch.length = (int) LittleEndian.getUInt(data, offset + 12);
@@ -53,7 +53,7 @@ public abstract class ChunkHeader {
         } else if (documentVersion == 5 || documentVersion == 4) {
             ChunkHeaderV4V5 ch = new ChunkHeaderV4V5();
 
-            ch.type = LittleEndian.getShort(data, offset + 0);
+            ch.type = LittleEndian.getShort(data, offset);
             ch.id = LittleEndian.getShort(data, offset + 2);
             ch.unknown2 = (short) LittleEndian.getUnsignedByte(data, offset + 4);
             ch.unknown3 = (short) LittleEndian.getUnsignedByte(data, offset + 5);

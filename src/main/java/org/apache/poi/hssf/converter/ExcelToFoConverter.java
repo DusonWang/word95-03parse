@@ -615,7 +615,7 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
         final CellRangeAddress[][] mergedRanges = ExcelToHtmlUtils
                 .buildMergedRangesMap(sheet);
 
-        final List<Element> emptyRowElements = new ArrayList<Element>(
+        final List<Element> emptyRowElements = new ArrayList<>(
                 physicalNumberOfRows);
         int maxSheetColumns = 1;
         for (int r = sheet.getFirstRowNum(); r <= sheet.getLastRowNum(); r++) {
