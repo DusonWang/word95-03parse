@@ -42,11 +42,35 @@ public final class SoundData {
     }
 
     /**
+     * Find all sound records in the supplied Document records
+     *
+     * @param document the document to find in
+     * @return the array with the sound data
+     */
+    public static SoundData[] find(Document document) {
+        ArrayList<SoundData> lst = new ArrayList<>();
+        Record[] ch = document.getChildRecords();
+        for (Record aCh : ch) {
+            if (aCh.getRecordType() == RecordTypes.SoundCollection.typeID) {
+                RecordContainer col = (RecordContainer) aCh;
+                Record[] sr = col.getChildRecords();
+                for (Record aSr : sr) {
+                    if (aSr instanceof Sound) {
+                        lst.add(new SoundData((Sound) aSr));
+                    }
+                }
+            }
+
+        }
+        return lst.toArray(new SoundData[lst.size()]);
+    }
+
+    /**
      * Name of the sound (e.g. "crash")
      *
      * @return name of the sound
      */
-    public String getSoundName(){
+    public String getSoundName() {
         return _container.getSoundName();
     }
 
@@ -55,7 +79,7 @@ public final class SoundData {
      *
      * @return type of the sound
      */
-    public String getSoundType(){
+    public String getSoundType() {
         return _container.getSoundType();
     }
 
@@ -66,29 +90,5 @@ public final class SoundData {
      */
     public byte[] getData() {
         return _container.getSoundData();
-    }
-
-    /**
-     * Find all sound records in the supplied Document records
-     *
-     * @param document the document to find in
-     * @return the array with the sound data
-     */
-    public static SoundData[] find(Document document){
-        ArrayList<SoundData> lst = new ArrayList<SoundData>();
-        Record[] ch = document.getChildRecords();
-        for (int i = 0; i < ch.length; i++) {
-            if(ch[i].getRecordType() == RecordTypes.SoundCollection.typeID){
-                RecordContainer col = (RecordContainer)ch[i];
-                Record[] sr = col.getChildRecords();
-                for (int j = 0; j < sr.length; j++) {
-                    if(sr[j] instanceof Sound){
-                        lst.add(new SoundData((Sound)sr[j]));
-                    }
-                }
-            }
-
-        }
-        return lst.toArray(new SoundData[lst.size()]);
     }
 }

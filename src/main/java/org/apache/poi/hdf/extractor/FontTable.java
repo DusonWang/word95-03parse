@@ -23,41 +23,36 @@ package org.apache.poi.hdf.extractor;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class FontTable
-{
-  String[] fontNames;
+public final class FontTable {
+    String[] fontNames;
 
-  public FontTable(byte[] fontTable)
-  {
-    int size = Utils.convertBytesToShort(fontTable, 0);
-    fontNames = new String[size];
+    public FontTable(byte[] fontTable) {
+        int size = Utils.convertBytesToShort(fontTable, 0);
+        fontNames = new String[size];
 
-    int currentIndex = 4;
-    for(int x = 0; x < size; x++)
-    {
-      byte ffnLength = fontTable[currentIndex];
+        int currentIndex = 4;
+        for (int x = 0; x < size; x++) {
+            byte ffnLength = fontTable[currentIndex];
 
-      int nameOffset = currentIndex + 40;
-      StringBuffer nameBuf = new StringBuffer();
-      char ch = Utils.getUnicodeCharacter(fontTable, nameOffset);
-      while(ch != '\0')
-      {
-        nameBuf.append(ch);
-        nameOffset += 2;
-        ch = Utils.getUnicodeCharacter(fontTable, nameOffset);
-      }
-      fontNames[x] = nameBuf.toString();
-      if(fontNames[x].startsWith("Times"))
-      {
-        fontNames[x] = "Times";
-      }
+            int nameOffset = currentIndex + 40;
+            StringBuffer nameBuf = new StringBuffer();
+            char ch = Utils.getUnicodeCharacter(fontTable, nameOffset);
+            while (ch != '\0') {
+                nameBuf.append(ch);
+                nameOffset += 2;
+                ch = Utils.getUnicodeCharacter(fontTable, nameOffset);
+            }
+            fontNames[x] = nameBuf.toString();
+            if (fontNames[x].startsWith("Times")) {
+                fontNames[x] = "Times";
+            }
 
-      currentIndex += ffnLength + 1;
+            currentIndex += ffnLength + 1;
+        }
+
     }
 
-  }
-  public String getFont(int index)
-  {
-    return fontNames[index];
-  }
+    public String getFont(int index) {
+        return fontNames[index];
+    }
 }

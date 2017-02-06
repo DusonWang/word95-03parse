@@ -23,17 +23,15 @@ package org.apache.poi.hdf.extractor.util;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class PapxNode extends PropertyNode
-{
+public final class PapxNode extends PropertyNode {
 
 
-  public PapxNode(int fcStart, int fcEnd, byte[] papx)
-  {
-    super(fcStart, fcEnd, papx);
-  }
-  public byte[] getPapx()
-  {
-    return super.getGrpprl();
-  }
+    public PapxNode(int fcStart, int fcEnd, byte[] papx) {
+        super(fcStart, fcEnd, papx);
+    }
+
+    public byte[] getPapx() {
+        return super.getGrpprl();
+    }
 
 }

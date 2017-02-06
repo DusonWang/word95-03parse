@@ -17,27 +17,25 @@
 
 package org.apache.poi.hslf.model;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.poi.ddf.*;
-import org.apache.poi.ddf.EscherSpRecord;
 import org.apache.poi.hslf.exceptions.HSLFException;
 import org.apache.poi.hslf.record.InteractiveInfo;
 import org.apache.poi.hslf.record.InteractiveInfoAtom;
 import org.apache.poi.hslf.record.Record;
 import org.apache.poi.util.LittleEndian;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *  An abstract simple (non-group) shape.
- *  This is the parent class for all primitive shapes like Line, Rectangle, etc.
+ * An abstract simple (non-group) shape.
+ * This is the parent class for all primitive shapes like Line, Rectangle, etc.
  *
- *  @author Yegor Kozlov
+ * @author Yegor Kozlov
  */
 public abstract class SimpleShape extends Shape {
 
@@ -52,23 +50,23 @@ public abstract class SimpleShape extends Shape {
     /**
      * Create a SimpleShape object and initialize it from the supplied Record container.
      *
-     * @param escherRecord    <code>EscherSpContainer</code> container which holds information about this shape
-     * @param parent    the parent of the shape
+     * @param escherRecord <code>EscherSpContainer</code> container which holds information about this shape
+     * @param parent       the parent of the shape
      */
-    protected SimpleShape(EscherContainerRecord escherRecord, Shape parent){
+    protected SimpleShape(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
     /**
      * Create a new Shape
      *
-     * @param isChild   <code>true</code> if the Line is inside a group, <code>false</code> otherwise
+     * @param isChild <code>true</code> if the Line is inside a group, <code>false</code> otherwise
      * @return the record container which holds this shape
      */
     protected EscherContainerRecord createSpContainer(boolean isChild) {
         _escherContainer = new EscherContainerRecord();
-        _escherContainer.setRecordId( EscherContainerRecord.SP_CONTAINER );
-        _escherContainer.setOptions((short)15);
+        _escherContainer.setRecordId(EscherContainerRecord.SP_CONTAINER);
+        _escherContainer.setOptions((short) 15);
 
         EscherSpRecord sp = new EscherSpRecord();
         int flags = EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_HASSHAPETYPE;
@@ -81,7 +79,7 @@ public abstract class SimpleShape extends Shape {
         _escherContainer.addChildRecord(opt);
 
         EscherRecord anchor;
-        if(isChild) anchor = new EscherChildAnchorRecord();
+        if (isChild) anchor = new EscherChildAnchorRecord();
         else {
             anchor = new EscherClientAnchorRecord();
 
@@ -99,22 +97,36 @@ public abstract class SimpleShape extends Shape {
     }
 
     /**
-     *  Returns width of the line in in points
+     * Returns width of the line in in points
      */
-    public double getLineWidth(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.LINESTYLE__LINEWIDTH);
-        double width = prop == null ? DEFAULT_LINE_WIDTH : (double)prop.getPropertyValue()/EMU_PER_POINT;
+    public double getLineWidth() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.LINESTYLE__LINEWIDTH);
+        double width = prop == null ? DEFAULT_LINE_WIDTH : (double) prop.getPropertyValue() / EMU_PER_POINT;
         return width;
     }
 
     /**
-     *  Sets the width of line in in points
-     *  @param width  the width of line in in points
+     * Sets the width of line in in points
+     *
+     * @param width the width of line in in points
      */
-    public void setLineWidth(double width){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        setEscherProperty(opt, EscherProperties.LINESTYLE__LINEWIDTH, (int)(width*EMU_PER_POINT));
+    public void setLineWidth(double width) {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        setEscherProperty(opt, EscherProperties.LINESTYLE__LINEWIDTH, (int) (width * EMU_PER_POINT));
+    }
+
+    /**
+     * @return color of the line. If color is not set returns <code>java.awt.Color.black</code>
+     */
+    public Color getLineColor() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+
+        EscherSimpleProperty p = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.LINESTYLE__NOLINEDRAWDASH);
+        if (p != null && (p.getPropertyValue() & 0x8) == 0) return null;
+
+        Color clr = getColor(EscherProperties.LINESTYLE__COLOR, EscherProperties.LINESTYLE__OPACITY, -1);
+        return clr == null ? Color.black : clr;
     }
 
     /**
@@ -122,8 +134,8 @@ public abstract class SimpleShape extends Shape {
      *
      * @param color new color of the line
      */
-    public void setLineColor(Color color){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+    public void setLineColor(Color color) {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
         if (color == null) {
             setEscherProperty(opt, EscherProperties.LINESTYLE__NOLINEDRAWDASH, 0x80000);
         } else {
@@ -134,27 +146,14 @@ public abstract class SimpleShape extends Shape {
     }
 
     /**
-     * @return color of the line. If color is not set returns <code>java.awt.Color.black</code>
-     */
-    public Color getLineColor(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-
-        EscherSimpleProperty p = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.LINESTYLE__NOLINEDRAWDASH);
-        if(p != null && (p.getPropertyValue() & 0x8) == 0) return null;
-
-        Color clr = getColor(EscherProperties.LINESTYLE__COLOR, EscherProperties.LINESTYLE__OPACITY, -1);
-        return clr == null ? Color.black : clr;
-    }
-
-    /**
      * Gets line dashing. One of the PEN_* constants defined in this class.
      *
      * @return dashing of the line.
      */
-    public int getLineDashing(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+    public int getLineDashing() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
 
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.LINESTYLE__LINEDASHING);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.LINESTYLE__LINEDASHING);
         return prop == null ? Line.PEN_SOLID : prop.getPropertyValue();
     }
 
@@ -163,20 +162,10 @@ public abstract class SimpleShape extends Shape {
      *
      * @param pen new style of the line.
      */
-    public void setLineDashing(int pen){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+    public void setLineDashing(int pen) {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
 
         setEscherProperty(opt, EscherProperties.LINESTYLE__LINEDASHING, pen == Line.PEN_SOLID ? -1 : pen);
-    }
-
-    /**
-     * Sets line style. One of the constants defined in this class.
-     *
-     * @param style new style of the line.
-     */
-    public void setLineStyle(int style){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        setEscherProperty(opt, EscherProperties.LINESTYLE__LINESTYLE, style == Line.LINE_SIMPLE ? -1 : style);
     }
 
     /**
@@ -184,16 +173,26 @@ public abstract class SimpleShape extends Shape {
      *
      * @return style of the line.
      */
-    public int getLineStyle(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.LINESTYLE__LINESTYLE);
+    public int getLineStyle() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.LINESTYLE__LINESTYLE);
         return prop == null ? Line.LINE_SIMPLE : prop.getPropertyValue();
+    }
+
+    /**
+     * Sets line style. One of the constants defined in this class.
+     *
+     * @param style new style of the line.
+     */
+    public void setLineStyle(int style) {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        setEscherProperty(opt, EscherProperties.LINESTYLE__LINESTYLE, style == Line.LINE_SIMPLE ? -1 : style);
     }
 
     /**
      * The color used to fill this shape.
      */
-    public Color getFillColor(){
+    public Color getFillColor() {
         return getFill().getForegroundColor();
     }
 
@@ -202,7 +201,7 @@ public abstract class SimpleShape extends Shape {
      *
      * @param color the background color
      */
-    public void setFillColor(Color color){
+    public void setFillColor(Color color) {
         getFill().setForegroundColor(color);
     }
 
@@ -211,9 +210,9 @@ public abstract class SimpleShape extends Shape {
      *
      * @return whether the shape is horizontally flipped
      */
-     public boolean getFlipHorizontal(){
+    public boolean getFlipHorizontal() {
         EscherSpRecord spRecord = _escherContainer.getChildById(EscherSpRecord.RECORD_ID);
-        return (spRecord.getFlags()& EscherSpRecord.FLAG_FLIPHORIZ) != 0;
+        return (spRecord.getFlags() & EscherSpRecord.FLAG_FLIPHORIZ) != 0;
     }
 
     /**
@@ -221,9 +220,9 @@ public abstract class SimpleShape extends Shape {
      *
      * @return whether the shape is vertically flipped
      */
-    public boolean getFlipVertical(){
+    public boolean getFlipVertical() {
         EscherSpRecord spRecord = _escherContainer.getChildById(EscherSpRecord.RECORD_ID);
-        return (spRecord.getFlags()& EscherSpRecord.FLAG_FLIPVERT) != 0;
+        return (spRecord.getFlags() & EscherSpRecord.FLAG_FLIPVERT) != 0;
     }
 
     /**
@@ -231,7 +230,7 @@ public abstract class SimpleShape extends Shape {
      *
      * @return rotation angle in degrees
      */
-    public int getRotation(){
+    public int getRotation() {
         int rot = getEscherProperty(EscherProperties.TRANSFORM__ROTATION);
         int angle = (rot >> 16) % 360;
 
@@ -243,34 +242,33 @@ public abstract class SimpleShape extends Shape {
      *
      * @param theta the rotation angle in degrees
      */
-    public void setRotation(int theta){
+    public void setRotation(int theta) {
         setEscherProperty(EscherProperties.TRANSFORM__ROTATION, (theta << 16));
     }
 
     /**
-     *
      * @return 'absolute' anchor of this shape relative to the parent sheet
      */
-    public Rectangle2D getLogicalAnchor2D(){
+    public Rectangle2D getLogicalAnchor2D() {
         Rectangle2D anchor = getAnchor2D();
 
         //if it is a groupped shape see if we need to transform the coordinates
-        if (_parent != null){
+        if (_parent != null) {
             List<Shape> lst = new ArrayList<Shape>();
             lst.add(_parent);
             Shape top = _parent;
-            while(top.getParent() != null) {
+            while (top.getParent() != null) {
                 top = top.getParent();
                 lst.add(top);
             }
 
             AffineTransform tx = new AffineTransform();
-            for(int i = lst.size() - 1; i >= 0; i--) {
-                ShapeGroup prnt = (ShapeGroup)lst.get(i);
+            for (int i = lst.size() - 1; i >= 0; i--) {
+                ShapeGroup prnt = (ShapeGroup) lst.get(i);
                 Rectangle2D exterior = prnt.getAnchor2D();
                 Rectangle2D interior = prnt.getCoordinates();
 
-                double scaleX =  exterior.getWidth() / interior.getWidth();
+                double scaleX = exterior.getWidth() / interior.getWidth();
                 double scaleY = exterior.getHeight() / interior.getHeight();
 
                 tx.translate(exterior.getX(), exterior.getY());
@@ -281,9 +279,9 @@ public abstract class SimpleShape extends Shape {
         }
 
         int angle = getRotation();
-        if(angle != 0){
-            double centerX = anchor.getX() + anchor.getWidth()/2;
-            double centerY = anchor.getY() + anchor.getHeight()/2;
+        if (angle != 0) {
+            double centerX = anchor.getX() + anchor.getWidth() / 2;
+            double centerY = anchor.getY() + anchor.getHeight() / 2;
 
             AffineTransform trans = new AffineTransform();
             trans.translate(centerX, centerY);
@@ -291,11 +289,11 @@ public abstract class SimpleShape extends Shape {
             trans.translate(-centerX, -centerY);
 
             Rectangle2D rect = trans.createTransformedShape(anchor).getBounds2D();
-            if((anchor.getWidth() < anchor.getHeight() && rect.getWidth() > rect.getHeight()) ||
-                (anchor.getWidth() > anchor.getHeight() && rect.getWidth() < rect.getHeight())    ){
+            if ((anchor.getWidth() < anchor.getHeight() && rect.getWidth() > rect.getHeight()) ||
+                    (anchor.getWidth() > anchor.getHeight() && rect.getWidth() < rect.getHeight())) {
                 trans = new AffineTransform();
                 trans.translate(centerX, centerY);
-                trans.rotate(Math.PI/2);
+                trans.rotate(Math.PI / 2);
                 trans.translate(-centerX, -centerY);
                 anchor = trans.createTransformedShape(anchor).getBounds2D();
             }
@@ -303,22 +301,22 @@ public abstract class SimpleShape extends Shape {
         return anchor;
     }
 
-    public void draw(Graphics2D graphics){
+    public void draw(Graphics2D graphics) {
         AffineTransform at = graphics.getTransform();
         ShapePainter.paint(this, graphics);
         graphics.setTransform(at);
     }
 
     /**
-     *  Find a record in the underlying EscherClientDataRecord
+     * Find a record in the underlying EscherClientDataRecord
      *
      * @param recordType type of the record to search
      */
     protected Record getClientDataRecord(int recordType) {
 
         Record[] records = getClientRecords();
-        if(records != null) for (int i = 0; i < records.length; i++) {
-            if(records[i].getRecordType() == recordType){
+        if (records != null) for (int i = 0; i < records.length; i++) {
+            if (records[i].getRecordType() == recordType) {
                 return records[i];
             }
         }
@@ -331,18 +329,18 @@ public abstract class SimpleShape extends Shape {
      * @return an array of HSLF records contained in the shape's EscherClientDataRecord or <code>null</code>
      */
     protected Record[] getClientRecords() {
-        if(_clientData == null){
+        if (_clientData == null) {
             EscherRecord r = Shape.getEscherChild(getSpContainer(), EscherClientDataRecord.RECORD_ID);
             //ddf can return EscherContainerRecord with recordId=EscherClientDataRecord.RECORD_ID
             //convert in to EscherClientDataRecord on the fly
-            if(r != null && !(r instanceof EscherClientDataRecord)){
+            if (r != null && !(r instanceof EscherClientDataRecord)) {
                 byte[] data = r.serialize();
                 r = new EscherClientDataRecord();
                 r.fillFields(data, 0, new DefaultEscherRecordFactory());
             }
-            _clientData = (EscherClientDataRecord)r;
+            _clientData = (EscherClientDataRecord) r;
         }
-        if(_clientData != null && _clientRecords == null){
+        if (_clientData != null && _clientRecords == null) {
             byte[] data = _clientData.getRemainingData();
             _clientRecords = Record.findChildRecords(data, 0, data.length);
         }
@@ -350,32 +348,32 @@ public abstract class SimpleShape extends Shape {
     }
 
     protected void updateClientData() {
-        if(_clientData != null && _clientRecords != null){
+        if (_clientData != null && _clientRecords != null) {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             try {
                 for (int i = 0; i < _clientRecords.length; i++) {
                     _clientRecords[i].writeOut(out);
                 }
-            } catch(Exception e){
+            } catch (Exception e) {
                 throw new HSLFException(e);
             }
             _clientData.setRemainingData(out.toByteArray());
         }
     }
 
-    public void setHyperlink(Hyperlink link){
-        if(link.getId() == -1){
+    public void setHyperlink(Hyperlink link) {
+        if (link.getId() == -1) {
             throw new HSLFException("You must call SlideShow.addHyperlink(Hyperlink link) first");
         }
 
         EscherClientDataRecord cldata = new EscherClientDataRecord();
-        cldata.setOptions((short)0xF);
+        cldata.setOptions((short) 0xF);
         getSpContainer().addChildRecord(cldata); // TODO - junit to prove getChildRecords().add is wrong
 
         InteractiveInfo info = new InteractiveInfo();
         InteractiveInfoAtom infoAtom = info.getInteractiveInfoAtom();
 
-        switch(link.getType()){
+        switch (link.getType()) {
             case Hyperlink.LINK_FIRSTSLIDE:
                 infoAtom.setAction(InteractiveInfoAtom.ACTION_JUMP);
                 infoAtom.setJump(InteractiveInfoAtom.JUMP_FIRSTSLIDE);
@@ -413,7 +411,7 @@ public abstract class SimpleShape extends Shape {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             info.writeOut(out);
-        } catch(Exception e){
+        } catch (Exception e) {
             throw new HSLFException(e);
         }
         cldata.setRemainingData(out.toByteArray());

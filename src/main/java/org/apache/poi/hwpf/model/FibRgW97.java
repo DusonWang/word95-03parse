@@ -75,9 +75,7 @@ public class FibRgW97 extends FibRgW97AbstractType {
             return false;
         if (field_8_reserved8 != other.field_8_reserved8)
             return false;
-        if (field_9_reserved9 != other.field_9_reserved9)
-            return false;
-        return true;
+        return field_9_reserved9 == other.field_9_reserved9;
     }
 
     @Override

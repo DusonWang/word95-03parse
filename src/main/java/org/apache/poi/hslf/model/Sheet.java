@@ -17,16 +17,19 @@
 
 package org.apache.poi.hslf.model;
 
-import org.apache.poi.ddf.*;
+import org.apache.poi.ddf.EscherContainerRecord;
+import org.apache.poi.ddf.EscherDgRecord;
+import org.apache.poi.ddf.EscherDggRecord;
+import org.apache.poi.ddf.EscherRecord;
 import org.apache.poi.hslf.record.*;
 import org.apache.poi.hslf.usermodel.SlideShow;
 import org.apache.poi.util.POILogFactory;
 import org.apache.poi.util.POILogger;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.awt.*;
 
 /**
  * This class defines the common format of "Sheets" in a powerpoint
@@ -37,7 +40,7 @@ import java.awt.*;
  */
 
 public abstract class Sheet {
-	private static POILogger logger = POILogFactory.getLogger(Sheet.class);
+    private static POILogger logger = POILogFactory.getLogger(Sheet.class);
 
     /**
      * The <code>SlideShow</code> we belong to
@@ -62,6 +65,115 @@ public abstract class Sheet {
     public Sheet(SheetContainer container, int sheetNo) {
         _container = container;
         _sheetNo = sheetNo;
+    }
+
+    /**
+     * For a given PPDrawing, grab all the TextRuns
+     */
+    public static TextRun[] findTextRuns(PPDrawing ppdrawing) {
+        final List<TextRun> runsV = new ArrayList<TextRun>();
+        final EscherTextboxWrapper[] wrappers = ppdrawing.getTextboxWrappers();
+        for (int i = 0; i < wrappers.length; i++) {
+            int s1 = runsV.size();
+
+            // propagate parents to parent-aware records
+            RecordContainer.handleParentAwareRecords(wrappers[i]);
+            findTextRuns(wrappers[i], runsV);
+            int s2 = runsV.size();
+            if (s2 != s1) {
+                TextRun t = runsV.get(runsV.size() - 1);
+                t.setShapeId(wrappers[i].getShapeId());
+            }
+        }
+        return runsV.toArray(new TextRun[runsV.size()]);
+    }
+
+    /**
+     * Scans through the supplied record array, looking for
+     * a TextHeaderAtom followed by one of a TextBytesAtom or
+     * a TextCharsAtom. Builds up TextRuns from these
+     *
+     * @param records the records to build from
+     * @param found   vector to add any found to
+     */
+    protected static void findTextRuns(final Record[] records, final List<TextRun> found) {
+        findTextRuns(records, found, null);
+    }
+
+    /**
+     * Scans through the supplied record array, looking for
+     * a TextHeaderAtom followed by one of a TextBytesAtom or
+     * a TextCharsAtom. Builds up TextRuns from these
+     *
+     * @param wrapper an EscherTextboxWrapper
+     * @param found   vector to add any found to
+     */
+    protected static void findTextRuns(final EscherTextboxWrapper wrapper, final List<TextRun> found) {
+        findTextRuns(wrapper.getChildRecords(), found, wrapper.getStyleTextProp9Atom());
+    }
+
+    /**
+     * Scans through the supplied record array, looking for
+     * a TextHeaderAtom followed by one of a TextBytesAtom or
+     * a TextCharsAtom. Builds up TextRuns from these
+     *
+     * @param records            the records to build from
+     * @param found              vector to add any found to
+     * @param styleTextProp9Atom a StyleTextProp9Atom with numbered lists info
+     */
+    protected static void findTextRuns(final Record[] records, final List<TextRun> found, final StyleTextProp9Atom styleTextProp9Atom) {
+        for (int i = 0, slwtIndex = 0; i < (records.length - 1); i++) {
+            if (records[i] instanceof TextHeaderAtom) {
+                TextHeaderAtom tha = (TextHeaderAtom) records[i];
+                StyleTextPropAtom stpa = null;
+                TextRun trun = null;
+                Record next = null;
+
+                // Is there a StyleTextPropAtom after the Text Atom?
+                // TODO Do we need to check for text ones two away as well?
+                if (i < (records.length - 2)) {
+                    next = records[i + 2];
+                    if (next instanceof StyleTextPropAtom) {
+                        stpa = (StyleTextPropAtom) next;
+                    }
+                }
+
+                // See what follows the TextHeaderAtom
+                next = records[i + 1];
+                if (next instanceof TextCharsAtom) {
+                    TextCharsAtom tca = (TextCharsAtom) next;
+                    trun = new TextRun(tha, tca, stpa);
+                } else if (next instanceof TextBytesAtom) {
+                    TextBytesAtom tba = (TextBytesAtom) next;
+                    trun = new TextRun(tha, tba, stpa);
+                } else if (next instanceof StyleTextPropAtom) {
+                    stpa = (StyleTextPropAtom) next;
+                } else if (next.getRecordType() == (long) RecordTypes.TextSpecInfoAtom.typeID ||
+                        next.getRecordType() == (long) RecordTypes.BaseTextPropAtom.typeID) {
+                    // Safe to ignore these ones
+                } else {
+                    logger.log(POILogger.ERROR, "Found a TextHeaderAtom not followed by a TextBytesAtom or TextCharsAtom: Followed by " + next.getRecordType());
+                }
+
+                if (trun != null) {
+                    List<Record> lst = new ArrayList<Record>();
+                    for (int j = i; j < records.length; j++) {
+                        if (j > i && records[j] instanceof TextHeaderAtom) break;
+                        lst.add(records[j]);
+                    }
+                    Record[] recs = new Record[lst.size()];
+                    lst.toArray(recs);
+                    trun._records = recs;
+                    trun.setIndex(slwtIndex);
+                    trun.setStyleTextProp9Atom(styleTextProp9Atom);
+                    found.add(trun);
+                    i++;
+                } else {
+                    // Not a valid one, so skip on to next and look again
+                }
+                slwtIndex++;
+            }
+        }
     }
 
     /**
@@ -100,13 +212,6 @@ public abstract class Sheet {
     }
 
     /**
-     * Return record container for this sheet
-     */
-    public SheetContainer getSheetContainer() {
-        return _container;
-    }
-
-    /**
      * Set the SlideShow we're attached to.
      * Also passes it on to our child RichTextRuns
      */
@@ -120,111 +225,11 @@ public abstract class Sheet {
         }
     }
 
-
     /**
-     * For a given PPDrawing, grab all the TextRuns
+     * Return record container for this sheet
      */
-    public static TextRun[] findTextRuns(PPDrawing ppdrawing) {
-        final List<TextRun> runsV = new ArrayList<TextRun>();
-        final EscherTextboxWrapper[] wrappers = ppdrawing.getTextboxWrappers();
-        for (int i = 0; i < wrappers.length; i++) {
-            int s1 = runsV.size();
-
-            // propagate parents to parent-aware records
-            RecordContainer.handleParentAwareRecords(wrappers[i]);
-            findTextRuns(wrappers[i], runsV);
-            int s2 = runsV.size();
-            if (s2 != s1){
-                TextRun t = runsV.get(runsV.size()-1);
-                t.setShapeId(wrappers[i].getShapeId());
-            }
-        }
-        return runsV.toArray(new TextRun[runsV.size()]);
-    }
-    /**
-     * Scans through the supplied record array, looking for
-     * a TextHeaderAtom followed by one of a TextBytesAtom or
-     * a TextCharsAtom. Builds up TextRuns from these
-     *
-     * @param records the records to build from
-     * @param found   vector to add any found to
-     */
-    protected static void findTextRuns(final Record[] records, final List<TextRun> found) {
-    	findTextRuns(records, found, null); 
-    }
-    /**
-     * Scans through the supplied record array, looking for
-     * a TextHeaderAtom followed by one of a TextBytesAtom or
-     * a TextCharsAtom. Builds up TextRuns from these
-     *
-     * @param wrapper an EscherTextboxWrapper
-     * @param found   vector to add any found to
-     */
-    protected static void findTextRuns(final EscherTextboxWrapper wrapper, final List<TextRun> found) {
-    	findTextRuns(wrapper.getChildRecords(), found, wrapper.getStyleTextProp9Atom());
-    }
-    /**
-     * Scans through the supplied record array, looking for
-     * a TextHeaderAtom followed by one of a TextBytesAtom or
-     * a TextCharsAtom. Builds up TextRuns from these
-     *
-     * @param records the records to build from
-     * @param found   vector to add any found to
-     * @param styleTextProp9Atom a StyleTextProp9Atom with numbered lists info
-     */
-    protected static void findTextRuns(final Record[] records, final List<TextRun> found, final StyleTextProp9Atom styleTextProp9Atom) {
-        for (int i = 0, slwtIndex=0; i < (records.length - 1); i++) {
-            if (records[i] instanceof TextHeaderAtom) {
-                TextHeaderAtom tha = (TextHeaderAtom) records[i];
-                StyleTextPropAtom stpa = null;
-                TextRun trun = null;
-                Record next = null;
-                
-                // Is there a StyleTextPropAtom after the Text Atom?
-                // TODO Do we need to check for text ones two away as well?
-                if (i < (records.length - 2)) {
-                    next = records[i+2];
-                    if (next instanceof StyleTextPropAtom) {
-                        stpa = (StyleTextPropAtom)next;
-                    }
-                }
-
-                // See what follows the TextHeaderAtom
-                next = records[i+1];
-                if (next instanceof TextCharsAtom) {
-                    TextCharsAtom tca = (TextCharsAtom)next;
-                    trun = new TextRun(tha, tca, stpa);
-                } else if (next instanceof TextBytesAtom) {
-                    TextBytesAtom tba = (TextBytesAtom)next;
-                    trun = new TextRun(tha, tba, stpa);
-                } else if (next instanceof StyleTextPropAtom) {
-                    stpa = (StyleTextPropAtom)next;
-                } else if (next.getRecordType() == (long)RecordTypes.TextSpecInfoAtom.typeID ||
-                           next.getRecordType() == (long)RecordTypes.BaseTextPropAtom.typeID) { 
-                    // Safe to ignore these ones
-                } else {
-                    logger.log(POILogger.ERROR, "Found a TextHeaderAtom not followed by a TextBytesAtom or TextCharsAtom: Followed by " + next.getRecordType());
-                }
-
-                if (trun != null) {
-                    List<Record> lst = new ArrayList<Record>();
-                    for (int j = i; j < records.length; j++) {
-                        if(j > i && records[j] instanceof TextHeaderAtom) break;
-                        lst.add(records[j]);
-                    }
-                    Record[] recs = new Record[lst.size()];
-                    lst.toArray(recs);
-                    trun._records = recs;
-                    trun.setIndex(slwtIndex);
-                    trun.setStyleTextProp9Atom(styleTextProp9Atom);
-                    found.add(trun);
-                    i++;
-                } else {
-                    // Not a valid one, so skip on to next and look again
-                }
-                slwtIndex++;
-            }
-        }
+    public SheetContainer getSheetContainer() {
+        return _container;
     }
 
     /**
@@ -238,7 +243,7 @@ public abstract class Sheet {
         EscherContainerRecord dg = (EscherContainerRecord) ppdrawing.getEscherRecords()[0];
         EscherContainerRecord spgr = null;
 
-        for (Iterator<EscherRecord> it = dg.getChildIterator(); it.hasNext();) {
+        for (Iterator<EscherRecord> it = dg.getChildIterator(); it.hasNext(); ) {
             EscherRecord rec = it.next();
             if (rec.getRecordId() == EscherContainerRecord.SPGR_CONTAINER) {
                 spgr = (EscherContainerRecord) rec;
@@ -255,7 +260,7 @@ public abstract class Sheet {
             // skip first item
             it.next();
         }
-        for (; it.hasNext();) {
+        for (; it.hasNext(); ) {
             EscherContainerRecord sp = (EscherContainerRecord) it.next();
             Shape sh = ShapeFactory.createShape(sp, null);
             sh.setSheet(this);
@@ -287,37 +292,34 @@ public abstract class Sheet {
      *
      * @return a new shape id.
      */
-    public int allocateShapeId()
-    {
+    public int allocateShapeId() {
         EscherDggRecord dgg = _slideShow.getDocumentRecord().getPPDrawingGroup().getEscherDggRecord();
         EscherDgRecord dg = _container.getPPDrawing().getEscherDgRecord();
 
-        dgg.setNumShapesSaved( dgg.getNumShapesSaved() + 1 );
+        dgg.setNumShapesSaved(dgg.getNumShapesSaved() + 1);
 
         // Add to existing cluster if space available
-        for (int i = 0; i < dgg.getFileIdClusters().length; i++)
-        {
+        for (int i = 0; i < dgg.getFileIdClusters().length; i++) {
             EscherDggRecord.FileIdCluster c = dgg.getFileIdClusters()[i];
-            if (c.getDrawingGroupId() == dg.getDrawingGroupId() && c.getNumShapeIdsUsed() != 1024)
-            {
-                int result = c.getNumShapeIdsUsed() + (1024 * (i+1));
+            if (c.getDrawingGroupId() == dg.getDrawingGroupId() && c.getNumShapeIdsUsed() != 1024) {
+                int result = c.getNumShapeIdsUsed() + (1024 * (i + 1));
                 c.incrementShapeId();
-                dg.setNumShapes( dg.getNumShapes() + 1 );
-                dg.setLastMSOSPID( result );
+                dg.setNumShapes(dg.getNumShapes() + 1);
+                dg.setLastMSOSPID(result);
                 if (result >= dgg.getShapeIdMax())
-                    dgg.setShapeIdMax( result + 1 );
+                    dgg.setShapeIdMax(result + 1);
                 return result;
             }
         }
 
         // Create new cluster
-        dgg.addCluster( dg.getDrawingGroupId(), 0, false );
-        dgg.getFileIdClusters()[dgg.getFileIdClusters().length-1].incrementShapeId();
-        dg.setNumShapes( dg.getNumShapes() + 1 );
+        dgg.addCluster(dg.getDrawingGroupId(), 0, false);
+        dgg.getFileIdClusters()[dgg.getFileIdClusters().length - 1].incrementShapeId();
+        dg.setNumShapes(dg.getNumShapes() + 1);
         int result = (1024 * dgg.getFileIdClusters().length);
-        dg.setLastMSOSPID( result );
+        dg.setLastMSOSPID(result);
         if (result >= dgg.getShapeIdMax())
-            dgg.setShapeIdMax( result + 1 );
+            dgg.setShapeIdMax(result + 1);
         return result;
     }
 
@@ -333,14 +335,14 @@ public abstract class Sheet {
         EscherContainerRecord dg = (EscherContainerRecord) ppdrawing.getEscherRecords()[0];
         EscherContainerRecord spgr = null;
 
-        for (Iterator<EscherRecord> it = dg.getChildIterator(); it.hasNext();) {
+        for (Iterator<EscherRecord> it = dg.getChildIterator(); it.hasNext(); ) {
             EscherRecord rec = it.next();
             if (rec.getRecordId() == EscherContainerRecord.SPGR_CONTAINER) {
                 spgr = (EscherContainerRecord) rec;
                 break;
             }
         }
-        if(spgr == null) {
+        if (spgr == null) {
             return false;
         }
 
@@ -353,7 +355,7 @@ public abstract class Sheet {
     /**
      * Called by SlideShow ater a new sheet is created
      */
-    public void onCreate(){
+    public void onCreate() {
 
     }
 
@@ -381,7 +383,7 @@ public abstract class Sheet {
             EscherContainerRecord dg = (EscherContainerRecord) ppdrawing.getEscherRecords()[0];
             EscherContainerRecord spContainer = null;
 
-            for (Iterator<EscherRecord> it = dg.getChildIterator(); it.hasNext();) {
+            for (Iterator<EscherRecord> it = dg.getChildIterator(); it.hasNext(); ) {
                 EscherRecord rec = it.next();
                 if (rec.getRecordId() == EscherContainerRecord.SP_CONTAINER) {
                     spContainer = (EscherContainerRecord) rec;
@@ -394,7 +396,7 @@ public abstract class Sheet {
         return _background;
     }
 
-    public void draw(Graphics2D graphics){
+    public void draw(Graphics2D graphics) {
 
     }
 
@@ -411,16 +413,16 @@ public abstract class Sheet {
     /**
      * Return placeholder by text type
      *
-     * @param type  type of text, See {@link org.apache.poi.hslf.record.TextHeaderAtom}
-     * @return  <code>TextShape</code> or <code>null</code>
+     * @param type type of text, See {@link org.apache.poi.hslf.record.TextHeaderAtom}
+     * @return <code>TextShape</code> or <code>null</code>
      */
-    public TextShape getPlaceholderByTextType(int type){
+    public TextShape getPlaceholderByTextType(int type) {
         Shape[] shape = getShapes();
         for (int i = 0; i < shape.length; i++) {
-            if(shape[i] instanceof TextShape){
-                TextShape tx = (TextShape)shape[i];
+            if (shape[i] instanceof TextShape) {
+                TextShape tx = (TextShape) shape[i];
                 TextRun run = tx.getTextRun();
-                if(run != null && run.getRunType() == type){
+                if (run != null && run.getRunType() == type) {
                     return tx;
                 }
             }
@@ -431,24 +433,24 @@ public abstract class Sheet {
     /**
      * Search text placeholer by its type
      *
-     * @param type  type of placeholder to search. See {@link org.apache.poi.hslf.record.OEPlaceholderAtom}
-     * @return  <code>TextShape</code> or <code>null</code>
+     * @param type type of placeholder to search. See {@link org.apache.poi.hslf.record.OEPlaceholderAtom}
+     * @return <code>TextShape</code> or <code>null</code>
      */
-    public TextShape getPlaceholder(int type){
+    public TextShape getPlaceholder(int type) {
         Shape[] shape = getShapes();
         for (int i = 0; i < shape.length; i++) {
-            if(shape[i] instanceof TextShape){
-                TextShape tx = (TextShape)shape[i];
+            if (shape[i] instanceof TextShape) {
+                TextShape tx = (TextShape) shape[i];
                 int placeholderId = 0;
                 OEPlaceholderAtom oep = tx.getPlaceholderAtom();
-                if(oep != null) {
+                if (oep != null) {
                     placeholderId = oep.getPlaceholderId();
                 } else {
                     //special case for files saved in Office 2007
-                    RoundTripHFPlaceholder12 hldr = (RoundTripHFPlaceholder12)tx.getClientDataRecord(RecordTypes.RoundTripHFPlaceholder12.typeID);
-                    if(hldr != null) placeholderId = hldr.getPlaceholderId();
+                    RoundTripHFPlaceholder12 hldr = (RoundTripHFPlaceholder12) tx.getClientDataRecord(RecordTypes.RoundTripHFPlaceholder12.typeID);
+                    if (hldr != null) placeholderId = hldr.getPlaceholderId();
                 }
-                if(placeholderId == type){
+                if (placeholderId == type) {
                     return tx;
                 }
             }
@@ -461,23 +463,23 @@ public abstract class Sheet {
      *
      * @return programmable tag associated with this sheet.
      */
-    public String getProgrammableTag(){
+    public String getProgrammableTag() {
         String tag = null;
         RecordContainer progTags = (RecordContainer)
                 getSheetContainer().findFirstOfType(
-                            RecordTypes.ProgTags.typeID
-        );
-        if(progTags != null) {
-            RecordContainer progBinaryTag = (RecordContainer)
-                progTags.findFirstOfType(
-                        RecordTypes.ProgBinaryTag.typeID
-            );
-            if(progBinaryTag != null) {
-                CString binaryTag = (CString)
-                    progBinaryTag.findFirstOfType(
-                            RecordTypes.CString.typeID
+                        RecordTypes.ProgTags.typeID
                 );
-                if(binaryTag != null) tag = binaryTag.getText();
+        if (progTags != null) {
+            RecordContainer progBinaryTag = (RecordContainer)
+                    progTags.findFirstOfType(
+                            RecordTypes.ProgBinaryTag.typeID
+                    );
+            if (progBinaryTag != null) {
+                CString binaryTag = (CString)
+                        progBinaryTag.findFirstOfType(
+                                RecordTypes.CString.typeID
+                        );
+                if (binaryTag != null) tag = binaryTag.getText();
             }
         }
 

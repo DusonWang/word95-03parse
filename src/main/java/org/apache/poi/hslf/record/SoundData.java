@@ -17,10 +17,10 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.poi.util.LittleEndian;
 
 /**
  * Storage for embedded sounds.
@@ -46,26 +46,26 @@ public final class SoundData extends RecordAtom {
         _header = new byte[8];
         _data = new byte[0];
 
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _data.length);
     }
 
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected SoundData(byte[] source, int start, int len) {
         // Get the header.
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Get the record data.
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,len-8);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, len - 8);
     }
 
     /**

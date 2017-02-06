@@ -201,37 +201,37 @@ public final class FileInformationBlock implements Cloneable {
          * fields FIBFieldHandler will load it content into
          * UnhandledDataStructure and save them on save.
          */
-        HashSet<Integer> knownFieldSet = new HashSet<Integer>();
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.STSHF));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.CLX));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.DOP));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.PLCFBTECHPX));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.PLCFBTEPAPX));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.PLCFSED));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.PLFLST));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.PLFLFO));
+        HashSet<Integer> knownFieldSet = new HashSet<>();
+        knownFieldSet.add(FIBFieldHandler.STSHF);
+        knownFieldSet.add(FIBFieldHandler.CLX);
+        knownFieldSet.add(FIBFieldHandler.DOP);
+        knownFieldSet.add(FIBFieldHandler.PLCFBTECHPX);
+        knownFieldSet.add(FIBFieldHandler.PLCFBTEPAPX);
+        knownFieldSet.add(FIBFieldHandler.PLCFSED);
+        knownFieldSet.add(FIBFieldHandler.PLFLST);
+        knownFieldSet.add(FIBFieldHandler.PLFLFO);
 
         // field info
         for (FieldsDocumentPart part : FieldsDocumentPart.values())
-            knownFieldSet.add(Integer.valueOf(part.getFibFieldsField()));
+            knownFieldSet.add(part.getFibFieldsField());
 
         // bookmarks
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.PLCFBKF));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.PLCFBKL));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.STTBFBKMK));
+        knownFieldSet.add(FIBFieldHandler.PLCFBKF);
+        knownFieldSet.add(FIBFieldHandler.PLCFBKL);
+        knownFieldSet.add(FIBFieldHandler.STTBFBKMK);
 
         // notes
         for (NoteType noteType : NoteType.values()) {
-            knownFieldSet.add(Integer.valueOf(noteType
-                    .getFibDescriptorsFieldIndex()));
-            knownFieldSet.add(Integer.valueOf(noteType
-                    .getFibTextPositionsFieldIndex()));
+            knownFieldSet.add(noteType
+                    .getFibDescriptorsFieldIndex());
+            knownFieldSet.add(noteType
+                    .getFibTextPositionsFieldIndex());
         }
 
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.STTBFFFN));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.STTBFRMARK));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.STTBSAVEDBY));
-        knownFieldSet.add(Integer.valueOf(FIBFieldHandler.MODIFIED));
+        knownFieldSet.add(FIBFieldHandler.STTBFFFN);
+        knownFieldSet.add(FIBFieldHandler.STTBFRMARK);
+        knownFieldSet.add(FIBFieldHandler.STTBSAVEDBY);
+        knownFieldSet.add(FIBFieldHandler.MODIFIED);
         _fieldHandler = new FIBFieldHandler(mainDocument, 154, _cbRgFcLcb,
                 tableStream, knownFieldSet, true);
     }
@@ -242,7 +242,7 @@ public final class FileInformationBlock implements Cloneable {
         stringBuilder.append(_fibBase);
         stringBuilder.append("[FIB2]\n");
         stringBuilder.append("\tSubdocuments info:\n");
-        for (SubdocumentType type : SubdocumentType.values()) {
+        for (SubDocumentType type : SubDocumentType.values()) {
             stringBuilder.append("\t\t");
             stringBuilder.append(type);
             stringBuilder.append(" has length of ");
@@ -292,7 +292,7 @@ public final class FileInformationBlock implements Cloneable {
                 stringBuilder.append("\n");
             }
         } catch (Exception exc) {
-            stringBuilder.append("(exc: " + exc.getMessage() + ")");
+            stringBuilder.append("(exc: ").append(exc.getMessage()).append(")");
         }
         stringBuilder.append("[/FIB2]\n");
         return stringBuilder.toString();
@@ -655,14 +655,14 @@ public final class FileInformationBlock implements Cloneable {
     /**
      * @return length of specified subdocument text stream in characters
      */
-    public int getSubdocumentTextStreamLength(SubdocumentType type) {
+    public int getSubdocumentTextStreamLength(SubDocumentType type) {
         if (type == null)
             throw new IllegalArgumentException("argument 'type' is null");
 
-        return _fibRgLw.getSubdocumentTextStreamLength(type);
+        return _fibRgLw.getSubDocumentTextStreamLength(type);
     }
 
-    public void setSubdocumentTextStreamLength(SubdocumentType type, int length) {
+    public void setSubdocumentTextStreamLength(SubDocumentType type, int length) {
         if (type == null)
             throw new IllegalArgumentException("argument 'type' is null");
         if (length < 0)
@@ -671,7 +671,7 @@ public final class FileInformationBlock implements Cloneable {
                             + length + "). " + "If there is no subdocument "
                             + "length must be set to zero.");
 
-        _fibRgLw.setSubdocumentTextStreamLength(type, length);
+        _fibRgLw.setSubDocumentTextStreamLength(type, length);
     }
 
     public void clearOffsetsSizes() {

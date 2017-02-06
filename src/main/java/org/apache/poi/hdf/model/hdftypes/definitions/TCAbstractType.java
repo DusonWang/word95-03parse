@@ -17,314 +17,266 @@
 
 package org.apache.poi.hdf.model.hdftypes.definitions;
 
+import org.apache.poi.hdf.model.hdftypes.HDFType;
 import org.apache.poi.util.BitField;
 import org.apache.poi.util.BitFieldFactory;
-import org.apache.poi.hdf.model.hdftypes.HDFType;
 
 /**
  * Table Cell Descriptor.
  * NOTE: This source is automatically generated please do not modify this file.  Either subclass or
- *       remove the record in src/records/definitions.
-
+ * remove the record in src/records/definitions.
+ *
  * @author S. Ryan Ackley
  */
 @Deprecated
 public abstract class TCAbstractType
-    implements HDFType
-{
+        implements HDFType {
 
-    private  short field_1_rgf;
-        private static BitField  fFirstMerged = BitFieldFactory.getInstance(0x0001);
-        private static BitField  fMerged = BitFieldFactory.getInstance(0x0002);
-        private static BitField  fVertical = BitFieldFactory.getInstance(0x0004);
-        private static BitField  fBackward = BitFieldFactory.getInstance(0x0008);
-        private static BitField  fRotateFont = BitFieldFactory.getInstance(0x0010);
-        private static BitField  fVertMerge = BitFieldFactory.getInstance(0x0020);
-        private static BitField  fVertRestart = BitFieldFactory.getInstance(0x0040);
-        private static BitField  vertAlign = BitFieldFactory.getInstance(0x0180);
-    private  short field_2_unused;
-    private  short[] field_3_brcTop;
-    private  short[] field_4_brcLeft;
-    private  short[] field_5_brcBottom;
-    private  short[] field_6_brcRight;
+    private static BitField fFirstMerged = BitFieldFactory.getInstance(0x0001);
+    private static BitField fMerged = BitFieldFactory.getInstance(0x0002);
+    private static BitField fVertical = BitFieldFactory.getInstance(0x0004);
+    private static BitField fBackward = BitFieldFactory.getInstance(0x0008);
+    private static BitField fRotateFont = BitFieldFactory.getInstance(0x0010);
+    private static BitField fVertMerge = BitFieldFactory.getInstance(0x0020);
+    private static BitField fVertRestart = BitFieldFactory.getInstance(0x0040);
+    private static BitField vertAlign = BitFieldFactory.getInstance(0x0180);
+    private short field_1_rgf;
+    private short field_2_unused;
+    private short[] field_3_brcTop;
+    private short[] field_4_brcLeft;
+    private short[] field_5_brcBottom;
+    private short[] field_6_brcRight;
 
 
-    public TCAbstractType()
-    {
+    public TCAbstractType() {
 
     }
 
     /**
      * Size of record (exluding 4 byte header)
      */
-    public int getSize()
-    {
-        return 4 +  + 2 + 2 + 4 + 4 + 4 + 4;
+    public int getSize() {
+        return 4 + +2 + 2 + 4 + 4 + 4 + 4;
     }
-
 
 
     /**
      * Get the rgf field for the TC record.
      */
-    public short getRgf()
-    {
+    public short getRgf() {
         return field_1_rgf;
     }
 
     /**
      * Set the rgf field for the TC record.
      */
-    public void setRgf(short field_1_rgf)
-    {
+    public void setRgf(short field_1_rgf) {
         this.field_1_rgf = field_1_rgf;
     }
 
     /**
      * Get the unused field for the TC record.
      */
-    public short getUnused()
-    {
+    public short getUnused() {
         return field_2_unused;
     }
 
     /**
      * Set the unused field for the TC record.
      */
-    public void setUnused(short field_2_unused)
-    {
+    public void setUnused(short field_2_unused) {
         this.field_2_unused = field_2_unused;
     }
 
     /**
      * Get the brcTop field for the TC record.
      */
-    public short[] getBrcTop()
-    {
+    public short[] getBrcTop() {
         return field_3_brcTop;
     }
 
     /**
      * Set the brcTop field for the TC record.
      */
-    public void setBrcTop(short[] field_3_brcTop)
-    {
+    public void setBrcTop(short[] field_3_brcTop) {
         this.field_3_brcTop = field_3_brcTop;
     }
 
     /**
      * Get the brcLeft field for the TC record.
      */
-    public short[] getBrcLeft()
-    {
+    public short[] getBrcLeft() {
         return field_4_brcLeft;
     }
 
     /**
      * Set the brcLeft field for the TC record.
      */
-    public void setBrcLeft(short[] field_4_brcLeft)
-    {
+    public void setBrcLeft(short[] field_4_brcLeft) {
         this.field_4_brcLeft = field_4_brcLeft;
     }
 
     /**
      * Get the brcBottom field for the TC record.
      */
-    public short[] getBrcBottom()
-    {
+    public short[] getBrcBottom() {
         return field_5_brcBottom;
     }
 
     /**
      * Set the brcBottom field for the TC record.
      */
-    public void setBrcBottom(short[] field_5_brcBottom)
-    {
+    public void setBrcBottom(short[] field_5_brcBottom) {
         this.field_5_brcBottom = field_5_brcBottom;
     }
 
     /**
      * Get the brcRight field for the TC record.
      */
-    public short[] getBrcRight()
-    {
+    public short[] getBrcRight() {
         return field_6_brcRight;
     }
 
     /**
      * Set the brcRight field for the TC record.
      */
-    public void setBrcRight(short[] field_6_brcRight)
-    {
+    public void setBrcRight(short[] field_6_brcRight) {
         this.field_6_brcRight = field_6_brcRight;
     }
 
     /**
-     * Sets the fFirstMerged field value.
-     *
+     * @return the fFirstMerged field value.
      */
-    public void setFFirstMerged(boolean value)
-    {
-        field_1_rgf = (short)fFirstMerged.setBoolean(field_1_rgf, value);
-
-
-    }
-
-    /**
-     *
-     * @return  the fFirstMerged field value.
-     */
-    public boolean isFFirstMerged()
-    {
+    public boolean isFFirstMerged() {
         return fFirstMerged.isSet(field_1_rgf);
 
     }
 
     /**
-     * Sets the fMerged field value.
-     *
+     * Sets the fFirstMerged field value.
      */
-    public void setFMerged(boolean value)
-    {
-        field_1_rgf = (short)fMerged.setBoolean(field_1_rgf, value);
+    public void setFFirstMerged(boolean value) {
+        field_1_rgf = (short) fFirstMerged.setBoolean(field_1_rgf, value);
 
 
     }
 
     /**
-     *
-     * @return  the fMerged field value.
+     * @return the fMerged field value.
      */
-    public boolean isFMerged()
-    {
+    public boolean isFMerged() {
         return fMerged.isSet(field_1_rgf);
 
     }
 
     /**
-     * Sets the fVertical field value.
-     *
+     * Sets the fMerged field value.
      */
-    public void setFVertical(boolean value)
-    {
-        field_1_rgf = (short)fVertical.setBoolean(field_1_rgf, value);
+    public void setFMerged(boolean value) {
+        field_1_rgf = (short) fMerged.setBoolean(field_1_rgf, value);
 
 
     }
 
     /**
-     *
-     * @return  the fVertical field value.
+     * @return the fVertical field value.
      */
-    public boolean isFVertical()
-    {
+    public boolean isFVertical() {
         return fVertical.isSet(field_1_rgf);
 
     }
 
     /**
-     * Sets the fBackward field value.
-     *
+     * Sets the fVertical field value.
      */
-    public void setFBackward(boolean value)
-    {
-        field_1_rgf = (short)fBackward.setBoolean(field_1_rgf, value);
+    public void setFVertical(boolean value) {
+        field_1_rgf = (short) fVertical.setBoolean(field_1_rgf, value);
 
 
     }
 
     /**
-     *
-     * @return  the fBackward field value.
+     * @return the fBackward field value.
      */
-    public boolean isFBackward()
-    {
+    public boolean isFBackward() {
         return fBackward.isSet(field_1_rgf);
 
     }
 
     /**
-     * Sets the fRotateFont field value.
-     *
+     * Sets the fBackward field value.
      */
-    public void setFRotateFont(boolean value)
-    {
-        field_1_rgf = (short)fRotateFont.setBoolean(field_1_rgf, value);
+    public void setFBackward(boolean value) {
+        field_1_rgf = (short) fBackward.setBoolean(field_1_rgf, value);
 
 
     }
 
     /**
-     *
-     * @return  the fRotateFont field value.
+     * @return the fRotateFont field value.
      */
-    public boolean isFRotateFont()
-    {
+    public boolean isFRotateFont() {
         return fRotateFont.isSet(field_1_rgf);
 
     }
 
     /**
-     * Sets the fVertMerge field value.
-     *
+     * Sets the fRotateFont field value.
      */
-    public void setFVertMerge(boolean value)
-    {
-        field_1_rgf = (short)fVertMerge.setBoolean(field_1_rgf, value);
+    public void setFRotateFont(boolean value) {
+        field_1_rgf = (short) fRotateFont.setBoolean(field_1_rgf, value);
 
 
     }
 
     /**
-     *
-     * @return  the fVertMerge field value.
+     * @return the fVertMerge field value.
      */
-    public boolean isFVertMerge()
-    {
+    public boolean isFVertMerge() {
         return fVertMerge.isSet(field_1_rgf);
 
     }
 
     /**
-     * Sets the fVertRestart field value.
-     *
+     * Sets the fVertMerge field value.
      */
-    public void setFVertRestart(boolean value)
-    {
-        field_1_rgf = (short)fVertRestart.setBoolean(field_1_rgf, value);
+    public void setFVertMerge(boolean value) {
+        field_1_rgf = (short) fVertMerge.setBoolean(field_1_rgf, value);
 
 
     }
 
     /**
-     *
-     * @return  the fVertRestart field value.
+     * @return the fVertRestart field value.
      */
-    public boolean isFVertRestart()
-    {
+    public boolean isFVertRestart() {
         return fVertRestart.isSet(field_1_rgf);
 
     }
 
     /**
-     * Sets the vertAlign field value.
-     *
+     * Sets the fVertRestart field value.
      */
-    public void setVertAlign(byte value)
-    {
-        field_1_rgf = (short)vertAlign.setValue(field_1_rgf, value);
+    public void setFVertRestart(boolean value) {
+        field_1_rgf = (short) fVertRestart.setBoolean(field_1_rgf, value);
 
 
     }
 
     /**
-     *
-     * @return  the vertAlign field value.
+     * @return the vertAlign field value.
      */
-    public byte getVertAlign()
-    {
-        return ( byte )vertAlign.getValue(field_1_rgf);
+    public byte getVertAlign() {
+        return (byte) vertAlign.getValue(field_1_rgf);
+
+    }
+
+    /**
+     * Sets the vertAlign field value.
+     */
+    public void setVertAlign(byte value) {
+        field_1_rgf = (short) vertAlign.setValue(field_1_rgf, value);
+
 
     }
 

@@ -23,18 +23,16 @@ package org.apache.poi.hdf.extractor.data;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class DOP
-{
+public final class DOP {
 
-  public boolean _fFacingPages;
-  public int _fpc;
-  public int _epc;
-  public int _rncFtn;
-  public int _nFtn;
-  public int _rncEdn;
-  public int _nEdn;
+    public boolean _fFacingPages;
+    public int _fpc;
+    public int _epc;
+    public int _rncFtn;
+    public int _nFtn;
+    public int _rncEdn;
+    public int _nEdn;
 
-  public DOP()
-  {
-  }
+    public DOP() {
+    }
 }

@@ -21,30 +21,34 @@ import org.apache.poi.util.LittleEndian;
 
 /**
  * Factor class to create the appropriate pointers, based on the version
- *  of the file
+ * of the file
  */
 public final class PointerFactory {
-	private int version;
-	public PointerFactory(int version) {
-		this.version = version;
-	}
-	public int getVersion() { return version; }
+    private int version;
 
-	public Pointer createPointer(byte[] data, int offset) {
-		Pointer p;
-		if(version >= 6) {
-			p = new PointerV6();
-			p.type = LittleEndian.getInt(data, offset+0);
-			p.address = (int)LittleEndian.getUInt(data, offset+4);
-			p.offset = (int)LittleEndian.getUInt(data, offset+8);
-			p.length = (int)LittleEndian.getUInt(data, offset+12);
-			p.format = LittleEndian.getShort(data, offset+16);
+    public PointerFactory(int version) {
+        this.version = version;
+    }
 
-			return p;
-		} else if(version == 5) {
-			throw new RuntimeException("TODO");
-		} else {
-			throw new IllegalArgumentException("Visio files with versions below 5 are not supported, yours was " + version);
-		}
-	}
+    public int getVersion() {
+        return version;
+    }
+
+    public Pointer createPointer(byte[] data, int offset) {
+        Pointer p;
+        if (version >= 6) {
+            p = new PointerV6();
+            p.type = LittleEndian.getInt(data, offset + 0);
+            p.address = (int) LittleEndian.getUInt(data, offset + 4);
+            p.offset = (int) LittleEndian.getUInt(data, offset + 8);
+            p.length = (int) LittleEndian.getUInt(data, offset + 12);
+            p.format = LittleEndian.getShort(data, offset + 16);
+
+            return p;
+        } else if (version == 5) {
+            throw new RuntimeException("TODO");
+        } else {
+            throw new IllegalArgumentException("Visio files with versions below 5 are not supported, yours was " + version);
+        }
+    }
 }

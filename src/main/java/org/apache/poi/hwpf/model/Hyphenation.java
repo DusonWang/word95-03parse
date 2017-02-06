@@ -56,11 +56,7 @@ public final class Hyphenation extends HRESIAbstractType implements Cloneable {
         if (getClass() != obj.getClass())
             return false;
         Hyphenation other = (Hyphenation) obj;
-        if (field_1_hres != other.field_1_hres)
-            return false;
-        if (field_2_chHres != other.field_2_chHres)
-            return false;
-        return true;
+        return field_1_hres == other.field_1_hres && field_2_chHres == other.field_2_chHres;
     }
 
     public short getValue() {

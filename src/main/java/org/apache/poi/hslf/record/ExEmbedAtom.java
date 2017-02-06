@@ -17,20 +17,20 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.poi.util.LittleEndian;
-
 /**
  * The atom that holds metadata on a specific embedded object in the document.
- *
+ * <p>
  * <!--
  * 0    sint4    followColorScheme  This field indicates how the object follows the color scheme. Valid values are:
- *                                  0 - doesn't follow the color scheme
- *                                  1 - follows the entire color scheme
- *                                  2 - follows the text and background scheme
- *
+ * 0 - doesn't follow the color scheme
+ * 1 - follows the entire color scheme
+ * 2 - follows the text and background scheme
+ * <p>
  * 4    bool1    cantLockServerB    Set if the embedded server can not be locked
  * 5    bool1    noSizeToServerB    Set if don't need to send the dimension to the embedded object
  * 6    Bool1    isTable            Set if the object is a Word table
@@ -72,7 +72,7 @@ public class ExEmbedAtom extends RecordAtom {
         _header = new byte[8];
         _data = new byte[8];
 
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _data.length);
 
         // It is fine for the other values to be zero
@@ -82,21 +82,21 @@ public class ExEmbedAtom extends RecordAtom {
      * Constructs the embedded object atom record from its source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected ExEmbedAtom(byte[] source, int start, int len) {
         // Get the header.
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Get the record data.
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,len-8);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, len - 8);
 
         // Must be at least 8 bytes long
-        if(_data.length < 8) {
-        	throw new IllegalArgumentException("The length of the data for a ExEmbedAtom must be at least 4 bytes, but was only " + _data.length);
+        if (_data.length < 8) {
+            throw new IllegalArgumentException("The length of the data for a ExEmbedAtom must be at least 4 bytes, but was only " + _data.length);
         }
     }
 
@@ -104,8 +104,8 @@ public class ExEmbedAtom extends RecordAtom {
      * Gets whether the object follows the color scheme.
      *
      * @return one of {@link #DOES_NOT_FOLLOW_COLOR_SCHEME},
-     *                {@link #FOLLOWS_ENTIRE_COLOR_SCHEME}, or
-     *                {@link #FOLLOWS_TEXT_AND_BACKGROUND_SCHEME}.
+     * {@link #FOLLOWS_ENTIRE_COLOR_SCHEME}, or
+     * {@link #FOLLOWS_TEXT_AND_BACKGROUND_SCHEME}.
      */
     public int getFollowColorScheme() {
         return LittleEndian.getInt(_data, 0);
@@ -121,9 +121,9 @@ public class ExEmbedAtom extends RecordAtom {
     }
 
     public void setCantLockServerB(boolean cantBeLocked) {
-    	_data[4] = (byte)(cantBeLocked ? 1 : 0);
+        _data[4] = (byte) (cantBeLocked ? 1 : 0);
     }
-    
+
     /**
      * Gets whether it is not required to send the dimensions to the embedded object.
      *
@@ -144,6 +144,7 @@ public class ExEmbedAtom extends RecordAtom {
 
     /**
      * Gets the record type.
+     *
      * @return the record type.
      */
     public long getRecordType() {

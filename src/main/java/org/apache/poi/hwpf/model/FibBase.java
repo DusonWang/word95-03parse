@@ -76,9 +76,7 @@ public class FibBase extends FibBaseAbstractType {
             return false;
         if (field_8_lKey != other.field_8_lKey)
             return false;
-        if (field_9_envr != other.field_9_envr)
-            return false;
-        return true;
+        return field_9_envr == other.field_9_envr;
     }
 
     @Override

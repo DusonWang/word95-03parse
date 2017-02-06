@@ -18,8 +18,7 @@
 package org.apache.poi.hdf.model.hdftypes;
 
 /**
- *
- * @author  andy
+ * @author andy
  */
 @Deprecated
 public interface HDFType {

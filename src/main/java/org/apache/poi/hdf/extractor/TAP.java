@@ -23,27 +23,25 @@ package org.apache.poi.hdf.extractor;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class TAP
-{
-  short _jc;
-  int _dxaGapHalf;
-  int _dyaRowHeight;
-  boolean _fCantSplit;
-  boolean _fTableHeader;
-  boolean _fLastRow;
-  short _itcMac;
-  short[] _rgdxaCenter;
-  short[] _brcLeft = new short[2];
-  short[] _brcRight = new short[2];
-  short[] _brcTop = new short[2];
-  short[] _brcBottom = new short[2];
-  short[] _brcHorizontal = new short[2];
-  short[] _brcVertical = new short[2];
+public final class TAP {
+    short _jc;
+    int _dxaGapHalf;
+    int _dyaRowHeight;
+    boolean _fCantSplit;
+    boolean _fTableHeader;
+    boolean _fLastRow;
+    short _itcMac;
+    short[] _rgdxaCenter;
+    short[] _brcLeft = new short[2];
+    short[] _brcRight = new short[2];
+    short[] _brcTop = new short[2];
+    short[] _brcBottom = new short[2];
+    short[] _brcHorizontal = new short[2];
+    short[] _brcVertical = new short[2];
 
-  TC[] _rgtc;
+    TC[] _rgtc;
 
 
-  public TAP()
-  {
-  }
+    public TAP() {
+    }
 }

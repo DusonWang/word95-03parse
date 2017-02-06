@@ -17,10 +17,10 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.poi.util.LittleEndian;
 
 /**
  * An atom record that specifies the animation information for a shape.
@@ -79,31 +79,32 @@ public final class AnimationInfoAtom extends RecordAtom {
         _recdata = new byte[28];
 
         _header = new byte[8];
-        LittleEndian.putShort(_header, 0, (short)0x01);
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 0, (short) 0x01);
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _recdata.length);
     }
 
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected AnimationInfoAtom(byte[] source, int start, int len) {
         // Get the header
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Grab the record data
-        _recdata = new byte[len-8];
-        System.arraycopy(source,start+8,_recdata,0,len-8);
+        _recdata = new byte[len - 8];
+        System.arraycopy(source, start + 8, _recdata, 0, len - 8);
     }
 
     /**
      * Gets the record type.
+     *
      * @return the record type.
      */
     public long getRecordType() {
@@ -125,36 +126,36 @@ public final class AnimationInfoAtom extends RecordAtom {
     /**
      * A rgb structure that specifies a color for the dim effect after the animation is complete.
      *
-     * @return  color for the dim effect after the animation is complete
+     * @return color for the dim effect after the animation is complete
      */
-    public int getDimColor(){
+    public int getDimColor() {
         return LittleEndian.getInt(_recdata, 0);
     }
 
     /**
      * A rgb structure that specifies a color for the dim effect after the animation is complete.
      *
-     * @param rgb  color for the dim effect after the animation is complete
+     * @param rgb color for the dim effect after the animation is complete
      */
-    public void setDimColor(int rgb){
-         LittleEndian.putInt(_recdata, 0, rgb);
+    public void setDimColor(int rgb) {
+        LittleEndian.putInt(_recdata, 0, rgb);
     }
 
     /**
-     *  A bit mask specifying options for displaying headers and footers
+     * A bit mask specifying options for displaying headers and footers
      *
      * @return A bit mask specifying options for displaying headers and footers
      */
-    public int getMask(){
+    public int getMask() {
         return LittleEndian.getInt(_recdata, 4);
     }
 
     /**
-     *  A bit mask specifying options for displaying video
+     * A bit mask specifying options for displaying video
      *
      * @param mask A bit mask specifying options for displaying video
      */
-    public void setMask(int mask){
+    public void setMask(int mask) {
         LittleEndian.putInt(_recdata, 4, mask);
     }
 
@@ -162,17 +163,17 @@ public final class AnimationInfoAtom extends RecordAtom {
      * @param bit the bit to check
      * @return whether the specified flag is set
      */
-    public boolean getFlag(int bit){
+    public boolean getFlag(int bit) {
         return (getMask() & bit) != 0;
     }
 
     /**
-     * @param  bit the bit to set
-     * @param  value whether the specified bit is set
+     * @param bit   the bit to set
+     * @param value whether the specified bit is set
      */
-    public void setFlag(int bit, boolean value){
+    public void setFlag(int bit, boolean value) {
         int mask = getMask();
-        if(value) mask |= bit;
+        if (value) mask |= bit;
         else mask &= ~bit;
         setMask(mask);
     }
@@ -181,9 +182,9 @@ public final class AnimationInfoAtom extends RecordAtom {
      * A 4-byte unsigned integer that specifies a reference to a sound
      * in the SoundCollectionContainer record to locate the embedded audio
      *
-     * @return  reference to a sound
+     * @return reference to a sound
      */
-    public int getSoundIdRef(){
+    public int getSoundIdRef() {
         return LittleEndian.getInt(_recdata, 8);
     }
 
@@ -193,23 +194,24 @@ public final class AnimationInfoAtom extends RecordAtom {
      *
      * @param id reference to a sound
      */
-    public void setSoundIdRef(int id){
-         LittleEndian.putInt(_recdata, 8, id);
+    public void setSoundIdRef(int id) {
+        LittleEndian.putInt(_recdata, 8, id);
     }
 
     /**
      * A signed integer that specifies the delay time, in milliseconds, before the animation starts to play.
      * If {@link #Automatic} is 0x1, this value MUST be greater than or equal to 0; otherwise, this field MUST be ignored.
      */
-    public int getDelayTime(){
+    public int getDelayTime() {
         return LittleEndian.getInt(_recdata, 12);
     }
+
     /**
      * A signed integer that specifies the delay time, in milliseconds, before the animation starts to play.
      * If {@link #Automatic} is 0x1, this value MUST be greater than or equal to 0; otherwise, this field MUST be ignored.
      */
-    public void setDelayTime(int id){
-         LittleEndian.putInt(_recdata, 12, id);
+    public void setDelayTime(int id) {
+        LittleEndian.putInt(_recdata, 12, id);
     }
 
     /**
@@ -218,7 +220,7 @@ public final class AnimationInfoAtom extends RecordAtom {
      * the corresponding placeholder shape on the main master slide or title master slide.
      * The value -1 SHOULD NOT <105> be used.
      */
-    public int getOrderID(){
+    public int getOrderID() {
         return LittleEndian.getInt(_recdata, 16);
     }
 
@@ -228,8 +230,8 @@ public final class AnimationInfoAtom extends RecordAtom {
      * the corresponding placeholder shape on the main master slide or title master slide.
      * The value -1 SHOULD NOT <105> be used.
      */
-    public void setOrderID(int id){
-         LittleEndian.putInt(_recdata, 16, id);
+    public void setOrderID(int id) {
+        LittleEndian.putInt(_recdata, 16, id);
     }
 
     /**
@@ -237,7 +239,7 @@ public final class AnimationInfoAtom extends RecordAtom {
      * This field is utilized only in conjunction with media.
      * The value 0xFFFFFFFF specifies that the animation plays for one slide.
      */
-    public int getSlideCount(){
+    public int getSlideCount() {
         return LittleEndian.getInt(_recdata, 18);
     }
 
@@ -246,24 +248,24 @@ public final class AnimationInfoAtom extends RecordAtom {
      * This field is utilized only in conjunction with media.
      * The value 0xFFFFFFFF specifies that the animation plays for one slide.
      */
-    public void setSlideCount(int id){
-         LittleEndian.putInt(_recdata, 18, id);
+    public void setSlideCount(int id) {
+        LittleEndian.putInt(_recdata, 18, id);
     }
 
-    public String toString(){
+    public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("AnimationInfoAtom\n");
         buf.append("\tDimColor: " + getDimColor() + "\n");
         int mask = getMask();
-        buf.append("\tMask: " + mask + ", 0x"+Integer.toHexString(mask)+"\n");
-        buf.append("\t  Reverse: " + getFlag(Reverse)+"\n");
-        buf.append("\t  Automatic: " + getFlag(Automatic)+"\n");
-        buf.append("\t  Sound: " + getFlag(Sound)+"\n");
-        buf.append("\t  StopSound: " + getFlag(StopSound)+"\n");
-        buf.append("\t  Play: " + getFlag(Play)+"\n");
-        buf.append("\t  Synchronous: " + getFlag(Synchronous)+"\n");
-        buf.append("\t  Hide: " + getFlag(Hide)+"\n");
-        buf.append("\t  AnimateBg: " + getFlag(AnimateBg)+"\n");
+        buf.append("\tMask: " + mask + ", 0x" + Integer.toHexString(mask) + "\n");
+        buf.append("\t  Reverse: " + getFlag(Reverse) + "\n");
+        buf.append("\t  Automatic: " + getFlag(Automatic) + "\n");
+        buf.append("\t  Sound: " + getFlag(Sound) + "\n");
+        buf.append("\t  StopSound: " + getFlag(StopSound) + "\n");
+        buf.append("\t  Play: " + getFlag(Play) + "\n");
+        buf.append("\t  Synchronous: " + getFlag(Synchronous) + "\n");
+        buf.append("\t  Hide: " + getFlag(Hide) + "\n");
+        buf.append("\t  AnimateBg: " + getFlag(AnimateBg) + "\n");
         buf.append("\tSoundIdRef: " + getSoundIdRef() + "\n");
         buf.append("\tDelayTime: " + getDelayTime() + "\n");
         buf.append("\tOrderID: " + getOrderID() + "\n");

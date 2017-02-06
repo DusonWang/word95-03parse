@@ -18,5 +18,5 @@
 package org.apache.poi.sl.usermodel;
 
 public interface Notes extends Sheet {
-	public TextRun getTextRun();
+    public TextRun getTextRun();
 }

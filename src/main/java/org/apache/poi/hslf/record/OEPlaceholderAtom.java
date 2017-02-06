@@ -18,19 +18,20 @@
 package org.apache.poi.hslf.record;
 
 import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
 /**
  * OEPlaceholderAtom (3011).
  * <p>
- *  An atom record that specifies whether a shape is a placeholder shape.
+ * An atom record that specifies whether a shape is a placeholder shape.
  * </p>
  *
  * @author Yegor Kozlov
  */
 
-public final class OEPlaceholderAtom extends RecordAtom{
+public final class OEPlaceholderAtom extends RecordAtom {
 
     /**
      * The full size of the master body text placeholder shape.
@@ -125,8 +126,8 @@ public final class OEPlaceholderAtom extends RecordAtom{
     public static final byte NotesBody = 12;
 
     /**
-     *  The corresponding shape contains the title text.
-     *  The corresponding slide MUST be a presentation slide.
+     * The corresponding shape contains the title text.
+     * The corresponding slide MUST be a presentation slide.
      */
     public static final byte Title = 13;
 
@@ -161,8 +162,8 @@ public final class OEPlaceholderAtom extends RecordAtom{
     public static final byte VerticalTextBody = 18;
 
     /**
-     *  The corresponding shape contains a generic object.
-     *  The corresponding slide MUST be a presentation slide.
+     * The corresponding shape contains a generic object.
+     * The corresponding slide MUST be a presentation slide.
      */
     public static final byte Object = 19;
 
@@ -196,7 +197,7 @@ public final class OEPlaceholderAtom extends RecordAtom{
      */
     public static final byte MediaClip = 24;
 
-	private byte[] _header;
+    private byte[] _header;
 
     private int placementId;
     private int placeholderId;
@@ -206,10 +207,10 @@ public final class OEPlaceholderAtom extends RecordAtom{
     /**
      * Create a new instance of <code>OEPlaceholderAtom</code>
      */
-    public OEPlaceholderAtom(){
+    public OEPlaceholderAtom() {
         _header = new byte[8];
         LittleEndian.putUShort(_header, 0, 0);
-        LittleEndian.putUShort(_header, 2, (int)getRecordType());
+        LittleEndian.putUShort(_header, 2, (int) getRecordType());
         LittleEndian.putInt(_header, 4, 8);
 
         placementId = 0;
@@ -220,21 +221,26 @@ public final class OEPlaceholderAtom extends RecordAtom{
     /**
      * Build an instance of <code>OEPlaceholderAtom</code> from on-disk data
      */
-	protected OEPlaceholderAtom(byte[] source, int start, int len) {
-		_header = new byte[8];
+    protected OEPlaceholderAtom(byte[] source, int start, int len) {
+        _header = new byte[8];
         int offset = start;
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
         offset += _header.length;
 
-        placementId = LittleEndian.getInt(source, offset); offset += 4;
-        placeholderId = LittleEndian.getUnsignedByte(source, offset); offset++;
-        placeholderSize = LittleEndian.getUnsignedByte(source, offset); offset++;
-	}
+        placementId = LittleEndian.getInt(source, offset);
+        offset += 4;
+        placeholderId = LittleEndian.getUnsignedByte(source, offset);
+        offset++;
+        placeholderSize = LittleEndian.getUnsignedByte(source, offset);
+        offset++;
+    }
 
     /**
      * @return type of this record {@link RecordTypes#OEPlaceholderAtom}.
      */
-	public long getRecordType() { return RecordTypes.OEPlaceholderAtom.typeID; }
+    public long getRecordType() {
+        return RecordTypes.OEPlaceholderAtom.typeID;
+    }
 
     /**
      * Returns the placement Id.
@@ -246,7 +252,7 @@ public final class OEPlaceholderAtom extends RecordAtom{
      *
      * @return the placement Id.
      */
-    public int getPlacementId(){
+    public int getPlacementId() {
         return placementId;
     }
 
@@ -260,13 +266,13 @@ public final class OEPlaceholderAtom extends RecordAtom{
      *
      * @param id the placement Id.
      */
-   public void setPlacementId(int id){
+    public void setPlacementId(int id) {
         placementId = id;
     }
 
     /**
      * Returns the placeholder Id.
-     *
+     * <p>
      * <p>
      * placeholder Id specifies the type of the placeholder shape.
      * The value MUST be one of the static constants defined in this class
@@ -274,20 +280,21 @@ public final class OEPlaceholderAtom extends RecordAtom{
      *
      * @return the placeholder Id.
      */
-    public int getPlaceholderId(){
+    public int getPlaceholderId() {
         return placeholderId;
     }
 
     /**
      * Sets the placeholder Id.
-     *
+     * <p>
      * <p>
      * placeholder Id specifies the type of the placeholder shape.
      * The value MUST be one of the static constants defined in this class
      * </p>
+     *
      * @param id the placeholder Id.
      */
-    public void setPlaceholderId(byte id){
+    public void setPlaceholderId(byte id) {
         placeholderId = id;
     }
 
@@ -297,7 +304,7 @@ public final class OEPlaceholderAtom extends RecordAtom{
      *
      * @return the placeholder size.
      */
-    public int getPlaceholderSize(){
+    public int getPlaceholderSize() {
         return placeholderSize;
     }
 
@@ -307,22 +314,22 @@ public final class OEPlaceholderAtom extends RecordAtom{
      *
      * @param size the placeholder size.
      */
-     public void setPlaceholderSize(byte size){
+    public void setPlaceholderSize(byte size) {
         placeholderSize = size;
     }
 
-	/**
-	 * Write the contents of the record back, so it can be written
-	 *  to disk
-	 */
-	public void writeOut(OutputStream out) throws IOException {
-		out.write(_header);
+    /**
+     * Write the contents of the record back, so it can be written
+     * to disk
+     */
+    public void writeOut(OutputStream out) throws IOException {
+        out.write(_header);
 
         byte[] recdata = new byte[8];
         LittleEndian.putInt(recdata, 0, placementId);
-        recdata[4] = (byte)placeholderId;
-        recdata[5] = (byte)placeholderSize;
+        recdata[4] = (byte) placeholderId;
+        recdata[5] = (byte) placeholderSize;
 
         out.write(recdata);
-	}
+    }
 }

@@ -1,4 +1,3 @@
-
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -21,10 +20,10 @@ import org.apache.poi.OldFileFormatException;
 
 /**
  * This exception is thrown when we try to open a PowerPoint file, and
- *  it's too old for us.
+ * it's too old for us.
  */
 public class OldPowerPointFormatException extends OldFileFormatException {
-	public OldPowerPointFormatException(String s) {
-		super(s);
-	}
+    public OldPowerPointFormatException(String s) {
+        super(s);
+    }
 }

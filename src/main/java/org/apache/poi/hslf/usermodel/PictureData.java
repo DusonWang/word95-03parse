@@ -17,41 +17,115 @@
 
 package org.apache.poi.hslf.usermodel;
 
-import org.apache.poi.util.LittleEndian;
-import org.apache.poi.util.POILogger;
-import org.apache.poi.util.POILogFactory;
-import org.apache.poi.hslf.model.Picture;
 import org.apache.poi.hslf.blip.*;
 import org.apache.poi.hslf.exceptions.HSLFException;
+import org.apache.poi.hslf.model.Picture;
+import org.apache.poi.util.LittleEndian;
+import org.apache.poi.util.POILogFactory;
+import org.apache.poi.util.POILogger;
 
-import java.io.OutputStream;
+import java.awt.*;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.awt.*;
 
 /**
  * A class that represents image data contained in a slide show.
  *
- *  @author Yegor Kozlov
+ * @author Yegor Kozlov
  */
 public abstract class PictureData {
-
-    protected POILogger logger = POILogFactory.getLogger(this.getClass());
 
     /**
      * Size of the image checksum calculated using MD5 algorithm.
      */
     protected static final int CHECKSUM_SIZE = 16;
+    protected static ImagePainter[] painters = new ImagePainter[8];
 
-    /**
-    * Binary data of the picture
-    */
-    private byte[] rawdata;
+    static {
+        PictureData.setImagePainter(Picture.PNG, new BitmapPainter());
+        PictureData.setImagePainter(Picture.JPEG, new BitmapPainter());
+        PictureData.setImagePainter(Picture.DIB, new BitmapPainter());
+    }
+
+    protected POILogger logger = POILogFactory.getLogger(this.getClass());
     /**
      * The offset to the picture in the stream
      */
     protected int offset;
+    /**
+     * Binary data of the picture
+     */
+    private byte[] rawdata;
+
+    /**
+     * Compute 16-byte checksum of this picture using MD5 algorithm.
+     */
+    public static byte[] getChecksum(byte[] data) {
+        MessageDigest sha;
+        try {
+            sha = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            throw new HSLFException(e.getMessage());
+        }
+        sha.update(data);
+        return sha.digest();
+    }
+
+    /**
+     * Create an instance of <code>PictureData</code> by type.
+     *
+     * @param type type of the picture data.
+     *             Must be one of the static constants defined in the <code>Picture<code> class.
+     * @return concrete instance of <code>PictureData</code>
+     */
+    public static PictureData create(int type) {
+        PictureData pict;
+        switch (type) {
+            case Picture.EMF:
+                pict = new EMF();
+                break;
+            case Picture.WMF:
+                pict = new WMF();
+                break;
+            case Picture.PICT:
+                pict = new PICT();
+                break;
+            case Picture.JPEG:
+                pict = new JPEG();
+                break;
+            case Picture.PNG:
+                pict = new PNG();
+                break;
+            case Picture.DIB:
+                pict = new DIB();
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported picture type: " + type);
+        }
+        return pict;
+    }
+
+    /**
+     * Register ImagePainter for the specified image type
+     *
+     * @param type    image type, must be one of the static constants defined in the <code>Picture<code> class.
+     * @param painter
+     */
+    public static void setImagePainter(int type, ImagePainter painter) {
+        painters[type] = painter;
+    }
+
+    /**
+     * Return ImagePainter for the specified image type
+     *
+     * @param type blip type, must be one of the static constants defined in the <code>Picture<code> class.
+     * @return ImagePainter for the specified image type
+     */
+    public static ImagePainter getImagePainter(int type) {
+        return painters[type];
+    }
 
     /**
      * Returns type of this picture.
@@ -63,12 +137,13 @@ public abstract class PictureData {
 
     /**
      * Returns the binary data of this Picture
+     *
      * @return picture data
      */
     public abstract byte[] getData();
 
     /**
-     *  Set picture data
+     * Set picture data
      */
     public abstract void setData(byte[] data) throws IOException;
 
@@ -77,24 +152,17 @@ public abstract class PictureData {
      */
     protected abstract int getSignature();
 
-    protected static ImagePainter[] painters = new ImagePainter[8];
-    static {
-        PictureData.setImagePainter(Picture.PNG, new BitmapPainter());
-        PictureData.setImagePainter(Picture.JPEG, new BitmapPainter());
-        PictureData.setImagePainter(Picture.DIB, new BitmapPainter());
-    }
-
     /**
      * Returns the raw binary data of this Picture excluding the first 8 bytes
      * which hold image signature and size of the image data.
      *
      * @return picture data
      */
-    public byte[] getRawData(){
+    public byte[] getRawData() {
         return rawdata;
     }
 
-    public void setRawData(byte[] data){
+    public void setRawData(byte[] data) {
         rawdata = data;
     }
 
@@ -103,7 +171,7 @@ public abstract class PictureData {
      *
      * @return offset in the 'Pictures' stream
      */
-    public int getOffset(){
+    public int getOffset() {
         return offset;
     }
 
@@ -113,32 +181,17 @@ public abstract class PictureData {
      *
      * @param offset in the 'Pictures' stream
      */
-    public void setOffset(int offset){
+    public void setOffset(int offset) {
         this.offset = offset;
     }
 
     /**
      * Returns 16-byte checksum of this picture
      */
-    public byte[] getUID(){
+    public byte[] getUID() {
         byte[] uid = new byte[16];
         System.arraycopy(rawdata, 0, uid, 0, uid.length);
         return uid;
-    }
-
-
-    /**
-     * Compute 16-byte checksum of this picture using MD5 algorithm.
-     */
-    public static byte[] getChecksum(byte[] data) {
-        MessageDigest sha;
-        try {
-            sha = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e){
-            throw new HSLFException(e.getMessage());
-        }
-        sha.update(data);
-        return sha.digest();
     }
 
     /**
@@ -165,40 +218,6 @@ public abstract class PictureData {
     }
 
     /**
-     * Create an instance of <code>PictureData</code> by type.
-     *
-     * @param type type of the picture data.
-     * Must be one of the static constants defined in the <code>Picture<code> class.
-     * @return concrete instance of <code>PictureData</code>
-     */
-     public static PictureData create(int type){
-        PictureData pict;
-        switch (type){
-            case Picture.EMF:
-                pict = new EMF();
-                break;
-            case Picture.WMF:
-                pict = new WMF();
-                break;
-            case Picture.PICT:
-                pict = new PICT();
-                break;
-            case Picture.JPEG:
-                pict = new JPEG();
-                break;
-            case Picture.PNG:
-                pict = new PNG();
-                break;
-            case Picture.DIB:
-                pict = new DIB();
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported picture type: " + type);
-        }
-        return pict;
-    }
-
-    /**
      * Return 24 byte header which preceeds the actual picture data.
      * <p>
      * The header consists of 2-byte signature, 2-byte type,
@@ -216,39 +235,19 @@ public abstract class PictureData {
     }
 
     /**
-    * Return image size in bytes
-    *
-    *  @return the size of the picture in bytes
+     * Return image size in bytes
+     *
+     * @return the size of the picture in bytes
      * @deprecated Use <code>getData().length</code> instead.
-    */
-    public int getSize(){
+     */
+    public int getSize() {
         return getData().length;
     }
 
-    public void draw(Graphics2D graphics, Picture parent){
+    public void draw(Graphics2D graphics, Picture parent) {
         ImagePainter painter = painters[getType()];
-        if(painter != null) painter.paint(graphics, this, parent);
+        if (painter != null) painter.paint(graphics, this, parent);
         else logger.log(POILogger.WARN, "Rendering is not supported: " + getClass().getName());
-    }
-
-    /**
-     * Register ImagePainter for the specified image type
-     *
-     * @param type  image type, must be one of the static constants defined in the <code>Picture<code> class.
-     * @param painter
-     */
-    public static void setImagePainter(int type, ImagePainter painter){
-        painters[type] = painter;
-    }
-
-    /**
-     * Return ImagePainter for the specified image type
-     *
-     * @param type blip type, must be one of the static constants defined in the <code>Picture<code> class.
-     * @return ImagePainter for the specified image type
-     */
-    public static ImagePainter getImagePainter(int type){
-        return painters[type];
     }
 
 }

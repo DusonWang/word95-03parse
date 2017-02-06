@@ -21,10 +21,10 @@ import org.apache.poi.hdgf.pointers.Pointer;
 
 /**
  * A placeholder for a stream where we don't known anything
- *  about how to process / handle it
+ * about how to process / handle it
  */
 public final class UnknownStream extends Stream {
-	protected UnknownStream(Pointer pointer, StreamStore store) {
-		super(pointer, store);
-	}
+    protected UnknownStream(Pointer pointer, StreamStore store) {
+        super(pointer, store);
+    }
 }

@@ -17,13 +17,13 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.hslf.model.textproperties.TextPFException9;
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.poi.hslf.model.textproperties.TextPFException9;
-import org.apache.poi.util.LittleEndian;
 
 /**
  * The atom record that specifies additional text formatting.
@@ -31,72 +31,80 @@ import org.apache.poi.util.LittleEndian;
  * @author Alex Nikiforov [mailto:anikif@gmail.com]
  */
 public final class StyleTextProp9Atom extends RecordAtom {
-	private final TextPFException9[] autoNumberSchemes;
-    /** Record header. */
+    private final TextPFException9[] autoNumberSchemes;
+    /**
+     * Record header.
+     */
     private byte[] header;
-    /** Record data. */
+    /**
+     * Record data.
+     */
     private byte[] data;
     private short version;
     private short recordId;
     private int length;
-    
+
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected StyleTextProp9Atom(byte[] source, int start, int len) {
         // Get the header.
-    	final List<TextPFException9> schemes = new LinkedList<TextPFException9>();
+        final List<TextPFException9> schemes = new LinkedList<TextPFException9>();
         header = new byte[8];
-        System.arraycopy(source,start, header,0,8);
-        this.version  = LittleEndian.getShort(header, 0);
+        System.arraycopy(source, start, header, 0, 8);
+        this.version = LittleEndian.getShort(header, 0);
         this.recordId = LittleEndian.getShort(header, 2);
-        this.length   = LittleEndian.getInt(header, 4);
-        
+        this.length = LittleEndian.getInt(header, 4);
+
         // Get the record data.
-        data = new byte[len-8];
-        System.arraycopy(source, start+8, data, 0, len-8);
+        data = new byte[len - 8];
+        System.arraycopy(source, start + 8, data, 0, len - 8);
         for (int i = 0; i < data.length; ) {
-        	final TextPFException9 item = new TextPFException9(data, i);
-        	schemes.add(item);
-        	i += item.getRecordLength();
-        	//int textCfException9 = LittleEndian.getInt(data, i );
-        	//TODO analyze textCfException when have some test data
-        	i += 4;
-        	int textSiException = LittleEndian.getInt(data, i );
-        	i +=  + 4;//TextCFException9 + SIException
-        	if (0 != (textSiException & 0x40)) { 
-        		i += 2; //skip fBidi 
-        	}
-        	if (i >= data.length) {
-        		break;
-        	}
+            final TextPFException9 item = new TextPFException9(data, i);
+            schemes.add(item);
+            i += item.getRecordLength();
+            //int textCfException9 = LittleEndian.getInt(data, i );
+            //TODO analyze textCfException when have some test data
+            i += 4;
+            int textSiException = LittleEndian.getInt(data, i);
+            i += +4;//TextCFException9 + SIException
+            if (0 != (textSiException & 0x40)) {
+                i += 2; //skip fBidi
+            }
+            if (i >= data.length) {
+                break;
+            }
         }
         this.autoNumberSchemes = (TextPFException9[]) schemes.toArray(new TextPFException9[schemes.size()]);
     }
 
-	/**
+    /**
      * Gets the record type.
+     *
      * @return the record type.
      */
-    public long getRecordType() { return this.recordId; }
+    public long getRecordType() {
+        return this.recordId;
+    }
 
     public short getVersion() {
-		return version;
-	}
+        return version;
+    }
 
-	public int getLength() {
-		return length;
-	}
-	public TextPFException9[] getAutoNumberTypes() {
-		return this.autoNumberSchemes;
-	}
+    public int getLength() {
+        return length;
+    }
 
-	/**
+    public TextPFException9[] getAutoNumberTypes() {
+        return this.autoNumberSchemes;
+    }
+
+    /**
      * Write the contents of the record back, so it can be written
      * to disk
      *
@@ -113,22 +121,23 @@ public final class StyleTextProp9Atom extends RecordAtom {
      *
      * @param size the text length
      */
-    public void setTextSize(int size){
+    public void setTextSize(int size) {
         LittleEndian.putInt(data, 0, size);
     }
 
     /**
      * Reset the content to one info run with the default values
-     * @param size  the site of parent text
+     *
+     * @param size the site of parent text
      */
-    public void reset(int size){
+    public void reset(int size) {
         data = new byte[10];
         // 01 00 00 00
         LittleEndian.putInt(data, 0, size);
         // 01 00 00 00
         LittleEndian.putInt(data, 4, 1); //mask
         // 00 00
-        LittleEndian.putShort(data, 8, (short)0); //langId
+        LittleEndian.putShort(data, 8, (short) 0); //langId
 
         // Update the size (header bytes 5-8)
         LittleEndian.putInt(header, 4, data.length);

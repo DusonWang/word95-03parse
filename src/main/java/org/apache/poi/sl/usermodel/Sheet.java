@@ -21,9 +21,9 @@ package org.apache.poi.sl.usermodel;
  * Common parent of Slides, Notes and Masters
  */
 public interface Sheet extends ShapeContainer {
-	public SlideShow getSlideShow();
+    public SlideShow getSlideShow();
 
-	public MasterSheet getMasterSheet();
+    public MasterSheet getMasterSheet();
 
-	public Background getBackground();
+    public Background getBackground();
 }

@@ -23,30 +23,48 @@ import java.nio.charset.Charset;
  * A chunk header from v11+
  */
 public final class ChunkHeaderV11 extends ChunkHeaderV6 {
-	/**
-	 * Does the chunk have a separator?
-	 */
-	public boolean hasSeparator() {
-		// For some reason, there are two types that don't have a
-		//  separator despite the flags that indicate they do
-		if(type == 0x1f || type == 0xc9) { return false; }
+    /**
+     * Does the chunk have a separator?
+     */
+    public boolean hasSeparator() {
+        // For some reason, there are two types that don't have a
+        //  separator despite the flags that indicate they do
+        if (type == 0x1f || type == 0xc9) {
+            return false;
+        }
 
-		// If there's a trailer, there's a separator
-		if(hasTrailer()) { return true; }
+        // If there's a trailer, there's a separator
+        if (hasTrailer()) {
+            return true;
+        }
 
-		if(unknown2 == 2 && unknown3 == 0x55) { return true; }
-		if(unknown2 == 2 && unknown3 == 0x54 && type == 0xa9) { return true; }
-		if(unknown2 == 2 && unknown3 == 0x54 && type == 0xaa) { return true; }
-		if(unknown2 == 2 && unknown3 == 0x54 && type == 0xb4) { return true; }
-		if(unknown2 == 2 && unknown3 == 0x54 && type == 0xb6) { return true; }
-		if(unknown2 == 3 && unknown3 != 0x50) { return true; }
-		if(type == 0x69) { return true; }
+        if (unknown2 == 2 && unknown3 == 0x55) {
+            return true;
+        }
+        if (unknown2 == 2 && unknown3 == 0x54 && type == 0xa9) {
+            return true;
+        }
+        if (unknown2 == 2 && unknown3 == 0x54 && type == 0xaa) {
+            return true;
+        }
+        if (unknown2 == 2 && unknown3 == 0x54 && type == 0xb4) {
+            return true;
+        }
+        if (unknown2 == 2 && unknown3 == 0x54 && type == 0xb6) {
+            return true;
+        }
+        if (unknown2 == 3 && unknown3 != 0x50) {
+            return true;
+        }
+        if (type == 0x69) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public Charset getChunkCharset() {
-		return Charset.forName("UTF-16LE");
-	}
+    @Override
+    public Charset getChunkCharset() {
+        return Charset.forName("UTF-16LE");
+    }
 }

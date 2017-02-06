@@ -41,9 +41,9 @@ public final class BTreeSet extends AbstractSet implements Set {
      * Instance Variables
     */
     public BTreeNode root;
-    private Comparator comparator = null;
     int order;
     int size = 0;
+    private Comparator comparator = null;
 
     /*
      *                             Constructors
@@ -107,7 +107,7 @@ public final class BTreeSet extends AbstractSet implements Set {
      * Private methods
     */
     int compare(Object x, Object y) {
-        return (comparator == null ? ((Comparable)x).compareTo(y) : comparator.compare(x, y));
+        return (comparator == null ? ((Comparable) x).compareTo(y) : comparator.compare(x, y));
     }
 
 
@@ -125,12 +125,18 @@ public final class BTreeSet extends AbstractSet implements Set {
      * chance of receiving a NullPointerException. The Iterator.delete method is supported.
     */
 
+    public static class Entry {
+
+        public Object element;
+        public BTreeNode child;
+    }
+
     private final class BTIterator implements java.util.Iterator {
-        private int index = 0;
         Stack parentIndex = new Stack(); // Contains all parentIndicies for currentNode
+        BTreeNode currentNode;
+        private int index = 0;
         private Object lastReturned = null;
         private Object next;
-        BTreeNode currentNode;
 
         BTIterator() {
             currentNode = firstNode();
@@ -173,19 +179,17 @@ public final class BTreeSet extends AbstractSet implements Set {
 
                 else if (!parentIndex.empty()) { //All elements have been returned, return successor of lastReturned if it exists
                     currentNode = currentNode._parent;
-                    index = ((Integer)parentIndex.pop()).intValue();
+                    index = ((Integer) parentIndex.pop()).intValue();
 
                     while (index == currentNode._nrElements) {
                         if (parentIndex.empty()) break;
                         currentNode = currentNode._parent;
-                        index = ((Integer)parentIndex.pop()).intValue();
+                        index = ((Integer) parentIndex.pop()).intValue();
                     }
 
                     if (index == currentNode._nrElements) return null; //Reached root and he has no more children
                     return currentNode._entries[index++].element;
-                }
-
-                else { //Your a leaf and the root
+                } else { //Your a leaf and the root
                     if (index == currentNode._nrElements) return null;
                     return currentNode._entries[index++].element;
                 }
@@ -205,20 +209,12 @@ public final class BTreeSet extends AbstractSet implements Set {
         }
     }
 
-
-    public static class Entry {
-
-        public Object element;
-        public BTreeNode child;
-    }
-
-
     public class BTreeNode {
 
+        private final int MIN = (BTreeSet.this.order - 1) / 2;
         public Entry[] _entries;
         public BTreeNode _parent;
         int _nrElements = 0;
-        private final int MIN = (BTreeSet.this.order - 1) / 2;
 
         BTreeNode(BTreeNode parent) {
             _parent = parent;
@@ -236,18 +232,14 @@ public final class BTreeSet extends AbstractSet implements Set {
                     // Determine where to insert
                     if (BTreeSet.this.compare(x, BTreeSet.this.root._entries[0].element) < 0) insert(x, 0);
                     else rightSibling.insert(x, 1);
-                }
-
-                else { // Promote splitNode
+                } else { // Promote splitNode
                     _parent.insertSplitNode(splitNode, this, rightSibling, parentIndex);
                     if (BTreeSet.this.compare(x, _parent._entries[parentIndex].element) < 0) {
                         return insert(x, parentIndex);
                     }
                     return rightSibling.insert(x, parentIndex + 1);
                 }
-            }
-
-            else if (isLeaf()) { // If leaf, simply insert the non-duplicate element
+            } else if (isLeaf()) { // If leaf, simply insert the non-duplicate element
                 int insertAt = childToInsertAt(x, true);
                 if (insertAt == -1) {
                     return false; // Determine if the element already exists
@@ -255,9 +247,7 @@ public final class BTreeSet extends AbstractSet implements Set {
                 insertNewElement(x, insertAt);
                 BTreeSet.this.size++;
                 return true;
-            }
-
-            else { // If not full and not leaf recursively find correct node to insert at
+            } else { // If not full and not leaf recursively find correct node to insert at
                 int insertAt = childToInsertAt(x, true);
                 return (insertAt == -1 ? false : _entries[insertAt].child.insert(x, insertAt));
             }
@@ -307,11 +297,17 @@ public final class BTreeSet extends AbstractSet implements Set {
         }
 
 
-        private boolean isFull() { return _nrElements == (BTreeSet.this.order - 1); }
+        private boolean isFull() {
+            return _nrElements == (BTreeSet.this.order - 1);
+        }
 
-        boolean isLeaf() { return _entries[0].child == null; }
+        boolean isLeaf() {
+            return _entries[0].child == null;
+        }
 
-        private boolean isRoot() { return _parent == null; }
+        private boolean isRoot() {
+            return _parent == null;
+        }
 
         /*
          * Splits a BTreeNode into two BTreeNodes, removing the splitNode from the
@@ -390,8 +386,7 @@ public final class BTreeSet extends AbstractSet implements Set {
                 if (BTreeSet.this.compare(x, _entries[index].element) > 0) {
                     lo = index + 1;
                     index = (hi + lo) / 2;
-                }
-                else {
+                } else {
                     hi = index - 1;
                     index = (hi + lo) / 2;
                 }
@@ -416,7 +411,7 @@ public final class BTreeSet extends AbstractSet implements Set {
         private void prepareForDeletion(int parentIndex) {
             if (isRoot()) return; // Don't attempt to steal or merge if your the root
 
-            // If not root then try to steal left
+                // If not root then try to steal left
             else if (parentIndex != 0 && _parent._entries[parentIndex - 1].child._nrElements > MIN) {
                 stealLeft(parentIndex);
                 return;
@@ -424,8 +419,8 @@ public final class BTreeSet extends AbstractSet implements Set {
 
             // If not root and can't steal left try to steal right
             else if (parentIndex < _entries.length && _parent._entries[parentIndex + 1] != null && _parent._entries[parentIndex + 1].child != null && _parent._entries[parentIndex + 1].child._nrElements > MIN) {
-                    stealRight(parentIndex);
-                    return;
+                stealRight(parentIndex);
+                return;
             }
 
             // If not root and can't steal left or right then try to merge left
@@ -478,9 +473,7 @@ public final class BTreeSet extends AbstractSet implements Set {
                 p._entries[parentIndex - 1].element = ls._entries[ls._nrElements - 1].element;
                 ls._entries[ls._nrElements - 1] = null;
                 ls._nrElements--;
-            }
-
-            else { // Was called recursively to fix an undermanned parent
+            } else { // Was called recursively to fix an undermanned parent
                 _entries[0].element = p._entries[parentIndex - 1].element;
                 p._entries[parentIndex - 1].element = ls._entries[ls._nrElements - 1].element;
                 _entries[0].child = ls._entries[ls._nrElements].child;
@@ -509,9 +502,7 @@ public final class BTreeSet extends AbstractSet implements Set {
                 rs._entries[rs._nrElements - 1] = null;
                 _nrElements++;
                 rs._nrElements--;
-            }
-
-            else { // Was called recursively to fix an undermanned parent
+            } else { // Was called recursively to fix an undermanned parent
                 for (int i = 0; i <= _nrElements; i++) _entries[i] = _entries[i + 1];
                 _entries[_nrElements].element = p._entries[parentIndex].element;
                 p._entries[parentIndex].element = rs._entries[0].element;
@@ -557,9 +548,7 @@ public final class BTreeSet extends AbstractSet implements Set {
                         p._entries[x] = p._entries[y];
                     p._entries[0] = new Entry();
                     p._entries[0].child = ls; //So p doesn't think it's a leaf this will be deleted in the next recursive call
-                }
-
-                else {
+                } else {
 
                     for (int x = parentIndex - 1, y = parentIndex; y <= p._nrElements; x++, y++)
                         p._entries[x] = p._entries[y];
@@ -572,9 +561,7 @@ public final class BTreeSet extends AbstractSet implements Set {
                     BTreeSet.this.root = this;
                     _parent = null;
                 }
-            }
-
-            else { // I'm not a leaf but fixing the tree structure
+            } else { // I'm not a leaf but fixing the tree structure
                 _entries[0].element = p._entries[parentIndex - 1].element;
                 _entries[0].child = ls._entries[ls._nrElements].child;
                 _nrElements++;
@@ -589,13 +576,12 @@ public final class BTreeSet extends AbstractSet implements Set {
                 }
 
                 if (p._nrElements == MIN && p != BTreeSet.this.root) { // Push everything to the right
-                    for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x++, y++){
+                    for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x++, y++) {
                         System.out.println(x + " " + y);
-                        p._entries[x] = p._entries[y];}
+                        p._entries[x] = p._entries[y];
+                    }
                     p._entries[0] = new Entry();
-                }
-
-                else { // Either p.nrElements > MIN or p == BTreeSet.this.root so push everything to the left
+                } else { // Either p.nrElements > MIN or p == BTreeSet.this.root so push everything to the left
                     for (int x = parentIndex - 1, y = parentIndex; y <= p._nrElements; x++, y++)
                         p._entries[x] = p._entries[y];
                     p._entries[p._nrElements] = null;
@@ -637,9 +623,7 @@ public final class BTreeSet extends AbstractSet implements Set {
                         p._entries[x] = p._entries[y];
                     p._entries[0] = new Entry();
                     p._entries[0].child = rs; // So it doesn't think it's a leaf, this child will be deleted in the next recursive call
-                }
-
-                else {
+                } else {
                     for (int x = parentIndex + 1, y = parentIndex + 2; y <= p._nrElements; x++, y++)
                         p._entries[x] = p._entries[y];
                     p._entries[p._nrElements] = null;
@@ -650,42 +634,38 @@ public final class BTreeSet extends AbstractSet implements Set {
                     BTreeSet.this.root = this;
                     _parent = null;
                 }
-           }
+            } else { // It's not a leaf
 
-           else { // It's not a leaf
+                _entries[_nrElements].element = p._entries[parentIndex].element;
+                _nrElements++;
 
-               _entries[_nrElements].element = p._entries[parentIndex].element;
-               _nrElements++;
+                for (int x = _nrElements + 1, y = 0; y <= rs._nrElements; x++, y++) {
+                    _entries[x] = rs._entries[y];
+                    rs._entries[y].child._parent = this;
+                    _nrElements++;
+                }
+                _nrElements--;
 
-               for (int x = _nrElements + 1, y = 0; y <= rs._nrElements; x++, y++) {
-                   _entries[x] = rs._entries[y];
-                   rs._entries[y].child._parent = this;
-                   _nrElements++;
-               }
-               _nrElements--;
+                p._entries[++parentIndex].child = this;
 
-               p._entries[++parentIndex].child = this;
+                if (p._nrElements == MIN && p != BTreeSet.this.root) {
+                    for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x--, y--)
+                        p._entries[x] = p._entries[y];
+                    p._entries[0] = new Entry();
+                } else {
+                    for (int x = parentIndex - 1, y = parentIndex; y <= p._nrElements; x++, y++)
+                        p._entries[x] = p._entries[y];
+                    p._entries[p._nrElements] = null;
+                }
 
-               if (p._nrElements == MIN && p != BTreeSet.this.root) {
-                  for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x--, y--)
-                      p._entries[x] = p._entries[y];
-                  p._entries[0] = new Entry();
-               }
+                p._nrElements--;
 
-               else {
-                   for (int x = parentIndex - 1, y = parentIndex; y <= p._nrElements; x++, y++)
-                       p._entries[x] = p._entries[y];
-                   p._entries[p._nrElements] = null;
-               }
-
-               p._nrElements--;
-
-               if (p.isRoot() && p._nrElements == 0) { // It's the root and it's empty
-                   BTreeSet.this.root = this;
-                   _parent = null;
-               }
+                if (p.isRoot() && p._nrElements == 0) { // It's the root and it's empty
+                    BTreeSet.this.root = this;
+                    _parent = null;
+                }
             }
         }
-  }
+    }
 }
 

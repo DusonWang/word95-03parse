@@ -17,10 +17,6 @@
 
 package org.apache.poi.hpbf;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.apache.poi.POIDocument;
 import org.apache.poi.hpbf.model.EscherDelayStm;
 import org.apache.poi.hpbf.model.EscherStm;
@@ -30,70 +26,81 @@ import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * This class provides the basic functionality
- *  for HPBF, our implementation of the publisher
- *  file format.
+ * for HPBF, our implementation of the publisher
+ * file format.
  */
 public final class HPBFDocument extends POIDocument {
-	private MainContents mainContents;
-	private QuillContents quillContents;
-	private EscherStm escherStm;
-	private EscherDelayStm escherDelayStm;
+    private MainContents mainContents;
+    private QuillContents quillContents;
+    private EscherStm escherStm;
+    private EscherDelayStm escherDelayStm;
 
-	/**
-	 * Opens a new publisher document
-	 */
-	public HPBFDocument(POIFSFileSystem fs) throws IOException {
-	   this(fs.getRoot());
-	}
-	public HPBFDocument(NPOIFSFileSystem fs) throws IOException {
-	   this(fs.getRoot());
-	}
-	public HPBFDocument(InputStream inp) throws IOException {
-	   this(new POIFSFileSystem(inp));
-	}
+    /**
+     * Opens a new publisher document
+     */
+    public HPBFDocument(POIFSFileSystem fs) throws IOException {
+        this(fs.getRoot());
+    }
 
-	/**
-	 * Opens an embedded publisher document,
-	 *  at the given directory.
-	 * @deprecated Use {@link #HPBFDocument(DirectoryNode)} instead
-	 */
-	@Deprecated
-	public HPBFDocument(DirectoryNode dir, POIFSFileSystem fs) throws IOException {
-	   this(dir);
-	}
-	/**
-	 * Opens an embedded publisher document,
-	 *  at the given directory.
-	 */
-	public HPBFDocument(DirectoryNode dir) throws IOException {
-	   super(dir);
+    public HPBFDocument(NPOIFSFileSystem fs) throws IOException {
+        this(fs.getRoot());
+    }
 
-	   // Go looking for our interesting child
-	   //  streams
-	   mainContents = new MainContents(dir);
-	   quillContents = new QuillContents(dir);
+    public HPBFDocument(InputStream inp) throws IOException {
+        this(new POIFSFileSystem(inp));
+    }
 
-	   // Now the Escher bits
-	   escherStm = new EscherStm(dir);
-	   escherDelayStm = new EscherDelayStm(dir);
-	}
+    /**
+     * Opens an embedded publisher document,
+     * at the given directory.
+     *
+     * @deprecated Use {@link #HPBFDocument(DirectoryNode)} instead
+     */
+    @Deprecated
+    public HPBFDocument(DirectoryNode dir, POIFSFileSystem fs) throws IOException {
+        this(dir);
+    }
 
-	public MainContents getMainContents() {
-		return mainContents;
-	}
-	public QuillContents getQuillContents() {
-		return quillContents;
-	}
-	public EscherStm getEscherStm() {
-		return escherStm;
-	}
-	public EscherDelayStm getEscherDelayStm() {
-		return escherDelayStm;
-	}
+    /**
+     * Opens an embedded publisher document,
+     * at the given directory.
+     */
+    public HPBFDocument(DirectoryNode dir) throws IOException {
+        super(dir);
 
-	public void write(OutputStream out) throws IOException {
-		throw new IllegalStateException("Writing is not yet implemented, see http://poi.apache.org/hpbf/");
-	}
+        // Go looking for our interesting child
+        //  streams
+        mainContents = new MainContents(dir);
+        quillContents = new QuillContents(dir);
+
+        // Now the Escher bits
+        escherStm = new EscherStm(dir);
+        escherDelayStm = new EscherDelayStm(dir);
+    }
+
+    public MainContents getMainContents() {
+        return mainContents;
+    }
+
+    public QuillContents getQuillContents() {
+        return quillContents;
+    }
+
+    public EscherStm getEscherStm() {
+        return escherStm;
+    }
+
+    public EscherDelayStm getEscherDelayStm() {
+        return escherDelayStm;
+    }
+
+    public void write(OutputStream out) throws IOException {
+        throw new IllegalStateException("Writing is not yet implemented, see http://poi.apache.org/hpbf/");
+    }
 }

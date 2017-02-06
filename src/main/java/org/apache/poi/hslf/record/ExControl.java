@@ -25,11 +25,10 @@ package org.apache.poi.hslf.record;
  * 2. ExOleObjAtom (4035)
  * 3. CString (4026), Instance MenuName (1) used for menus and the Links dialog box.
  * 4. CString (4026), Instance ProgID (2) that stores the OLE Programmatic Identifier.
- *  A ProgID is a string that uniquely identifies a given object.
+ * A ProgID is a string that uniquely identifies a given object.
  * 5. CString (4026), Instance ClipboardName (3) that appears in the paste special dialog.
  * 6. MetaFile( 4033), optional
  * </p>
- *
  *
  * @author Yegor kozlov
  */
@@ -39,8 +38,8 @@ public final class ExControl extends ExEmbed {
      * Set things up, and find our more interesting children
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected ExControl(byte[] source, int start, int len) {
         super(source, start, len);
@@ -60,9 +59,8 @@ public final class ExControl extends ExEmbed {
      *
      * @return the {@link ExControlAtom}.
      */
-    public ExControlAtom getExControlAtom()
-    {
-        return (ExControlAtom)_children[0];
+    public ExControlAtom getExControlAtom() {
+        return (ExControlAtom) _children[0];
     }
 
     /**

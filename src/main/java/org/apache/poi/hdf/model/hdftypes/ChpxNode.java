@@ -24,17 +24,15 @@ package org.apache.poi.hdf.model.hdftypes;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class ChpxNode extends PropertyNode
-{
+public final class ChpxNode extends PropertyNode {
 
 
-  public ChpxNode(int fcStart, int fcEnd, byte[] chpx)
-  {
-    super(fcStart, fcEnd, chpx);
-  }
-  public byte[] getChpx()
-  {
-    return super.getGrpprl();
-  }
+    public ChpxNode(int fcStart, int fcEnd, byte[] chpx) {
+        super(fcStart, fcEnd, chpx);
+    }
+
+    public byte[] getChpx() {
+        return super.getGrpprl();
+    }
 
 }

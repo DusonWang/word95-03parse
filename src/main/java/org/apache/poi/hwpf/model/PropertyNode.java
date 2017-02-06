@@ -46,6 +46,7 @@ public abstract class PropertyNode<T extends PropertyNode<T>> implements Compara
      * The end, in characters
      */
     private int _cpEnd;
+
     /**
      * @param fcStart The start of the text for this property, in characters.
      * @param fcEnd   The end of the text for this property, in characters.

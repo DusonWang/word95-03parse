@@ -144,7 +144,7 @@ public final class FIBFieldHandler {
     public static final int STTBFUSSR = 92;
     private static final int FIELD_SIZE = LittleEndian.INT_SIZE * 2;
     private static POILogger log = POILogFactory.getLogger(FIBFieldHandler.class);
-    private Map<Integer, UnhandledDataStructure> _unknownMap = new HashMap<Integer, UnhandledDataStructure>();
+    private Map<Integer, UnhandledDataStructure> _unknownMap = new HashMap<>();
     private int[] _fields;
 
 
@@ -157,7 +157,7 @@ public final class FIBFieldHandler {
             fieldOffset += LittleEndian.INT_SIZE;
             int dsSize = LittleEndian.getInt(mainStream, fieldOffset);
 
-            if (offsetList.contains(Integer.valueOf(x)) ^ areKnown) {
+            if (offsetList.contains(x) ^ areKnown) {
                 if (dsSize > 0) {
                     if (dsOffset + dsSize > tableStream.length) {
                         log.log(POILogger.WARN, "Unhandled data structure points to outside the buffer. " +
@@ -166,7 +166,7 @@ public final class FIBFieldHandler {
                     } else {
                         UnhandledDataStructure unhandled = new UnhandledDataStructure(
                                 tableStream, dsOffset, dsSize);
-                        _unknownMap.put(Integer.valueOf(x), unhandled);
+                        _unknownMap.put(x, unhandled);
                     }
                 }
             }
@@ -218,7 +218,7 @@ public final class FIBFieldHandler {
     void writeTo(byte[] mainStream, int offset, HWPFOutputStream tableStream)
             throws IOException {
         for (int x = 0; x < _fields.length / 2; x++) {
-            UnhandledDataStructure ds = _unknownMap.get(Integer.valueOf(x));
+            UnhandledDataStructure ds = _unknownMap.get(x);
             if (ds != null) {
                 _fields[x * 2] = tableStream.getOffset();
                 LittleEndian.putInt(mainStream, offset, tableStream.getOffset());
@@ -266,8 +266,7 @@ public final class FIBFieldHandler {
             result.append(leftPad(Integer.toString(getFieldSize(x)), 8,
                     ' '));
 
-            UnhandledDataStructure structure = _unknownMap.get(Integer
-                    .valueOf(x));
+            UnhandledDataStructure structure = _unknownMap.get(x);
             if (structure != null) {
                 result.append(" => Unknown structure of size ");
                 result.append(structure._buf.length);

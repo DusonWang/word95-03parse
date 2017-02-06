@@ -81,11 +81,11 @@ public abstract class FibRgLw97AbstractType {
      * Size of record
      */
     public static int getSize() {
-        return 0 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4;
+        return 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4;
     }
 
     protected void fillFields(byte[] data, int offset) {
-        field_1_cbMac = LittleEndian.getInt(data, 0x0 + offset);
+        field_1_cbMac = LittleEndian.getInt(data, offset);
         field_2_reserved1 = LittleEndian.getInt(data, 0x4 + offset);
         field_3_reserved2 = LittleEndian.getInt(data, 0x8 + offset);
         field_4_ccpText = LittleEndian.getInt(data, 0xc + offset);

@@ -17,11 +17,13 @@
 
 package org.apache.poi.hslf.blip;
 
-import org.apache.poi.util.LittleEndian;
 import org.apache.poi.hslf.usermodel.PictureData;
+import org.apache.poi.util.LittleEndian;
 
 import java.awt.*;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.zip.DeflaterOutputStream;
 
 /**
@@ -32,12 +34,20 @@ import java.util.zip.DeflaterOutputStream;
  */
 public abstract class Metafile extends PictureData {
 
+    protected byte[] compress(byte[] bytes, int offset, int length) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        DeflaterOutputStream deflater = new DeflaterOutputStream(out);
+        deflater.write(bytes, offset, length);
+        deflater.close();
+        return out.toByteArray();
+    }
+
     /**
-     *  A structure which represents a 34-byte header preceeding the compressed metafile data
+     * A structure which represents a 34-byte header preceeding the compressed metafile data
      *
      * @author Yegor Kozlov
      */
-    public static class Header{
+    public static class Header {
 
         /**
          * size of the original file
@@ -50,7 +60,7 @@ public abstract class Metafile extends PictureData {
         public Rectangle bounds;
 
         /**
-         *  Size of the metafile in EMUs
+         * Size of the metafile in EMUs
          */
         public Dimension size;
 
@@ -69,56 +79,68 @@ public abstract class Metafile extends PictureData {
          */
         public int filter = 254;
 
-        public void read(byte[] data, int offset){
+        public void read(byte[] data, int offset) {
             int pos = offset;
-            wmfsize = LittleEndian.getInt(data, pos);   pos += LittleEndian.INT_SIZE;
+            wmfsize = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
 
-            int left = LittleEndian.getInt(data, pos); pos += LittleEndian.INT_SIZE;
-            int top = LittleEndian.getInt(data, pos); pos += LittleEndian.INT_SIZE;
-            int right = LittleEndian.getInt(data, pos); pos += LittleEndian.INT_SIZE;
-            int bottom = LittleEndian.getInt(data, pos); pos += LittleEndian.INT_SIZE;
+            int left = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
+            int top = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
+            int right = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
+            int bottom = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
 
-            bounds = new Rectangle(left, top, right-left, bottom-top);
-            int width = LittleEndian.getInt(data, pos); pos += LittleEndian.INT_SIZE;
-            int height = LittleEndian.getInt(data, pos); pos += LittleEndian.INT_SIZE;
+            bounds = new Rectangle(left, top, right - left, bottom - top);
+            int width = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
+            int height = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
 
             size = new Dimension(width, height);
 
-            zipsize = LittleEndian.getInt(data, pos); pos += LittleEndian.INT_SIZE;
+            zipsize = LittleEndian.getInt(data, pos);
+            pos += LittleEndian.INT_SIZE;
 
-            compression = LittleEndian.getUnsignedByte(data, pos); pos++;
-            filter = LittleEndian.getUnsignedByte(data, pos); pos++;
+            compression = LittleEndian.getUnsignedByte(data, pos);
+            pos++;
+            filter = LittleEndian.getUnsignedByte(data, pos);
+            pos++;
         }
 
         public void write(OutputStream out) throws IOException {
             byte[] header = new byte[34];
             int pos = 0;
-            LittleEndian.putInt(header, pos, wmfsize); pos += LittleEndian.INT_SIZE; //hmf
+            LittleEndian.putInt(header, pos, wmfsize);
+            pos += LittleEndian.INT_SIZE; //hmf
 
-            LittleEndian.putInt(header, pos, bounds.x); pos += LittleEndian.INT_SIZE; //left
-            LittleEndian.putInt(header, pos, bounds.y); pos += LittleEndian.INT_SIZE; //top
-            LittleEndian.putInt(header, pos, bounds.x + bounds.width); pos += LittleEndian.INT_SIZE; //right
-            LittleEndian.putInt(header, pos, bounds.y + bounds.height); pos += LittleEndian.INT_SIZE; //bottom
-            LittleEndian.putInt(header, pos, size.width); pos += LittleEndian.INT_SIZE; //inch
-            LittleEndian.putInt(header, pos, size.height); pos += LittleEndian.INT_SIZE; //inch
-            LittleEndian.putInt(header, pos, zipsize); pos += LittleEndian.INT_SIZE; //inch
+            LittleEndian.putInt(header, pos, bounds.x);
+            pos += LittleEndian.INT_SIZE; //left
+            LittleEndian.putInt(header, pos, bounds.y);
+            pos += LittleEndian.INT_SIZE; //top
+            LittleEndian.putInt(header, pos, bounds.x + bounds.width);
+            pos += LittleEndian.INT_SIZE; //right
+            LittleEndian.putInt(header, pos, bounds.y + bounds.height);
+            pos += LittleEndian.INT_SIZE; //bottom
+            LittleEndian.putInt(header, pos, size.width);
+            pos += LittleEndian.INT_SIZE; //inch
+            LittleEndian.putInt(header, pos, size.height);
+            pos += LittleEndian.INT_SIZE; //inch
+            LittleEndian.putInt(header, pos, zipsize);
+            pos += LittleEndian.INT_SIZE; //inch
 
-            header[pos] = 0; pos ++;
-            header[pos] = (byte)filter; pos ++;
+            header[pos] = 0;
+            pos++;
+            header[pos] = (byte) filter;
+            pos++;
 
             out.write(header);
         }
 
-        public int getSize(){
+        public int getSize() {
             return 34;
         }
-    }
-
-    protected byte[] compress(byte[] bytes, int offset, int length) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        DeflaterOutputStream  deflater = new DeflaterOutputStream( out );
-        deflater.write(bytes, offset, length);
-        deflater.close();
-        return out.toByteArray();
     }
 }

@@ -17,9 +17,9 @@
 
 package org.apache.poi.hdf.model.util;
 
-import java.util.*;
-
 import org.apache.poi.hdf.model.hdftypes.PropertyNode;
+
+import java.util.*;
 
 /*
  * A B-Tree like implementation of the java.util.Set inteface.  This is a modifiable set
@@ -36,16 +36,15 @@ import org.apache.poi.hdf.model.hdftypes.PropertyNode;
  *
 */
 @Deprecated
-public final class BTreeSet extends AbstractSet
-{
+public final class BTreeSet extends AbstractSet {
 
     /*
      * Instance Variables
     */
     public BTreeNode root;
+    int size = 0;
     private Comparator comparator = null;
     private int order;
-    int size = 0;
 
     /*
      *                             Constructors
@@ -54,127 +53,100 @@ public final class BTreeSet extends AbstractSet
      * at construction it defaults to 32.
     */
 
-    public BTreeSet()
-    {
+    public BTreeSet() {
         this(6);           // Default order for a BTreeSet is 32
     }
 
-    public BTreeSet(Collection c)
-    {
+    public BTreeSet(Collection c) {
         this(6);           // Default order for a BTreeSet is 32
         addAll(c);
     }
 
-    public BTreeSet(int order)
-    {
+    public BTreeSet(int order) {
         this(order, null);
     }
 
-    public BTreeSet(int order, Comparator comparator)
-    {
+    public BTreeSet(int order, Comparator comparator) {
         this.order = order;
         this.comparator = comparator;
         root = new BTreeNode(null);
     }
 
+    public static ArrayList findProperties(int start, int end, BTreeSet.BTreeNode root) {
+        ArrayList results = new ArrayList();
+        BTreeSet.Entry[] entries = root.entries;
+
+        for (int x = 0; x < entries.length; x++) {
+            if (entries[x] != null) {
+                BTreeSet.BTreeNode child = entries[x].child;
+                PropertyNode xNode = (PropertyNode) entries[x].element;
+                if (xNode != null) {
+                    int xStart = xNode.getStart();
+                    int xEnd = xNode.getEnd();
+                    if (xStart < end) {
+                        if (xStart >= start) {
+                            if (child != null) {
+                                ArrayList beforeItems = findProperties(start, end, child);
+                                results.addAll(beforeItems);
+                            }
+                            results.add(xNode);
+                        } else if (start < xEnd) {
+                            results.add(xNode);
+                            //break;
+                        }
+                    } else {
+                        if (child != null) {
+                            ArrayList beforeItems = findProperties(start, end, child);
+                            results.addAll(beforeItems);
+                        }
+                        break;
+                    }
+                } else if (child != null) {
+                    ArrayList afterItems = findProperties(start, end, child);
+                    results.addAll(afterItems);
+                }
+            } else {
+                break;
+            }
+        }
+        return results;
+    }
 
     /*
      * Public Methods
     */
-    public boolean add(Object x) throws IllegalArgumentException
-    {
+    public boolean add(Object x) throws IllegalArgumentException {
         if (x == null) throw new IllegalArgumentException();
         return root.insert(x, -1);
     }
 
-    public boolean contains(Object x)
-    {
+    public boolean contains(Object x) {
         return root.includes(x);
     }
 
-    public boolean remove(Object x)
-    {
+    public boolean remove(Object x) {
         if (x == null) return false;
         return root.delete(x, -1);
     }
 
-    public int size()
-    {
+    public int size() {
         return size;
     }
 
-    public void clear()
-    {
+    public void clear() {
         root = new BTreeNode(null);
         size = 0;
     }
 
-    public java.util.Iterator iterator()
-    {
+    public java.util.Iterator iterator() {
         return new Iterator();
     }
 
-    public static ArrayList findProperties(int start, int end, BTreeSet.BTreeNode root)
-    {
-      ArrayList results = new ArrayList();
-      BTreeSet.Entry[] entries = root.entries;
-
-      for(int x = 0; x < entries.length; x++)
-      {
-        if(entries[x] != null)
-        {
-          BTreeSet.BTreeNode child = entries[x].child;
-          PropertyNode xNode = (PropertyNode)entries[x].element;
-          if(xNode != null)
-          {
-            int xStart = xNode.getStart();
-            int xEnd = xNode.getEnd();
-            if(xStart < end)
-            {
-              if(xStart >= start)
-              {
-                if(child != null)
-                {
-                  ArrayList beforeItems = findProperties(start, end, child);
-                  results.addAll(beforeItems);
-                }
-                results.add(xNode);
-              }
-              else if(start < xEnd)
-              {
-                results.add(xNode);
-                //break;
-              }
-            }
-            else
-            {
-              if(child != null)
-              {
-                ArrayList beforeItems = findProperties(start, end, child);
-                results.addAll(beforeItems);
-              }
-              break;
-            }
-          }
-          else if(child != null)
-          {
-            ArrayList afterItems = findProperties(start, end, child);
-            results.addAll(afterItems);
-          }
-        }
-        else
-        {
-          break;
-        }
-      }
-      return results;
-    }
     /*
      * Private methods
     */
-    int compare(Object x, Object y)
-    {
-        return (comparator == null ? ((Comparable)x).compareTo(y) : comparator.compare(x, y));
+    int compare(Object x, Object y) {
+        return (comparator == null ? ((Comparable) x).compareTo(y) : comparator.compare(x, y));
     }
 
 
@@ -192,27 +164,29 @@ public final class BTreeSet extends AbstractSet
      * chance of receiving a NullPointerException. The Iterator.delete method is supported.
     */
 
-    private class Iterator implements java.util.Iterator
-    {
+    public static class Entry {
+
+        public Object element;
+        public BTreeNode child;
+    }
+
+    private class Iterator implements java.util.Iterator {
         private int index = 0;
         private Stack parentIndex = new Stack(); // Contains all parentIndicies for currentNode
         private Object lastReturned = null;
         private Object next;
         private BTreeNode currentNode;
 
-        Iterator()
-        {
+        Iterator() {
             currentNode = firstNode();
             next = nextElement();
         }
 
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return next != null;
         }
 
-        public Object next()
-        {
+        public Object next() {
             if (next == null) throw new NoSuchElementException();
 
             lastReturned = next;
@@ -220,20 +194,17 @@ public final class BTreeSet extends AbstractSet
             return lastReturned;
         }
 
-        public void remove()
-        {
+        public void remove() {
             if (lastReturned == null) throw new NoSuchElementException();
 
             BTreeSet.this.remove(lastReturned);
             lastReturned = null;
         }
 
-        private BTreeNode firstNode()
-        {
+        private BTreeNode firstNode() {
             BTreeNode temp = BTreeSet.this.root;
 
-            while (temp.entries[0].child != null)
-            {
+            while (temp.entries[0].child != null) {
                 temp = temp.entries[0].child;
                 parentIndex.push(Integer.valueOf(0));
             }
@@ -241,30 +212,23 @@ public final class BTreeSet extends AbstractSet
             return temp;
         }
 
-        private Object nextElement()
-        {
-            if (currentNode.isLeaf())
-            {
+        private Object nextElement() {
+            if (currentNode.isLeaf()) {
                 if (index < currentNode.nrElements) return currentNode.entries[index++].element;
 
-                else if (!parentIndex.empty())
-                { //All elements have been returned, return successor of lastReturned if it exists
+                else if (!parentIndex.empty()) { //All elements have been returned, return successor of lastReturned if it exists
                     currentNode = currentNode.parent;
-                    index = ((Integer)parentIndex.pop()).intValue();
+                    index = ((Integer) parentIndex.pop()).intValue();
 
-                    while (index == currentNode.nrElements)
-                    {
+                    while (index == currentNode.nrElements) {
                         if (parentIndex.empty()) break;
                         currentNode = currentNode.parent;
-                        index = ((Integer)parentIndex.pop()).intValue();
+                        index = ((Integer) parentIndex.pop()).intValue();
                     }
 
                     if (index == currentNode.nrElements) return null; //Reached root and he has no more children
                     return currentNode.entries[index++].element;
-                }
-
-                else
-                { //Your a leaf and the root
+                } else { //Your a leaf and the root
                     if (index == currentNode.nrElements) return null;
                     return currentNode.entries[index++].element;
                 }
@@ -274,8 +238,7 @@ public final class BTreeSet extends AbstractSet
             currentNode = currentNode.entries[index].child;
             parentIndex.push(Integer.valueOf(index));
 
-            while (currentNode.entries[0].child != null)
-            {
+            while (currentNode.entries[0].child != null) {
                 currentNode = currentNode.entries[0].child;
                 parentIndex.push(Integer.valueOf(0));
             }
@@ -285,57 +248,37 @@ public final class BTreeSet extends AbstractSet
         }
     }
 
+    public class BTreeNode {
 
-    public static class Entry
-    {
-
-        public Object element;
-        public BTreeNode child;
-    }
-
-
-    public class BTreeNode
-    {
-
+        private final int MIN = (BTreeSet.this.order - 1) / 2;
         public Entry[] entries;
         public BTreeNode parent;
         private int nrElements = 0;
-        private final int MIN = (BTreeSet.this.order - 1) / 2;
 
-        BTreeNode(BTreeNode parent)
-        {
+        BTreeNode(BTreeNode parent) {
             this.parent = parent;
             entries = new Entry[BTreeSet.this.order];
             entries[0] = new Entry();
         }
 
-        boolean insert(Object x, int parentIndex)
-        {
-            if (isFull())
-            { // If full, you must split and promote splitNode before inserting
+        boolean insert(Object x, int parentIndex) {
+            if (isFull()) { // If full, you must split and promote splitNode before inserting
                 Object splitNode = entries[nrElements / 2].element;
                 BTreeNode rightSibling = split();
 
-                if (isRoot())
-                { // Grow a level
+                if (isRoot()) { // Grow a level
                     splitRoot(splitNode, this, rightSibling);
                     // Determine where to insert
                     if (BTreeSet.this.compare(x, BTreeSet.this.root.entries[0].element) < 0) insert(x, 0);
                     else rightSibling.insert(x, 1);
-                }
-
-                else
-                { // Promote splitNode
+                } else { // Promote splitNode
                     parent.insertSplitNode(splitNode, this, rightSibling, parentIndex);
                     if (BTreeSet.this.compare(x, parent.entries[parentIndex].element) < 0) {
                         return insert(x, parentIndex);
                     }
                     return rightSibling.insert(x, parentIndex + 1);
                 }
-            }
-
-            else if (isLeaf())
-            { // If leaf, simply insert the non-duplicate element
+            } else if (isLeaf()) { // If leaf, simply insert the non-duplicate element
                 int insertAt = childToInsertAt(x, true);
                 // Determine if the element already exists
                 if (insertAt == -1) {
@@ -344,33 +287,26 @@ public final class BTreeSet extends AbstractSet
                 insertNewElement(x, insertAt);
                 BTreeSet.this.size++;
                 return true;
-            }
-
-            else
-            { // If not full and not leaf recursively find correct node to insert at
+            } else { // If not full and not leaf recursively find correct node to insert at
                 int insertAt = childToInsertAt(x, true);
                 return (insertAt == -1 ? false : entries[insertAt].child.insert(x, insertAt));
             }
             return false;
         }
 
-        boolean includes(Object x)
-        {
+        boolean includes(Object x) {
             int index = childToInsertAt(x, true);
             if (index == -1) return true;
             if (entries[index] == null || entries[index].child == null) return false;
             return entries[index].child.includes(x);
         }
 
-        boolean delete(Object x, int parentIndex)
-        {
+        boolean delete(Object x, int parentIndex) {
             int i = childToInsertAt(x, true);
             int priorParentIndex = parentIndex;
             BTreeNode temp = this;
-            if (i != -1)
-            {
-                do
-                {
+            if (i != -1) {
+                do {
                     if (temp.entries[i] == null || temp.entries[i].child == null) return false;
                     temp = temp.entries[i].child;
                     priorParentIndex = parentIndex;
@@ -379,10 +315,8 @@ public final class BTreeSet extends AbstractSet
                 } while (i != -1);
             } // Now temp contains element to delete and temp's parentIndex is parentIndex
 
-            if (temp.isLeaf())
-            { // If leaf and have more than MIN elements, simply delete
-                if (temp.nrElements > MIN)
-                {
+            if (temp.isLeaf()) { // If leaf and have more than MIN elements, simply delete
+                if (temp.nrElements > MIN) {
                     temp.deleteElement(x);
                     BTreeSet.this.size--;
                     return true;
@@ -404,24 +338,28 @@ public final class BTreeSet extends AbstractSet
         }
 
 
-        private boolean isFull() { return nrElements == (BTreeSet.this.order - 1); }
+        private boolean isFull() {
+            return nrElements == (BTreeSet.this.order - 1);
+        }
 
-        private boolean isLeaf() { return entries[0].child == null; }
+        private boolean isLeaf() {
+            return entries[0].child == null;
+        }
 
-        private boolean isRoot() { return parent == null; }
+        private boolean isRoot() {
+            return parent == null;
+        }
 
         /*
          * Splits a BTreeNode into two BTreeNodes, removing the splitNode from the
          * calling BTreeNode.
         */
-        private BTreeNode split()
-        {
+        private BTreeNode split() {
             BTreeNode rightSibling = new BTreeNode(parent);
             int index = nrElements / 2;
             entries[index++].element = null;
 
-            for (int i = 0, nr = nrElements; index <= nr; i++, index++)
-            {
+            for (int i = 0, nr = nrElements; index <= nr; i++, index++) {
                 rightSibling.entries[i] = entries[index];
                 if (rightSibling.entries[i] != null && rightSibling.entries[i].child != null)
                     rightSibling.entries[i].child.parent = rightSibling;
@@ -438,8 +376,7 @@ public final class BTreeSet extends AbstractSet
          * Creates a new BTreeSet.root which contains only the splitNode and pointers
          * to it's left and right child.
         */
-        private void splitRoot(Object splitNode, BTreeNode left, BTreeNode right)
-        {
+        private void splitRoot(Object splitNode, BTreeNode left, BTreeNode right) {
             BTreeNode newRoot = new BTreeNode(null);
             newRoot.entries[0].element = splitNode;
             newRoot.entries[0].child = left;
@@ -450,8 +387,7 @@ public final class BTreeSet extends AbstractSet
             BTreeSet.this.root = newRoot;
         }
 
-        private void insertSplitNode(Object splitNode, BTreeNode left, BTreeNode right, int insertAt)
-        {
+        private void insertSplitNode(Object splitNode, BTreeNode left, BTreeNode right, int insertAt) {
             for (int i = nrElements; i >= insertAt; i--) entries[i + 1] = entries[i];
 
             entries[insertAt] = new Entry();
@@ -462,8 +398,7 @@ public final class BTreeSet extends AbstractSet
             nrElements++;
         }
 
-        private void insertNewElement(Object x, int insertAt)
-        {
+        private void insertNewElement(Object x, int insertAt) {
 
             for (int i = nrElements; i > insertAt; i--) entries[i] = entries[i - 1];
 
@@ -482,22 +417,17 @@ public final class BTreeSet extends AbstractSet
          * element is contained in the calling BTreeNode than the position of the element
          * in entries[] is returned.
         */
-        private int childToInsertAt(Object x, boolean position)
-        {
+        private int childToInsertAt(Object x, boolean position) {
             int index = nrElements / 2;
 
             if (entries[index] == null || entries[index].element == null) return index;
 
             int lo = 0, hi = nrElements - 1;
-            while (lo <= hi)
-            {
-                if (BTreeSet.this.compare(x, entries[index].element) > 0)
-                {
+            while (lo <= hi) {
+                if (BTreeSet.this.compare(x, entries[index].element) > 0) {
                     lo = index + 1;
                     index = (hi + lo) / 2;
-                }
-                else
-                {
+                } else {
                     hi = index - 1;
                     index = (hi + lo) / 2;
                 }
@@ -509,8 +439,7 @@ public final class BTreeSet extends AbstractSet
         }
 
 
-        private void deleteElement(Object x)
-        {
+        private void deleteElement(Object x) {
             int index = childToInsertAt(x, false);
             for (; index < (nrElements - 1); index++) entries[index] = entries[index + 1];
 
@@ -520,22 +449,19 @@ public final class BTreeSet extends AbstractSet
             nrElements--;
         }
 
-        private void prepareForDeletion(int parentIndex)
-        {
+        private void prepareForDeletion(int parentIndex) {
             if (isRoot()) return; // Don't attempt to steal or merge if your the root
 
-            // If not root then try to steal left
-            else if (parentIndex != 0 && parent.entries[parentIndex - 1].child.nrElements > MIN)
-            {
+                // If not root then try to steal left
+            else if (parentIndex != 0 && parent.entries[parentIndex - 1].child.nrElements > MIN) {
                 stealLeft(parentIndex);
                 return;
             }
 
             // If not root and can't steal left try to steal right
-            else if (parentIndex < entries.length && parent.entries[parentIndex + 1] != null && parent.entries[parentIndex + 1].child != null && parent.entries[parentIndex + 1].child.nrElements > MIN)
-            {
-                    stealRight(parentIndex);
-                    return;
+            else if (parentIndex < entries.length && parent.entries[parentIndex + 1] != null && parent.entries[parentIndex + 1].child != null && parent.entries[parentIndex + 1].child.nrElements > MIN) {
+                stealRight(parentIndex);
+                return;
             }
 
             // If not root and can't steal left or right then try to merge left
@@ -548,17 +474,14 @@ public final class BTreeSet extends AbstractSet
             else mergeRight(parentIndex);
         }
 
-        private void fixAfterDeletion(int parentIndex)
-        {
+        private void fixAfterDeletion(int parentIndex) {
             if (isRoot() || parent.isRoot()) return; // No fixing needed
 
-            if (parent.nrElements < MIN)
-            { // If parent lost it's n/2 element repair it
+            if (parent.nrElements < MIN) { // If parent lost it's n/2 element repair it
                 BTreeNode temp = parent;
                 temp.prepareForDeletion(parentIndex);
                 if (temp.parent == null) return; // Root changed
-                if (!temp.parent.isRoot() && temp.parent.nrElements < MIN)
-                { // If need be recurse
+                if (!temp.parent.isRoot() && temp.parent.nrElements < MIN) { // If need be recurse
                     BTreeNode x = temp.parent.parent;
                     int i = 0;
                     // Find parent's parentIndex
@@ -568,8 +491,7 @@ public final class BTreeSet extends AbstractSet
             }
         }
 
-        private void switchWithSuccessor(Object x)
-        {
+        private void switchWithSuccessor(Object x) {
             int index = childToInsertAt(x, false);
             BTreeNode temp = entries[index + 1].child;
             while (temp.entries[0] != null && temp.entries[0].child != null) temp = temp.entries[0].child;
@@ -582,22 +504,17 @@ public final class BTreeSet extends AbstractSet
          * This method is called only when the BTreeNode has the minimum number of elements,
          * has a leftSibling, and the leftSibling has more than the minimum number of elements.
         */
-        private void stealLeft(int parentIndex)
-        {
+        private void stealLeft(int parentIndex) {
             BTreeNode p = parent;
             BTreeNode ls = parent.entries[parentIndex - 1].child;
 
-            if (isLeaf())
-            { // When stealing from leaf to leaf don't worry about children
+            if (isLeaf()) { // When stealing from leaf to leaf don't worry about children
                 int add = childToInsertAt(p.entries[parentIndex - 1].element, true);
                 insertNewElement(p.entries[parentIndex - 1].element, add);
                 p.entries[parentIndex - 1].element = ls.entries[ls.nrElements - 1].element;
                 ls.entries[ls.nrElements - 1] = null;
                 ls.nrElements--;
-            }
-
-            else
-            { // Was called recursively to fix an undermanned parent
+            } else { // Was called recursively to fix an undermanned parent
                 entries[0].element = p.entries[parentIndex - 1].element;
                 p.entries[parentIndex - 1].element = ls.entries[ls.nrElements - 1].element;
                 entries[0].child = ls.entries[ls.nrElements].child;
@@ -614,13 +531,11 @@ public final class BTreeSet extends AbstractSet
          * has the minimum number of elements, has a rightSibling, and the rightSibling
          * has more than the minimum number of elements.
         */
-        private void stealRight(int parentIndex)
-        {
+        private void stealRight(int parentIndex) {
             BTreeNode p = parent;
             BTreeNode rs = p.entries[parentIndex + 1].child;
 
-            if (isLeaf())
-            { // When stealing from leaf to leaf don't worry about children
+            if (isLeaf()) { // When stealing from leaf to leaf don't worry about children
                 entries[nrElements] = new Entry();
                 entries[nrElements].element = p.entries[parentIndex].element;
                 p.entries[parentIndex].element = rs.entries[0].element;
@@ -628,10 +543,7 @@ public final class BTreeSet extends AbstractSet
                 rs.entries[rs.nrElements - 1] = null;
                 nrElements++;
                 rs.nrElements--;
-            }
-
-            else
-            { // Was called recursively to fix an undermanned parent
+            } else { // Was called recursively to fix an undermanned parent
                 for (int i = 0; i <= nrElements; i++) entries[i] = entries[i + 1];
                 entries[nrElements].element = p.entries[parentIndex].element;
                 p.entries[parentIndex].element = rs.entries[0].element;
@@ -654,13 +566,11 @@ public final class BTreeSet extends AbstractSet
          * mergeLeft, or mergeRight to fix the parent. All of the before-mentioned methods
          * expect the parent to be in such a condition.
         */
-        private void mergeLeft(int parentIndex)
-        {
+        private void mergeLeft(int parentIndex) {
             BTreeNode p = parent;
             BTreeNode ls = p.entries[parentIndex - 1].child;
 
-            if (isLeaf())
-            { // Don't worry about children
+            if (isLeaf()) { // Don't worry about children
                 int add = childToInsertAt(p.entries[parentIndex - 1].element, true);
                 insertNewElement(p.entries[parentIndex - 1].element, add); // Could have been a successor switch
                 p.entries[parentIndex - 1].element = null;
@@ -668,23 +578,18 @@ public final class BTreeSet extends AbstractSet
                 for (int i = nrElements - 1, nr = ls.nrElements; i >= 0; i--)
                     entries[i + nr] = entries[i];
 
-                for (int i = ls.nrElements - 1; i >= 0; i--)
-                {
+                for (int i = ls.nrElements - 1; i >= 0; i--) {
                     entries[i] = ls.entries[i];
                     nrElements++;
                 }
 
-                if (p.nrElements == MIN && p != BTreeSet.this.root)
-                {
+                if (p.nrElements == MIN && p != BTreeSet.this.root) {
 
                     for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x--, y--)
                         p.entries[x] = p.entries[y];
                     p.entries[0] = new Entry();
                     p.entries[0].child = ls; //So p doesn't think it's a leaf this will be deleted in the next recursive call
-                }
-
-                else
-                {
+                } else {
 
                     for (int x = parentIndex - 1, y = parentIndex; y <= p.nrElements; x++, y++)
                         p.entries[x] = p.entries[y];
@@ -693,15 +598,11 @@ public final class BTreeSet extends AbstractSet
 
                 p.nrElements--;
 
-                if (p.isRoot() && p.nrElements == 0)
-                { // It's the root and it's empty
+                if (p.isRoot() && p.nrElements == 0) { // It's the root and it's empty
                     BTreeSet.this.root = this;
                     parent = null;
                 }
-            }
-
-            else
-            { // I'm not a leaf but fixing the tree structure
+            } else { // I'm not a leaf but fixing the tree structure
                 entries[0].element = p.entries[parentIndex - 1].element;
                 entries[0].child = ls.entries[ls.nrElements].child;
                 nrElements++;
@@ -709,25 +610,19 @@ public final class BTreeSet extends AbstractSet
                 for (int x = nrElements, nr = ls.nrElements; x >= 0; x--)
                     entries[x + nr] = entries[x];
 
-                for (int x = ls.nrElements - 1; x >= 0; x--)
-                {
+                for (int x = ls.nrElements - 1; x >= 0; x--) {
                     entries[x] = ls.entries[x];
                     entries[x].child.parent = this;
                     nrElements++;
                 }
 
-                if (p.nrElements == MIN && p != BTreeSet.this.root)
-                { // Push everything to the right
-                    for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x++, y++)
-                    {
+                if (p.nrElements == MIN && p != BTreeSet.this.root) { // Push everything to the right
+                    for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x++, y++) {
                         System.out.println(x + " " + y);
                         p.entries[x] = p.entries[y];
                     }
                     p.entries[0] = new Entry();
-                }
-
-                else
-                { // Either p.nrElements > MIN or p == BTreeSet.this.root so push everything to the left
+                } else { // Either p.nrElements > MIN or p == BTreeSet.this.root so push everything to the left
                     for (int x = parentIndex - 1, y = parentIndex; y <= p.nrElements; x++, y++)
                         p.entries[x] = p.entries[y];
                     p.entries[p.nrElements] = null;
@@ -735,8 +630,7 @@ public final class BTreeSet extends AbstractSet
 
                 p.nrElements--;
 
-                if (p.isRoot() && p.nrElements == 0)
-                { // p == BTreeSet.this.root and it's empty
+                if (p.isRoot() && p.nrElements == 0) { // p == BTreeSet.this.root and it's empty
                     BTreeSet.this.root = this;
                     parent = null;
                 }
@@ -752,85 +646,68 @@ public final class BTreeSet extends AbstractSet
          * mergeLeft, or mergeRight to fix the parent. All of the before-mentioned methods
          * expect the parent to be in such a condition.
         */
-        private void mergeRight(int parentIndex)
-        {
+        private void mergeRight(int parentIndex) {
             BTreeNode p = parent;
             BTreeNode rs = p.entries[parentIndex + 1].child;
 
-            if (isLeaf())
-            { // Don't worry about children
+            if (isLeaf()) { // Don't worry about children
                 entries[nrElements] = new Entry();
                 entries[nrElements].element = p.entries[parentIndex].element;
                 nrElements++;
-                for (int i = 0, nr = nrElements; i < rs.nrElements; i++, nr++)
-                {
+                for (int i = 0, nr = nrElements; i < rs.nrElements; i++, nr++) {
                     entries[nr] = rs.entries[i];
                     nrElements++;
                 }
                 p.entries[parentIndex].element = p.entries[parentIndex + 1].element;
-                if (p.nrElements == MIN && p != BTreeSet.this.root)
-                {
+                if (p.nrElements == MIN && p != BTreeSet.this.root) {
                     for (int x = parentIndex + 1, y = parentIndex; y >= 0; x--, y--)
                         p.entries[x] = p.entries[y];
                     p.entries[0] = new Entry();
                     p.entries[0].child = rs; // So it doesn't think it's a leaf, this child will be deleted in the next recursive call
-                }
-
-                else
-                {
+                } else {
                     for (int x = parentIndex + 1, y = parentIndex + 2; y <= p.nrElements; x++, y++)
                         p.entries[x] = p.entries[y];
                     p.entries[p.nrElements] = null;
                 }
 
                 p.nrElements--;
-                if (p.isRoot() && p.nrElements == 0)
-                { // It's the root and it's empty
+                if (p.isRoot() && p.nrElements == 0) { // It's the root and it's empty
                     BTreeSet.this.root = this;
                     parent = null;
                 }
-           }
+            } else { // It's not a leaf
 
-           else
-           { // It's not a leaf
+                entries[nrElements].element = p.entries[parentIndex].element;
+                nrElements++;
 
-               entries[nrElements].element = p.entries[parentIndex].element;
-               nrElements++;
+                for (int x = nrElements + 1, y = 0; y <= rs.nrElements; x++, y++) {
+                    entries[x] = rs.entries[y];
+                    rs.entries[y].child.parent = this;
+                    nrElements++;
+                }
+                nrElements--;
 
-               for (int x = nrElements + 1, y = 0; y <= rs.nrElements; x++, y++)
-               {
-                   entries[x] = rs.entries[y];
-                   rs.entries[y].child.parent = this;
-                   nrElements++;
-               }
-               nrElements--;
+                p.entries[++parentIndex].child = this;
 
-               p.entries[++parentIndex].child = this;
+                if (p.nrElements == MIN && p != BTreeSet.this.root) {
+                    for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x--, y--)
+                        p.entries[x] = p.entries[y];
+                    p.entries[0] = new Entry();
+                } else {
+                    for (int x = parentIndex - 1, y = parentIndex; y <= p.nrElements; x++, y++)
+                        p.entries[x] = p.entries[y];
+                    p.entries[p.nrElements] = null;
+                }
 
-               if (p.nrElements == MIN && p != BTreeSet.this.root)
-               {
-                  for (int x = parentIndex - 1, y = parentIndex - 2; y >= 0; x--, y--)
-                      p.entries[x] = p.entries[y];
-                  p.entries[0] = new Entry();
-               }
+                p.nrElements--;
 
-               else
-               {
-                   for (int x = parentIndex - 1, y = parentIndex; y <= p.nrElements; x++, y++)
-                       p.entries[x] = p.entries[y];
-                   p.entries[p.nrElements] = null;
-               }
-
-               p.nrElements--;
-
-               if (p.isRoot() && p.nrElements == 0)
-               { // It's the root and it's empty
-                   BTreeSet.this.root = this;
-                   parent = null;
-               }
+                if (p.isRoot() && p.nrElements == 0) { // It's the root and it's empty
+                    BTreeSet.this.root = this;
+                    parent = null;
+                }
             }
         }
-  }
+    }
 
 }
 

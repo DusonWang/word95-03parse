@@ -22,11 +22,11 @@ import org.apache.poi.hdgf.pointers.Pointer;
 
 /**
  * A Stream which holds Strings. This is just another kind
- *  of ChunkStream, it seems
+ * of ChunkStream, it seems
  */
 public final class StringsStream extends Stream {
-	protected StringsStream(Pointer pointer, StreamStore store, ChunkFactory chunkFactory) {
-		super(pointer, store);
+    protected StringsStream(Pointer pointer, StreamStore store, ChunkFactory chunkFactory) {
+        super(pointer, store);
 //		super(pointer, store, chunkFactory);
-	}
+    }
 }

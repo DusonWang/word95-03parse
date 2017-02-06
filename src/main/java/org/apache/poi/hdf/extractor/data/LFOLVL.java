@@ -23,15 +23,13 @@ package org.apache.poi.hdf.extractor.data;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class LFOLVL
-{
-  int _iStartAt;
-  int _ilvl;
-  boolean _fStartAt;
-  boolean _fFormatting;
-  LVL _override;
+public final class LFOLVL {
+    int _iStartAt;
+    int _ilvl;
+    boolean _fStartAt;
+    boolean _fFormatting;
+    LVL _override;
 
-  public LFOLVL()
-  {
-  }
+    public LFOLVL() {
+    }
 }

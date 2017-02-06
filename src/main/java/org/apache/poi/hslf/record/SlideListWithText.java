@@ -25,21 +25,21 @@ import java.util.Vector;
 
 /**
  * These are tricky beasts. They contain the text of potentially
- *  many (normal) slides. They are made up of several sets of
- *  - SlidePersistAtom
- *  - TextHeaderAtom
- *  - TextBytesAtom / TextCharsAtom
- *  - StyleTextPropAtom (optional)
- *  - TextSpecInfoAtom (optional)
- *  - InteractiveInfo (optional)
- *  - TxInteractiveInfoAtom (optional)
+ * many (normal) slides. They are made up of several sets of
+ * - SlidePersistAtom
+ * - TextHeaderAtom
+ * - TextBytesAtom / TextCharsAtom
+ * - StyleTextPropAtom (optional)
+ * - TextSpecInfoAtom (optional)
+ * - InteractiveInfo (optional)
+ * - TxInteractiveInfoAtom (optional)
  * and then the next SlidePersistAtom.
- *
+ * <p>
  * Eventually, Slides will find the blocks that interest them from all
- *  the SlideListWithText entries, and refere to them
- *
+ * the SlideListWithText entries, and refere to them
+ * <p>
  * For now, we scan through looking for interesting bits, then creating
- *  the helpful Sheet from model for them
+ * the helpful Sheet from model for them
  *
  * @author Nick Burch
  */
@@ -47,153 +47,171 @@ import java.util.Vector;
 // For now, pretend to be an atom
 public final class SlideListWithText extends RecordContainer {
 
-	/**
-	 * Instance filed of the record header indicates that this SlideListWithText stores
-	 * references to slides
-	 */
-	public static final int SLIDES = 0;
-	/**
-	 * Instance filed of the record header indicates that this SlideListWithText stores
-	 * references to master slides
-	 */
-	public static final int MASTER = 1;
-	/**
-	 * Instance filed of the record header indicates that this SlideListWithText stores
-	 * references to notes
-	 */
-	public static final int NOTES = 2;
+    /**
+     * Instance filed of the record header indicates that this SlideListWithText stores
+     * references to slides
+     */
+    public static final int SLIDES = 0;
+    /**
+     * Instance filed of the record header indicates that this SlideListWithText stores
+     * references to master slides
+     */
+    public static final int MASTER = 1;
+    /**
+     * Instance filed of the record header indicates that this SlideListWithText stores
+     * references to notes
+     */
+    public static final int NOTES = 2;
+    private static long _type = 4080;
+    private byte[] _header;
+    private SlideAtomsSet[] slideAtomsSets;
 
-	private byte[] _header;
-	private static long _type = 4080;
+    /**
+     * Create a new holder for slide records
+     */
+    protected SlideListWithText(byte[] source, int start, int len) {
+        // Grab the header
+        _header = new byte[8];
+        System.arraycopy(source, start, _header, 0, 8);
 
-	private SlideAtomsSet[] slideAtomsSets;
+        // Find our children
+        _children = Record.findChildRecords(source, start + 8, len - 8);
 
-	/**
-	 * Create a new holder for slide records
-	 */
-	protected SlideListWithText(byte[] source, int start, int len) {
-		// Grab the header
-		_header = new byte[8];
-		System.arraycopy(source,start,_header,0,8);
+        // Group our children together into SlideAtomsSets
+        // That way, model layer code can just grab the sets to use,
+        //  without having to try to match the children together
+        Vector<SlideAtomsSet> sets = new Vector<SlideAtomsSet>();
+        for (int i = 0; i < _children.length; i++) {
+            if (_children[i] instanceof SlidePersistAtom) {
+                // Find where the next SlidePersistAtom is
+                int endPos = i + 1;
+                while (endPos < _children.length && !(_children[endPos] instanceof SlidePersistAtom)) {
+                    endPos += 1;
+                }
 
-		// Find our children
-		_children = Record.findChildRecords(source,start+8,len-8);
+                int clen = endPos - i - 1;
+                boolean emptySet = false;
+                if (clen == 0) {
+                    emptySet = true;
+                }
 
-		// Group our children together into SlideAtomsSets
-		// That way, model layer code can just grab the sets to use,
-		//  without having to try to match the children together
-		Vector<SlideAtomsSet> sets = new Vector<SlideAtomsSet>();
-		for(int i=0; i<_children.length; i++) {
-			if(_children[i] instanceof SlidePersistAtom) {
-				// Find where the next SlidePersistAtom is
-				int endPos = i+1;
-				while(endPos < _children.length && !(_children[endPos] instanceof SlidePersistAtom)) {
-					endPos += 1;
-				}
+                // Create a SlideAtomsSets, not caring if they're empty
+                //if(emptySet) { continue; }
+                Record[] spaChildren = new Record[clen];
+                System.arraycopy(_children, i + 1, spaChildren, 0, clen);
+                SlideAtomsSet set = new SlideAtomsSet((SlidePersistAtom) _children[i], spaChildren);
+                sets.add(set);
 
-				int clen = endPos - i - 1;
-				boolean emptySet = false;
-				if(clen == 0) { emptySet = true; }
+                // Wind on
+                i += clen;
+            }
+        }
 
-				// Create a SlideAtomsSets, not caring if they're empty
-				//if(emptySet) { continue; }
-				Record[] spaChildren = new Record[clen];
-				System.arraycopy(_children,i+1,spaChildren,0,clen);
-				SlideAtomsSet set = new SlideAtomsSet((SlidePersistAtom)_children[i],spaChildren);
-				sets.add(set);
+        // Turn the vector into an array
+        slideAtomsSets = sets.toArray(new SlideAtomsSet[sets.size()]);
+    }
 
-				// Wind on
-				i += clen;
-			}
-		}
+    /**
+     * Create a new, empty, SlideListWithText
+     */
+    public SlideListWithText() {
+        _header = new byte[8];
+        LittleEndian.putUShort(_header, 0, 15);
+        LittleEndian.putUShort(_header, 2, (int) _type);
+        LittleEndian.putInt(_header, 4, 0);
 
-		// Turn the vector into an array
-		slideAtomsSets = sets.toArray( new SlideAtomsSet[sets.size()] );
-	}
+        // We have no children to start with
+        _children = new Record[0];
+        slideAtomsSets = new SlideAtomsSet[0];
+    }
 
-	/**
-	 * Create a new, empty, SlideListWithText
-	 */
-	public SlideListWithText(){
-		_header = new byte[8];
-		LittleEndian.putUShort(_header, 0, 15);
-		LittleEndian.putUShort(_header, 2, (int)_type);
-		LittleEndian.putInt(_header, 4, 0);
+    /**
+     * Add a new SlidePersistAtom, to the end of the current list,
+     * and update the internal list of SlidePersistAtoms
+     *
+     * @param spa
+     */
+    public void addSlidePersistAtom(SlidePersistAtom spa) {
+        // Add the new SlidePersistAtom at the end
+        appendChildRecord(spa);
 
-		// We have no children to start with
-		_children = new Record[0];
-		slideAtomsSets = new SlideAtomsSet[0];
-	}
+        SlideAtomsSet newSAS = new SlideAtomsSet(spa, new Record[0]);
 
-	/**
-	 * Add a new SlidePersistAtom, to the end of the current list,
-	 *  and update the internal list of SlidePersistAtoms
-	 * @param spa
-	 */
-	public void addSlidePersistAtom(SlidePersistAtom spa) {
-		// Add the new SlidePersistAtom at the end
-		appendChildRecord(spa);
+        // Update our SlideAtomsSets with this
+        SlideAtomsSet[] sas = new SlideAtomsSet[slideAtomsSets.length + 1];
+        System.arraycopy(slideAtomsSets, 0, sas, 0, slideAtomsSets.length);
+        sas[sas.length - 1] = newSAS;
+        slideAtomsSets = sas;
+    }
 
-		SlideAtomsSet newSAS = new SlideAtomsSet(spa, new Record[0]);
+    public int getInstance() {
+        return LittleEndian.getShort(_header, 0) >> 4;
+    }
 
-		// Update our SlideAtomsSets with this
-		SlideAtomsSet[] sas = new SlideAtomsSet[slideAtomsSets.length+1];
-		System.arraycopy(slideAtomsSets, 0, sas, 0, slideAtomsSets.length);
-		sas[sas.length-1] = newSAS;
-		slideAtomsSets = sas;
-	}
+    public void setInstance(int inst) {
+        LittleEndian.putShort(_header, (short) ((inst << 4) | 0xF));
+    }
 
-	public int getInstance(){
-		return LittleEndian.getShort(_header, 0) >> 4;
-	}
+    /**
+     * Get access to the SlideAtomsSets of the children of this record
+     */
+    public SlideAtomsSet[] getSlideAtomsSets() {
+        return slideAtomsSets;
+    }
 
-	public void setInstance(int inst){
-		LittleEndian.putShort(_header, (short)((inst << 4) | 0xF));
-	}
+    /**
+     * Get access to the SlideAtomsSets of the children of this record
+     */
+    public void setSlideAtomsSets(SlideAtomsSet[] sas) {
+        slideAtomsSets = sas;
+    }
 
-	/**
-	 * Get access to the SlideAtomsSets of the children of this record
-	 */
-	public SlideAtomsSet[] getSlideAtomsSets() { return slideAtomsSets; }
+    /**
+     * Return the value we were given at creation
+     */
+    public long getRecordType() {
+        return _type;
+    }
 
-	/**
-	* Get access to the SlideAtomsSets of the children of this record
-	*/
-	public void setSlideAtomsSets( SlideAtomsSet[] sas ) { slideAtomsSets = sas; }
+    /**
+     * Write the contents of the record back, so it can be written
+     * to disk
+     */
+    public void writeOut(OutputStream out) throws IOException {
+        writeOut(_header[0], _header[1], _type, _children, out);
+    }
 
-	/**
-	 * Return the value we were given at creation
-	 */
-	public long getRecordType() { return _type; }
+    /**
+     * Inner class to wrap up a matching set of records that hold the
+     * text for a given sheet. Contains the leading SlidePersistAtom,
+     * and all of the records until the next SlidePersistAtom. This
+     * includes sets of TextHeaderAtom and TextBytesAtom/TextCharsAtom,
+     * along with some others.
+     */
+    public class SlideAtomsSet {
+        private SlidePersistAtom slidePersistAtom;
+        private Record[] slideRecords;
 
-	/**
-	 * Write the contents of the record back, so it can be written
-	 *  to disk
-	 */
-	public void writeOut(OutputStream out) throws IOException {
-		writeOut(_header[0],_header[1],_type,_children,out);
-	}
+        /**
+         * Create one to hold the Records for one Slide's text
+         */
+        public SlideAtomsSet(SlidePersistAtom s, Record[] r) {
+            slidePersistAtom = s;
+            slideRecords = r;
+        }
 
-	/**
-	 * Inner class to wrap up a matching set of records that hold the
-	 *  text for a given sheet. Contains the leading SlidePersistAtom,
-	 *  and all of the records until the next SlidePersistAtom. This
-	 *  includes sets of TextHeaderAtom and TextBytesAtom/TextCharsAtom,
-	 *  along with some others.
-	 */
-	public class SlideAtomsSet {
-		private SlidePersistAtom slidePersistAtom;
-		private Record[] slideRecords;
+        /**
+         * Get the SlidePersistAtom, which gives details on the Slide this text is associated with
+         */
+        public SlidePersistAtom getSlidePersistAtom() {
+            return slidePersistAtom;
+        }
 
-		/** Get the SlidePersistAtom, which gives details on the Slide this text is associated with */
-		public SlidePersistAtom getSlidePersistAtom() { return slidePersistAtom; }
-		/** Get the Text related records for this slide */
-		public Record[] getSlideRecords() { return slideRecords; }
-
-		/** Create one to hold the Records for one Slide's text */
-		public SlideAtomsSet(SlidePersistAtom s, Record[] r) {
-			slidePersistAtom = s;
-			slideRecords = r;
-		}
-	}
+        /**
+         * Get the Text related records for this slide
+         */
+        public Record[] getSlideRecords() {
+            return slideRecords;
+        }
+    }
 }

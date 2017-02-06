@@ -17,104 +17,115 @@
 
 package org.apache.poi.hslf.record;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.StringUtil;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * A CString (type 4026). Holds a unicode string, and the first two bytes
- *  of the record header normally encode the count. Typically attached to
- *  some complex sequence of records, eg Commetns.
+ * of the record header normally encode the count. Typically attached to
+ * some complex sequence of records, eg Commetns.
  *
  * @author Nick Burch
  */
 
 public final class CString extends RecordAtom {
-	private byte[] _header;
-	private static long _type = 4026l;
+    private static long _type = 4026l;
+    private byte[] _header;
+    /**
+     * The bytes that make up the text
+     */
+    private byte[] _text;
 
-	/** The bytes that make up the text */
-	private byte[] _text;
+    /**
+     * For the CStrubg Atom
+     */
+    protected CString(byte[] source, int start, int len) {
+        // Sanity Checking
+        if (len < 8) {
+            len = 8;
+        }
 
-	/** Grabs the text. Never <code>null</code> */
-	public String getText() {
-		return StringUtil.getFromUnicodeLE(_text);
-	}
+        // Get the header
+        _header = new byte[8];
+        System.arraycopy(source, start, _header, 0, 8);
 
-	/** Updates the text in the Atom. */
-	public void setText(String text) {
-		// Convert to little endian unicode
-		_text = new byte[text.length()*2];
-		StringUtil.putUnicodeLE(text,_text,0);
+        // Grab the text
+        _text = new byte[len - 8];
+        System.arraycopy(source, start + 8, _text, 0, len - 8);
+    }
 
-		// Update the size (header bytes 5-8)
-		LittleEndian.putInt(_header,4,_text.length);
-	}
+    /**
+     * Create an empty CString
+     */
+    public CString() {
+        // 0 length header
+        _header = new byte[]{0, 0, 0xBA - 256, 0x0f, 0, 0, 0, 0};
+        // Empty text
+        _text = new byte[0];
+    }
 
-	/**
-	 * Grabs the count, from the first two bytes of the header.
-	 * The meaning of the count is specific to the type of the parent record
-	 */
-	public int getOptions() {
-		return LittleEndian.getShort(_header);
-	}
+    /**
+     * Grabs the text. Never <code>null</code>
+     */
+    public String getText() {
+        return StringUtil.getFromUnicodeLE(_text);
+    }
 
-	/**
-	 * Sets the count
-	 * The meaning of the count is specific to the type of the parent record
-	 */
-	public void setOptions(int count) {
-		LittleEndian.putShort(_header, (short)count);
-	}
+    /**
+     * Updates the text in the Atom.
+     */
+    public void setText(String text) {
+        // Convert to little endian unicode
+        _text = new byte[text.length() * 2];
+        StringUtil.putUnicodeLE(text, _text, 0);
+
+        // Update the size (header bytes 5-8)
+        LittleEndian.putInt(_header, 4, _text.length);
+    }
 
 	/* *************** record code follows ********************** */
 
-	/**
-	 * For the CStrubg Atom
-	 */
-	protected CString(byte[] source, int start, int len) {
-		// Sanity Checking
-		if(len < 8) { len = 8; }
+    /**
+     * Grabs the count, from the first two bytes of the header.
+     * The meaning of the count is specific to the type of the parent record
+     */
+    public int getOptions() {
+        return LittleEndian.getShort(_header);
+    }
 
-		// Get the header
-		_header = new byte[8];
-		System.arraycopy(source,start,_header,0,8);
+    /**
+     * Sets the count
+     * The meaning of the count is specific to the type of the parent record
+     */
+    public void setOptions(int count) {
+        LittleEndian.putShort(_header, (short) count);
+    }
 
-		// Grab the text
-		_text = new byte[len-8];
-		System.arraycopy(source,start+8,_text,0,len-8);
-	}
-	/**
-	 * Create an empty CString
-	 */
-	public CString() {
-		// 0 length header
-		_header = new byte[] {  0, 0, 0xBA-256, 0x0f, 0, 0, 0, 0 };
-		// Empty text
-		_text = new byte[0];
-	}
+    /**
+     * We are of type 4026
+     */
+    public long getRecordType() {
+        return _type;
+    }
 
-	/**
-	 * We are of type 4026
-	 */
-	public long getRecordType() { return _type; }
+    /**
+     * Write the contents of the record back, so it can be written
+     * to disk
+     */
+    public void writeOut(OutputStream out) throws IOException {
+        // Header - size or type unchanged
+        out.write(_header);
 
-	/**
-	 * Write the contents of the record back, so it can be written
-	 *  to disk
-	 */
-	public void writeOut(OutputStream out) throws IOException {
-		// Header - size or type unchanged
-		out.write(_header);
-
-		// Write out our text
-		out.write(_text);
-	}
+        // Write out our text
+        out.write(_text);
+    }
 
     /**
      * Gets a string representation of this object, primarily for debugging.
+     *
      * @return a string representation of this object.
      */
     public String toString() {

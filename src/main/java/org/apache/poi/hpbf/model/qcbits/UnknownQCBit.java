@@ -19,10 +19,10 @@ package org.apache.poi.hpbf.model.qcbits;
 
 /**
  * Any Quill Contents bits we don't know
- *  how to handle explicitly
+ * how to handle explicitly
  */
 public final class UnknownQCBit extends QCBit {
-	public UnknownQCBit(String thingType, String bitType, byte[] data) {
-		super(thingType, bitType, data);
-	}
+    public UnknownQCBit(String thingType, String bitType, byte[] data) {
+        super(thingType, bitType, data);
+    }
 }

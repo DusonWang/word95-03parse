@@ -19,8 +19,8 @@ package org.apache.poi.hslf.blip;
 
 import org.apache.poi.hslf.usermodel.PictureData;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Represents a bitmap picture data:  JPEG or PNG.
@@ -28,11 +28,11 @@ import java.io.ByteArrayOutputStream;
  *
  * @author Yegor Kozlov
  */
-public abstract  class Bitmap extends PictureData {
+public abstract class Bitmap extends PictureData {
 
-    public byte[] getData(){
+    public byte[] getData() {
         byte[] rawdata = getRawData();
-        byte[] imgdata = new byte[rawdata.length-17];
+        byte[] imgdata = new byte[rawdata.length - 17];
         System.arraycopy(rawdata, 17, imgdata, 0, imgdata.length);
         return imgdata;
     }

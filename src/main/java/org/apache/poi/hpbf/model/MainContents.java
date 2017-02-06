@@ -17,22 +17,22 @@
 
 package org.apache.poi.hpbf.model;
 
-import java.io.IOException;
-
 import org.apache.poi.poifs.filesystem.DirectoryNode;
+
+import java.io.IOException;
 
 /**
  * The main Contents. Not yet understood
  */
 public final class MainContents extends HPBFPart {
-	private static final String[] PATH = { "Contents", };
+    private static final String[] PATH = {"Contents",};
 
-	public MainContents(DirectoryNode baseDir) throws IOException {
-		super(baseDir, PATH);
-	}
+    public MainContents(DirectoryNode baseDir) throws IOException {
+        super(baseDir, PATH);
+    }
 
-	protected void generateData() {
-		// We don't parse the contents, so
-		//  nothing will have changed
-	}
+    protected void generateData() {
+        // We don't parse the contents, so
+        //  nothing will have changed
+    }
 }

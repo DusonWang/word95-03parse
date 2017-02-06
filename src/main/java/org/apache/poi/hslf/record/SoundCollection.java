@@ -17,13 +17,13 @@
 
 package org.apache.poi.hslf.record;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Is a container for all sound related atoms and containers. It contains:
- *<li>1. SoundCollAtom (2021)
- *<li>2. Sound (2022), for each sound, if any
+ * <li>1. SoundCollAtom (2021)
+ * <li>2. Sound (2022), for each sound, if any
  *
  * @author Yegor Kozlov
  */
@@ -37,16 +37,16 @@ public final class SoundCollection extends RecordContainer {
      * Set things up, and find our more interesting children
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected SoundCollection(byte[] source, int start, int len) {
         // Grab the header
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Find our children
-        _children = Record.findChildRecords(source,start+8,len-8);
+        _children = Record.findChildRecords(source, start + 8, len - 8);
     }
 
     /**
@@ -67,6 +67,6 @@ public final class SoundCollection extends RecordContainer {
      * @throws java.io.IOException if there was an error writing to the stream.
      */
     public void writeOut(OutputStream out) throws IOException {
-        writeOut(_header[0],_header[1],getRecordType(),_children,out);
+        writeOut(_header[0], _header[1], getRecordType(), _children, out);
     }
 }

@@ -28,7 +28,7 @@ import org.apache.poi.util.LittleEndian;
  * offset is the next value in the array. For example, if an fkp has X number of
  * Paragraph's stored in it then there are (x + 1) 4 byte ints in the beginning
  * array. The number X is determined by the last byte in a 512 byte fkp.
- *
+ * <p>
  * CHP and PAP fkps also store the compressed styles(grpprl) that correspond to
  * the offsets on the front of the fkp. The offset of the grpprls is determined
  * differently for CHP fkps and PAP fkps.
@@ -36,8 +36,7 @@ import org.apache.poi.util.LittleEndian;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class CHPFormattedDiskPage extends FormattedDiskPage
-{
+public final class CHPFormattedDiskPage extends FormattedDiskPage {
 
 
     /**
@@ -46,8 +45,7 @@ public final class CHPFormattedDiskPage extends FormattedDiskPage
      *
      * @param fkp The 512 byte array to read data from
      */
-    public CHPFormattedDiskPage(byte[] fkp)
-    {
+    public CHPFormattedDiskPage(byte[] fkp) {
         super(fkp);
     }
 
@@ -57,13 +55,11 @@ public final class CHPFormattedDiskPage extends FormattedDiskPage
      * @param index The index of the chpx to get.
      * @return a chpx grpprl.
      */
-    public byte[] getGrpprl(int index)
-    {
+    public byte[] getGrpprl(int index) {
         int chpxOffset = 2 * LittleEndian.getUnsignedByte(_fkp, ((_crun + 1) * 4) + index);
 
         //optimization if offset == 0 use "Normal" style
-        if(chpxOffset == 0)
-        {
+        if (chpxOffset == 0) {
             return new byte[0];
 
         }

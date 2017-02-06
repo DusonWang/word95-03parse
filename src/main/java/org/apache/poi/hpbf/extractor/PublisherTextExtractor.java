@@ -17,105 +17,108 @@
 
 package org.apache.poi.hpbf.extractor;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.poi.POIOLE2TextExtractor;
 import org.apache.poi.hpbf.HPBFDocument;
 import org.apache.poi.hpbf.model.qcbits.QCBit;
-import org.apache.poi.hpbf.model.qcbits.QCTextBit;
 import org.apache.poi.hpbf.model.qcbits.QCPLCBit.Type12;
+import org.apache.poi.hpbf.model.qcbits.QCTextBit;
 import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Extract text from HPBF Publisher files
  */
 public final class PublisherTextExtractor extends POIOLE2TextExtractor {
-   private HPBFDocument doc;
-   private boolean hyperlinksByDefault = false;
+    private HPBFDocument doc;
+    private boolean hyperlinksByDefault = false;
 
-   public PublisherTextExtractor(HPBFDocument doc) {
-      super(doc);
-      this.doc = doc;
-   }
-   public PublisherTextExtractor(DirectoryNode dir) throws IOException {
-      this(new HPBFDocument(dir));
-   }
-   public PublisherTextExtractor(POIFSFileSystem fs) throws IOException {
-      this(new HPBFDocument(fs));
-   }
-   public PublisherTextExtractor(NPOIFSFileSystem fs) throws IOException {
-      this(new HPBFDocument(fs));
-   }
-   public PublisherTextExtractor(InputStream is) throws IOException {
-      this(new POIFSFileSystem(is));
-   }
-   @Deprecated
-   public PublisherTextExtractor(DirectoryNode dir, POIFSFileSystem fs) throws IOException {
-      this(new HPBFDocument(dir, fs));
-   }
+    public PublisherTextExtractor(HPBFDocument doc) {
+        super(doc);
+        this.doc = doc;
+    }
 
-	/**
-	 * Should a call to getText() return hyperlinks inline
-	 *  with the text?
-	 * Default is no
-	 */
-	public void setHyperlinksByDefault(boolean hyperlinksByDefault) {
-		this.hyperlinksByDefault = hyperlinksByDefault;
-	}
+    public PublisherTextExtractor(DirectoryNode dir) throws IOException {
+        this(new HPBFDocument(dir));
+    }
 
+    public PublisherTextExtractor(POIFSFileSystem fs) throws IOException {
+        this(new HPBFDocument(fs));
+    }
 
-	public String getText() {
-		StringBuffer text = new StringBuffer();
+    public PublisherTextExtractor(NPOIFSFileSystem fs) throws IOException {
+        this(new HPBFDocument(fs));
+    }
 
-		// Get the text from the Quill Contents
-		QCBit[] bits = doc.getQuillContents().getBits();
-		for(int i=0; i<bits.length; i++) {
-			if(bits[i] != null && bits[i] instanceof QCTextBit) {
-				QCTextBit t = (QCTextBit)bits[i];
-				text.append( t.getText().replace('\r', '\n') );
-			}
-		}
+    public PublisherTextExtractor(InputStream is) throws IOException {
+        this(new POIFSFileSystem(is));
+    }
 
-		// If requested, add in the hyperlinks
-		// Ideally, we'd do these inline, but the hyperlink
-		//  positions are relative to the text area the
-		//  hyperlink is in, and we have yet to figure out
-		//  how to tie that together.
-		if(hyperlinksByDefault) {
-			for(int i=0; i<bits.length; i++) {
-				if(bits[i] != null && bits[i] instanceof Type12) {
-					Type12 hyperlinks = (Type12)bits[i];
-					for(int j=0; j<hyperlinks.getNumberOfHyperlinks(); j++) {
-						text.append("<");
-						text.append(hyperlinks.getHyperlink(j));
-						text.append(">\n");
-					}
-				}
-			}
-		}
+    @Deprecated
+    public PublisherTextExtractor(DirectoryNode dir, POIFSFileSystem fs) throws IOException {
+        this(new HPBFDocument(dir, fs));
+    }
 
-		// Get more text
-		// TODO
+    public static void main(String[] args) throws Exception {
+        if (args.length == 0) {
+            System.err.println("Use:");
+            System.err.println("  PublisherTextExtractor <file.pub>");
+        }
 
-		return text.toString();
-	}
+        for (int i = 0; i < args.length; i++) {
+            PublisherTextExtractor te = new PublisherTextExtractor(
+                    new FileInputStream(args[i])
+            );
+            System.out.println(te.getText());
+        }
+    }
 
+    /**
+     * Should a call to getText() return hyperlinks inline
+     * with the text?
+     * Default is no
+     */
+    public void setHyperlinksByDefault(boolean hyperlinksByDefault) {
+        this.hyperlinksByDefault = hyperlinksByDefault;
+    }
 
-	public static void main(String[] args) throws Exception {
-		if(args.length == 0) {
-			System.err.println("Use:");
-			System.err.println("  PublisherTextExtractor <file.pub>");
-		}
+    public String getText() {
+        StringBuilder text = new StringBuilder();
 
-		for(int i=0; i<args.length; i++) {
-			PublisherTextExtractor te = new PublisherTextExtractor(
-					new FileInputStream(args[i])
-			);
-			System.out.println(te.getText());
-		}
-	}
+        // Get the text from the Quill Contents
+        QCBit[] bits = doc.getQuillContents().getBits();
+        for (QCBit bit : bits) {
+            if (bit != null && bit instanceof QCTextBit) {
+                QCTextBit t = (QCTextBit) bit;
+                text.append(t.getText().replace('\r', '\n'));
+            }
+        }
+
+        // If requested, add in the hyperlinks
+        // Ideally, we'd do these inline, but the hyperlink
+        //  positions are relative to the text area the
+        //  hyperlink is in, and we have yet to figure out
+        //  how to tie that together.
+        if (hyperlinksByDefault) {
+            for (QCBit bit : bits) {
+                if (bit != null && bit instanceof Type12) {
+                    Type12 hyperlinks = (Type12) bit;
+                    for (int j = 0; j < hyperlinks.getNumberOfHyperlinks(); j++) {
+                        text.append("<");
+                        text.append(hyperlinks.getHyperlink(j));
+                        text.append(">\n");
+                    }
+                }
+            }
+        }
+
+        // Get more text
+        // TODO
+
+        return text.toString();
+    }
 }

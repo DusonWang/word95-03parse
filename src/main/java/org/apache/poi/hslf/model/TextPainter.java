@@ -17,9 +17,12 @@
 
 package org.apache.poi.hslf.model;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
+import org.apache.poi.hslf.record.TextRulerAtom;
+import org.apache.poi.hslf.usermodel.RichTextRun;
+import org.apache.poi.util.POILogFactory;
+import org.apache.poi.util.POILogger;
+
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -32,74 +35,69 @@ import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hslf.record.TextRulerAtom;
-import org.apache.poi.hslf.usermodel.RichTextRun;
-import org.apache.poi.util.POILogFactory;
-import org.apache.poi.util.POILogger;
-
 /**
  * Paint text into java.awt.Graphics2D
  *
  * @author Yegor Kozlov
  */
 public final class TextPainter {
-    protected POILogger logger = POILogFactory.getLogger(this.getClass());
-
     /**
      * Display unicode square if a bullet char can't be displayed,
      * for example, if Wingdings font is used.
      * TODO: map Wingdngs and Symbol to unicode Arial
      */
     protected static final char DEFAULT_BULLET_CHAR = '\u25a0';
-
+    protected POILogger logger = POILogFactory.getLogger(this.getClass());
     protected TextShape _shape;
 
-    public TextPainter(TextShape shape){
+    public TextPainter(TextShape shape) {
         _shape = shape;
     }
 
     /**
      * Convert the underlying set of rich text runs into java.text.AttributedString
      */
-    public AttributedString getAttributedString(TextRun txrun){
+    public AttributedString getAttributedString(TextRun txrun) {
         String text = txrun.getText();
         //TODO: properly process tabs
         text = text.replace('\t', ' ');
-        text = text.replace((char)160, ' ');
+        text = text.replace((char) 160, ' ');
 
         AttributedString at = new AttributedString(text);
         RichTextRun[] rt = txrun.getRichTextRuns();
         for (int i = 0; i < rt.length; i++) {
             int start = rt[i].getStartIndex();
             int end = rt[i].getEndIndex();
-            if(start == end) {
-                logger.log(POILogger.INFO,  "Skipping RichTextRun with zero length");
+            if (start == end) {
+                logger.log(POILogger.INFO, "Skipping RichTextRun with zero length");
                 continue;
             }
 
             at.addAttribute(TextAttribute.FAMILY, rt[i].getFontName(), start, end);
             at.addAttribute(TextAttribute.SIZE, new Float(rt[i].getFontSize()), start, end);
             at.addAttribute(TextAttribute.FOREGROUND, rt[i].getFontColor(), start, end);
-            if(rt[i].isBold()) at.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, start, end);
-            if(rt[i].isItalic()) at.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, start, end);
-            if(rt[i].isUnderlined()) {
+            if (rt[i].isBold()) at.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, start, end);
+            if (rt[i].isItalic()) at.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, start, end);
+            if (rt[i].isUnderlined()) {
                 at.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, start, end);
                 at.addAttribute(TextAttribute.INPUT_METHOD_UNDERLINE, TextAttribute.UNDERLINE_LOW_TWO_PIXEL, start, end);
             }
-            if(rt[i].isStrikethrough()) at.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON, start, end);
+            if (rt[i].isStrikethrough())
+                at.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON, start, end);
             int superScript = rt[i].getSuperscript();
-            if(superScript != 0) at.addAttribute(TextAttribute.SUPERSCRIPT, superScript > 0 ? TextAttribute.SUPERSCRIPT_SUPER : TextAttribute.SUPERSCRIPT_SUB, start, end);
+            if (superScript != 0)
+                at.addAttribute(TextAttribute.SUPERSCRIPT, superScript > 0 ? TextAttribute.SUPERSCRIPT_SUPER : TextAttribute.SUPERSCRIPT_SUB, start, end);
 
         }
         return at;
     }
 
-    public void paint(Graphics2D graphics){
+    public void paint(Graphics2D graphics) {
         AffineTransform tx = graphics.getTransform();
 
         Rectangle2D anchor = _shape.getLogicalAnchor2D();
-        TextElement[] elem = getTextElements((float)anchor.getWidth(), graphics.getFontRenderContext());
-        if(elem == null) return;
+        TextElement[] elem = getTextElements((float) anchor.getWidth(), graphics.getFontRenderContext());
+        if (elem == null) return;
 
         float textHeight = 0;
         for (int i = 0; i < elem.length; i++) {
@@ -108,7 +106,7 @@ public final class TextPainter {
 
         int valign = _shape.getVerticalAlignment();
         double y0 = anchor.getY();
-        switch (valign){
+        switch (valign) {
             case TextShape.AnchorTopBaseline:
             case TextShape.AnchorTop:
                 y0 += _shape.getMarginTop();
@@ -118,8 +116,8 @@ public final class TextPainter {
                 break;
             default:
             case TextShape.AnchorMiddle:
-                float delta =  (float)anchor.getHeight() - textHeight - _shape.getMarginTop() - _shape.getMarginBottom();
-                y0 += _shape.getMarginTop()  + delta/2;
+                float delta = (float) anchor.getHeight() - textHeight - _shape.getMarginTop() - _shape.getMarginBottom();
+                y0 += _shape.getMarginTop() + delta / 2;
                 break;
         }
 
@@ -128,14 +126,14 @@ public final class TextPainter {
         // At this point the flip and rotation transform is already applied
         // (see XSLFShape#applyTransform ), but we need to restore it to avoid painting "upside down".
         // See Bugzilla 54210.
-        if(_shape.getFlipVertical()){
+        if (_shape.getFlipVertical()) {
             graphics.translate(anchor.getX(), anchor.getY() + anchor.getHeight());
             graphics.scale(1, -1);
             graphics.translate(-anchor.getX(), -anchor.getY());
 
             // text in vertically flipped shapes is rotated by 180 degrees
-            double centerX = anchor.getX() + anchor.getWidth()/2;
-            double centerY = anchor.getY() + anchor.getHeight()/2;
+            double centerX = anchor.getX() + anchor.getWidth() / 2;
+            double centerY = anchor.getY() + anchor.getHeight() / 2;
             graphics.translate(centerX, centerY);
             graphics.rotate(Math.toRadians(180));
             graphics.translate(-centerX, -centerY);
@@ -143,10 +141,10 @@ public final class TextPainter {
 
         // Horizontal flipping applies only to shape outline and not to the text in the shape.
         // Applying flip second time restores the original not-flipped transform
-        if(_shape.getFlipHorizontal()){
+        if (_shape.getFlipHorizontal()) {
             graphics.translate(anchor.getX() + anchor.getWidth(), anchor.getY());
             graphics.scale(-1, 1);
-            graphics.translate(-anchor.getX() , -anchor.getY());
+            graphics.translate(-anchor.getX(), -anchor.getY());
         }
 
         //finally draw the text fragments
@@ -169,12 +167,12 @@ public final class TextPainter {
                             (anchor.getWidth() - elem[i].advance - _shape.getMarginLeft() - _shape.getMarginRight());
                     break;
             }
-            if(elem[i]._bullet != null){
-                graphics.drawString(elem[i]._bullet.getIterator(), (float)(pen.x + elem[i]._bulletOffset), (float)pen.y);
+            if (elem[i]._bullet != null) {
+                graphics.drawString(elem[i]._bullet.getIterator(), (float) (pen.x + elem[i]._bulletOffset), (float) pen.y);
             }
             AttributedCharacterIterator chIt = elem[i]._text.getIterator();
-            if(chIt.getEndIndex() > chIt.getBeginIndex()) {
-                graphics.drawString(chIt, (float)(pen.x + elem[i]._textOffset), (float)pen.y);
+            if (chIt.getEndIndex() > chIt.getBeginIndex()) {
+                graphics.drawString(chIt, (float) (pen.x + elem[i]._textOffset), (float) pen.y);
             }
             y0 += elem[i].descent;
         }
@@ -182,7 +180,7 @@ public final class TextPainter {
         graphics.setTransform(tx);
     }
 
-    public TextElement[] getTextElements(float textWidth, FontRenderContext frc){
+    public TextElement[] getTextElements(float textWidth, FontRenderContext frc) {
         TextRun run = _shape.getTextRun();
         if (run == null) return null;
 
@@ -203,11 +201,11 @@ public final class TextPainter {
             int nextBreak = text.indexOf('\n', measurer.getPosition() + 1);
 
             boolean prStart = text.charAt(startIndex) == '\n';
-            if(prStart) measurer.setPosition(startIndex++);
+            if (prStart) measurer.setPosition(startIndex++);
 
-            RichTextRun rt = run.getRichTextRunAt(startIndex == text.length() ? (startIndex-1) : startIndex);
-            if(rt == null) {
-                logger.log(POILogger.WARN,  "RichTextRun not found at pos" + startIndex + "; text.length: " + text.length());
+            RichTextRun rt = run.getRichTextRunAt(startIndex == text.length() ? (startIndex - 1) : startIndex);
+            if (rt == null) {
+                logger.log(POILogger.WARN, "RichTextRun not found at pos" + startIndex + "; text.length: " + text.length());
                 break;
             }
 
@@ -217,19 +215,19 @@ public final class TextPainter {
             int indent = rt.getIndentLevel();
 
             TextRulerAtom ruler = run.getTextRuler();
-            if(ruler != null) {
-                int bullet_val = ruler.getBulletOffsets()[indent]*Shape.POINT_DPI/Shape.MASTER_DPI;
-                int text_val = ruler.getTextOffsets()[indent]*Shape.POINT_DPI/Shape.MASTER_DPI;
-                if(bullet_val > text_val){
+            if (ruler != null) {
+                int bullet_val = ruler.getBulletOffsets()[indent] * Shape.POINT_DPI / Shape.MASTER_DPI;
+                int text_val = ruler.getTextOffsets()[indent] * Shape.POINT_DPI / Shape.MASTER_DPI;
+                if (bullet_val > text_val) {
                     int a = bullet_val;
                     bullet_val = text_val;
                     text_val = a;
                 }
-                if(bullet_val != 0 ) bulletOffset = bullet_val;
-                if(text_val != 0) textOffset = text_val;
+                if (bullet_val != 0) bulletOffset = bullet_val;
+                if (text_val != 0) textOffset = text_val;
             }
 
-            if(bulletOffset > 0 || prStart || startIndex == 0) wrappingWidth -= textOffset;
+            if (bulletOffset > 0 || prStart || startIndex == 0) wrappingWidth -= textOffset;
 
             if (_shape.getWordWrap() == TextShape.WrapNone) {
                 wrappingWidth = _shape.getSheet().getSlideShow().getPageSize().width;
@@ -239,25 +237,25 @@ public final class TextPainter {
                     nextBreak == -1 ? paragraphEnd : nextBreak, true);
             if (textLayout == null) {
                 textLayout = measurer.nextLayout(textWidth,
-                    nextBreak == -1 ? paragraphEnd : nextBreak, false);
+                        nextBreak == -1 ? paragraphEnd : nextBreak, false);
             }
-            if(textLayout == null){
-                logger.log(POILogger.WARN, "Failed to break text into lines: wrappingWidth: "+wrappingWidth+
+            if (textLayout == null) {
+                logger.log(POILogger.WARN, "Failed to break text into lines: wrappingWidth: " + wrappingWidth +
                         "; text: " + rt.getText());
                 measurer.setPosition(rt.getEndIndex());
                 continue;
             }
             int endIndex = measurer.getPosition();
 
-            float lineHeight = (float)textLayout.getBounds().getHeight();
+            float lineHeight = (float) textLayout.getBounds().getHeight();
             int linespacing = rt.getLineSpacing();
-            if(linespacing == 0) linespacing = 100;
+            if (linespacing == 0) linespacing = 100;
 
             TextElement el = new TextElement();
-            if(linespacing >= 0){
-                el.ascent = textLayout.getAscent()*linespacing/100;
+            if (linespacing >= 0) {
+                el.ascent = textLayout.getAscent() * linespacing / 100;
             } else {
-                el.ascent = -linespacing*Shape.POINT_DPI/Shape.MASTER_DPI;
+                el.ascent = -linespacing * Shape.POINT_DPI / Shape.MASTER_DPI;
             }
 
             el._align = rt.getAlignment();
@@ -267,36 +265,36 @@ public final class TextPainter {
             el.textStartIndex = startIndex;
             el.textEndIndex = endIndex;
 
-            if (prStart){
+            if (prStart) {
                 int sp = rt.getSpaceBefore();
                 float spaceBefore;
-                if(sp >= 0){
-                    spaceBefore = lineHeight * sp/100;
+                if (sp >= 0) {
+                    spaceBefore = lineHeight * sp / 100;
                 } else {
-                    spaceBefore = -sp*Shape.POINT_DPI/Shape.MASTER_DPI;
+                    spaceBefore = -sp * Shape.POINT_DPI / Shape.MASTER_DPI;
                 }
                 el.ascent += spaceBefore;
             }
 
             float descent;
-            if(linespacing >= 0){
-                descent = (textLayout.getDescent() + textLayout.getLeading())*linespacing/100;
+            if (linespacing >= 0) {
+                descent = (textLayout.getDescent() + textLayout.getLeading()) * linespacing / 100;
             } else {
-                descent = -linespacing*Shape.POINT_DPI/Shape.MASTER_DPI;
+                descent = -linespacing * Shape.POINT_DPI / Shape.MASTER_DPI;
             }
-            if (prStart){
+            if (prStart) {
                 int sp = rt.getSpaceAfter();
                 float spaceAfter;
-                if(sp >= 0){
-                    spaceAfter = lineHeight * sp/100;
+                if (sp >= 0) {
+                    spaceAfter = lineHeight * sp / 100;
                 } else {
-                    spaceAfter = -sp*Shape.POINT_DPI/Shape.MASTER_DPI;
+                    spaceAfter = -sp * Shape.POINT_DPI / Shape.MASTER_DPI;
                 }
                 el.ascent += spaceAfter;
             }
             el.descent = descent;
 
-            if(rt.isBullet() && (prStart || startIndex == 0)){
+            if (rt.isBullet() && (prStart || startIndex == 0)) {
                 it.setIndex(startIndex);
 
                 AttributedString bat = new AttributedString(Character.toString(rt.getBulletChar()));
@@ -305,21 +303,21 @@ public final class TextPainter {
                 else bat.addAttribute(TextAttribute.FOREGROUND, it.getAttribute(TextAttribute.FOREGROUND));
 
                 int fontIdx = rt.getBulletFont();
-                if(fontIdx == -1) fontIdx = rt.getFontIndex();
+                if (fontIdx == -1) fontIdx = rt.getFontIndex();
                 PPFont bulletFont = _shape.getSheet().getSlideShow().getFont(fontIdx);
                 bat.addAttribute(TextAttribute.FAMILY, bulletFont.getFontName());
 
                 int bulletSize = rt.getBulletSize();
                 int fontSize = rt.getFontSize();
-                if(bulletSize != -1) fontSize = Math.round(fontSize*bulletSize*0.01f);
+                if (bulletSize != -1) fontSize = Math.round(fontSize * bulletSize * 0.01f);
                 bat.addAttribute(TextAttribute.SIZE, new Float(fontSize));
 
-                if(!new Font(bulletFont.getFontName(), Font.PLAIN, 1).canDisplay(rt.getBulletChar())){
+                if (!new Font(bulletFont.getFontName(), Font.PLAIN, 1).canDisplay(rt.getBulletChar())) {
                     bat.addAttribute(TextAttribute.FAMILY, "Arial");
                     bat = new AttributedString("" + DEFAULT_BULLET_CHAR, bat.getIterator().getAttributes());
                 }
 
-                if(text.substring(startIndex, endIndex).length() > 1){
+                if (text.substring(startIndex, endIndex).length() > 1) {
                     el._bullet = bat;
                     el._bulletOffset = bulletOffset;
                 }

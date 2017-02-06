@@ -17,7 +17,7 @@
 
 package org.apache.poi.hdf.extractor;
 
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Comment me
@@ -25,22 +25,20 @@ import java.util.*;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class TableRow
-{
-  TAP _descriptor;
-  ArrayList _cells;
+public final class TableRow {
+    TAP _descriptor;
+    ArrayList _cells;
 
-  public TableRow(ArrayList cells, TAP descriptor)
-  {
-    _cells = cells;
-    _descriptor = descriptor;
-  }
-  public TAP getTAP()
-  {
-    return _descriptor;
-  }
-  public ArrayList getCells()
-  {
-    return _cells;
-  }
+    public TableRow(ArrayList cells, TAP descriptor) {
+        _cells = cells;
+        _descriptor = descriptor;
+    }
+
+    public TAP getTAP() {
+        return _descriptor;
+    }
+
+    public ArrayList getCells() {
+        return _cells;
+    }
 }

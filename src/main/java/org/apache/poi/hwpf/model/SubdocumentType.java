@@ -24,7 +24,7 @@ import org.apache.poi.util.Internal;
  * @author Sergey Vladimirov (vlsergey {at} gmail {dot} com)
  */
 @Internal
-public enum SubdocumentType {
+public enum SubDocumentType {
     MAIN(),
 
     FOOTNOTE(),
@@ -43,14 +43,14 @@ public enum SubdocumentType {
     HEADER_TEXTBOX();
 
     /**
-     * Array of {@link SubdocumentType}s ordered by document position and FIB
+     * Array of {@link SubDocumentType}s ordered by document position and FIB
      * field order
      */
-    public static final SubdocumentType[] ORDERED = new SubdocumentType[]{
+    public static final SubDocumentType[] ORDERED = new SubDocumentType[]{
             MAIN, FOOTNOTE, HEADER, MACRO, ANNOTATION, ENDNOTE, TEXTBOX,
             HEADER_TEXTBOX};
 
-    private SubdocumentType() {
+    private SubDocumentType() {
     }
 
 }

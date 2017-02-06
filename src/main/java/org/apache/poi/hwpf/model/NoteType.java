@@ -26,10 +26,14 @@ import org.apache.poi.util.Internal;
 
 @Internal
 public enum NoteType {
-    /** Ending note */
+    /**
+     * Ending note
+     */
     ENDNOTE(FIBFieldHandler.PLCFENDREF, FIBFieldHandler.PLCFENDTXT),
 
-    /** Footnote */
+    /**
+     * Footnote
+     */
     FOOTNOTE(FIBFieldHandler.PLCFFNDREF, FIBFieldHandler.PLCFFNDTXT);
 
     private final int fibDescriptorsFieldIndex;

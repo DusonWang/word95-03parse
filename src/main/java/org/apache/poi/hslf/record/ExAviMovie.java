@@ -39,6 +39,7 @@ public final class ExAviMovie extends ExMCIMovie {
         super();
 
     }
+
     /**
      * We are of type 4102
      */

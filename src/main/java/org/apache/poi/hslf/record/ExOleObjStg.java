@@ -17,17 +17,13 @@
 
 package org.apache.poi.hslf.record;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import org.apache.poi.util.BoundedInputStream;
+import org.apache.poi.util.LittleEndian;
+
+import java.io.*;
 import java.util.Hashtable;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
-
-import org.apache.poi.util.BoundedInputStream;
-import org.apache.poi.util.LittleEndian;
 
 /**
  * Storage for embedded OLE objects.
@@ -36,13 +32,15 @@ import org.apache.poi.util.LittleEndian;
  */
 public class ExOleObjStg extends RecordAtom implements PositionDependentRecord, PersistRecord {
 
+    /**
+     * Our location on the disk, as of the last write out
+     */
+    protected int myLastOnDiskOffset;
     private int _persistId; // Found from PersistPtrHolder
-
     /**
      * Record header.
      */
     private byte[] _header;
-
     /**
      * Record data.
      */
@@ -55,31 +53,31 @@ public class ExOleObjStg extends RecordAtom implements PositionDependentRecord, 
         _header = new byte[8];
         _data = new byte[0];
 
-        LittleEndian.putShort(_header, 0, (short)0x10);
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 0, (short) 0x10);
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _data.length);
     }
 
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected ExOleObjStg(byte[] source, int start, int len) {
         // Get the header.
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Get the record data.
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,len-8);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, len - 8);
     }
 
     public boolean isCompressed() {
-        return LittleEndian.getShort(_header, 0)!=0;
+        return LittleEndian.getShort(_header, 0) != 0;
     }
 
     /**
@@ -111,16 +109,12 @@ public class ExOleObjStg extends RecordAtom implements PositionDependentRecord, 
         }
     }
 
-    public byte[] getRawData() {
-        return _data;
-    }
-
     /**
      * Sets the embedded data.
      *
      * @param data the embedded data.
      */
-     public void setData(byte[] data) throws IOException {
+    public void setData(byte[] data) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         //first four bytes is the length of the raw data
         byte[] b = new byte[4];
@@ -132,6 +126,10 @@ public class ExOleObjStg extends RecordAtom implements PositionDependentRecord, 
         def.finish();
         _data = out.toByteArray();
         LittleEndian.putInt(_header, 4, _data.length);
+    }
+
+    public byte[] getRawData() {
+        return _data;
     }
 
     /**
@@ -170,11 +168,12 @@ public class ExOleObjStg extends RecordAtom implements PositionDependentRecord, 
         _persistId = id;
     }
 
-    /** Our location on the disk, as of the last write out */
-    protected int myLastOnDiskOffset;
-
-    /** Fetch our location on the disk, as of the last write out */
-    public int getLastOnDiskOffset() { return myLastOnDiskOffset; }
+    /**
+     * Fetch our location on the disk, as of the last write out
+     */
+    public int getLastOnDiskOffset() {
+        return myLastOnDiskOffset;
+    }
 
     /**
      * Update the Record's idea of where on disk it lives, after a write out.
@@ -184,7 +183,7 @@ public class ExOleObjStg extends RecordAtom implements PositionDependentRecord, 
         myLastOnDiskOffset = offset;
     }
 
-    public void updateOtherRecordReferences(Hashtable<Integer,Integer> oldToNewReferencesLookup) {
+    public void updateOtherRecordReferences(Hashtable<Integer, Integer> oldToNewReferencesLookup) {
         return;
     }
 

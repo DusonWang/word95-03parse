@@ -21,8 +21,8 @@ public interface FibRgLw {
 
     void setCbMac(int cbMac);
 
-    int getSubdocumentTextStreamLength(SubdocumentType subdocumentType);
+    int getSubDocumentTextStreamLength(SubDocumentType subdocumentType);
 
-    void setSubdocumentTextStreamLength(SubdocumentType subdocumentType,
+    void setSubDocumentTextStreamLength(SubDocumentType subdocumentType,
                                         int newLength);
 }

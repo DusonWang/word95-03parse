@@ -18,7 +18,7 @@
 package org.apache.poi.hslf.model;
 
 import org.apache.poi.hslf.model.textproperties.TextProp;
-import org.apache.poi.hslf.record.*;
+import org.apache.poi.hslf.record.SlideAtom;
 
 /**
  * Title masters define the design template for slides with a Title Slide layout.
@@ -30,13 +30,12 @@ public final class TitleMaster extends MasterSheet {
 
     /**
      * Constructs a TitleMaster
-     *
      */
     public TitleMaster(org.apache.poi.hslf.record.Slide record, int sheetNo) {
         super(record, sheetNo);
 
         _runs = findTextRuns(getPPDrawing());
-        for (int i = 0; i < _runs.length; i++) _runs[i].setSheet(this);
+        for (TextRun _run : _runs) _run.setSheet(this);
     }
 
     /**
@@ -57,12 +56,12 @@ public final class TitleMaster extends MasterSheet {
     /**
      * Returns the slide master for this title master.
      */
-    public MasterSheet getMasterSheet(){
+    public MasterSheet getMasterSheet() {
         SlideMaster[] master = getSlideShow().getSlidesMasters();
-        SlideAtom sa = ((org.apache.poi.hslf.record.Slide)getSheetContainer()).getSlideAtom();
+        SlideAtom sa = ((org.apache.poi.hslf.record.Slide) getSheetContainer()).getSlideAtom();
         int masterId = sa.getMasterID();
-        for (int i = 0; i < master.length; i++) {
-            if (masterId == master[i]._getSheetNumber()) return master[i];
+        for (SlideMaster aMaster : master) {
+            if (masterId == aMaster._getSheetNumber()) return aMaster;
         }
         return null;
     }

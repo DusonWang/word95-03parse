@@ -168,8 +168,8 @@ public class CHPBinTable {
             }
             logger.log(POILogger.DEBUG,
                     "Merged with CHPX from complex file table in ",
-                    Long.valueOf(System.currentTimeMillis() - start),
-                    " ms (", Integer.valueOf(_textRuns.size()),
+                    System.currentTimeMillis() - start,
+                    " ms (", _textRuns.size(),
                     " elements in total)");
             start = System.currentTimeMillis();
         }
@@ -179,53 +179,50 @@ public class CHPBinTable {
                 PropertyNode.StartComparator.instance);
 
         logger.log(POILogger.DEBUG, "CHPX sorted by start position in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms");
+                System.currentTimeMillis() - start, " ms");
         start = System.currentTimeMillis();
 
         final Map<CHPX, Integer> chpxToFileOrder = new IdentityHashMap<CHPX, Integer>();
         {
             int counter = 0;
             for (CHPX chpx : _textRuns) {
-                chpxToFileOrder.put(chpx, Integer.valueOf(counter++));
+                chpxToFileOrder.put(chpx, counter++);
             }
         }
-        final Comparator<CHPX> chpxFileOrderComparator = new Comparator<CHPX>() {
-            public int compare(CHPX o1, CHPX o2) {
-                Integer i1 = chpxToFileOrder.get(o1);
-                Integer i2 = chpxToFileOrder.get(o2);
-                return i1.compareTo(i2);
-            }
+        final Comparator<CHPX> chpxFileOrderComparator = (o1, o2) -> {
+            Integer i1 = chpxToFileOrder.get(o1);
+            Integer i2 = chpxToFileOrder.get(o2);
+            return i1.compareTo(i2);
         };
 
         logger.log(POILogger.DEBUG, "CHPX's order map created in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms");
+                System.currentTimeMillis() - start, " ms");
         start = System.currentTimeMillis();
 
         List<Integer> textRunsBoundariesList;
         {
-            Set<Integer> textRunsBoundariesSet = new HashSet<Integer>();
+            Set<Integer> textRunsBoundariesSet = new HashSet<>();
             for (CHPX chpx : _textRuns) {
-                textRunsBoundariesSet.add(Integer.valueOf(chpx.getStart()));
-                textRunsBoundariesSet.add(Integer.valueOf(chpx.getEnd()));
+                textRunsBoundariesSet.add(chpx.getStart());
+                textRunsBoundariesSet.add(chpx.getEnd());
             }
-            textRunsBoundariesSet.remove(Integer.valueOf(0));
-            textRunsBoundariesList = new ArrayList<Integer>(
+            textRunsBoundariesSet.remove(0);
+            textRunsBoundariesList = new ArrayList<>(
                     textRunsBoundariesSet);
             Collections.sort(textRunsBoundariesList);
         }
 
         logger.log(POILogger.DEBUG, "Texts CHPX boundaries collected in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms");
+                System.currentTimeMillis() - start, " ms");
         start = System.currentTimeMillis();
 
-        List<CHPX> newChpxs = new LinkedList<CHPX>();
+        List<CHPX> newChpxs = new LinkedList<>();
         int lastTextRunStart = 0;
         for (Integer objBoundary : textRunsBoundariesList) {
-            final int boundary = objBoundary.intValue();
+            final int boundary = objBoundary;
 
             final int startInclusive = lastTextRunStart;
-            final int endExclusive = boundary;
-            lastTextRunStart = endExclusive;
+            lastTextRunStart = boundary;
 
             int startPosition = binarySearch(oldChpxSortedByStartPos, boundary);
             startPosition = Math.abs(startPosition);
@@ -235,7 +232,7 @@ public class CHPBinTable {
                     && oldChpxSortedByStartPos.get(startPosition).getStart() >= boundary)
                 startPosition--;
 
-            List<CHPX> chpxs = new LinkedList<CHPX>();
+            List<CHPX> chpxs = new LinkedList<>();
             for (int c = startPosition; c < oldChpxSortedByStartPos.size(); c++) {
                 CHPX chpx = oldChpxSortedByStartPos.get(c);
 
@@ -243,7 +240,7 @@ public class CHPBinTable {
                     break;
 
                 int left = Math.max(startInclusive, chpx.getStart());
-                int right = Math.min(endExclusive, chpx.getEnd());
+                int right = Math.min(boundary, chpx.getEnd());
 
                 if (left < right) {
                     chpxs.add(chpx);
@@ -252,11 +249,11 @@ public class CHPBinTable {
 
             if (chpxs.size() == 0) {
                 logger.log(POILogger.WARN, "Text piece [",
-                        Integer.valueOf(startInclusive), "; ",
-                        Integer.valueOf(endExclusive),
+                        startInclusive, "; ",
+                        boundary,
                         ") has no CHPX. Creating new one.");
                 // create it manually
-                CHPX chpx = new CHPX(startInclusive, endExclusive,
+                CHPX chpx = new CHPX(startInclusive, boundary,
                         new SprmBuffer(0));
                 newChpxs.add(chpx);
                 continue;
@@ -266,7 +263,7 @@ public class CHPBinTable {
                 // can we reuse existing?
                 CHPX existing = chpxs.get(0);
                 if (existing.getStart() == startInclusive
-                        && existing.getEnd() == endExclusive) {
+                        && existing.getEnd() == boundary) {
                     newChpxs.add(existing);
                     continue;
                 }
@@ -278,16 +275,15 @@ public class CHPBinTable {
             for (CHPX chpx : chpxs) {
                 sprmBuffer.append(chpx.getGrpprl(), 0);
             }
-            CHPX newChpx = new CHPX(startInclusive, endExclusive, sprmBuffer);
+            CHPX newChpx = new CHPX(startInclusive, boundary, sprmBuffer);
             newChpxs.add(newChpx);
 
-            continue;
         }
         this._textRuns = new ArrayList<CHPX>(newChpxs);
 
         logger.log(POILogger.DEBUG, "CHPX rebuilded in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms (",
-                Integer.valueOf(_textRuns.size()), " elements)");
+                System.currentTimeMillis() - start, " ms (",
+                _textRuns.size(), " elements)");
         start = System.currentTimeMillis();
 
         CHPX previous = null;
@@ -311,8 +307,8 @@ public class CHPBinTable {
         }
 
         logger.log(POILogger.DEBUG, "CHPX compacted in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms (",
-                Integer.valueOf(_textRuns.size()), " elements)");
+                System.currentTimeMillis() - start, " ms (",
+                _textRuns.size(), " elements)");
     }
 
     public void adjustForDelete(int listIndex, int offset, int length) {

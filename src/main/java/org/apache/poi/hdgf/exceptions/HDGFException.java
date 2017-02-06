@@ -25,14 +25,14 @@ package org.apache.poi.hdgf.exceptions;
 public final class HDGFException extends RuntimeException {
 
     public HDGFException() {
-	    super();
+        super();
     }
 
-   public HDGFException(String message) {
-	    super(message);
+    public HDGFException(String message) {
+        super(message);
     }
 
-   public HDGFException(String message, Throwable cause) {
+    public HDGFException(String message, Throwable cause) {
         super(message, cause);
     }
 

@@ -17,14 +17,14 @@
 
 package org.apache.poi.hslf.blip;
 
+import org.apache.poi.hslf.exceptions.HSLFException;
 import org.apache.poi.hslf.model.Picture;
 import org.apache.poi.hslf.model.Shape;
-import org.apache.poi.hslf.exceptions.HSLFException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
 
 /**
@@ -37,25 +37,25 @@ public final class EMF extends Metafile {
     /**
      * Extract compressed EMF data from a ppt
      */
-    public byte[] getData(){
+    public byte[] getData() {
         try {
             byte[] rawdata = getRawData();
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            InputStream is = new ByteArrayInputStream( rawdata );
+            InputStream is = new ByteArrayInputStream(rawdata);
             Header header = new Header();
             header.read(rawdata, CHECKSUM_SIZE);
             is.skip(header.getSize() + CHECKSUM_SIZE);
 
-            InflaterInputStream inflater = new InflaterInputStream( is );
+            InflaterInputStream inflater = new InflaterInputStream(is);
             byte[] chunk = new byte[4096];
             int count;
-            while ((count = inflater.read(chunk)) >=0 ) {
-                out.write(chunk,0,count);
+            while ((count = inflater.read(chunk)) >= 0) {
+                out.write(chunk, 0, count);
             }
             inflater.close();
             return out.toByteArray();
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new HSLFException(e);
         }
     }
@@ -67,7 +67,7 @@ public final class EMF extends Metafile {
         header.wmfsize = data.length;
         //we don't have a EMF reader in java, have to set default image size  200x200
         header.bounds = new java.awt.Rectangle(0, 0, 200, 200);
-        header.size = new java.awt.Dimension(header.bounds.width*Shape.EMU_PER_POINT, header.bounds.height*Shape.EMU_PER_POINT);
+        header.size = new java.awt.Dimension(header.bounds.width * Shape.EMU_PER_POINT, header.bounds.height * Shape.EMU_PER_POINT);
         header.zipsize = compressed.length;
 
         byte[] checksum = getChecksum(data);
@@ -79,7 +79,7 @@ public final class EMF extends Metafile {
         setRawData(out.toByteArray());
     }
 
-    public int getType(){
+    public int getType() {
         return Picture.EMF;
     }
 
@@ -88,7 +88,7 @@ public final class EMF extends Metafile {
      *
      * @return EMF signature (<code>0x3D40</code>)
      */
-    public int getSignature(){
+    public int getSignature() {
         return 0x3D40;
     }
 }

@@ -17,12 +17,6 @@
 
 package org.apache.poi.hmef.attribute;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
 import org.apache.poi.hmef.Attachment;
 import org.apache.poi.hmef.HMEFMessage;
 import org.apache.poi.hpsf.Util;
@@ -30,65 +24,71 @@ import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.POILogFactory;
 import org.apache.poi.util.POILogger;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * A Date attribute which applies to a {@link HMEFMessage}
- *  or one of its {@link Attachment}s.
+ * or one of its {@link Attachment}s.
  */
 public final class TNEFDateAttribute extends TNEFAttribute {
-   private static POILogger logger = POILogFactory.getLogger(TNEFDateAttribute.class);
-   private Date data;
-   
-   /**
-    * Constructs a single new date attribute from the id, type,
-    *  and the contents of the stream
-    */
-   protected TNEFDateAttribute(int id, int type, InputStream inp) throws IOException {
-      super(id, type, inp);
-      
-      byte[] data = getData();
-      if(data.length == 8) {
-         // The value is a 64 bit Windows Filetime
-         this.data = Util.filetimeToDate(
-               LittleEndian.getLong(getData(), 0)
-         );
-      } else if(data.length == 14) {
-         // It's the 7 date fields. We think it's in UTC...
-         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-         c.set(Calendar.YEAR, LittleEndian.getUShort(data, 0));
-         c.set(Calendar.MONTH, LittleEndian.getUShort(data, 2) - 1); // Java months are 0 based!
-         c.set(Calendar.DAY_OF_MONTH, LittleEndian.getUShort(data, 4));
-         c.set(Calendar.HOUR_OF_DAY, LittleEndian.getUShort(data, 6));
-         c.set(Calendar.MINUTE, LittleEndian.getUShort(data, 8));
-         c.set(Calendar.SECOND, LittleEndian.getUShort(data, 10));
-         // The 7th field is day of week, which we don't require
-         c.set(Calendar.MILLISECOND, 0); // Not set in the file
-         this.data = c.getTime();
-      } else {
-         throw new IllegalArgumentException("Invalid date, found " + data.length + " bytes");
-      }
-   }
+    private static POILogger logger = POILogFactory.getLogger(TNEFDateAttribute.class);
+    private Date data;
 
-   public Date getDate() {
-      return this.data;
-   }
-   
-   public String toString() {
-      return "Attribute " + getProperty().toString() + ", type=" + getType() + 
-             ", date=" + data.toString(); 
-   }
-   
-   /**
-    * Returns the Date of a Attribute, converting as appropriate
-    */
-   public static Date getAsDate(TNEFAttribute attr) {
-      if(attr == null) {
-         return null;
-      }
-      if(attr instanceof TNEFDateAttribute) {
-         return ((TNEFDateAttribute)attr).getDate();
-      }
-      
-      logger.log(POILogger.WARN, "Warning, non date property found: " + attr.toString());
-      return null;
-  }
+    /**
+     * Constructs a single new date attribute from the id, type,
+     * and the contents of the stream
+     */
+    protected TNEFDateAttribute(int id, int type, InputStream inp) throws IOException {
+        super(id, type, inp);
+
+        byte[] data = getData();
+        if (data.length == 8) {
+            // The value is a 64 bit Windows Filetime
+            this.data = Util.filetimeToDate(
+                    LittleEndian.getLong(getData(), 0)
+            );
+        } else if (data.length == 14) {
+            // It's the 7 date fields. We think it's in UTC...
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            c.set(Calendar.YEAR, LittleEndian.getUShort(data, 0));
+            c.set(Calendar.MONTH, LittleEndian.getUShort(data, 2) - 1); // Java months are 0 based!
+            c.set(Calendar.DAY_OF_MONTH, LittleEndian.getUShort(data, 4));
+            c.set(Calendar.HOUR_OF_DAY, LittleEndian.getUShort(data, 6));
+            c.set(Calendar.MINUTE, LittleEndian.getUShort(data, 8));
+            c.set(Calendar.SECOND, LittleEndian.getUShort(data, 10));
+            // The 7th field is day of week, which we don't require
+            c.set(Calendar.MILLISECOND, 0); // Not set in the file
+            this.data = c.getTime();
+        } else {
+            throw new IllegalArgumentException("Invalid date, found " + data.length + " bytes");
+        }
+    }
+
+    /**
+     * Returns the Date of a Attribute, converting as appropriate
+     */
+    public static Date getAsDate(TNEFAttribute attr) {
+        if (attr == null) {
+            return null;
+        }
+        if (attr instanceof TNEFDateAttribute) {
+            return ((TNEFDateAttribute) attr).getDate();
+        }
+
+        logger.log(POILogger.WARN, "Warning, non date property found: " + attr.toString());
+        return null;
+    }
+
+    public Date getDate() {
+        return this.data;
+    }
+
+    public String toString() {
+        return "Attribute " + getProperty().toString() + ", type=" + getType() +
+                ", date=" + data.toString();
+    }
 }

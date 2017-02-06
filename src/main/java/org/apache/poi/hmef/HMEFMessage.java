@@ -17,176 +17,172 @@
 
 package org.apache.poi.hmef;
 
+import org.apache.poi.hmef.attribute.*;
+import org.apache.poi.hsmf.datatypes.MAPIProperty;
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hmef.attribute.MAPIAttribute;
-import org.apache.poi.hmef.attribute.MAPIStringAttribute;
-import org.apache.poi.hmef.attribute.TNEFAttribute;
-import org.apache.poi.hmef.attribute.TNEFMAPIAttribute;
-import org.apache.poi.hmef.attribute.TNEFProperty;
-import org.apache.poi.hsmf.datatypes.MAPIProperty;
-import org.apache.poi.util.LittleEndian;
-
 /**
  * HMEF - Implementation of the Microsoft TNEF message
- *  encoding format (aka winmail.dat)
+ * encoding format (aka winmail.dat)
  * See:
- *   http://support.microsoft.com/kb/241538
- *   http://en.wikipedia.org/wiki/Transport_Neutral_Encapsulation_Format
- *   http://search.cpan.org/dist/Convert-TNEF/
+ * http://support.microsoft.com/kb/241538
+ * http://en.wikipedia.org/wiki/Transport_Neutral_Encapsulation_Format
+ * http://search.cpan.org/dist/Convert-TNEF/
  */
 public final class HMEFMessage {
-   public static final int HEADER_SIGNATURE = 0x223e9f78;
-   
-   private int fileId; 
-   private List<TNEFAttribute> messageAttributes = new ArrayList<TNEFAttribute>();
-   private List<MAPIAttribute> mapiAttributes = new ArrayList<MAPIAttribute>();
-   private List<Attachment> attachments = new ArrayList<Attachment>();
-   
-   public HMEFMessage(InputStream inp) throws IOException {
-      // Check the signature matches
-      int sig = LittleEndian.readInt(inp);
-      if(sig != HEADER_SIGNATURE) {
-         throw new IllegalArgumentException(
-               "TNEF signature not detected in file, " +
-               "expected " + HEADER_SIGNATURE + " but got " + sig
-         );
-      }
-      
-      // Read the File ID
-      fileId = LittleEndian.readUShort(inp);
-      
-      // Now begin processing the contents
-      process(inp);
-   }
-   
-   private void process(InputStream inp) throws IOException {
-      int level;
-      do {
-         // Fetch the level
-         level = inp.read();
+    public static final int HEADER_SIGNATURE = 0x223e9f78;
 
-         // Decide what to attach it to, based on the levels and IDs
-         switch (level) {
-         case TNEFProperty.LEVEL_MESSAGE:
-            processMessage(inp);
-            break;
-         case TNEFProperty.LEVEL_ATTACHMENT:
-            processAttachment(inp);
-            break;
-         // ignore trailing newline
-         case '\r':
-         case '\n':
-         case TNEFProperty.LEVEL_END_OF_FILE:
-            break;
-         default:
-            throw new IllegalStateException("Unhandled level " + level);
-         }
-      } while (level != TNEFProperty.LEVEL_END_OF_FILE);
-   }
+    private int fileId;
+    private List<TNEFAttribute> messageAttributes = new ArrayList<TNEFAttribute>();
+    private List<MAPIAttribute> mapiAttributes = new ArrayList<MAPIAttribute>();
+    private List<Attachment> attachments = new ArrayList<Attachment>();
 
-   void processMessage(InputStream inp) throws IOException {
-      // Build the attribute
-      TNEFAttribute attr = TNEFAttribute.create(inp);
+    public HMEFMessage(InputStream inp) throws IOException {
+        // Check the signature matches
+        int sig = LittleEndian.readInt(inp);
+        if (sig != HEADER_SIGNATURE) {
+            throw new IllegalArgumentException(
+                    "TNEF signature not detected in file, " +
+                            "expected " + HEADER_SIGNATURE + " but got " + sig
+            );
+        }
 
-      messageAttributes.add(attr);
+        // Read the File ID
+        fileId = LittleEndian.readUShort(inp);
 
-      if (attr instanceof TNEFMAPIAttribute) {
-         TNEFMAPIAttribute tnefMAPI = (TNEFMAPIAttribute) attr;
-         mapiAttributes.addAll(tnefMAPI.getMAPIAttributes());
-      }
-   }
+        // Now begin processing the contents
+        process(inp);
+    }
 
-   void processAttachment(InputStream inp) throws IOException {
-      // Build the attribute
-      TNEFAttribute attr = TNEFAttribute.create(inp);
+    private void process(InputStream inp) throws IOException {
+        int level;
+        do {
+            // Fetch the level
+            level = inp.read();
 
-      // Previous attachment or a new one?
-      if (attachments.isEmpty()
-         || attr.getProperty() == TNEFProperty.ID_ATTACHRENDERDATA) {
-         attachments.add(new Attachment());
-      }
+            // Decide what to attach it to, based on the levels and IDs
+            switch (level) {
+                case TNEFProperty.LEVEL_MESSAGE:
+                    processMessage(inp);
+                    break;
+                case TNEFProperty.LEVEL_ATTACHMENT:
+                    processAttachment(inp);
+                    break;
+                // ignore trailing newline
+                case '\r':
+                case '\n':
+                case TNEFProperty.LEVEL_END_OF_FILE:
+                    break;
+                default:
+                    throw new IllegalStateException("Unhandled level " + level);
+            }
+        } while (level != TNEFProperty.LEVEL_END_OF_FILE);
+    }
 
-      // Save the attribute for it
-      Attachment attach = attachments.get(attachments.size() - 1);
-      attach.addAttribute(attr);
-   }
-   
-   /**
-    * Returns all HMEF/TNEF attributes of the message. 
-    * Note - In a typical message, most of the interesting properties
-    *  are stored as {@link MAPIAttribute}s - see {@link #getMessageMAPIAttributes()} 
-    */
-   public List<TNEFAttribute> getMessageAttributes() {
-      return messageAttributes;
-   }
-   
-   /**
-    * Returns all MAPI attributes of the message.
-    * Note - A small number of HMEF/TNEF specific attributes normally
-    *  apply to most messages, see {@link #getMessageAttributes()}
-    */
-   public List<MAPIAttribute> getMessageMAPIAttributes() {
-      return mapiAttributes;
-   }
-   
-   /**
-    * Returns all the Attachments of the message.
-    */
-   public List<Attachment> getAttachments() {
-      return attachments;
-   }
-   
-   /**
-    * Return the message attribute with the given ID,
-    *  or null if there isn't one. 
-    */
-   public TNEFAttribute getMessageAttribute(TNEFProperty id) {
-      for(TNEFAttribute attr : messageAttributes) {
-         if(attr.getProperty() == id) {
-            return attr;
-         }
-      }
-      return null;
-   }
-   
-   /**
-    * Return the message MAPI Attribute with the given ID,
-    *  or null if there isn't one. 
-    */
-   public MAPIAttribute getMessageMAPIAttribute(MAPIProperty id) {
-      for(MAPIAttribute attr : mapiAttributes) {
-         if(attr.getProperty() == id) {
-            return attr;
-         }
-      }
-      return null;
-   }
-   
-   /**
-    * Return the string value of the mapi property, or null
-    *  if it isn't set
-    */
-   private String getString(MAPIProperty id) {
-      return MAPIStringAttribute.getAsString( getMessageMAPIAttribute(id) );
-   }
-   
-   /**
-    * Returns the Message Subject, or null if the mapi property
-    *  for this isn't set
-    */
-   public String getSubject() {
-      return getString(MAPIProperty.CONVERSATION_TOPIC);
-   }
-   
-   /**
-    * Returns the Message Body, as RTF, or null if the mapi property
-    *  for this isn't set
-    */
-   public String getBody() {
-      return getString(MAPIProperty.RTF_COMPRESSED);
-   }
+    void processMessage(InputStream inp) throws IOException {
+        // Build the attribute
+        TNEFAttribute attr = TNEFAttribute.create(inp);
+
+        messageAttributes.add(attr);
+
+        if (attr instanceof TNEFMAPIAttribute) {
+            TNEFMAPIAttribute tnefMAPI = (TNEFMAPIAttribute) attr;
+            mapiAttributes.addAll(tnefMAPI.getMAPIAttributes());
+        }
+    }
+
+    void processAttachment(InputStream inp) throws IOException {
+        // Build the attribute
+        TNEFAttribute attr = TNEFAttribute.create(inp);
+
+        // Previous attachment or a new one?
+        if (attachments.isEmpty()
+                || attr.getProperty() == TNEFProperty.ID_ATTACHRENDERDATA) {
+            attachments.add(new Attachment());
+        }
+
+        // Save the attribute for it
+        Attachment attach = attachments.get(attachments.size() - 1);
+        attach.addAttribute(attr);
+    }
+
+    /**
+     * Returns all HMEF/TNEF attributes of the message.
+     * Note - In a typical message, most of the interesting properties
+     * are stored as {@link MAPIAttribute}s - see {@link #getMessageMAPIAttributes()}
+     */
+    public List<TNEFAttribute> getMessageAttributes() {
+        return messageAttributes;
+    }
+
+    /**
+     * Returns all MAPI attributes of the message.
+     * Note - A small number of HMEF/TNEF specific attributes normally
+     * apply to most messages, see {@link #getMessageAttributes()}
+     */
+    public List<MAPIAttribute> getMessageMAPIAttributes() {
+        return mapiAttributes;
+    }
+
+    /**
+     * Returns all the Attachments of the message.
+     */
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    /**
+     * Return the message attribute with the given ID,
+     * or null if there isn't one.
+     */
+    public TNEFAttribute getMessageAttribute(TNEFProperty id) {
+        for (TNEFAttribute attr : messageAttributes) {
+            if (attr.getProperty() == id) {
+                return attr;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return the message MAPI Attribute with the given ID,
+     * or null if there isn't one.
+     */
+    public MAPIAttribute getMessageMAPIAttribute(MAPIProperty id) {
+        for (MAPIAttribute attr : mapiAttributes) {
+            if (attr.getProperty() == id) {
+                return attr;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return the string value of the mapi property, or null
+     * if it isn't set
+     */
+    private String getString(MAPIProperty id) {
+        return MAPIStringAttribute.getAsString(getMessageMAPIAttribute(id));
+    }
+
+    /**
+     * Returns the Message Subject, or null if the mapi property
+     * for this isn't set
+     */
+    public String getSubject() {
+        return getString(MAPIProperty.CONVERSATION_TOPIC);
+    }
+
+    /**
+     * Returns the Message Body, as RTF, or null if the mapi property
+     * for this isn't set
+     */
+    public String getBody() {
+        return getString(MAPIProperty.RTF_COMPRESSED);
+    }
 }

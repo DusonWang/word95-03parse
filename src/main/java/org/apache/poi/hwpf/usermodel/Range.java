@@ -1126,7 +1126,7 @@ public class Range { // TODO -instantiable superclass
         // much simple implementation base on SubdocumentType --sergey
 
         int currentEnd = 0;
-        for (SubdocumentType type : SubdocumentType.ORDERED) {
+        for (SubDocumentType type : SubDocumentType.ORDERED) {
             int currentLength = fib.getSubdocumentTextStreamLength(type);
             currentEnd += currentLength;
 

@@ -19,28 +19,35 @@ package org.apache.poi.hdgf.streams;
 
 /**
  * Holds the representation of the stream on-disk, and
- *  handles de-compressing it as required.
+ * handles de-compressing it as required.
  * In future, may also handle writing it back out again
  */
 public class StreamStore { // TODO - instantiable superclass
-	private byte[] contents;
+    private byte[] contents;
 
-	/**
-	 * Creates a new, non compressed Stream Store
-	 */
-	protected StreamStore(byte[] data, int offset, int length) {
-		contents = new byte[length];
-		System.arraycopy(data, offset, contents, 0, length);
-	}
+    /**
+     * Creates a new, non compressed Stream Store
+     */
+    protected StreamStore(byte[] data, int offset, int length) {
+        contents = new byte[length];
+        System.arraycopy(data, offset, contents, 0, length);
+    }
 
-	protected void prependContentsWith(byte[] b) {
-		byte[] newContents = new byte[contents.length + b.length];
-		System.arraycopy(b, 0, newContents, 0, b.length);
-		System.arraycopy(contents, 0, newContents, b.length, contents.length);
-		contents = newContents;
-	}
-	protected void copyBlockHeaderToContents() {}
+    protected void prependContentsWith(byte[] b) {
+        byte[] newContents = new byte[contents.length + b.length];
+        System.arraycopy(b, 0, newContents, 0, b.length);
+        System.arraycopy(contents, 0, newContents, b.length, contents.length);
+        contents = newContents;
+    }
 
-	protected byte[] getContents() { return contents; }
-	public byte[] _getContents() { return contents; }
+    protected void copyBlockHeaderToContents() {
+    }
+
+    protected byte[] getContents() {
+        return contents;
+    }
+
+    public byte[] _getContents() {
+        return contents;
+    }
 }

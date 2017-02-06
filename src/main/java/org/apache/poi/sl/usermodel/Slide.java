@@ -18,15 +18,19 @@
 package org.apache.poi.sl.usermodel;
 
 public interface Slide extends Sheet {
-	public Notes getNotes();
-	public void setNotes(Notes notes);
+    public Notes getNotes();
 
-	public boolean getFollowMasterBackground();
-	public void setFollowMasterBackground(boolean follow);
+    public void setNotes(Notes notes);
 
-	public boolean getFollowMasterColourScheme();
-	public void setFollowMasterColourScheme(boolean follow);
+    public boolean getFollowMasterBackground();
 
-	public boolean getFollowMasterObjects();
-	public void setFollowMasterObjects(boolean follow);
+    public void setFollowMasterBackground(boolean follow);
+
+    public boolean getFollowMasterColourScheme();
+
+    public void setFollowMasterColourScheme(boolean follow);
+
+    public boolean getFollowMasterObjects();
+
+    public void setFollowMasterObjects(boolean follow);
 }

@@ -17,14 +17,14 @@
 
 package org.apache.poi.hslf.model;
 
-import java.io.ByteArrayOutputStream;
-
 import org.apache.poi.ddf.EscherClientDataRecord;
 import org.apache.poi.ddf.EscherContainerRecord;
 import org.apache.poi.ddf.EscherProperties;
 import org.apache.poi.hslf.exceptions.HSLFException;
 import org.apache.poi.hslf.record.*;
 import org.apache.poi.hslf.usermodel.SlideShow;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Represents a movie in a PowerPoint document.
@@ -35,14 +35,14 @@ public final class MovieShape extends Picture {
     public static final int DEFAULT_MOVIE_THUMBNAIL = -1;
 
     public static final int MOVIE_MPEG = 1;
-    public static final int MOVIE_AVI  = 2;
+    public static final int MOVIE_AVI = 2;
 
     /**
      * Create a new <code>Picture</code>
      *
-    * @param pictureIdx the index of the picture
+     * @param pictureIdx the index of the picture
      */
-    public MovieShape(int movieIdx, int pictureIdx){
+    public MovieShape(int movieIdx, int pictureIdx) {
         super(pictureIdx, null);
         setMovieIndex(movieIdx);
         setAutoPlay(true);
@@ -51,7 +51,7 @@ public final class MovieShape extends Picture {
     /**
      * Create a new <code>Picture</code>
      *
-     * @param idx the index of the picture
+     * @param idx    the index of the picture
      * @param parent the parent shape
      */
     public MovieShape(int movieIdx, int idx, Shape parent) {
@@ -60,13 +60,13 @@ public final class MovieShape extends Picture {
     }
 
     /**
-      * Create a <code>Picture</code> object
-      *
-      * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
-      *        this picture in the <code>Slide</code>
-      * @param parent the parent shape of this picture
-      */
-     protected MovieShape(EscherContainerRecord escherRecord, Shape parent){
+     * Create a <code>Picture</code> object
+     *
+     * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
+     *                     this picture in the <code>Slide</code>
+     * @param parent       the parent shape of this picture
+     */
+    protected MovieShape(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
@@ -82,7 +82,7 @@ public final class MovieShape extends Picture {
         setEscherProperty(EscherProperties.FILL__NOFILLHITTEST, 0x10001);
 
         EscherClientDataRecord cldata = new EscherClientDataRecord();
-        cldata.setOptions((short)0xF);
+        cldata.setOptions((short) 0xF);
         _escherContainer.addChildRecord(cldata);
 
         OEShapeAtom oe = new OEShapeAtom();
@@ -101,7 +101,7 @@ public final class MovieShape extends Picture {
             oe.writeOut(out);
             an.writeOut(out);
             info.writeOut(out);
-        } catch(Exception e){
+        } catch (Exception e) {
             throw new HSLFException(e);
         }
         cldata.setRemainingData(out.toByteArray());
@@ -112,15 +112,15 @@ public final class MovieShape extends Picture {
     /**
      * Assign a movie to this shape
      *
+     * @param idx the index of the movie
      * @see org.apache.poi.hslf.usermodel.SlideShow#addMovie(String, int)
-     * @param idx  the index of the movie
      */
-    public void setMovieIndex(int idx){
-        OEShapeAtom oe = (OEShapeAtom)getClientDataRecord(RecordTypes.OEShapeAtom.typeID);
+    public void setMovieIndex(int idx) {
+        OEShapeAtom oe = (OEShapeAtom) getClientDataRecord(RecordTypes.OEShapeAtom.typeID);
         oe.setOptions(idx);
 
-        AnimationInfo an = (AnimationInfo)getClientDataRecord(RecordTypes.AnimationInfo.typeID);
-        if(an != null) {
+        AnimationInfo an = (AnimationInfo) getClientDataRecord(RecordTypes.AnimationInfo.typeID);
+        if (an != null) {
             AnimationInfoAtom ai = an.getAnimationInfoAtom();
             ai.setDimColor(0x07000000);
             ai.setFlag(AnimationInfoAtom.Automatic, true);
@@ -130,40 +130,40 @@ public final class MovieShape extends Picture {
         }
     }
 
-    public void setAutoPlay(boolean flag){
-        AnimationInfo an = (AnimationInfo)getClientDataRecord(RecordTypes.AnimationInfo.typeID);
-        if(an != null){
-            an.getAnimationInfoAtom().setFlag(AnimationInfoAtom.Automatic, flag);
-            updateClientData();
-        }
-    }
-
-    public boolean  isAutoPlay(){
-        AnimationInfo an = (AnimationInfo)getClientDataRecord(RecordTypes.AnimationInfo.typeID);
-        if(an != null){
+    public boolean isAutoPlay() {
+        AnimationInfo an = (AnimationInfo) getClientDataRecord(RecordTypes.AnimationInfo.typeID);
+        if (an != null) {
             return an.getAnimationInfoAtom().getFlag(AnimationInfoAtom.Automatic);
         }
         return false;
     }
 
+    public void setAutoPlay(boolean flag) {
+        AnimationInfo an = (AnimationInfo) getClientDataRecord(RecordTypes.AnimationInfo.typeID);
+        if (an != null) {
+            an.getAnimationInfoAtom().setFlag(AnimationInfoAtom.Automatic, flag);
+            updateClientData();
+        }
+    }
+
     /**
      * @return UNC or local path to a video file
      */
-    public String getPath(){
-        OEShapeAtom oe = (OEShapeAtom)getClientDataRecord(RecordTypes.OEShapeAtom.typeID);
+    public String getPath() {
+        OEShapeAtom oe = (OEShapeAtom) getClientDataRecord(RecordTypes.OEShapeAtom.typeID);
         int idx = oe.getOptions();
 
         SlideShow ppt = getSheet().getSlideShow();
-        ExObjList lst = (ExObjList)ppt.getDocumentRecord().findFirstOfType(RecordTypes.ExObjList.typeID);
-        if(lst == null) return null;
+        ExObjList lst = (ExObjList) ppt.getDocumentRecord().findFirstOfType(RecordTypes.ExObjList.typeID);
+        if (lst == null) return null;
 
-        Record[]  r = lst.getChildRecords();
+        Record[] r = lst.getChildRecords();
         for (int i = 0; i < r.length; i++) {
-            if(r[i] instanceof ExMCIMovie){
-                ExMCIMovie mci = (ExMCIMovie)r[i];
+            if (r[i] instanceof ExMCIMovie) {
+                ExMCIMovie mci = (ExMCIMovie) r[i];
                 ExVideoContainer exVideo = mci.getExVideo();
                 int objectId = exVideo.getExMediaAtom().getObjectId();
-                if(objectId == idx){
+                if (objectId == idx) {
                     return exVideo.getPathAtom().getText();
                 }
             }

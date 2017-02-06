@@ -23,22 +23,22 @@ import org.apache.poi.util.StringUtil;
  * A Text based bit of Quill Contents
  */
 public final class QCTextBit extends QCBit {
-	public QCTextBit(String thingType, String bitType, byte[] data) {
-		super(thingType, bitType, data);
-	}
+    public QCTextBit(String thingType, String bitType, byte[] data) {
+        super(thingType, bitType, data);
+    }
 
-	/**
-	 * Returns the text. Note that line endings
-	 *  are \r and not \n
-	 */
-	public String getText() {
-		return StringUtil.getFromUnicodeLE(
-				data, 0, data.length/2
-		);
-	}
+    /**
+     * Returns the text. Note that line endings
+     * are \r and not \n
+     */
+    public String getText() {
+        return StringUtil.getFromUnicodeLE(
+                data, 0, data.length / 2
+        );
+    }
 
-	public void setText(String text) {
-		data = new byte[text.length()*2];
-		StringUtil.putUnicodeLE(text, data, 0);
-	}
+    public void setText(String text) {
+        data = new byte[text.length() * 2];
+        StringUtil.putUnicodeLE(text, data, 0);
+    }
 }

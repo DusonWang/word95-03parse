@@ -17,10 +17,10 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.poi.util.LittleEndian;
 
 /**
  * Tne atom that holds metadata on Links in the document.
@@ -44,7 +44,7 @@ public class InteractiveInfoAtom extends RecordAtom {
     public static final byte ACTION_CUSTOMSHOW = 7;
 
     /**
-     *  Jump Table
+     * Jump Table
      */
     public static final byte JUMP_NONE = 0;
     public static final byte JUMP_NEXTSLIDE = 1;
@@ -66,7 +66,7 @@ public class InteractiveInfoAtom extends RecordAtom {
     public static final byte LINK_Url = 0x08;
     public static final byte LINK_OtherPresentation = 0x09;
     public static final byte LINK_OtherFile = 0x0A;
-    public static final byte LINK_NULL = (byte)0xFF;
+    public static final byte LINK_NULL = (byte) 0xFF;
 
     /**
      * Record header.
@@ -85,7 +85,7 @@ public class InteractiveInfoAtom extends RecordAtom {
         _header = new byte[8];
         _data = new byte[16];
 
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _data.length);
 
         // It is fine for the other values to be zero
@@ -93,24 +93,24 @@ public class InteractiveInfoAtom extends RecordAtom {
 
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected InteractiveInfoAtom(byte[] source, int start, int len) {
         // Get the header.
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Get the record data.
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,len-8);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, len - 8);
 
         // Must be at least 16 bytes long
-        if(_data.length < 16) {
-        	throw new IllegalArgumentException("The length of the data for a InteractiveInfoAtom must be at least 16 bytes, but was only " + _data.length);
+        if (_data.length < 16) {
+            throw new IllegalArgumentException("The length of the data for a InteractiveInfoAtom must be at least 16 bytes, but was only " + _data.length);
         }
 
         // First 4 bytes - no idea, normally 0
@@ -121,11 +121,12 @@ public class InteractiveInfoAtom extends RecordAtom {
 
     /**
      * Gets the link number. You will normally look the
-     *  ExHyperlink with this number to get the details.
+     * ExHyperlink with this number to get the details.
+     *
      * @return the link number
      */
     public int getHyperlinkID() {
-        return LittleEndian.getInt(_data,4);
+        return LittleEndian.getInt(_data, 4);
     }
 
     /**
@@ -134,22 +135,23 @@ public class InteractiveInfoAtom extends RecordAtom {
      * @param number the persistent unique identifier of the link
      */
     public void setHyperlinkID(int number) {
-        LittleEndian.putInt(_data,4,number);
+        LittleEndian.putInt(_data, 4, number);
     }
 
     /**
      * a reference to a sound in the sound collection.
      */
     public int getSoundRef() {
-        return LittleEndian.getInt(_data,0);
+        return LittleEndian.getInt(_data, 0);
     }
+
     /**
      * a reference to a sound in the sound collection.
      *
      * @param val a reference to a sound in the sound collection
      */
     public void setSoundRef(int val) {
-    	LittleEndian.putInt(_data, 0, val);
+        LittleEndian.putInt(_data, 0, val);
     }
 
     /**
@@ -173,7 +175,7 @@ public class InteractiveInfoAtom extends RecordAtom {
      * @param val hyperlink action.
      */
     public void setAction(byte val) {
-    	_data[8] = val;
+        _data[8] = val;
     }
 
     /**
@@ -187,7 +189,7 @@ public class InteractiveInfoAtom extends RecordAtom {
      * Only valid when action == OLEAction. OLE verb to use, 0 = first verb, 1 = second verb, etc.
      */
     public void setOleVerb(byte val) {
-    	_data[9] = val;
+        _data[9] = val;
     }
 
     /**
@@ -211,7 +213,7 @@ public class InteractiveInfoAtom extends RecordAtom {
      * @param val jump
      */
     public void setJump(byte val) {
-    	_data[10] = val;
+        _data[10] = val;
     }
 
     /**
@@ -220,7 +222,7 @@ public class InteractiveInfoAtom extends RecordAtom {
      * <li> Bit 1: Animated. If 1, then button is animated
      * <li> Bit 2: Stop sound. If 1, then stop current sound when button is pressed.
      * <li> Bit 3: CustomShowReturn. If 1, and this is a jump to custom show,
-     *   then return to this slide after custom show.
+     * then return to this slide after custom show.
      * </p>
      */
     public byte getFlags() {
@@ -233,11 +235,11 @@ public class InteractiveInfoAtom extends RecordAtom {
      * <li> Bit 1: Animated. If 1, then button is animated
      * <li> Bit 2: Stop sound. If 1, then stop current sound when button is pressed.
      * <li> Bit 3: CustomShowReturn. If 1, and this is a jump to custom show,
-     *   then return to this slide after custom show.
+     * then return to this slide after custom show.
      * </p>
      */
     public void setFlags(byte val) {
-    	_data[11] = val;
+        _data[11] = val;
     }
 
     /**
@@ -255,14 +257,17 @@ public class InteractiveInfoAtom extends RecordAtom {
      * @param val hyperlink type
      */
     public void setHyperlinkType(byte val) {
-    	_data[12] = val;
+        _data[12] = val;
     }
 
     /**
      * Gets the record type.
+     *
      * @return the record type.
      */
-    public long getRecordType() { return RecordTypes.InteractiveInfoAtom.typeID; }
+    public long getRecordType() {
+        return RecordTypes.InteractiveInfoAtom.typeID;
+    }
 
     /**
      * Write the contents of the record back, so it can be written

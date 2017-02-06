@@ -24,7 +24,7 @@ public abstract class SheetContainer extends PositionDependentRecordContainer {
 
     /**
      * Returns the PPDrawing of this sheet, which has all the
-     *  interesting data in it
+     * interesting data in it
      */
     public abstract PPDrawing getPPDrawing();
 

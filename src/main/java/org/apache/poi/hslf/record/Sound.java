@@ -19,8 +19,8 @@ package org.apache.poi.hslf.record;
 
 import org.apache.poi.util.POILogger;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A container holding information about a sound. It contains:
@@ -50,37 +50,37 @@ public final class Sound extends RecordContainer {
      * Set things up, and find our more interesting children
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected Sound(byte[] source, int start, int len) {
         // Grab the header
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Find our children
-        _children = Record.findChildRecords(source,start+8,len-8);
+        _children = Record.findChildRecords(source, start + 8, len - 8);
         findInterestingChildren();
     }
 
     private void findInterestingChildren() {
         // First child should be the ExHyperlinkAtom
-        if(_children[0] instanceof CString) {
-            _name = (CString)_children[0];
+        if (_children[0] instanceof CString) {
+            _name = (CString) _children[0];
         } else {
             logger.log(POILogger.ERROR, "First child record wasn't a CString, was of type " + _children[0].getRecordType());
         }
 
         // Second child should be the ExOleObjAtom
         if (_children[1] instanceof CString) {
-            _type = (CString)_children[1];
+            _type = (CString) _children[1];
         } else {
             logger.log(POILogger.ERROR, "Second child record wasn't a CString, was of type " + _children[1].getRecordType());
         }
 
         for (int i = 2; i < _children.length; i++) {
-            if(_children[i] instanceof SoundData){
-                _data = (SoundData)_children[i];
+            if (_children[i] instanceof SoundData) {
+                _data = (SoundData) _children[i];
                 break;
             }
         }
@@ -105,7 +105,7 @@ public final class Sound extends RecordContainer {
      * @throws java.io.IOException if there was an error writing to the stream.
      */
     public void writeOut(OutputStream out) throws IOException {
-        writeOut(_header[0],_header[1],getRecordType(),_children,out);
+        writeOut(_header[0], _header[1], getRecordType(), _children, out);
     }
 
     /**
@@ -113,7 +113,7 @@ public final class Sound extends RecordContainer {
      *
      * @return name of the sound
      */
-    public String getSoundName(){
+    public String getSoundName() {
         return _name.getText();
     }
 
@@ -122,7 +122,7 @@ public final class Sound extends RecordContainer {
      *
      * @return type of the sound
      */
-    public String getSoundType(){
+    public String getSoundType() {
         return _type.getText();
     }
 
@@ -131,7 +131,7 @@ public final class Sound extends RecordContainer {
      *
      * @return the sound data.
      */
-    public byte[] getSoundData(){
+    public byte[] getSoundData() {
         return _data == null ? null : _data.getData();
     }
 }

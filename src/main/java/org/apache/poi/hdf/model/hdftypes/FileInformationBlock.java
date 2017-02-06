@@ -21,12 +21,10 @@ package org.apache.poi.hdf.model.hdftypes;
 import org.apache.poi.hdf.model.hdftypes.definitions.FIBAbstractType;
 
 /**
- *
- * @author  andy
+ * @author andy
  */
 @Deprecated
-public final class FileInformationBlock extends FIBAbstractType
-{
+public final class FileInformationBlock extends FIBAbstractType {
 /*
     private  short field_1_id;
     private  short field_2_version; // 101 = Word 6.0 +
@@ -185,8 +183,11 @@ public final class FileInformationBlock extends FIBAbstractType
     private int field_115_DOP_size;
     private int field_116_sttbfassoc_offset;
     private int field_117_sttbfassoc_size; */
-    /**offset in table stream of beginning of information for complex files.
-     * Also, this is the beginning of the Text piece table*/ /*
+
+    /**
+     * offset in table stream of beginning of information for complex files.
+     * Also, this is the beginning of the Text piece table
+     */ /*
     private int field_118_textPieceTable_offset;
     private int field_119_textPieceTable_size;
     private int field_199_list_format_offset;
@@ -199,9 +200,8 @@ public final class FileInformationBlock extends FIBAbstractType
 
 ^/
     /** Creates a new instance of FileInformationBlock */
-    public FileInformationBlock(byte[] mainDocument)
-    {
-        fillFields(mainDocument, (short)0, (short)0);
+    public FileInformationBlock(byte[] mainDocument) {
+        fillFields(mainDocument, (short) 0, (short) 0);
 /*        field_1_id = LittleEndian.getShort(mainDocument, 0);
         field_2_version = LittleEndian.getShort(mainDocument, 0x2); // 101 = Word 6.0 +
         field_3_product_version = LittleEndian.getShort(mainDocument, 0x4);

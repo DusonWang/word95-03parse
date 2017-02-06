@@ -18,17 +18,17 @@
 package org.apache.poi.hslf.model;
 
 import org.apache.poi.ddf.*;
-import org.apache.poi.hslf.usermodel.PictureData;
-import org.apache.poi.hslf.usermodel.SlideShow;
-import org.apache.poi.hslf.record.Document;
 import org.apache.poi.hslf.blip.Bitmap;
 import org.apache.poi.hslf.exceptions.HSLFException;
+import org.apache.poi.hslf.record.Document;
+import org.apache.poi.hslf.usermodel.PictureData;
+import org.apache.poi.hslf.usermodel.SlideShow;
 import org.apache.poi.util.POILogger;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -43,28 +43,28 @@ import java.util.List;
 public class Picture extends SimpleShape {
 
     /**
-    *  Windows Enhanced Metafile (EMF)
-    */
+     * Windows Enhanced Metafile (EMF)
+     */
     public static final int EMF = 2;
 
     /**
-    *  Windows Metafile (WMF)
-    */
+     * Windows Metafile (WMF)
+     */
     public static final int WMF = 3;
 
     /**
-    * Macintosh PICT
-    */
+     * Macintosh PICT
+     */
     public static final int PICT = 4;
 
     /**
-    *  JPEG
-    */
+     * JPEG
+     */
     public static final int JPEG = 5;
 
     /**
-    *  PNG
-    */
+     * PNG
+     */
     public static final int PNG = 6;
 
     /**
@@ -75,16 +75,16 @@ public class Picture extends SimpleShape {
     /**
      * Create a new <code>Picture</code>
      *
-    * @param idx the index of the picture
+     * @param idx the index of the picture
      */
-    public Picture(int idx){
+    public Picture(int idx) {
         this(idx, null);
     }
 
     /**
      * Create a new <code>Picture</code>
      *
-     * @param idx the index of the picture
+     * @param idx    the index of the picture
      * @param parent the parent shape
      */
     public Picture(int idx, Shape parent) {
@@ -93,13 +93,13 @@ public class Picture extends SimpleShape {
     }
 
     /**
-      * Create a <code>Picture</code> object
-      *
-      * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
-      *        this picture in the <code>Slide</code>
-      * @param parent the parent shape of this picture
-      */
-     protected Picture(EscherContainerRecord escherRecord, Shape parent){
+     * Create a <code>Picture</code> object
+     *
+     * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
+     *                     this picture in the <code>Slide</code>
+     * @param parent       the parent shape of this picture
+     */
+    protected Picture(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
@@ -110,31 +110,31 @@ public class Picture extends SimpleShape {
      *
      * @return the index to this picture (1 based).
      */
-    public int getPictureIndex(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.BLIP__BLIPTODISPLAY);
+    public int getPictureIndex() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.BLIP__BLIPTODISPLAY);
         return prop == null ? 0 : prop.getPropertyValue();
     }
 
     /**
      * Create a new Picture and populate the inital structure of the <code>EscherSp</code> record which holds information about this picture.
-
+     *
      * @param idx the index of the picture which refers to <code>EscherBSE</code> container.
      * @return the create Picture object
      */
     protected EscherContainerRecord createSpContainer(int idx, boolean isChild) {
         _escherContainer = super.createSpContainer(isChild);
-        _escherContainer.setOptions((short)15);
+        _escherContainer.setOptions((short) 15);
 
         EscherSpRecord spRecord = _escherContainer.getChildById(EscherSpRecord.RECORD_ID);
-        spRecord.setOptions((short)((ShapeTypes.PictureFrame << 4) | 0x2));
+        spRecord.setOptions((short) ((ShapeTypes.PictureFrame << 4) | 0x2));
 
         //set default properties for a picture
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
         setEscherProperty(opt, EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, 0x800080);
 
         //another weird feature of powerpoint: for picture id we must add 0x4000.
-        setEscherProperty(opt, (short)(EscherProperties.BLIP__BLIPTODISPLAY + 0x4000), idx);
+        setEscherProperty(opt, (short) (EscherProperties.BLIP__BLIPTODISPLAY + 0x4000), idx);
 
         return _escherContainer;
     }
@@ -144,19 +144,19 @@ public class Picture extends SimpleShape {
      * For PNG and JPEG resizes the image to 100%,
      * for other types sets the default size of 200x200 pixels.
      */
-    public void setDefaultSize(){
+    public void setDefaultSize() {
         PictureData pict = getPictureData();
-        if (pict  instanceof Bitmap){
+        if (pict instanceof Bitmap) {
             BufferedImage img = null;
             try {
-               	img = ImageIO.read(new ByteArrayInputStream(pict.getData()));
+                img = ImageIO.read(new ByteArrayInputStream(pict.getData()));
+            } catch (IOException e) {
+            } catch (NegativeArraySizeException ne) {
             }
-            catch (IOException e){}
-            catch (NegativeArraySizeException ne) {}
 
-            if(img != null) {
+            if (img != null) {
                 // Valid image, set anchor from it
-                setAnchor(new java.awt.Rectangle(0, 0, img.getWidth()*POINT_DPI/PIXEL_DPI, img.getHeight()*POINT_DPI/PIXEL_DPI));
+                setAnchor(new java.awt.Rectangle(0, 0, img.getWidth() * POINT_DPI / PIXEL_DPI, img.getHeight() * POINT_DPI / PIXEL_DPI));
             } else {
                 // Invalid image, go with the default metafile size
                 setAnchor(new java.awt.Rectangle(0, 0, 200, 200));
@@ -172,16 +172,16 @@ public class Picture extends SimpleShape {
      *
      * @return the picture data for this picture.
      */
-    public PictureData getPictureData(){
+    public PictureData getPictureData() {
         SlideShow ppt = getSheet().getSlideShow();
         PictureData[] pict = ppt.getPictureData();
 
         EscherBSERecord bse = getEscherBSERecord();
-        if (bse == null){
+        if (bse == null) {
             logger.log(POILogger.ERROR, "no reference to picture data found ");
         } else {
-            for ( int i = 0; i < pict.length; i++ ) {
-                if (pict[i].getOffset() ==  bse.getOffset()){
+            for (int i = 0; i < pict.length; i++) {
+                if (pict[i].getOffset() == bse.getOffset()) {
                     return pict[i];
                 }
             }
@@ -190,22 +190,22 @@ public class Picture extends SimpleShape {
         return null;
     }
 
-    protected EscherBSERecord getEscherBSERecord(){
+    protected EscherBSERecord getEscherBSERecord() {
         SlideShow ppt = getSheet().getSlideShow();
         Document doc = ppt.getDocumentRecord();
         EscherContainerRecord dggContainer = doc.getPPDrawingGroup().getDggContainer();
-        EscherContainerRecord bstore = (EscherContainerRecord)Shape.getEscherChild(dggContainer, EscherContainerRecord.BSTORE_CONTAINER);
-        if(bstore == null) {
+        EscherContainerRecord bstore = (EscherContainerRecord) Shape.getEscherChild(dggContainer, EscherContainerRecord.BSTORE_CONTAINER);
+        if (bstore == null) {
             logger.log(POILogger.DEBUG, "EscherContainerRecord.BSTORE_CONTAINER was not found ");
             return null;
         }
         List lst = bstore.getChildRecords();
         int idx = getPictureIndex();
-        if (idx == 0){
+        if (idx == 0) {
             logger.log(POILogger.DEBUG, "picture index was not found, returning ");
             return null;
         }
-        return (EscherBSERecord)lst.get(idx-1);
+        return (EscherBSERecord) lst.get(idx - 1);
     }
 
     /**
@@ -213,16 +213,16 @@ public class Picture extends SimpleShape {
      *
      * @return name of this picture
      */
-    public String getPictureName(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherComplexProperty prop = (EscherComplexProperty)getEscherProperty(opt, EscherProperties.BLIP__BLIPFILENAME);
+    public String getPictureName() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherComplexProperty prop = (EscherComplexProperty) getEscherProperty(opt, EscherProperties.BLIP__BLIPFILENAME);
         String name = null;
-        if(prop != null){
+        if (prop != null) {
             try {
                 name = new String(prop.getComplexData(), "UTF-16LE");
                 int idx = name.indexOf('\u0000');
                 return idx == -1 ? name : name.substring(0, idx);
-            } catch (UnsupportedEncodingException e){
+            } catch (UnsupportedEncodingException e) {
                 throw new HSLFException(e);
             }
         }
@@ -234,13 +234,13 @@ public class Picture extends SimpleShape {
      *
      * @param name of this picture
      */
-    public void setPictureName(String name){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+    public void setPictureName(String name) {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
         try {
             byte[] data = (name + '\u0000').getBytes("UTF-16LE");
             EscherComplexProperty prop = new EscherComplexProperty(EscherProperties.BLIP__BLIPFILENAME, false, data);
             opt.addEscherProperty(prop);
-        } catch (UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             throw new HSLFException(e);
         }
     }
@@ -248,24 +248,24 @@ public class Picture extends SimpleShape {
     /**
      * By default set the orininal image size
      */
-    protected void afterInsert(Sheet sh){
+    protected void afterInsert(Sheet sh) {
         super.afterInsert(sh);
 
         EscherBSERecord bse = getEscherBSERecord();
         bse.setRef(bse.getRef() + 1);
 
         java.awt.Rectangle anchor = getAnchor();
-        if (anchor.equals(new java.awt.Rectangle())){
+        if (anchor.equals(new java.awt.Rectangle())) {
             setDefaultSize();
         }
     }
 
-    public void draw(Graphics2D graphics){
+    public void draw(Graphics2D graphics) {
         AffineTransform at = graphics.getTransform();
         ShapePainter.paint(this, graphics);
 
         PictureData data = getPictureData();
-        if(data != null) data.draw(graphics, this);
+        if (data != null) data.draw(graphics, this);
 
         graphics.setTransform(at);
     }

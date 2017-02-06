@@ -17,37 +17,18 @@
 
 package org.apache.poi.hslf.model;
 
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import org.apache.poi.ddf.*;
+import org.apache.poi.hslf.exceptions.HSLFException;
+import org.apache.poi.hslf.record.*;
+import org.apache.poi.hslf.usermodel.RichTextRun;
+import org.apache.poi.util.POILogger;
+
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
-
-import org.apache.poi.ddf.EscherContainerRecord;
-import org.apache.poi.ddf.EscherOptRecord;
-import org.apache.poi.ddf.EscherProperties;
-import org.apache.poi.ddf.EscherSimpleProperty;
-import org.apache.poi.ddf.EscherSpRecord;
-import org.apache.poi.ddf.EscherTextboxRecord;
-import org.apache.poi.hslf.exceptions.HSLFException;
-import org.apache.poi.hslf.record.EscherTextboxWrapper;
-import org.apache.poi.hslf.record.InteractiveInfo;
-import org.apache.poi.hslf.record.InteractiveInfoAtom;
-import org.apache.poi.hslf.record.OEPlaceholderAtom;
-import org.apache.poi.hslf.record.OutlineTextRefAtom;
-import org.apache.poi.hslf.record.PPDrawing;
-import org.apache.poi.hslf.record.Record;
-import org.apache.poi.hslf.record.RecordTypes;
-import org.apache.poi.hslf.record.StyleTextPropAtom;
-import org.apache.poi.hslf.record.TextBytesAtom;
-import org.apache.poi.hslf.record.TextCharsAtom;
-import org.apache.poi.hslf.record.TextHeaderAtom;
-import org.apache.poi.hslf.record.TxInteractiveInfoAtom;
-import org.apache.poi.hslf.usermodel.RichTextRun;
-import org.apache.poi.util.POILogger;
 
 /**
  * A common superclass of all shapes that can hold text.
@@ -86,12 +67,14 @@ public abstract class TextShape extends SimpleShape {
     public static final int AlignCenter = 1;
     public static final int AlignRight = 2;
     public static final int AlignJustify = 3;
-
+    /**
+     * Used to calculate text bounds
+     */
+    protected static final FontRenderContext _frc = new FontRenderContext(null, true, true);
     /**
      * TextRun object which holds actual text and format data
      */
     protected TextRun _txtrun;
-
     /**
      * Escher container which holds text attributes such as
      * TextHeaderAtom, TextBytesAtom ot TextCharsAtom, StyleTextPropAtom etc.
@@ -99,17 +82,12 @@ public abstract class TextShape extends SimpleShape {
     protected EscherTextboxWrapper _txtbox;
 
     /**
-     * Used to calculate text bounds
-     */
-    protected static final FontRenderContext _frc = new FontRenderContext(null, true, true);
-
-    /**
      * Create a TextBox object and initialize it from the supplied Record container.
      *
-     * @param escherRecord       <code>EscherSpContainer</code> container which holds information about this shape
-     * @param parent    the parent of the shape
+     * @param escherRecord <code>EscherSpContainer</code> container which holds information about this shape
+     * @param parent       the parent of the shape
      */
-   protected TextShape(EscherContainerRecord escherRecord, Shape parent){
+    protected TextShape(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
 
     }
@@ -117,28 +95,27 @@ public abstract class TextShape extends SimpleShape {
     /**
      * Create a new TextBox. This constructor is used when a new shape is created.
      *
-     * @param parent    the parent of this Shape. For example, if this text box is a cell
-     * in a table then the parent is Table.
+     * @param parent the parent of this Shape. For example, if this text box is a cell
+     *               in a table then the parent is Table.
      */
-    public TextShape(Shape parent){
+    public TextShape(Shape parent) {
         super(null, parent);
         _escherContainer = createSpContainer(parent instanceof ShapeGroup);
     }
 
     /**
      * Create a new TextBox. This constructor is used when a new shape is created.
-     *
      */
-    public TextShape(){
+    public TextShape() {
         this(null);
     }
 
-    public TextRun createTextRun(){
+    public TextRun createTextRun() {
         _txtbox = getEscherTextboxWrapper();
-        if(_txtbox == null) _txtbox = new EscherTextboxWrapper();
+        if (_txtbox == null) _txtbox = new EscherTextboxWrapper();
 
         _txtrun = getTextRun();
-        if(_txtrun == null){
+        if (_txtrun == null) {
             TextHeaderAtom tha = new TextHeaderAtom();
             tha.setParentRecord(_txtbox);
             _txtbox.appendChildRecord(tha);
@@ -149,7 +126,7 @@ public abstract class TextShape extends SimpleShape {
             StyleTextPropAtom sta = new StyleTextPropAtom(0);
             _txtbox.appendChildRecord(sta);
 
-            _txtrun = new TextRun(tha,tca,sta);
+            _txtrun = new TextRun(tha, tca, sta);
             _txtrun._records = new Record[]{tha, tca, sta};
             _txtrun.setText("");
 
@@ -164,11 +141,10 @@ public abstract class TextShape extends SimpleShape {
     /**
      * Set default properties for the  TextRun.
      * Depending on the text and shape type the defaults are different:
-     *   TextBox: align=left, valign=top
-     *   AutoShape: align=center, valign=middle
-     *
+     * TextBox: align=left, valign=top
+     * AutoShape: align=center, valign=middle
      */
-    protected void setDefaultTextProperties(TextRun _txtrun){
+    protected void setDefaultTextProperties(TextRun _txtrun) {
 
     }
 
@@ -177,7 +153,7 @@ public abstract class TextShape extends SimpleShape {
      *
      * @return the text string for this textbox.
      */
-     public String getText(){
+    public String getText() {
         TextRun tx = getTextRun();
         return tx == null ? null : tx.getText();
     }
@@ -187,9 +163,9 @@ public abstract class TextShape extends SimpleShape {
      *
      * @param text the text string used by this object.
      */
-    public void setText(String text){
+    public void setText(String text) {
         TextRun tx = getTextRun();
-        if(tx == null){
+        if (tx == null) {
             tx = createTextRun();
         }
         tx.setText(text);
@@ -202,42 +178,43 @@ public abstract class TextShape extends SimpleShape {
      *
      * @param sh the sheet we are adding to
      */
-    protected void afterInsert(Sheet sh){
+    protected void afterInsert(Sheet sh) {
         super.afterInsert(sh);
 
         EscherTextboxWrapper _txtbox = getEscherTextboxWrapper();
-        if(_txtbox != null){
+        if (_txtbox != null) {
             PPDrawing ppdrawing = sh.getPPDrawing();
             ppdrawing.addTextboxWrapper(_txtbox);
             // Ensure the escher layer knows about the added records
             try {
                 _txtbox.writeOut(null);
-            } catch (IOException e){
+            } catch (IOException e) {
                 throw new HSLFException(e);
             }
-            if(getAnchor().equals(new Rectangle()) && !"".equals(getText())) resizeToFitText();
+            if (getAnchor().equals(new Rectangle()) && !"".equals(getText())) resizeToFitText();
         }
-        if(_txtrun != null) {
+        if (_txtrun != null) {
             _txtrun.setShapeId(getShapeId());
             sh.onAddTextShape(this);
         }
     }
 
-    protected EscherTextboxWrapper getEscherTextboxWrapper(){
-        if(_txtbox == null){
-            EscherTextboxRecord textRecord = (EscherTextboxRecord)Shape.getEscherChild(_escherContainer, EscherTextboxRecord.RECORD_ID);
-            if(textRecord != null) _txtbox = new EscherTextboxWrapper(textRecord);
+    protected EscherTextboxWrapper getEscherTextboxWrapper() {
+        if (_txtbox == null) {
+            EscherTextboxRecord textRecord = (EscherTextboxRecord) Shape.getEscherChild(_escherContainer, EscherTextboxRecord.RECORD_ID);
+            if (textRecord != null) _txtbox = new EscherTextboxWrapper(textRecord);
         }
         return _txtbox;
     }
+
     /**
      * Adjust the size of the TextShape so it encompasses the text inside it.
      *
      * @return a <code>Rectangle2D</code> that is the bounds of this <code>TextShape</code>.
      */
-    public Rectangle2D resizeToFitText(){
+    public Rectangle2D resizeToFitText() {
         String txt = getText();
-        if(txt == null || txt.length() == 0) return new Rectangle2D.Float();
+        if (txt == null || txt.length() == 0) return new Rectangle2D.Float();
 
         RichTextRun rt = getTextRun().getRichTextRuns()[0];
         int size = rt.getFontSize();
@@ -249,10 +226,10 @@ public abstract class TextShape extends SimpleShape {
 
         float width = 0, height = 0, leading = 0;
         String[] lines = txt.split("\n");
-        for (int i = 0; i < lines.length; i++) {
-            if(lines[i].length() == 0) continue;
+        for (String line : lines) {
+            if (line.length() == 0) continue;
 
-            TextLayout layout = new TextLayout(lines[i], font, _frc);
+            TextLayout layout = new TextLayout(line, font, _frc);
 
             leading = Math.max(leading, layout.getLeading());
             width = Math.max(width, layout.getAdvance());
@@ -279,31 +256,31 @@ public abstract class TextShape extends SimpleShape {
      *
      * @return the type of alignment
      */
-    public int getVerticalAlignment(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.TEXT__ANCHORTEXT);
+    public int getVerticalAlignment() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.TEXT__ANCHORTEXT);
         int valign = TextShape.AnchorTop;
-        if (prop == null){
+        if (prop == null) {
             /**
              * If vertical alignment was not found in the shape properties then try to
              * fetch the master shape and search for the align property there.
              */
             int type = getTextRun().getRunType();
             MasterSheet master = getSheet().getMasterSheet();
-            if(master != null){
+            if (master != null) {
                 TextShape masterShape = master.getPlaceholderByTextType(type);
-                if(masterShape != null) valign = masterShape.getVerticalAlignment();
+                if (masterShape != null) valign = masterShape.getVerticalAlignment();
             } else {
                 //not found in the master sheet. Use the hardcoded defaults.
-                switch (type){
-                     case TextHeaderAtom.TITLE_TYPE:
-                     case TextHeaderAtom.CENTER_TITLE_TYPE:
-                         valign = TextShape.AnchorMiddle;
-                         break;
-                     default:
-                         valign = TextShape.AnchorTop;
-                         break;
-                 }
+                switch (type) {
+                    case TextHeaderAtom.TITLE_TYPE:
+                    case TextHeaderAtom.CENTER_TITLE_TYPE:
+                        valign = TextShape.AnchorMiddle;
+                        break;
+                    default:
+                        valign = TextShape.AnchorTop;
+                        break;
+                }
             }
         } else {
             valign = prop.getPropertyValue();
@@ -317,19 +294,8 @@ public abstract class TextShape extends SimpleShape {
      *
      * @param align - the type of alignment
      */
-    public void setVerticalAlignment(int align){
+    public void setVerticalAlignment(int align) {
         setEscherProperty(EscherProperties.TEXT__ANCHORTEXT, align);
-    }
-
-    /**
-     * Sets the type of horizontal alignment for the text.
-     * One of the <code>Align*</code> constants defined in this class.
-     *
-     * @param align - the type of horizontal alignment
-     */
-    public void setHorizontalAlignment(int align){
-        TextRun tx = getTextRun();
-        if(tx != null) tx.getRichTextRuns()[0].setAlignment(align);
     }
 
     /**
@@ -338,9 +304,20 @@ public abstract class TextShape extends SimpleShape {
      *
      * @return align - the type of horizontal alignment
      */
-    public int getHorizontalAlignment(){
+    public int getHorizontalAlignment() {
         TextRun tx = getTextRun();
         return tx == null ? -1 : tx.getRichTextRuns()[0].getAlignment();
+    }
+
+    /**
+     * Sets the type of horizontal alignment for the text.
+     * One of the <code>Align*</code> constants defined in this class.
+     *
+     * @param align - the type of horizontal alignment
+     */
+    public void setHorizontalAlignment(int align) {
+        TextRun tx = getTextRun();
+        if (tx != null) tx.getRichTextRuns()[0].setAlignment(align);
     }
 
     /**
@@ -350,95 +327,95 @@ public abstract class TextShape extends SimpleShape {
      *
      * @return the botom margin
      */
-    public float getMarginBottom(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.TEXT__TEXTBOTTOM);
-        int val = prop == null ? EMU_PER_INCH/20 : prop.getPropertyValue();
-        return (float)val/EMU_PER_POINT;
+    public float getMarginBottom() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.TEXT__TEXTBOTTOM);
+        int val = prop == null ? EMU_PER_INCH / 20 : prop.getPropertyValue();
+        return (float) val / EMU_PER_POINT;
     }
 
     /**
      * Sets the botom margin.
-     * @see #getMarginBottom()
      *
-     * @param margin    the bottom margin
+     * @param margin the bottom margin
+     * @see #getMarginBottom()
      */
-    public void setMarginBottom(float margin){
-        setEscherProperty(EscherProperties.TEXT__TEXTBOTTOM, (int)(margin*EMU_PER_POINT));
+    public void setMarginBottom(float margin) {
+        setEscherProperty(EscherProperties.TEXT__TEXTBOTTOM, (int) (margin * EMU_PER_POINT));
     }
 
     /**
-     *  Returns the distance (in points) between the left edge of the text frame
-     *  and the left edge of the inscribed rectangle of the shape that contains
-     *  the text.
-     *  Default value is 1/10 inch.
+     * Returns the distance (in points) between the left edge of the text frame
+     * and the left edge of the inscribed rectangle of the shape that contains
+     * the text.
+     * Default value is 1/10 inch.
      *
      * @return the left margin
      */
-    public float getMarginLeft(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.TEXT__TEXTLEFT);
-        int val = prop == null ? EMU_PER_INCH/10 : prop.getPropertyValue();
-        return (float)val/EMU_PER_POINT;
+    public float getMarginLeft() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.TEXT__TEXTLEFT);
+        int val = prop == null ? EMU_PER_INCH / 10 : prop.getPropertyValue();
+        return (float) val / EMU_PER_POINT;
     }
 
     /**
      * Sets the left margin.
-     * @see #getMarginLeft()
      *
-     * @param margin    the left margin
+     * @param margin the left margin
+     * @see #getMarginLeft()
      */
-    public void setMarginLeft(float margin){
-        setEscherProperty(EscherProperties.TEXT__TEXTLEFT, (int)(margin*EMU_PER_POINT));
+    public void setMarginLeft(float margin) {
+        setEscherProperty(EscherProperties.TEXT__TEXTLEFT, (int) (margin * EMU_PER_POINT));
     }
 
     /**
-     *  Returns the distance (in points) between the right edge of the
-     *  text frame and the right edge of the inscribed rectangle of the shape
-     *  that contains the text.
-     *  Default value is 1/10 inch.
+     * Returns the distance (in points) between the right edge of the
+     * text frame and the right edge of the inscribed rectangle of the shape
+     * that contains the text.
+     * Default value is 1/10 inch.
      *
      * @return the right margin
      */
-    public float getMarginRight(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.TEXT__TEXTRIGHT);
-        int val = prop == null ? EMU_PER_INCH/10 : prop.getPropertyValue();
-        return (float)val/EMU_PER_POINT;
+    public float getMarginRight() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.TEXT__TEXTRIGHT);
+        int val = prop == null ? EMU_PER_INCH / 10 : prop.getPropertyValue();
+        return (float) val / EMU_PER_POINT;
     }
 
     /**
      * Sets the right margin.
-     * @see #getMarginRight()
      *
-     * @param margin    the right margin
+     * @param margin the right margin
+     * @see #getMarginRight()
      */
-    public void setMarginRight(float margin){
-        setEscherProperty(EscherProperties.TEXT__TEXTRIGHT, (int)(margin*EMU_PER_POINT));
+    public void setMarginRight(float margin) {
+        setEscherProperty(EscherProperties.TEXT__TEXTRIGHT, (int) (margin * EMU_PER_POINT));
     }
 
-     /**
-     *  Returns the distance (in points) between the top of the text frame
-     *  and the top of the inscribed rectangle of the shape that contains the text.
-     *  Default value is 1/20 inch.
+    /**
+     * Returns the distance (in points) between the top of the text frame
+     * and the top of the inscribed rectangle of the shape that contains the text.
+     * Default value is 1/20 inch.
      *
      * @return the top margin
      */
-    public float getMarginTop(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.TEXT__TEXTTOP);
-        int val = prop == null ? EMU_PER_INCH/20 : prop.getPropertyValue();
-        return (float)val/EMU_PER_POINT;
+    public float getMarginTop() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.TEXT__TEXTTOP);
+        int val = prop == null ? EMU_PER_INCH / 20 : prop.getPropertyValue();
+        return (float) val / EMU_PER_POINT;
     }
 
-   /**
+    /**
      * Sets the top margin.
-     * @see #getMarginTop()
      *
-     * @param margin    the top margin
+     * @param margin the top margin
+     * @see #getMarginTop()
      */
-    public void setMarginTop(float margin){
-        setEscherProperty(EscherProperties.TEXT__TEXTTOP, (int)(margin*EMU_PER_POINT));
+    public void setMarginTop(float margin) {
+        setEscherProperty(EscherProperties.TEXT__TEXTTOP, (int) (margin * EMU_PER_POINT));
     }
 
 
@@ -446,30 +423,30 @@ public abstract class TextShape extends SimpleShape {
      * Returns the value indicating word wrap.
      *
      * @return the value indicating word wrap.
-     *  Must be one of the <code>Wrap*</code> constants defined in this class.
+     * Must be one of the <code>Wrap*</code> constants defined in this class.
      */
-    public int getWordWrap(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.TEXT__WRAPTEXT);
+    public int getWordWrap() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.TEXT__WRAPTEXT);
         return prop == null ? WrapSquare : prop.getPropertyValue();
     }
 
     /**
-     *  Specifies how the text should be wrapped
+     * Specifies how the text should be wrapped
      *
-     * @param wrap  the value indicating how the text should be wrapped.
-     *  Must be one of the <code>Wrap*</code> constants defined in this class.
+     * @param wrap the value indicating how the text should be wrapped.
+     *             Must be one of the <code>Wrap*</code> constants defined in this class.
      */
-    public void setWordWrap(int wrap){
+    public void setWordWrap(int wrap) {
         setEscherProperty(EscherProperties.TEXT__WRAPTEXT, wrap);
     }
 
     /**
      * @return id for the text.
      */
-    public int getTextId(){
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
-        EscherSimpleProperty prop = (EscherSimpleProperty)getEscherProperty(opt, EscherProperties.TEXT__TEXTID);
+    public int getTextId() {
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherSimpleProperty prop = (EscherSimpleProperty) getEscherProperty(opt, EscherProperties.TEXT__TEXTID);
         return prop == null ? 0 : prop.getPropertyValue();
     }
 
@@ -478,39 +455,39 @@ public abstract class TextShape extends SimpleShape {
      *
      * @param id of the text
      */
-    public void setTextId(int id){
+    public void setTextId(int id) {
         setEscherProperty(EscherProperties.TEXT__TEXTID, id);
     }
 
     /**
-      * @return the TextRun object for this text box
-      */
-    public TextRun getTextRun(){
-       if (null == this._txtrun) initTextRun();
-       if (null == this._txtrun && null != this._txtbox) {
-          TextHeaderAtom    tha = null; 
-          TextBytesAtom     tba = null;
-          TextCharsAtom     tca = null;
-          StyleTextPropAtom sta = null;
-          Record[] childRecords = this._txtbox.getChildRecords();
-          for (Record r : childRecords) {
-             if (r instanceof TextHeaderAtom) {
-                tha = (TextHeaderAtom) r;
-             } else if (r instanceof TextBytesAtom) {
-                tba = (TextBytesAtom) r;
-             } else if (r instanceof TextCharsAtom) {
-                tca = (TextCharsAtom) r;
-             } else if (r instanceof StyleTextPropAtom) {
-                sta = (StyleTextPropAtom) r;
-             }
-          }
-          if (tba != null) {
-             this._txtrun = new TextRun(tha, tba, sta);
-          } else if (tca != null) {
-             this._txtrun = new TextRun(tha, tca, sta);
-          }
-       }
-       return _txtrun;
+     * @return the TextRun object for this text box
+     */
+    public TextRun getTextRun() {
+        if (null == this._txtrun) initTextRun();
+        if (null == this._txtrun && null != this._txtbox) {
+            TextHeaderAtom tha = null;
+            TextBytesAtom tba = null;
+            TextCharsAtom tca = null;
+            StyleTextPropAtom sta = null;
+            Record[] childRecords = this._txtbox.getChildRecords();
+            for (Record r : childRecords) {
+                if (r instanceof TextHeaderAtom) {
+                    tha = (TextHeaderAtom) r;
+                } else if (r instanceof TextBytesAtom) {
+                    tba = (TextBytesAtom) r;
+                } else if (r instanceof TextCharsAtom) {
+                    tca = (TextCharsAtom) r;
+                } else if (r instanceof StyleTextPropAtom) {
+                    sta = (StyleTextPropAtom) r;
+                }
+            }
+            if (tba != null) {
+                this._txtrun = new TextRun(tha, tba, sta);
+            } else if (tca != null) {
+                this._txtrun = new TextRun(tha, tca, sta);
+            }
+        }
+        return _txtrun;
     }
 
     public void setSheet(Sheet sheet) {
@@ -532,18 +509,18 @@ public abstract class TextShape extends SimpleShape {
 
     }
 
-    protected void initTextRun(){
+    protected void initTextRun() {
         EscherTextboxWrapper txtbox = getEscherTextboxWrapper();
         Sheet sheet = getSheet();
 
-        if(sheet == null || txtbox == null) return;
+        if (sheet == null || txtbox == null) return;
 
         OutlineTextRefAtom ota = null;
 
         Record[] child = txtbox.getChildRecords();
-        for (int i = 0; i < child.length; i++) {
-            if (child[i] instanceof OutlineTextRefAtom) {
-                ota = (OutlineTextRefAtom)child[i];
+        for (Record aChild : child) {
+            if (aChild instanceof OutlineTextRefAtom) {
+                ota = (OutlineTextRefAtom) aChild;
                 break;
             }
         }
@@ -551,27 +528,27 @@ public abstract class TextShape extends SimpleShape {
         TextRun[] runs = _sheet.getTextRuns();
         if (ota != null) {
             int idx = ota.getTextIndex();
-            for (int i = 0; i < runs.length; i++) {
-                if(runs[i].getIndex() == idx){
-                    _txtrun = runs[i];
+            for (TextRun run : runs) {
+                if (run.getIndex() == idx) {
+                    _txtrun = run;
                     break;
                 }
             }
-            if(_txtrun == null) {
+            if (_txtrun == null) {
                 logger.log(POILogger.WARN, "text run not found for OutlineTextRefAtom.TextIndex=" + idx);
             }
         } else {
             EscherSpRecord escherSpRecord = _escherContainer.getChildById(EscherSpRecord.RECORD_ID);
             int shapeId = escherSpRecord.getShapeId();
-            if(runs != null) for (int i = 0; i < runs.length; i++) {
-                if(runs[i].getShapeId() == shapeId){
-                    _txtrun = runs[i];
+            if (runs != null) for (TextRun run : runs) {
+                if (run.getShapeId() == shapeId) {
+                    _txtrun = run;
                     break;
                 }
             }
         }
         // ensure the same references child records of TextRun
-        if(_txtrun != null) for (int i = 0; i < child.length; i++) {
+        if (_txtrun != null) for (int i = 0; i < child.length; i++) {
             for (Record r : _txtrun.getRecords()) {
                 if (child[i].getRecordType() == r.getRecordType()) {
                     child[i] = r;
@@ -580,7 +557,7 @@ public abstract class TextShape extends SimpleShape {
         }
     }
 
-    public void draw(Graphics2D graphics){
+    public void draw(Graphics2D graphics) {
         AffineTransform at = graphics.getTransform();
         ShapePainter.paint(this, graphics);
         new TextPainter(this).paint(graphics);
@@ -592,20 +569,19 @@ public abstract class TextShape extends SimpleShape {
      *
      * @return <code>OEPlaceholderAtom</code> or <code>null</code> if not found
      */
-    public OEPlaceholderAtom getPlaceholderAtom(){
-        return (OEPlaceholderAtom)getClientDataRecord(RecordTypes.OEPlaceholderAtom.typeID);
+    public OEPlaceholderAtom getPlaceholderAtom() {
+        return (OEPlaceholderAtom) getClientDataRecord(RecordTypes.OEPlaceholderAtom.typeID);
     }
 
     /**
-     *
      * Assigns a hyperlink to this text shape
      *
-     * @param linkId    id of the hyperlink, @see org.apache.poi.hslf.usermodel.SlideShow#addHyperlink(Hyperlink)
-     * @param      beginIndex   the beginning index, inclusive.
-     * @param      endIndex     the ending index, exclusive.
+     * @param linkId     id of the hyperlink, @see org.apache.poi.hslf.usermodel.SlideShow#addHyperlink(Hyperlink)
+     * @param beginIndex the beginning index, inclusive.
+     * @param endIndex   the ending index, exclusive.
      * @see org.apache.poi.hslf.usermodel.SlideShow#addHyperlink(Hyperlink)
      */
-    public void setHyperlink(int linkId, int beginIndex, int endIndex){
+    public void setHyperlink(int linkId, int beginIndex, int endIndex) {
         //TODO validate beginIndex and endIndex and throw IllegalArgumentException
 
         InteractiveInfo info = new InteractiveInfo();

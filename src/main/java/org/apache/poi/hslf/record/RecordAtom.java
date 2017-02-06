@@ -23,15 +23,18 @@ package org.apache.poi.hslf.record;
  * @author Nick Burch
  */
 
-public abstract class RecordAtom extends Record
-{
-	/**
-	 * We are an atom
-	 */
-	public boolean isAnAtom() { return true; }
+public abstract class RecordAtom extends Record {
+    /**
+     * We are an atom
+     */
+    public boolean isAnAtom() {
+        return true;
+    }
 
-	/**
-	 * We're an atom, returns null
-	 */
-	public Record[] getChildRecords() { return null; }
+    /**
+     * We're an atom, returns null
+     */
+    public Record[] getChildRecords() {
+        return null;
+    }
 }

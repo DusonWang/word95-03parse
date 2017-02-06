@@ -17,10 +17,10 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.poi.util.LittleEndian;
 
 /**
  * An atom record that specifies an ActiveX control.
@@ -83,10 +83,10 @@ public final class ExControlAtom extends RecordAtom {
      * Sets which presentation slide is associated with the ActiveX control.
      *
      * @param id an integer that specifies which presentation slide is associated with the ActiveX control
-     * <p>
-     * It MUST be 0x00000000 or equal to the value of the slideId field of a SlidePersistAtom record.
-     * The value 0x00000000 specifies a null reference.
-     * </p>
+     *           <p>
+     *           It MUST be 0x00000000 or equal to the value of the slideId field of a SlidePersistAtom record.
+     *           The value 0x00000000 specifies a null reference.
+     *           </p>
      */
     public void setSlideId(int id) {
         _id = id;
@@ -94,6 +94,7 @@ public final class ExControlAtom extends RecordAtom {
 
     /**
      * Gets the record type.
+     *
      * @return the record type.
      */
     public long getRecordType() {

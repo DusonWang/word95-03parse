@@ -196,9 +196,9 @@ public final class ListLevel {
         if (_lvlf.getNfc() == 0x17) {
             if (_xst.getCch() != 1) {
                 logger.log(POILogger.WARN, "LVL at offset ",
-                        Integer.valueOf(startOffset),
+                        startOffset,
                         " has nfc == 0x17 (bullets), but cch != 1 (",
-                        Integer.valueOf(_xst.getCch()), ")");
+                        _xst.getCch(), ")");
             }
         }
 

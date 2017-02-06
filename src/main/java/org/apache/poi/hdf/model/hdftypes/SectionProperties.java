@@ -18,14 +18,14 @@
 package org.apache.poi.hdf.model.hdftypes;
 
 import org.apache.poi.hdf.model.hdftypes.definitions.SEPAbstractType;
+
 /**
  * Comment me
  *
  * @author Ryan Ackley
  */
 @Deprecated
-public final class SectionProperties extends SEPAbstractType implements HDFType
-{
+public final class SectionProperties extends SEPAbstractType implements HDFType {
   /*int _index;
   byte _bkc;
   boolean _fTitlePage;
@@ -77,25 +77,23 @@ public final class SectionProperties extends SEPAbstractType implements HDFType
   byte[] _olstAnn;*/
 
 
+    public SectionProperties() {
+        setBkc((byte) 2);
+        setDyaPgn(720);
+        setDxaPgn(720);
+        setFEndNote(true);
+        setFEvenlySpaced(true);
+        setXaPage(12240);
+        setYaPage(15840);
+        setDyaHdrTop(720);
+        setDyaHdrBottom(720);
+        setDmOrientPage((byte) 1);
+        setDxaColumns(720);
+        setDyaTop(1440);
+        setDxaLeft(1800);
+        setDyaBottom(1440);
+        setDxaRight(1800);
+        setPgnStart(1);
 
-  public SectionProperties()
-  {
-      setBkc((byte)2);
-      setDyaPgn(720);
-      setDxaPgn(720);
-      setFEndNote(true);
-      setFEvenlySpaced(true);
-      setXaPage(12240);
-      setYaPage(15840);
-      setDyaHdrTop(720);
-      setDyaHdrBottom(720);
-      setDmOrientPage((byte)1);
-      setDxaColumns(720);
-      setDyaTop(1440);
-      setDxaLeft(1800);
-      setDyaBottom(1440);
-      setDxaRight(1800);
-      setPgnStart(1);
-
-  }
+    }
 }

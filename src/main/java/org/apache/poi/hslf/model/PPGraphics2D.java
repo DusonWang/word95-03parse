@@ -18,20 +18,24 @@
 package org.apache.poi.hslf.model;
 
 
+import org.apache.poi.hslf.exceptions.HSLFException;
+import org.apache.poi.hslf.usermodel.RichTextRun;
+import org.apache.poi.util.POILogFactory;
+import org.apache.poi.util.POILogger;
+
 import java.awt.*;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.TextLayout;
-import java.awt.image.*;
-import java.awt.image.renderable.RenderableImage;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ImageObserver;
+import java.awt.image.RenderedImage;
+import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
-import org.apache.poi.hslf.usermodel.RichTextRun;
-import org.apache.poi.hslf.exceptions.HSLFException;
-import org.apache.poi.util.POILogger;
-import org.apache.poi.util.POILogFactory;
 
 /**
  * Translates Graphics2D calls into PowerPoint.
@@ -56,9 +60,9 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
     /**
      * Construct Java Graphics object which translates graphic calls in ppt drawing layer.
      *
-     * @param group           The shape group to write the graphics calls into.
+     * @param group The shape group to write the graphics calls into.
      */
-    public PPGraphics2D(ShapeGroup group){
+    public PPGraphics2D(ShapeGroup group) {
         this._group = group;
 
         _transform = new AffineTransform();
@@ -71,19 +75,20 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
     }
 
     /**
-     * @return  the shape group being used for drawing
+     * @return the shape group being used for drawing
      */
-    public ShapeGroup getShapeGroup(){
+    public ShapeGroup getShapeGroup() {
         return _group;
     }
 
     /**
      * Gets the current font.
-     * @return    this graphics context's current font.
-     * @see       java.awt.Font
-     * @see       java.awt.Graphics#setFont(Font)
+     *
+     * @return this graphics context's current font.
+     * @see java.awt.Font
+     * @see java.awt.Graphics#setFont(Font)
      */
-    public Font getFont(){
+    public Font getFont() {
         return _font;
     }
 
@@ -91,23 +96,25 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * Sets this graphics context's font to the specified font.
      * All subsequent text operations using this graphics context
      * use this font.
-     * @param  font   the font.
-     * @see     java.awt.Graphics#getFont
-     * @see     java.awt.Graphics#drawString(java.lang.String, int, int)
-     * @see     java.awt.Graphics#drawBytes(byte[], int, int, int, int)
-     * @see     java.awt.Graphics#drawChars(char[], int, int, int, int)
-    */
-    public void setFont(Font font){
+     *
+     * @param font the font.
+     * @see java.awt.Graphics#getFont
+     * @see java.awt.Graphics#drawString(java.lang.String, int, int)
+     * @see java.awt.Graphics#drawBytes(byte[], int, int, int, int)
+     * @see java.awt.Graphics#drawChars(char[], int, int, int, int)
+     */
+    public void setFont(Font font) {
         this._font = font;
     }
 
     /**
      * Gets this graphics context's current color.
-     * @return    this graphics context's current color.
-     * @see       java.awt.Color
-     * @see       java.awt.Graphics#setColor
+     *
+     * @return this graphics context's current color.
+     * @see java.awt.Color
+     * @see java.awt.Graphics#setColor
      */
-     public Color getColor(){
+    public Color getColor() {
         return _foreground;
     }
 
@@ -115,9 +122,10 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * Sets this graphics context's current color to the specified
      * color. All subsequent graphics operations using this graphics
      * context use this specified color.
-     * @param     c   the new rendering color.
-     * @see       java.awt.Color
-     * @see       java.awt.Graphics#getColor
+     *
+     * @param c the new rendering color.
+     * @see java.awt.Color
+     * @see java.awt.Graphics#getColor
      */
     public void setColor(Color c) {
         setPaint(c);
@@ -126,32 +134,35 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
     /**
      * Returns the current <code>Stroke</code> in the
      * <code>Graphics2D</code> context.
+     *
      * @return the current <code>Graphics2D</code> <code>Stroke</code>,
-     *                 which defines the line style.
+     * which defines the line style.
      * @see #setStroke
      */
-    public Stroke getStroke(){
+    public Stroke getStroke() {
         return _stroke;
     }
 
     /**
      * Sets the <code>Stroke</code> for the <code>Graphics2D</code> context.
+     *
      * @param s the <code>Stroke</code> object to be used to stroke a
-     * <code>Shape</code> during the rendering process
+     *          <code>Shape</code> during the rendering process
      */
-    public void setStroke(Stroke s){
+    public void setStroke(Stroke s) {
         this._stroke = s;
     }
 
     /**
      * Returns the current <code>Paint</code> of the
      * <code>Graphics2D</code> context.
+     *
      * @return the current <code>Graphics2D</code> <code>Paint</code>,
      * which defines a color or pattern.
      * @see #setPaint
      * @see java.awt.Graphics#setColor
      */
-    public Paint getPaint(){
+    public Paint getPaint() {
         return _paint;
     }
 
@@ -161,34 +172,37 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * with a <code>null</code> <code>Paint</code> object does
      * not have any effect on the current <code>Paint</code> attribute
      * of this <code>Graphics2D</code>.
+     *
      * @param paint the <code>Paint</code> object to be used to generate
-     * color during the rendering process, or <code>null</code>
+     *              color during the rendering process, or <code>null</code>
      * @see java.awt.Graphics#setColor
      */
-     public void setPaint(Paint paint){
-        if(paint == null) return;
+    public void setPaint(Paint paint) {
+        if (paint == null) return;
 
         this._paint = paint;
-        if (paint instanceof Color) _foreground = (Color)paint;
+        if (paint instanceof Color) _foreground = (Color) paint;
     }
 
     /**
      * Returns a copy of the current <code>Transform</code> in the
      * <code>Graphics2D</code> context.
+     *
      * @return the current <code>AffineTransform</code> in the
-     *             <code>Graphics2D</code> context.
+     * <code>Graphics2D</code> context.
      * @see #_transform
      * @see #setTransform
      */
-    public AffineTransform getTransform(){
+    public AffineTransform getTransform() {
         return new AffineTransform(_transform);
     }
 
     /**
      * Sets the <code>Transform</code> in the <code>Graphics2D</code>
      * context.
+     *
      * @param Tx the <code>AffineTransform</code> object to be used in the
-     * rendering process
+     *           rendering process
      * @see #_transform
      * @see AffineTransform
      */
@@ -202,6 +216,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * applied include the <code>Clip</code>, <code>Transform</code>,
      * <code>Paint</code>, <code>Composite</code> and
      * <code>Stroke</code> attributes.
+     *
      * @param shape the <code>Shape</code> to be rendered
      * @see #setStroke
      * @see #setPaint
@@ -212,14 +227,14 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * @see #setClip
      * @see #setComposite
      */
-    public void draw(Shape shape){
+    public void draw(Shape shape) {
         GeneralPath path = new GeneralPath(_transform.createTransformedShape(shape));
         Freeform p = new Freeform(_group);
         p.setPath(path);
         p.getFill().setForegroundColor(null);
         applyStroke(p);
         if (_paint instanceof Color) {
-            p.setLineColor((Color)_paint);
+            p.setLineColor((Color) _paint);
         }
         _group.addShape(p);
     }
@@ -235,13 +250,14 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * such as Hebrew and Arabic, the glyphs can be rendered from right to
      * left, in which case the coordinate supplied is the location of the
      * leftmost character on the baseline.
+     *
      * @param s the <code>String</code> to be rendered
      * @param x the x coordinate of the location where the
-     * <code>String</code> should be rendered
+     *          <code>String</code> should be rendered
      * @param y the y coordinate of the location where the
-     * <code>String</code> should be rendered
+     *          <code>String</code> should be rendered
      * @throws NullPointerException if <code>str</code> is
-     *         <code>null</code>
+     *                              <code>null</code>
      * @see #setPaint
      * @see java.awt.Graphics#setColor
      * @see java.awt.Graphics#setFont
@@ -306,6 +322,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>Graphics2D</code> context. The rendering attributes applied
      * include the <code>Clip</code>, <code>Transform</code>,
      * <code>Paint</code>, and <code>Composite</code>.
+     *
      * @param shape the <code>Shape</code> to be filled
      * @see #setPaint
      * @see java.awt.Graphics#setColor
@@ -315,7 +332,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * @see #clip
      * @see #setClip
      */
-    public void fill(Shape shape){
+    public void fill(Shape shape) {
         GeneralPath path = new GeneralPath(_transform.createTransformedShape(shape));
         Freeform p = new Freeform(_group);
         p.setPath(path);
@@ -332,10 +349,11 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * original coordinate system.  All coordinates used in subsequent
      * rendering operations on this graphics context will be relative
      * to this new origin.
-     * @param  x   the <i>x</i> coordinate.
-     * @param  y   the <i>y</i> coordinate.
+     *
+     * @param x the <i>x</i> coordinate.
+     * @param y the <i>y</i> coordinate.
      */
-    public void translate(int x, int y){
+    public void translate(int x, int y) {
         _transform.translate(x, y);
     }
 
@@ -354,11 +372,12 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * {@link java.awt.Graphics#setClip(Shape) setClip} with a
      * <code>null</code> argument, the specified <code>Shape</code> becomes
      * the new user clip.
+     *
      * @param s the <code>Shape</code> to be intersected with the current
      *          <code>Clip</code>.  If <code>s</code> is <code>null</code>,
      *          this method clears the current <code>Clip</code>.
      */
-    public void clip(Shape s){
+    public void clip(Shape s) {
         log.log(POILogger.WARN, "Not implemented");
     }
 
@@ -369,18 +388,40 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * If no clip has previously been set, or if the clip has been
      * cleared using <code>setClip(null)</code>, this method returns
      * <code>null</code>.
-     * @return      a <code>Shape</code> object representing the
-     *              current clipping area, or <code>null</code> if
-     *              no clip is set.
-     * @see         java.awt.Graphics#getClipBounds()
-     * @see         java.awt.Graphics#clipRect
-     * @see         java.awt.Graphics#setClip(int, int, int, int)
-     * @see         java.awt.Graphics#setClip(Shape)
-     * @since       JDK1.1
+     *
+     * @return a <code>Shape</code> object representing the
+     * current clipping area, or <code>null</code> if
+     * no clip is set.
+     * @see java.awt.Graphics#getClipBounds()
+     * @see java.awt.Graphics#clipRect
+     * @see java.awt.Graphics#setClip(int, int, int, int)
+     * @see java.awt.Graphics#setClip(Shape)
+     * @since JDK1.1
      */
-    public Shape getClip(){
+    public Shape getClip() {
         log.log(POILogger.WARN, "Not implemented");
         return null;
+    }
+
+    /**
+     * Sets the current clipping area to an arbitrary clip shape.
+     * Not all objects that implement the <code>Shape</code>
+     * interface can be used to set the clip.  The only
+     * <code>Shape</code> objects that are guaranteed to be
+     * supported are <code>Shape</code> objects that are
+     * obtained via the <code>getClip</code> method and via
+     * <code>Rectangle</code> objects.  This method sets the
+     * user clip, which is independent of the clipping associated
+     * with device bounds and window visibility.
+     *
+     * @param clip the <code>Shape</code> to use to set the clip
+     * @see java.awt.Graphics#getClip()
+     * @see java.awt.Graphics#clipRect
+     * @see java.awt.Graphics#setClip(int, int, int, int)
+     * @since JDK1.1
+     */
+    public void setClip(Shape clip) {
+        log.log(POILogger.WARN, "Not implemented");
     }
 
     /**
@@ -395,14 +436,15 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      *          [   0    sy   0   ]
      *          [   0    0    1   ]
      * </pre>
+     *
      * @param sx the amount by which X coordinates in subsequent
-     * rendering operations are multiplied relative to previous
-     * rendering operations.
+     *           rendering operations are multiplied relative to previous
+     *           rendering operations.
      * @param sy the amount by which Y coordinates in subsequent
-     * rendering operations are multiplied relative to previous
-     * rendering operations.
+     *           rendering operations are multiplied relative to previous
+     *           rendering operations.
      */
-    public void scale(double sx, double sy){
+    public void scale(double sx, double sy) {
         _transform.scale(sx, sy);
     }
 
@@ -412,49 +454,52 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * are at <code>x</code> and <code>x&nbsp;+&nbsp;width</code>,
      * respectively. The top and bottom edges of the rectangle are at
      * <code>y</code> and <code>y&nbsp;+&nbsp;height</code>.
-     * @param      x the <i>x</i> coordinate of the rectangle to be drawn.
-     * @param      y the <i>y</i> coordinate of the rectangle to be drawn.
-     * @param      width the width of the rectangle to be drawn.
-     * @param      height the height of the rectangle to be drawn.
-     * @param      arcWidth the horizontal diameter of the arc
-     *                    at the four corners.
-     * @param      arcHeight the vertical diameter of the arc
-     *                    at the four corners.
-     * @see        java.awt.Graphics#fillRoundRect
+     *
+     * @param x         the <i>x</i> coordinate of the rectangle to be drawn.
+     * @param y         the <i>y</i> coordinate of the rectangle to be drawn.
+     * @param width     the width of the rectangle to be drawn.
+     * @param height    the height of the rectangle to be drawn.
+     * @param arcWidth  the horizontal diameter of the arc
+     *                  at the four corners.
+     * @param arcHeight the vertical diameter of the arc
+     *                  at the four corners.
+     * @see java.awt.Graphics#fillRoundRect
      */
     public void drawRoundRect(int x, int y, int width, int height,
-                              int arcWidth, int arcHeight){
+                              int arcWidth, int arcHeight) {
         RoundRectangle2D rect = new RoundRectangle2D.Float(x, y, width, height, arcWidth, arcHeight);
         draw(rect);
-     }
+    }
 
     /**
      * Draws the text given by the specified string, using this
      * graphics context's current font and color. The baseline of the
      * first character is at position (<i>x</i>,&nbsp;<i>y</i>) in this
      * graphics context's coordinate system.
-     * @param       str      the string to be drawn.
-     * @param       x        the <i>x</i> coordinate.
-     * @param       y        the <i>y</i> coordinate.
-     * @see         java.awt.Graphics#drawBytes
-     * @see         java.awt.Graphics#drawChars
+     *
+     * @param str the string to be drawn.
+     * @param x   the <i>x</i> coordinate.
+     * @param y   the <i>y</i> coordinate.
+     * @see java.awt.Graphics#drawBytes
+     * @see java.awt.Graphics#drawChars
      */
-    public void drawString(String str, int x, int y){
-        drawString(str, (float)x, (float)y);
+    public void drawString(String str, int x, int y) {
+        drawString(str, (float) x, (float) y);
     }
 
     /**
      * Fills an oval bounded by the specified rectangle with the
      * current color.
-     * @param       x the <i>x</i> coordinate of the upper left corner
-     *                     of the oval to be filled.
-     * @param       y the <i>y</i> coordinate of the upper left corner
-     *                     of the oval to be filled.
-     * @param       width the width of the oval to be filled.
-     * @param       height the height of the oval to be filled.
-     * @see         java.awt.Graphics#drawOval
+     *
+     * @param x      the <i>x</i> coordinate of the upper left corner
+     *               of the oval to be filled.
+     * @param y      the <i>y</i> coordinate of the upper left corner
+     *               of the oval to be filled.
+     * @param width  the width of the oval to be filled.
+     * @param height the height of the oval to be filled.
+     * @see java.awt.Graphics#drawOval
      */
-    public void fillOval(int x, int y, int width, int height){
+    public void fillOval(int x, int y, int width, int height) {
         Ellipse2D oval = new Ellipse2D.Float(x, y, width, height);
         fill(oval);
     }
@@ -465,18 +510,19 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * are at <code>x</code> and <code>x&nbsp;+&nbsp;width&nbsp;-&nbsp;1</code>,
      * respectively. The top and bottom edges of the rectangle are at
      * <code>y</code> and <code>y&nbsp;+&nbsp;height&nbsp;-&nbsp;1</code>.
-     * @param       x the <i>x</i> coordinate of the rectangle to be filled.
-     * @param       y the <i>y</i> coordinate of the rectangle to be filled.
-     * @param       width the width of the rectangle to be filled.
-     * @param       height the height of the rectangle to be filled.
-     * @param       arcWidth the horizontal diameter
-     *                     of the arc at the four corners.
-     * @param       arcHeight the vertical diameter
-     *                     of the arc at the four corners.
-     * @see         java.awt.Graphics#drawRoundRect
+     *
+     * @param x         the <i>x</i> coordinate of the rectangle to be filled.
+     * @param y         the <i>y</i> coordinate of the rectangle to be filled.
+     * @param width     the width of the rectangle to be filled.
+     * @param height    the height of the rectangle to be filled.
+     * @param arcWidth  the horizontal diameter
+     *                  of the arc at the four corners.
+     * @param arcHeight the vertical diameter
+     *                  of the arc at the four corners.
+     * @see java.awt.Graphics#drawRoundRect
      */
     public void fillRoundRect(int x, int y, int width, int height,
-                              int arcWidth, int arcHeight){
+                              int arcWidth, int arcHeight) {
 
         RoundRectangle2D rect = new RoundRectangle2D.Float(x, y, width, height, arcWidth, arcHeight);
         fill(rect);
@@ -507,19 +553,20 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * noticeably longer in one axis than the other, the angles to the
      * start and end of the arc segment will be skewed farther along the
      * longer axis of the bounds.
-     * @param        x the <i>x</i> coordinate of the
-     *                    upper-left corner of the arc to be filled.
-     * @param        y the <i>y</i>  coordinate of the
-     *                    upper-left corner of the arc to be filled.
-     * @param        width the width of the arc to be filled.
-     * @param        height the height of the arc to be filled.
-     * @param        startAngle the beginning angle.
-     * @param        arcAngle the angular extent of the arc,
-     *                    relative to the start angle.
-     * @see         java.awt.Graphics#drawArc
+     *
+     * @param x          the <i>x</i> coordinate of the
+     *                   upper-left corner of the arc to be filled.
+     * @param y          the <i>y</i>  coordinate of the
+     *                   upper-left corner of the arc to be filled.
+     * @param width      the width of the arc to be filled.
+     * @param height     the height of the arc to be filled.
+     * @param startAngle the beginning angle.
+     * @param arcAngle   the angular extent of the arc,
+     *                   relative to the start angle.
+     * @see java.awt.Graphics#drawArc
      */
     public void fillArc(int x, int y, int width, int height,
-                        int startAngle, int arcAngle){
+                        int startAngle, int arcAngle) {
         Arc2D arc = new Arc2D.Float(x, y, width, height, startAngle, arcAngle, Arc2D.PIE);
         fill(arc);
     }
@@ -550,16 +597,17 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * noticeably longer in one axis than the other, the angles to the
      * start and end of the arc segment will be skewed farther along the
      * longer axis of the bounds.
-     * @param        x the <i>x</i> coordinate of the
-     *                    upper-left corner of the arc to be drawn.
-     * @param        y the <i>y</i>  coordinate of the
-     *                    upper-left corner of the arc to be drawn.
-     * @param        width the width of the arc to be drawn.
-     * @param        height the height of the arc to be drawn.
-     * @param        startAngle the beginning angle.
-     * @param        arcAngle the angular extent of the arc,
-     *                    relative to the start angle.
-     * @see         java.awt.Graphics#fillArc
+     *
+     * @param x          the <i>x</i> coordinate of the
+     *                   upper-left corner of the arc to be drawn.
+     * @param y          the <i>y</i>  coordinate of the
+     *                   upper-left corner of the arc to be drawn.
+     * @param width      the width of the arc to be drawn.
+     * @param height     the height of the arc to be drawn.
+     * @param startAngle the beginning angle.
+     * @param arcAngle   the angular extent of the arc,
+     *                   relative to the start angle.
+     * @see java.awt.Graphics#fillArc
      */
     public void drawArc(int x, int y, int width, int height,
                         int startAngle, int arcAngle) {
@@ -567,25 +615,25 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
         draw(arc);
     }
 
-
     /**
      * Draws a sequence of connected lines defined by
      * arrays of <i>x</i> and <i>y</i> coordinates.
      * Each pair of (<i>x</i>,&nbsp;<i>y</i>) coordinates defines a point.
      * The figure is not closed if the first point
      * differs from the last point.
-     * @param       xPoints an array of <i>x</i> points
-     * @param       yPoints an array of <i>y</i> points
-     * @param       nPoints the total number of points
-     * @see         java.awt.Graphics#drawPolygon(int[], int[], int)
-     * @since       JDK1.1
+     *
+     * @param xPoints an array of <i>x</i> points
+     * @param yPoints an array of <i>y</i> points
+     * @param nPoints the total number of points
+     * @see java.awt.Graphics#drawPolygon(int[], int[], int)
+     * @since JDK1.1
      */
     public void drawPolyline(int[] xPoints, int[] yPoints,
-                             int nPoints){
-        if(nPoints > 0){
+                             int nPoints) {
+        if (nPoints > 0) {
             GeneralPath path = new GeneralPath();
             path.moveTo(xPoints[0], yPoints[0]);
-            for(int i=1; i<nPoints; i++)
+            for (int i = 1; i < nPoints; i++)
                 path.lineTo(xPoints[i], yPoints[i]);
 
             draw(path);
@@ -601,15 +649,16 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * The oval covers an area that is
      * <code>width&nbsp;+&nbsp;1</code> pixels wide
      * and <code>height&nbsp;+&nbsp;1</code> pixels tall.
-     * @param       x the <i>x</i> coordinate of the upper left
-     *                     corner of the oval to be drawn.
-     * @param       y the <i>y</i> coordinate of the upper left
-     *                     corner of the oval to be drawn.
-     * @param       width the width of the oval to be drawn.
-     * @param       height the height of the oval to be drawn.
-     * @see         java.awt.Graphics#fillOval
+     *
+     * @param x      the <i>x</i> coordinate of the upper left
+     *               corner of the oval to be drawn.
+     * @param y      the <i>y</i> coordinate of the upper left
+     *               corner of the oval to be drawn.
+     * @param width  the width of the oval to be drawn.
+     * @param height the height of the oval to be drawn.
+     * @see java.awt.Graphics#fillOval
      */
-    public void drawOval(int x, int y, int width, int height){
+    public void drawOval(int x, int y, int width, int height) {
         Ellipse2D oval = new Ellipse2D.Float(x, y, width, height);
         draw(oval);
     }
@@ -633,20 +682,21 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>drawImage</code> returns <code>false</code>. As more of
      * the image becomes available, the process that draws the image notifies
      * the specified image observer.
-     * @param    img    the specified image to be drawn.
-     * @param    x      the <i>x</i> coordinate.
-     * @param    y      the <i>y</i> coordinate.
-     * @param    bgcolor the background color to paint under the
-     *                         non-opaque portions of the image.
-     * @param    observer    object to be notified as more of
-     *                          the image is converted.
-     * @see      java.awt.Image
-     * @see      java.awt.image.ImageObserver
-     * @see      java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
+     *
+     * @param img      the specified image to be drawn.
+     * @param x        the <i>x</i> coordinate.
+     * @param y        the <i>y</i> coordinate.
+     * @param bgcolor  the background color to paint under the
+     *                 non-opaque portions of the image.
+     * @param observer object to be notified as more of
+     *                 the image is converted.
+     * @see java.awt.Image
+     * @see java.awt.image.ImageObserver
+     * @see java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
      */
     public boolean drawImage(Image img, int x, int y,
                              Color bgcolor,
-                             ImageObserver observer){
+                             ImageObserver observer) {
         log.log(POILogger.WARN, "Not implemented");
 
         return false;
@@ -677,28 +727,28 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * image has been constructed for this output device.  Each size of
      * the image may be cached separately and generated from the original
      * data in a separate image production sequence.
-     * @param    img       the specified image to be drawn.
-     * @param    x         the <i>x</i> coordinate.
-     * @param    y         the <i>y</i> coordinate.
-     * @param    width     the width of the rectangle.
-     * @param    height    the height of the rectangle.
-     * @param    bgcolor   the background color to paint under the
-     *                         non-opaque portions of the image.
-     * @param    observer    object to be notified as more of
-     *                          the image is converted.
-     * @see      java.awt.Image
-     * @see      java.awt.image.ImageObserver
-     * @see      java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
+     *
+     * @param img      the specified image to be drawn.
+     * @param x        the <i>x</i> coordinate.
+     * @param y        the <i>y</i> coordinate.
+     * @param width    the width of the rectangle.
+     * @param height   the height of the rectangle.
+     * @param bgcolor  the background color to paint under the
+     *                 non-opaque portions of the image.
+     * @param observer object to be notified as more of
+     *                 the image is converted.
+     * @see java.awt.Image
+     * @see java.awt.image.ImageObserver
+     * @see java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
      */
     public boolean drawImage(Image img, int x, int y,
                              int width, int height,
                              Color bgcolor,
-                             ImageObserver observer){
+                             ImageObserver observer) {
         log.log(POILogger.WARN, "Not implemented");
 
         return false;
     }
-
 
     /**
      * Draws as much of the specified area of the specified image as is
@@ -723,34 +773,35 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * the destination rectangle, and the second source coordinate is
      * mapped to the second destination coordinate. The subimage is
      * scaled and flipped as needed to preserve those mappings.
-     * @param       img the specified image to be drawn
-     * @param       dx1 the <i>x</i> coordinate of the first corner of the
-     *                    destination rectangle.
-     * @param       dy1 the <i>y</i> coordinate of the first corner of the
-     *                    destination rectangle.
-     * @param       dx2 the <i>x</i> coordinate of the second corner of the
-     *                    destination rectangle.
-     * @param       dy2 the <i>y</i> coordinate of the second corner of the
-     *                    destination rectangle.
-     * @param       sx1 the <i>x</i> coordinate of the first corner of the
-     *                    source rectangle.
-     * @param       sy1 the <i>y</i> coordinate of the first corner of the
-     *                    source rectangle.
-     * @param       sx2 the <i>x</i> coordinate of the second corner of the
-     *                    source rectangle.
-     * @param       sy2 the <i>y</i> coordinate of the second corner of the
-     *                    source rectangle.
-     * @param       observer object to be notified as more of the image is
-     *                    scaled and converted.
-     * @see         java.awt.Image
-     * @see         java.awt.image.ImageObserver
-     * @see         java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
-     * @since       JDK1.1
+     *
+     * @param img      the specified image to be drawn
+     * @param dx1      the <i>x</i> coordinate of the first corner of the
+     *                 destination rectangle.
+     * @param dy1      the <i>y</i> coordinate of the first corner of the
+     *                 destination rectangle.
+     * @param dx2      the <i>x</i> coordinate of the second corner of the
+     *                 destination rectangle.
+     * @param dy2      the <i>y</i> coordinate of the second corner of the
+     *                 destination rectangle.
+     * @param sx1      the <i>x</i> coordinate of the first corner of the
+     *                 source rectangle.
+     * @param sy1      the <i>y</i> coordinate of the first corner of the
+     *                 source rectangle.
+     * @param sx2      the <i>x</i> coordinate of the second corner of the
+     *                 source rectangle.
+     * @param sy2      the <i>y</i> coordinate of the second corner of the
+     *                 source rectangle.
+     * @param observer object to be notified as more of the image is
+     *                 scaled and converted.
+     * @see java.awt.Image
+     * @see java.awt.image.ImageObserver
+     * @see java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
+     * @since JDK1.1
      */
     public boolean drawImage(Image img,
                              int dx1, int dy1, int dx2, int dy2,
                              int sx1, int sy1, int sx2, int sy2,
-                             ImageObserver observer){
+                             ImageObserver observer) {
         log.log(POILogger.WARN, "Not implemented");
         return false;
     }
@@ -782,37 +833,38 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * the destination rectangle, and the second source coordinate is
      * mapped to the second destination coordinate. The subimage is
      * scaled and flipped as needed to preserve those mappings.
-     * @param       img the specified image to be drawn
-     * @param       dx1 the <i>x</i> coordinate of the first corner of the
-     *                    destination rectangle.
-     * @param       dy1 the <i>y</i> coordinate of the first corner of the
-     *                    destination rectangle.
-     * @param       dx2 the <i>x</i> coordinate of the second corner of the
-     *                    destination rectangle.
-     * @param       dy2 the <i>y</i> coordinate of the second corner of the
-     *                    destination rectangle.
-     * @param       sx1 the <i>x</i> coordinate of the first corner of the
-     *                    source rectangle.
-     * @param       sy1 the <i>y</i> coordinate of the first corner of the
-     *                    source rectangle.
-     * @param       sx2 the <i>x</i> coordinate of the second corner of the
-     *                    source rectangle.
-     * @param       sy2 the <i>y</i> coordinate of the second corner of the
-     *                    source rectangle.
-     * @param       bgcolor the background color to paint under the
-     *                    non-opaque portions of the image.
-     * @param       observer object to be notified as more of the image is
-     *                    scaled and converted.
-     * @see         java.awt.Image
-     * @see         java.awt.image.ImageObserver
-     * @see         java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
-     * @since       JDK1.1
+     *
+     * @param img      the specified image to be drawn
+     * @param dx1      the <i>x</i> coordinate of the first corner of the
+     *                 destination rectangle.
+     * @param dy1      the <i>y</i> coordinate of the first corner of the
+     *                 destination rectangle.
+     * @param dx2      the <i>x</i> coordinate of the second corner of the
+     *                 destination rectangle.
+     * @param dy2      the <i>y</i> coordinate of the second corner of the
+     *                 destination rectangle.
+     * @param sx1      the <i>x</i> coordinate of the first corner of the
+     *                 source rectangle.
+     * @param sy1      the <i>y</i> coordinate of the first corner of the
+     *                 source rectangle.
+     * @param sx2      the <i>x</i> coordinate of the second corner of the
+     *                 source rectangle.
+     * @param sy2      the <i>y</i> coordinate of the second corner of the
+     *                 source rectangle.
+     * @param bgcolor  the background color to paint under the
+     *                 non-opaque portions of the image.
+     * @param observer object to be notified as more of the image is
+     *                 scaled and converted.
+     * @see java.awt.Image
+     * @see java.awt.image.ImageObserver
+     * @see java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
+     * @since JDK1.1
      */
     public boolean drawImage(Image img,
                              int dx1, int dy1, int dx2, int dy2,
                              int sx1, int sy1, int sx2, int sy2,
                              Color bgcolor,
-                             ImageObserver observer){
+                             ImageObserver observer) {
         log.log(POILogger.WARN, "Not implemented");
         return false;
     }
@@ -837,17 +889,18 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * or it is time to draw another frame of animation,
      * the process that loads the image notifies
      * the specified image observer.
-     * @param    img the specified image to be drawn. This method does
-     *               nothing if <code>img</code> is null.
-     * @param    x   the <i>x</i> coordinate.
-     * @param    y   the <i>y</i> coordinate.
-     * @param    observer    object to be notified as more of
-     *                          the image is converted.
-     * @return   <code>false</code> if the image pixels are still changing;
-     *           <code>true</code> otherwise.
-     * @see      java.awt.Image
-     * @see      java.awt.image.ImageObserver
-     * @see      java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
+     *
+     * @param img      the specified image to be drawn. This method does
+     *                 nothing if <code>img</code> is null.
+     * @param x        the <i>x</i> coordinate.
+     * @param y        the <i>y</i> coordinate.
+     * @param observer object to be notified as more of
+     *                 the image is converted.
+     * @return <code>false</code> if the image pixels are still changing;
+     * <code>true</code> otherwise.
+     * @see java.awt.Image
+     * @see java.awt.image.ImageObserver
+     * @see java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
      */
     public boolean drawImage(Image img, int x, int y,
                              ImageObserver observer) {
@@ -876,11 +929,12 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * call <code>dispose</code> when finished using
      * a <code>Graphics</code> object only if it was created
      * directly from a component or another <code>Graphics</code> object.
-     * @see         java.awt.Graphics#finalize
-     * @see         java.awt.Component#paint
-     * @see         java.awt.Component#update
-     * @see         java.awt.Component#getGraphics
-     * @see         java.awt.Graphics#create
+     *
+     * @see java.awt.Graphics#finalize
+     * @see java.awt.Component#paint
+     * @see java.awt.Component#update
+     * @see java.awt.Component#getGraphics
+     * @see java.awt.Graphics#create
      */
     public void dispose() {
         ;
@@ -890,12 +944,13 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * Draws a line, using the current color, between the points
      * <code>(x1,&nbsp;y1)</code> and <code>(x2,&nbsp;y2)</code>
      * in this graphics context's coordinate system.
-     * @param   x1  the first point's <i>x</i> coordinate.
-     * @param   y1  the first point's <i>y</i> coordinate.
-     * @param   x2  the second point's <i>x</i> coordinate.
-     * @param   y2  the second point's <i>y</i> coordinate.
+     *
+     * @param x1 the first point's <i>x</i> coordinate.
+     * @param y1 the first point's <i>y</i> coordinate.
+     * @param x2 the second point's <i>x</i> coordinate.
+     * @param y2 the second point's <i>y</i> coordinate.
      */
-    public void drawLine(int x1, int y1, int x2, int y2){
+    public void drawLine(int x1, int y1, int x2, int y2) {
         Line2D line = new Line2D.Float(x1, y1, x2, y2);
         draw(line);
     }
@@ -915,13 +970,14 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <p>
      * The area inside the polygon is defined using an
      * even-odd fill rule, also known as the alternating rule.
-     * @param        xPoints   a an array of <code>x</code> coordinates.
-     * @param        yPoints   a an array of <code>y</code> coordinates.
-     * @param        nPoints   a the total number of points.
-     * @see          java.awt.Graphics#drawPolygon(int[], int[], int)
+     *
+     * @param xPoints a an array of <code>x</code> coordinates.
+     * @param yPoints a an array of <code>y</code> coordinates.
+     * @param nPoints a the total number of points.
+     * @see java.awt.Graphics#drawPolygon(int[], int[], int)
      */
     public void fillPolygon(int[] xPoints, int[] yPoints,
-                            int nPoints){
+                            int nPoints) {
         java.awt.Polygon polygon = new java.awt.Polygon(xPoints, yPoints, nPoints);
         fill(polygon);
     }
@@ -936,16 +992,17 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>width</code> pixels wide by
      * <code>height</code> pixels tall.
      * The rectangle is filled using the graphics context's current color.
-     * @param         x   the <i>x</i> coordinate
-     *                         of the rectangle to be filled.
-     * @param         y   the <i>y</i> coordinate
-     *                         of the rectangle to be filled.
-     * @param         width   the width of the rectangle to be filled.
-     * @param         height   the height of the rectangle to be filled.
-     * @see           java.awt.Graphics#clearRect
-     * @see           java.awt.Graphics#drawRect
+     *
+     * @param x      the <i>x</i> coordinate
+     *               of the rectangle to be filled.
+     * @param y      the <i>y</i> coordinate
+     *               of the rectangle to be filled.
+     * @param width  the width of the rectangle to be filled.
+     * @param height the height of the rectangle to be filled.
+     * @see java.awt.Graphics#clearRect
+     * @see java.awt.Graphics#drawRect
      */
-    public void fillRect(int x, int y, int width, int height){
+    public void fillRect(int x, int y, int width, int height) {
         Rectangle rect = new Rectangle(x, y, width, height);
         fill(rect);
     }
@@ -957,14 +1014,15 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * The top and bottom edges are at
      * <code>y</code> and <code>y&nbsp;+&nbsp;height</code>.
      * The rectangle is drawn using the graphics context's current color.
-     * @param         x   the <i>x</i> coordinate
-     *                         of the rectangle to be drawn.
-     * @param         y   the <i>y</i> coordinate
-     *                         of the rectangle to be drawn.
-     * @param         width   the width of the rectangle to be drawn.
-     * @param         height   the height of the rectangle to be drawn.
-     * @see          java.awt.Graphics#fillRect
-     * @see          java.awt.Graphics#clearRect
+     *
+     * @param x      the <i>x</i> coordinate
+     *               of the rectangle to be drawn.
+     * @param y      the <i>y</i> coordinate
+     *               of the rectangle to be drawn.
+     * @param width  the width of the rectangle to be drawn.
+     * @param height the height of the rectangle to be drawn.
+     * @see java.awt.Graphics#fillRect
+     * @see java.awt.Graphics#clearRect
      */
     public void drawRect(int x, int y, int width, int height) {
         Rectangle rect = new Rectangle(x, y, width, height);
@@ -984,14 +1042,15 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * 1&nbsp;&le;&nbsp;<i>i</i>&nbsp;&le;&nbsp;<code>nPoints</code>.
      * The figure is automatically closed by drawing a line connecting
      * the final point to the first point, if those points are different.
-     * @param        xPoints   a an array of <code>x</code> coordinates.
-     * @param        yPoints   a an array of <code>y</code> coordinates.
-     * @param        nPoints   a the total number of points.
-     * @see          java.awt.Graphics#fillPolygon(int[],int[],int)
-     * @see          java.awt.Graphics#drawPolyline
+     *
+     * @param xPoints a an array of <code>x</code> coordinates.
+     * @param yPoints a an array of <code>y</code> coordinates.
+     * @param nPoints a the total number of points.
+     * @see java.awt.Graphics#fillPolygon(int[], int[], int)
+     * @see java.awt.Graphics#drawPolyline
      */
     public void drawPolygon(int[] xPoints, int[] yPoints,
-                            int nPoints){
+                            int nPoints) {
         java.awt.Polygon polygon = new java.awt.Polygon(xPoints, yPoints, nPoints);
         draw(polygon);
     }
@@ -1008,35 +1067,16 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * This method can only be used to make the current clip smaller.
      * To set the current clip larger, use any of the setClip methods.
      * Rendering operations have no effect outside of the clipping area.
-     * @param x the x coordinate of the rectangle to intersect the clip with
-     * @param y the y coordinate of the rectangle to intersect the clip with
-     * @param width the width of the rectangle to intersect the clip with
+     *
+     * @param x      the x coordinate of the rectangle to intersect the clip with
+     * @param y      the y coordinate of the rectangle to intersect the clip with
+     * @param width  the width of the rectangle to intersect the clip with
      * @param height the height of the rectangle to intersect the clip with
      * @see #setClip(int, int, int, int)
      * @see #setClip(Shape)
      */
-    public void clipRect(int x, int y, int width, int height){
+    public void clipRect(int x, int y, int width, int height) {
         clip(new Rectangle(x, y, width, height));
-    }
-
-    /**
-     * Sets the current clipping area to an arbitrary clip shape.
-     * Not all objects that implement the <code>Shape</code>
-     * interface can be used to set the clip.  The only
-     * <code>Shape</code> objects that are guaranteed to be
-     * supported are <code>Shape</code> objects that are
-     * obtained via the <code>getClip</code> method and via
-     * <code>Rectangle</code> objects.  This method sets the
-     * user clip, which is independent of the clipping associated
-     * with device bounds and window visibility.
-     * @param clip the <code>Shape</code> to use to set the clip
-     * @see         java.awt.Graphics#getClip()
-     * @see         java.awt.Graphics#clipRect
-     * @see         java.awt.Graphics#setClip(int, int, int, int)
-     * @since       JDK1.1
-     */
-    public void setClip(Shape clip) {
-        log.log(POILogger.WARN, "Not implemented");
     }
 
     /**
@@ -1048,17 +1088,18 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>null</code>.
      * The coordinates in the rectangle are relative to the coordinate
      * system origin of this graphics context.
-     * @return      the bounding rectangle of the current clipping area,
-     *              or <code>null</code> if no clip is set.
-     * @see         java.awt.Graphics#getClip
-     * @see         java.awt.Graphics#clipRect
-     * @see         java.awt.Graphics#setClip(int, int, int, int)
-     * @see         java.awt.Graphics#setClip(Shape)
-     * @since       JDK1.1
+     *
+     * @return the bounding rectangle of the current clipping area,
+     * or <code>null</code> if no clip is set.
+     * @see java.awt.Graphics#getClip
+     * @see java.awt.Graphics#clipRect
+     * @see java.awt.Graphics#setClip(int, int, int, int)
+     * @see java.awt.Graphics#setClip(Shape)
+     * @since JDK1.1
      */
-    public Rectangle getClipBounds(){
+    public Rectangle getClipBounds() {
         Shape c = getClip();
-        if (c==null) {
+        if (c == null) {
             return null;
         }
         return c.getBounds();
@@ -1070,15 +1111,16 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * for each character. The baseline of the
      * first character is at position (<i>x</i>,&nbsp;<i>y</i>) in this
      * graphics context's coordinate system.
-     * @param       iterator the iterator whose text is to be drawn
-     * @param       x        the <i>x</i> coordinate.
-     * @param       y        the <i>y</i> coordinate.
-     * @see         java.awt.Graphics#drawBytes
-     * @see         java.awt.Graphics#drawChars
+     *
+     * @param iterator the iterator whose text is to be drawn
+     * @param x        the <i>x</i> coordinate.
+     * @param y        the <i>y</i> coordinate.
+     * @see java.awt.Graphics#drawBytes
+     * @see java.awt.Graphics#drawChars
      */
     public void drawString(AttributedCharacterIterator iterator,
-                           int x, int y){
-        drawString(iterator, (float)x, (float)y);
+                           int x, int y) {
+        drawString(iterator, (float) x, (float) y);
     }
 
     /**
@@ -1090,15 +1132,16 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * of offscreen images may be system dependent. Applications should
      * use <code>setColor</code> followed by <code>fillRect</code> to
      * ensure that an offscreen image is cleared to a specific color.
-     * @param       x the <i>x</i> coordinate of the rectangle to clear.
-     * @param       y the <i>y</i> coordinate of the rectangle to clear.
-     * @param       width the width of the rectangle to clear.
-     * @param       height the height of the rectangle to clear.
-     * @see         java.awt.Graphics#fillRect(int, int, int, int)
-     * @see         java.awt.Graphics#drawRect
-     * @see         java.awt.Graphics#setColor(java.awt.Color)
-     * @see         java.awt.Graphics#setPaintMode
-     * @see         java.awt.Graphics#setXORMode(java.awt.Color)
+     *
+     * @param x      the <i>x</i> coordinate of the rectangle to clear.
+     * @param y      the <i>y</i> coordinate of the rectangle to clear.
+     * @param width  the width of the rectangle to clear.
+     * @param height the height of the rectangle to clear.
+     * @see java.awt.Graphics#fillRect(int, int, int, int)
+     * @see java.awt.Graphics#drawRect
+     * @see java.awt.Graphics#setColor(java.awt.Color)
+     * @see java.awt.Graphics#setPaintMode
+     * @see java.awt.Graphics#setXORMode(java.awt.Color)
      */
     public void clearRect(int x, int y, int width, int height) {
         Paint paint = getPaint();
@@ -1117,15 +1160,16 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * independent of the clipping associated with device bounds
      * and window visibility.
      * Rendering operations have no effect outside of the clipping area.
-     * @param       x the <i>x</i> coordinate of the new clip rectangle.
-     * @param       y the <i>y</i> coordinate of the new clip rectangle.
-     * @param       width the width of the new clip rectangle.
-     * @param       height the height of the new clip rectangle.
-     * @see         java.awt.Graphics#clipRect
-     * @see         java.awt.Graphics#setClip(Shape)
-     * @since       JDK1.1
+     *
+     * @param x      the <i>x</i> coordinate of the new clip rectangle.
+     * @param y      the <i>y</i> coordinate of the new clip rectangle.
+     * @param width  the width of the new clip rectangle.
+     * @param height the height of the new clip rectangle.
+     * @see java.awt.Graphics#clipRect
+     * @see java.awt.Graphics#setClip(Shape)
+     * @since JDK1.1
      */
-    public void setClip(int x, int y, int width, int height){
+    public void setClip(int x, int y, int width, int height) {
         setClip(new Rectangle(x, y, width, height));
     }
 
@@ -1143,9 +1187,10 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * </pre>
      * Rotating with a positive angle theta rotates points on the positive
      * x axis toward the positive y axis.
+     *
      * @param theta the angle of rotation in radians
      */
-    public void rotate(double theta){
+    public void rotate(double theta) {
         _transform.rotate(theta);
     }
 
@@ -1164,11 +1209,12 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * </pre>
      * Rotating with a positive angle theta rotates points on the positive
      * x axis toward the positive y axis.
+     *
      * @param theta the angle of rotation in radians
-     * @param x x coordinate of the origin of the rotation
-     * @param y y coordinate of the origin of the rotation
+     * @param x     x coordinate of the origin of the rotation
+     * @param y     y coordinate of the origin of the rotation
      */
-    public void rotate(double theta, double x, double y){
+    public void rotate(double theta, double x, double y) {
         _transform.rotate(theta, x, y);
     }
 
@@ -1185,12 +1231,13 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      *          [  shy   1    0   ]
      *          [   0    0    1   ]
      * </pre>
+     *
      * @param shx the multiplier by which coordinates are shifted in
-     * the positive X axis direction as a function of their Y coordinate
+     *            the positive X axis direction as a function of their Y coordinate
      * @param shy the multiplier by which coordinates are shifted in
-     * the positive Y axis direction as a function of their X coordinate
+     *            the positive Y axis direction as a function of their X coordinate
      */
-    public void shear(double shx, double shy){
+    public void shear(double shx, double shy) {
         _transform.shear(shx, shy);
     }
 
@@ -1211,9 +1258,9 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      *
      * @return a reference to an instance of FontRenderContext.
      * @see java.awt.font.FontRenderContext
-     * @see java.awt.Font#createGlyphVector(FontRenderContext,char[])
+     * @see java.awt.Font#createGlyphVector(FontRenderContext, char[])
      * @see java.awt.font.TextLayout
-     * @since     JDK1.2
+     * @since JDK1.2
      */
     public FontRenderContext getFontRenderContext() {
         boolean isAntiAliased = RenderingHints.VALUE_TEXT_ANTIALIAS_ON.equals(
@@ -1237,8 +1284,9 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * the result by the original <code>Transform</code> Cx.  In other
      * words, Cx'(p) = Cx(Tx(p)).  A copy of the Tx is made, if necessary,
      * so further modifications to Tx do not affect rendering.
+     *
      * @param Tx the <code>AffineTransform</code> object to be composed with
-     * the current <code>Transform</code>
+     *           the current <code>Transform</code>
      * @see #setTransform
      * @see AffineTransform
      */
@@ -1257,10 +1305,11 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * img1 = op.filter(img, null);
      * drawImage(img1, new AffineTransform(1f,0f,0f,1f,x,y), null);
      * </pre>
+     *
      * @param img the <code>BufferedImage</code> to be rendered
-     * @param op the filter to be applied to the image before rendering
-     * @param x the x coordinate in user space where the image is rendered
-     * @param y the y coordinate in user space where the image is rendered
+     * @param op  the filter to be applied to the image before rendering
+     * @param x   the x coordinate in user space where the image is rendered
+     * @param y   the y coordinate in user space where the image is rendered
      * @see #_transform
      * @see #setTransform
      * @see #setComposite
@@ -1270,9 +1319,20 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
     public void drawImage(BufferedImage img,
                           BufferedImageOp op,
                           int x,
-                          int y){
+                          int y) {
         img = op.filter(img, null);
         drawImage(img, x, y, null);
+    }
+
+    /**
+     * Returns the background color used for clearing a region.
+     *
+     * @return the current <code>Graphics2D</code> <code>Color</code>,
+     * which defines the background color.
+     * @see #setBackground
+     */
+    public Color getBackground() {
+        return _background;
     }
 
     /**
@@ -1286,26 +1346,30 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>Component</code>.  To change the background
      * of the <code>Component</code>, use appropriate methods of
      * the <code>Component</code>.
+     *
      * @param color the background color that isused in
-     * subsequent calls to <code>clearRect</code>
+     *              subsequent calls to <code>clearRect</code>
      * @see #getBackground
      * @see java.awt.Graphics#clearRect
      */
     public void setBackground(Color color) {
-        if(color == null)
+        if (color == null)
             return;
 
         _background = color;
     }
 
     /**
-     * Returns the background color used for clearing a region.
-     * @return the current <code>Graphics2D</code> <code>Color</code>,
-     * which defines the background color.
-     * @see #setBackground
+     * Returns the current <code>Composite</code> in the
+     * <code>Graphics2D</code> context.
+     *
+     * @return the current <code>Graphics2D</code> <code>Composite</code>,
+     * which defines a compositing style.
+     * @see #setComposite
      */
-    public Color getBackground(){
-        return _background;
+    public Composite getComposite() {
+        log.log(POILogger.WARN, "Not implemented");
+        return null;
     }
 
     /**
@@ -1324,29 +1388,16 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * permission.
      *
      * @param comp the <code>Composite</code> object to be used for rendering
-     * @throws SecurityException
-     *         if a custom <code>Composite</code> object is being
-     *         used to render to the screen and a security manager
-     *         is set and its <code>checkPermission</code> method
-     *         does not allow the operation.
+     * @throws SecurityException if a custom <code>Composite</code> object is being
+     *                           used to render to the screen and a security manager
+     *                           is set and its <code>checkPermission</code> method
+     *                           does not allow the operation.
      * @see java.awt.Graphics#setXORMode
      * @see java.awt.Graphics#setPaintMode
      * @see java.awt.AlphaComposite
      */
-    public void setComposite(Composite comp){
+    public void setComposite(Composite comp) {
         log.log(POILogger.WARN, "Not implemented");
-    }
-
-    /**
-     * Returns the current <code>Composite</code> in the
-     * <code>Graphics2D</code> context.
-     * @return the current <code>Graphics2D</code> <code>Composite</code>,
-     *              which defines a compositing style.
-     * @see #setComposite
-     */
-    public Composite getComposite(){
-        log.log(POILogger.WARN, "Not implemented");
-        return null;
     }
 
     /**
@@ -1355,13 +1406,14 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * time/quality trade-off in the rendering process.  Refer to the
      * <code>RenderingHints</code> class for definitions of some common
      * keys and values.
+     *
      * @param hintKey the key corresponding to the hint to get.
      * @return an object representing the value for the specified hint key.
      * Some of the keys and their associated values are defined in the
      * <code>RenderingHints</code> class.
      * @see RenderingHints
      */
-    public Object getRenderingHint(RenderingHints.Key hintKey){
+    public Object getRenderingHint(RenderingHints.Key hintKey) {
         return _hints.get(hintKey);
     }
 
@@ -1371,12 +1423,13 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * time/quality trade-off in the rendering process.  Refer to the
      * <code>RenderingHints</code> class for definitions of some common
      * keys and values.
-     * @param hintKey the key of the hint to be set.
+     *
+     * @param hintKey   the key of the hint to be set.
      * @param hintValue the value indicating preferences for the specified
-     * hint category.
+     *                  hint category.
      * @see RenderingHints
      */
-    public void setRenderingHint(RenderingHints.Key hintKey, Object hintValue){
+    public void setRenderingHint(RenderingHints.Key hintKey, Object hintValue) {
         _hints.put(hintKey, hintValue);
     }
 
@@ -1395,10 +1448,9 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      *
      * @param g the <code>GlyphVector</code> to be rendered
      * @param x the x position in user space where the glyphs should be
-     *        rendered
+     *          rendered
      * @param y the y position in user space where the glyphs should be
-     *        rendered
-     *
+     *          rendered
      * @see java.awt.Font#createGlyphVector(FontRenderContext, char[])
      * @see java.awt.font.GlyphVector
      * @see #setPaint
@@ -1415,6 +1467,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
     /**
      * Returns the device configuration associated with this
      * <code>Graphics2D</code>.
+     *
      * @return the device configuration
      */
     public GraphicsConfiguration getDeviceConfiguration() {
@@ -1433,10 +1486,11 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * overall time/quality trade-off in the rendering process.
      * Refer to the <code>RenderingHints</code> class for definitions of
      * some common keys and values.
+     *
      * @param hints the rendering hints to be set
      * @see RenderingHints
      */
-    public void addRenderingHints(Map hints){
+    public void addRenderingHints(Map hints) {
         this._hints.putAll(hints);
     }
 
@@ -1453,10 +1507,11 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      *          [   0    1    ty  ]
      *          [   0    0    1   ]
      * </pre>
+     *
      * @param tx the distance to translate along the x-axis
      * @param ty the distance to translate along the y-axis
      */
-    public void translate(double tx, double ty){
+    public void translate(double tx, double ty) {
         _transform.translate(tx, ty);
     }
 
@@ -1474,11 +1529,12 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * the glyphs can be rendered from right to left, in which case the
      * coordinate supplied is the location of the leftmost character
      * on the baseline.
+     *
      * @param iterator the iterator whose text is to be rendered
-     * @param x the x coordinate where the iterator's text is to be
-     * rendered
-     * @param y the y coordinate where the iterator's text is to be
-     * rendered
+     * @param x        the x coordinate where the iterator's text is to be
+     *                 rendered
+     * @param y        the y coordinate where the iterator's text is to be
+     *                 rendered
      * @see #setPaint
      * @see java.awt.Graphics#setColor
      * @see #setTransform
@@ -1502,12 +1558,13 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * The rendering attributes taken into account include the
      * <code>Clip</code>, <code>Transform</code>, and <code>Stroke</code>
      * attributes.
-     * @param rect the area in device space to check for a hit
-     * @param s the <code>Shape</code> to check for a hit
+     *
+     * @param rect     the area in device space to check for a hit
+     * @param s        the <code>Shape</code> to check for a hit
      * @param onStroke flag used to choose between testing the
-     * stroked or the filled shape.  If the flag is <code>true</code>, the
-     * <code>Stroke</code> oultine is tested.  If the flag is
-     * <code>false</code>, the filled <code>Shape</code> is tested.
+     *                 stroked or the filled shape.  If the flag is <code>true</code>, the
+     *                 <code>Stroke</code> oultine is tested.  If the flag is
+     *                 <code>false</code>, the filled <code>Shape</code> is tested.
      * @return <code>true</code> if there is a hit; <code>false</code>
      * otherwise.
      * @see #setStroke
@@ -1520,7 +1577,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      */
     public boolean hit(Rectangle rect,
                        Shape s,
-                       boolean onStroke){
+                       boolean onStroke) {
         if (onStroke) {
             s = getStroke().createStrokedShape(s);
         }
@@ -1538,11 +1595,12 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * one operation.  Refer to the
      * <code>RenderingHints</code> class for definitions of some common
      * keys and values.
+     *
      * @return a reference to an instance of <code>RenderingHints</code>
      * that contains the current preferences.
      * @see RenderingHints
      */
-    public RenderingHints getRenderingHints(){
+    public RenderingHints getRenderingHints() {
         return _hints;
     }
 
@@ -1556,10 +1614,11 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * overall time/quality trade-off in the rendering process.
      * Refer to the <code>RenderingHints</code> class for definitions of
      * some common keys and values.
+     *
      * @param hints the rendering hints to be set
      * @see RenderingHints
      */
-    public void setRenderingHints(Map hints){
+    public void setRenderingHints(Map hints) {
         this._hints = new RenderingHints(hints);
     }
 
@@ -1574,11 +1633,12 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>Transform</code>, and <code>Composite</code> attributes.
      * Note that no rendering is done if the specified transform is
      * noninvertible.
-     * @param img the <code>Image</code> to be rendered
+     *
+     * @param img   the <code>Image</code> to be rendered
      * @param xform the transformation from image space into user space
-     * @param obs the {@link ImageObserver}
-     * to be notified as more of the <code>Image</code>
-     * is converted
+     * @param obs   the {@link ImageObserver}
+     *              to be notified as more of the <code>Image</code>
+     *              is converted
      * @return <code>true</code> if the <code>Image</code> is
      * fully loaded and completely rendered;
      * <code>false</code> if the <code>Image</code> is still being loaded.
@@ -1588,7 +1648,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * @see #clip
      * @see #setClip(Shape)
      */
-     public boolean drawImage(Image img, AffineTransform xform, ImageObserver obs) {
+    public boolean drawImage(Image img, AffineTransform xform, ImageObserver obs) {
         log.log(POILogger.WARN, "Not implemented");
         return false;
     }
@@ -1615,19 +1675,20 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * image has been constructed for this output device.  Each size of
      * the image may be cached separately and generated from the original
      * data in a separate image production sequence.
-     * @param    img    the specified image to be drawn. This method does
-     *                  nothing if <code>img</code> is null.
-     * @param    x      the <i>x</i> coordinate.
-     * @param    y      the <i>y</i> coordinate.
-     * @param    width  the width of the rectangle.
-     * @param    height the height of the rectangle.
-     * @param    observer    object to be notified as more of
-     *                          the image is converted.
-     * @return   <code>false</code> if the image pixels are still changing;
-     *           <code>true</code> otherwise.
-     * @see      java.awt.Image
-     * @see      java.awt.image.ImageObserver
-     * @see      java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
+     *
+     * @param img      the specified image to be drawn. This method does
+     *                 nothing if <code>img</code> is null.
+     * @param x        the <i>x</i> coordinate.
+     * @param y        the <i>y</i> coordinate.
+     * @param width    the width of the rectangle.
+     * @param height   the height of the rectangle.
+     * @param observer object to be notified as more of
+     *                 the image is converted.
+     * @return <code>false</code> if the image pixels are still changing;
+     * <code>true</code> otherwise.
+     * @see java.awt.Image
+     * @see java.awt.image.ImageObserver
+     * @see java.awt.image.ImageObserver#imageUpdate(java.awt.Image, int, int, int, int, int)
      */
     public boolean drawImage(Image img, int x, int y,
                              int width, int height,
@@ -1639,24 +1700,26 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
     /**
      * Creates a new <code>Graphics</code> object that is
      * a copy of this <code>Graphics</code> object.
-     * @return     a new graphics context that is a copy of
-     *                       this graphics context.
+     *
+     * @return a new graphics context that is a copy of
+     * this graphics context.
      */
     public Graphics create() {
         try {
-            return (Graphics)clone();
-        } catch (CloneNotSupportedException e){
+            return (Graphics) clone();
+        } catch (CloneNotSupportedException e) {
             throw new HSLFException(e);
         }
     }
 
     /**
      * Gets the font metrics for the specified font.
-     * @return    the font metrics for the specified font.
-     * @param     f the specified font
-     * @see       java.awt.Graphics#getFont
-     * @see       java.awt.FontMetrics
-     * @see       java.awt.Graphics#getFontMetrics()
+     *
+     * @param f the specified font
+     * @return the font metrics for the specified font.
+     * @see java.awt.Graphics#getFont
+     * @see java.awt.FontMetrics
+     * @see java.awt.Graphics#getFontMetrics()
      */
     @SuppressWarnings("deprecation")
     public FontMetrics getFontMetrics(Font f) {
@@ -1676,7 +1739,8 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * Pixels that are of colors other than those two colors are changed
      * in an unpredictable but reversible manner; if the same figure is
      * drawn twice, then all pixels are restored to their original values.
-     * @param     c1 the XOR alternation color
+     *
+     * @param c1 the XOR alternation color
      */
     public void setXORMode(Color c1) {
         log.log(POILogger.WARN, "Not implemented");
@@ -1705,7 +1769,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>Transform</code>, and <code>Composite</code> attributes. Note
      * that no rendering is done if the specified transform is
      * noninvertible.
-     *<p>
+     * <p>
      * Rendering hints set on the <code>Graphics2D</code> object might
      * be used in rendering the <code>RenderableImage</code>.
      * If explicit control is required over specific hints recognized by a
@@ -1713,9 +1777,10 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * are used is required, then a <code>RenderedImage</code> should be
      * obtained directly from the <code>RenderableImage</code>
      * and rendered using
-     *{@link #drawRenderedImage(RenderedImage, AffineTransform) drawRenderedImage}.
-     * @param img the image to be rendered. This method does
-     *            nothing if <code>img</code> is null.
+     * {@link #drawRenderedImage(RenderedImage, AffineTransform) drawRenderedImage}.
+     *
+     * @param img   the image to be rendered. This method does
+     *              nothing if <code>img</code> is null.
      * @param xform the transformation from image space into user space
      * @see #_transform
      * @see #setTransform
@@ -1724,7 +1789,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * @see #setClip
      * @see #drawRenderedImage
      */
-     public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
+    public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
         log.log(POILogger.WARN, "Not implemented");
     }
 
@@ -1740,8 +1805,9 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
      * <code>Transform</code>, and <code>Composite</code> attributes. Note
      * that no rendering is done if the specified transform is
      * noninvertible.
-     * @param img the image to be rendered. This method does
-     *            nothing if <code>img</code> is null.
+     *
+     * @param img   the image to be rendered. This method does
+     *              nothing if <code>img</code> is null.
      * @param xform the transformation from image space into user space
      * @see #_transform
      * @see #setTransform
@@ -1754,8 +1820,8 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
     }
 
     protected void applyStroke(SimpleShape shape) {
-        if (_stroke instanceof BasicStroke){
-            BasicStroke bs = (BasicStroke)_stroke;
+        if (_stroke instanceof BasicStroke) {
+            BasicStroke bs = (BasicStroke) _stroke;
             shape.setLineWidth(bs.getLineWidth());
             float[] dash = bs.getDashArray();
             if (dash != null) {
@@ -1767,7 +1833,7 @@ public final class PPGraphics2D extends Graphics2D implements Cloneable {
 
     protected void applyPaint(SimpleShape shape) {
         if (_paint instanceof Color) {
-            shape.getFill().setForegroundColor((Color)_paint);
+            shape.getFill().setForegroundColor((Color) _paint);
         }
     }
 }

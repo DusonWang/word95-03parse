@@ -75,6 +75,7 @@ public final class Picture {
     private int dataBlockStartOfsset;
     private int height = -1;
     private int width = -1;
+
     /**
      * Builds a Picture object for a Picture stored as
      * Escher.

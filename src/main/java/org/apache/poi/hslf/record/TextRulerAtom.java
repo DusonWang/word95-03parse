@@ -17,11 +17,11 @@
 
 package org.apache.poi.hslf.record;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.POILogger;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Ruler of a text as it differs from the style's ruler settings.
@@ -54,33 +54,42 @@ public final class TextRulerAtom extends RecordAtom {
         _header = new byte[8];
         _data = new byte[0];
 
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _data.length);
     }
 
     /**
      * Constructs the ruler atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected TextRulerAtom(byte[] source, int start, int len) {
         // Get the header.
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Get the record data.
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,len-8);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, len - 8);
 
         try {
             read();
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.log(POILogger.ERROR, "Failed to parse TextRulerAtom: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static TextRulerAtom getParagraphInstance() {
+        byte[] data = new byte[]{
+                0x00, 0x00, (byte) 0xA6, 0x0F, 0x0A, 0x00, 0x00, 0x00,
+                0x10, 0x03, 0x00, 0x00, (byte) 0xF9, 0x00, 0x41, 0x01, 0x41, 0x01
+        };
+        TextRulerAtom ruler = new TextRulerAtom(data, 0, data.length);
+        return ruler;
     }
 
     /**
@@ -107,28 +116,33 @@ public final class TextRulerAtom extends RecordAtom {
     /**
      * Read the record bytes and initialize the internal variables
      */
-    private void read(){
+    private void read() {
         int pos = 0;
-        short mask = LittleEndian.getShort(_data);  pos += 4;
+        short mask = LittleEndian.getShort(_data);
+        pos += 4;
         short val;
         int[] bits = {1, 0, 2, 3, 8, 4, 9, 5, 10, 6, 11, 7, 12};
         for (int i = 0; i < bits.length; i++) {
-            if((mask & 1 << bits[i]) != 0){
-                switch (bits[i]){
+            if ((mask & 1 << bits[i]) != 0) {
+                switch (bits[i]) {
                     case 0:
                         //defaultTabSize
-                        defaultTabSize = LittleEndian.getShort(_data, pos); pos += 2;
+                        defaultTabSize = LittleEndian.getShort(_data, pos);
+                        pos += 2;
                         break;
                     case 1:
                         //numLevels
-                        numLevels = LittleEndian.getShort(_data, pos); pos += 2;
+                        numLevels = LittleEndian.getShort(_data, pos);
+                        pos += 2;
                         break;
                     case 2:
                         //tabStops
-                        val = LittleEndian.getShort(_data, pos); pos += 2;
-                        tabStops = new int[val*2];
+                        val = LittleEndian.getShort(_data, pos);
+                        pos += 2;
+                        tabStops = new int[val * 2];
                         for (int j = 0; j < tabStops.length; j++) {
-                            tabStops[j] = LittleEndian.getUShort(_data, pos); pos += 2;
+                            tabStops[j] = LittleEndian.getUShort(_data, pos);
+                            pos += 2;
                         }
                         break;
                     case 3:
@@ -137,8 +151,9 @@ public final class TextRulerAtom extends RecordAtom {
                     case 6:
                     case 7:
                         //bullet.offset
-                        val = LittleEndian.getShort(_data, pos); pos += 2;
-                        bulletOffsets[bits[i]-3] = val;
+                        val = LittleEndian.getShort(_data, pos);
+                        pos += 2;
+                        bulletOffsets[bits[i] - 3] = val;
                         break;
                     case 8:
                     case 9:
@@ -146,8 +161,9 @@ public final class TextRulerAtom extends RecordAtom {
                     case 11:
                     case 12:
                         //text.offset
-                        val = LittleEndian.getShort(_data, pos); pos += 2;
-                        textOffsets[bits[i]-8] = val;
+                        val = LittleEndian.getShort(_data, pos);
+                        pos += 2;
+                        textOffsets[bits[i] - 8] = val;
                         break;
                 }
             }
@@ -157,48 +173,39 @@ public final class TextRulerAtom extends RecordAtom {
     /**
      * Default distance between tab stops, in master coordinates (576 dpi).
      */
-    public int getDefaultTabSize(){
+    public int getDefaultTabSize() {
         return defaultTabSize;
     }
 
     /**
      * Number of indent levels (maximum 5).
      */
-    public int getNumberOfLevels(){
+    public int getNumberOfLevels() {
         return numLevels;
     }
 
     /**
      * Default distance between tab stops, in master coordinates (576 dpi).
      */
-    public int[] getTabStops(){
+    public int[] getTabStops() {
         return tabStops;
     }
 
     /**
      * Paragraph's distance from shape's left margin, in master coordinates (576 dpi).
      */
-    public int[] getTextOffsets(){
+    public int[] getTextOffsets() {
         return textOffsets;
     }
 
     /**
      * First line of paragraph's distance from shape's left margin, in master coordinates (576 dpi).
      */
-    public int[] getBulletOffsets(){
+    public int[] getBulletOffsets() {
         return bulletOffsets;
     }
 
-    public static TextRulerAtom getParagraphInstance(){
-        byte[] data = new byte[] {
-            0x00, 0x00, (byte)0xA6, 0x0F, 0x0A, 0x00, 0x00, 0x00,
-            0x10, 0x03, 0x00, 0x00, (byte)0xF9, 0x00, 0x41, 0x01, 0x41, 0x01
-        };
-        TextRulerAtom ruler = new TextRulerAtom(data, 0, data.length);
-        return ruler;
-    }
-
-    public void setParagraphIndent(short tetxOffset, short bulletOffset){
+    public void setParagraphIndent(short tetxOffset, short bulletOffset) {
         LittleEndian.putShort(_data, 4, tetxOffset);
         LittleEndian.putShort(_data, 6, bulletOffset);
         LittleEndian.putShort(_data, 8, bulletOffset);

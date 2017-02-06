@@ -322,7 +322,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
         _officeDrawingsHeaders = new OfficeDrawingsImpl(_fspaHeaders, _escherRecordHolder, _mainStream);
         _officeDrawingsMain = new OfficeDrawingsImpl(_fspaMain, _escherRecordHolder, _mainStream);
 
-        _st = new SectionTable(_mainStream, _tableStream, _fib.getFcPlcfsed(), _fib.getLcbPlcfsed(), fcMin, _tpt, _fib.getSubdocumentTextStreamLength(SubdocumentType.MAIN));
+        _st = new SectionTable(_mainStream, _tableStream, _fib.getFcPlcfsed(), _fib.getLcbPlcfsed(), fcMin, _tpt, _fib.getSubdocumentTextStreamLength(SubDocumentType.MAIN));
         _ss = new StyleSheet(_tableStream, _fib.getFcStshf());
         _ft = new FontTable(_tableStream, _fib.getFcSttbfffn(), _fib.getLcbSttbfffn());
 
@@ -596,7 +596,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
         _officeDrawingsHeaders = new OfficeDrawingsImpl(_fspaHeaders, _escherRecordHolder, _mainStream);
         _officeDrawingsMain = new OfficeDrawingsImpl(_fspaMain, _escherRecordHolder, _mainStream);
 
-        _st = new SectionTable(_mainStream, _tableStream, _fib.getFcPlcfsed(), _fib.getLcbPlcfsed(), fcMin, _tpt, _fib.getSubdocumentTextStreamLength(SubdocumentType.MAIN));
+        _st = new SectionTable(_mainStream, _tableStream, _fib.getFcPlcfsed(), _fib.getLcbPlcfsed(), fcMin, _tpt, _fib.getSubdocumentTextStreamLength(SubDocumentType.MAIN));
         _ss = new StyleSheet(_tableStream, _fib.getFcStshf());
         _ft = new FontTable(_tableStream, _fib.getFcSttbfffn(), _fib.getLcbSttbfffn());
         int listOffset = LittleEndian.getInt(_mainStream, 0x2E2);// _fib.getFcPlfLst();
@@ -794,12 +794,12 @@ public final class HWPFDocument extends HWPFDocumentCore {
         // SubdocumentType.MAIN );
 
         // it seems much simpler -- sergey
-        return getRange(SubdocumentType.MAIN);
+        return getRange(SubDocumentType.MAIN);
     }
 
-    private Range getRange(SubdocumentType subdocument) {
+    private Range getRange(SubDocumentType subdocument) {
         int startCp = 0;
-        for (SubdocumentType previos : SubdocumentType.ORDERED) {
+        for (SubDocumentType previos : SubDocumentType.ORDERED) {
             int length = getFileInformationBlock()
                     .getSubdocumentTextStreamLength(previos);
             if (subdocument == previos)
@@ -816,7 +816,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
      * @return the {@link Range} which covers all the Footnotes.
      */
     public Range getFootnoteRange() {
-        return getRange(SubdocumentType.FOOTNOTE);
+        return getRange(SubDocumentType.FOOTNOTE);
     }
 
     /**
@@ -825,7 +825,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
      * @return the {@link Range} which covers all endnotes.
      */
     public Range getEndnoteRange() {
-        return getRange(SubdocumentType.ENDNOTE);
+        return getRange(SubDocumentType.ENDNOTE);
     }
 
     /**
@@ -834,7 +834,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
      * @return the {@link Range} which covers all annotations.
      */
     public Range getCommentsRange() {
-        return getRange(SubdocumentType.ANNOTATION);
+        return getRange(SubDocumentType.ANNOTATION);
     }
 
     /**
@@ -843,7 +843,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
      * @return the {@link Range} which covers all textboxes.
      */
     public Range getMainTextboxRange() {
-        return getRange(SubdocumentType.TEXTBOX);
+        return getRange(SubDocumentType.TEXTBOX);
     }
 
     /**
@@ -852,7 +852,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
      * separators and footnote separators.
      */
     public Range getHeaderStoryRange() {
-        return getRange(SubdocumentType.HEADER);
+        return getRange(SubDocumentType.HEADER);
     }
 
     /**

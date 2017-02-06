@@ -17,7 +17,7 @@
 
 package org.apache.poi.hdf.extractor;
 
-import org.apache.poi.hdf.extractor.util.*;
+import org.apache.poi.hdf.extractor.util.PropertyNode;
 
 /**
  * Comment me
@@ -25,27 +25,25 @@ import org.apache.poi.hdf.extractor.util.*;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class TextPiece extends PropertyNode implements Comparable
-{
-  private boolean _usesUnicode;
-  private int _length;
+public final class TextPiece extends PropertyNode implements Comparable {
+    private boolean _usesUnicode;
+    private int _length;
 
-  public TextPiece(int start, int length, boolean unicode)
-  {
-    super(start, start + length, null);
-      _usesUnicode = unicode;
-      _length = length;
-      //_fcStart = start;
-      //_fcEnd = start + length;
+    public TextPiece(int start, int length, boolean unicode) {
+        super(start, start + length, null);
+        _usesUnicode = unicode;
+        _length = length;
+        //_fcStart = start;
+        //_fcEnd = start + length;
 
-  }
-   public boolean usesUnicode()
-  {
-      return _usesUnicode;
-  }
+    }
 
-   public int compareTo(Object obj) {
-       return 0;
-   }
+    public boolean usesUnicode() {
+        return _usesUnicode;
+    }
+
+    public int compareTo(Object obj) {
+        return 0;
+    }
 
 }

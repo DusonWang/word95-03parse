@@ -18,43 +18,40 @@
 package org.apache.poi.hdf.model.hdftypes;
 
 import org.apache.poi.util.LittleEndian;
+
 /**
  * Comment me
  *
  * @author Ryan Ackley
  */
 @Deprecated
-public final class FontTable implements HDFType
-{
-  String[] fontNames;
+public final class FontTable implements HDFType {
+    String[] fontNames;
 
-  public FontTable(byte[] fontTable)
-  {
-    int size = LittleEndian.getShort(fontTable, 0);
-    fontNames = new String[size];
+    public FontTable(byte[] fontTable) {
+        int size = LittleEndian.getShort(fontTable, 0);
+        fontNames = new String[size];
 
-    int currentIndex = 4;
-    for(int x = 0; x < size; x++)
-    {
-      byte ffnLength = fontTable[currentIndex];
+        int currentIndex = 4;
+        for (int x = 0; x < size; x++) {
+            byte ffnLength = fontTable[currentIndex];
 
-      int nameOffset = currentIndex + 40;
-      StringBuffer nameBuf = new StringBuffer();
-      //char ch = Utils.getUnicodeCharacter(fontTable, nameOffset);
-      char ch = (char)LittleEndian.getShort(fontTable, nameOffset);
-      while(ch != '\0')
-      {
-        nameBuf.append(ch);
-        nameOffset += 2;
-        ch = (char)LittleEndian.getShort(fontTable, nameOffset);
-      }
-      fontNames[x] = nameBuf.toString();
-      currentIndex += ffnLength + 1;
+            int nameOffset = currentIndex + 40;
+            StringBuffer nameBuf = new StringBuffer();
+            //char ch = Utils.getUnicodeCharacter(fontTable, nameOffset);
+            char ch = (char) LittleEndian.getShort(fontTable, nameOffset);
+            while (ch != '\0') {
+                nameBuf.append(ch);
+                nameOffset += 2;
+                ch = (char) LittleEndian.getShort(fontTable, nameOffset);
+            }
+            fontNames[x] = nameBuf.toString();
+            currentIndex += ffnLength + 1;
+        }
+
     }
 
-  }
-  public String getFont(int index)
-  {
-    return fontNames[index];
-  }
+    public String getFont(int index) {
+        return fontNames[index];
+    }
 }

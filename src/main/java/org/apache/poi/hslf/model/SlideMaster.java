@@ -19,7 +19,9 @@ package org.apache.poi.hslf.model;
 
 import org.apache.poi.hslf.model.textproperties.TextProp;
 import org.apache.poi.hslf.model.textproperties.TextPropCollection;
-import org.apache.poi.hslf.record.*;
+import org.apache.poi.hslf.record.MainMaster;
+import org.apache.poi.hslf.record.TextHeaderAtom;
+import org.apache.poi.hslf.record.TxMasterStyleAtom;
 import org.apache.poi.hslf.usermodel.SlideShow;
 
 /**
@@ -39,7 +41,6 @@ public final class SlideMaster extends MasterSheet {
 
     /**
      * Constructs a SlideMaster from the MainMaster record,
-     *
      */
     public SlideMaster(MainMaster record, int sheetNo) {
         super(record, sheetNo);
@@ -76,7 +77,7 @@ public final class SlideMaster extends MasterSheet {
             if (prop != null) break;
         }
         if (prop == null) {
-            if(isCharacter) {
+            if (isCharacter) {
                 switch (txtype) {
                     case TextHeaderAtom.CENTRE_BODY_TYPE:
                     case TextHeaderAtom.HALF_BODY_TYPE:
@@ -122,10 +123,10 @@ public final class SlideMaster extends MasterSheet {
             TxMasterStyleAtom txdoc = getSlideShow().getDocumentRecord().getEnvironment().getTxMasterStyleAtom();
             _txmaster[txdoc.getTextType()] = txdoc;
 
-            TxMasterStyleAtom[] txrec = ((MainMaster)getSheetContainer()).getTxMasterStyleAtoms();
+            TxMasterStyleAtom[] txrec = ((MainMaster) getSheetContainer()).getTxMasterStyleAtoms();
             for (int i = 0; i < txrec.length; i++) {
                 int txType = txrec[i].getTextType();
-                if(_txmaster[txType] == null) _txmaster[txType] = txrec[i];
+                if (_txmaster[txType] == null) _txmaster[txType] = txrec[i];
             }
         }
     }
@@ -133,16 +134,16 @@ public final class SlideMaster extends MasterSheet {
     protected void onAddTextShape(TextShape shape) {
         TextRun run = shape.getTextRun();
 
-        if(_runs == null) _runs = new TextRun[]{run};
+        if (_runs == null) _runs = new TextRun[]{run};
         else {
             TextRun[] tmp = new TextRun[_runs.length + 1];
             System.arraycopy(_runs, 0, tmp, 0, _runs.length);
-            tmp[tmp.length-1] = run;
+            tmp[tmp.length - 1] = run;
             _runs = tmp;
         }
     }
 
-    public TxMasterStyleAtom[] getTxMasterStyleAtoms(){
+    public TxMasterStyleAtom[] getTxMasterStyleAtoms() {
         return _txmaster;
     }
 }

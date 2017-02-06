@@ -127,13 +127,7 @@ public class PlfLfo {
         if (getClass() != obj.getClass())
             return false;
         PlfLfo other = (PlfLfo) obj;
-        if (_lfoMac != other._lfoMac)
-            return false;
-        if (!Arrays.equals(_rgLfo, other._rgLfo))
-            return false;
-        if (!Arrays.equals(_rgLfoData, other._rgLfoData))
-            return false;
-        return true;
+        return _lfoMac == other._lfoMac && Arrays.equals(_rgLfo, other._rgLfo) && Arrays.equals(_rgLfoData, other._rgLfoData);
     }
 
     /**

@@ -19,12 +19,13 @@ package org.apache.poi.hsmf.exceptions;
 
 /**
  * Exception for when a directory chunk is not found but is expected.
+ *
  * @author Travis Ferguson
  */
 public final class DirectoryChunkNotFoundException extends Exception {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public DirectoryChunkNotFoundException(String directory) {
-		super("Directory Chunk " + directory + " was not found!");
-	}
+    public DirectoryChunkNotFoundException(String directory) {
+        super("Directory Chunk " + directory + " was not found!");
+    }
 }

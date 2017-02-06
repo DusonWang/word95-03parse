@@ -18,115 +18,102 @@
 package org.apache.poi.hdf.model.hdftypes;
 
 import org.apache.poi.util.LittleEndian;
+
 /**
  * Comment me
  *
  * @author Ryan Ackley
  */
 @Deprecated
-public final class StyleDescription implements HDFType
-{
+public final class StyleDescription implements HDFType {
 
-  private static int PARAGRAPH_STYLE = 1;
-  private static int CHARACTER_STYLE = 2;
+    private static int PARAGRAPH_STYLE = 1;
+    private static int CHARACTER_STYLE = 2;
 
-  int _baseStyleIndex;
-  int _styleTypeCode;
-  int _numUPX;
-  byte[] _papx;
-  byte[] _chpx;
-  ParagraphProperties _pap;
-  CharacterProperties _chp;
+    int _baseStyleIndex;
+    int _styleTypeCode;
+    int _numUPX;
+    byte[] _papx;
+    byte[] _chpx;
+    ParagraphProperties _pap;
+    CharacterProperties _chp;
 
-  public StyleDescription()
-  {
-      _pap = new ParagraphProperties();
-      _chp = new CharacterProperties();
-  }
-  public StyleDescription(byte[] std, int baseLength, boolean word9)
-  {
-      int infoShort = LittleEndian.getShort(std, 2);
-      _styleTypeCode = (infoShort & 0xf);
-      _baseStyleIndex = (infoShort & 0xfff0) >> 4;
+    public StyleDescription() {
+        _pap = new ParagraphProperties();
+        _chp = new CharacterProperties();
+    }
 
-      infoShort = LittleEndian.getShort(std, 4);
-      _numUPX = infoShort & 0xf;
+    public StyleDescription(byte[] std, int baseLength, boolean word9) {
+        int infoShort = LittleEndian.getShort(std, 2);
+        _styleTypeCode = (infoShort & 0xf);
+        _baseStyleIndex = (infoShort & 0xfff0) >> 4;
 
-      //first byte(s) of variable length section of std is the length of the
-      //style name and aliases string
-      int nameLength = 0;
-      int multiplier = 1;
-      if(word9)
-      {
-          nameLength = LittleEndian.getShort(std, baseLength);
-          multiplier = 2;
-      }
-      else
-      {
-          nameLength = std[baseLength];
-      }
-      //2 bytes for length, length then null terminator.
-      int grupxStart = multiplier + ((nameLength + 1) * multiplier) + baseLength;
+        infoShort = LittleEndian.getShort(std, 4);
+        _numUPX = infoShort & 0xf;
 
-      int offset = 0;
-      for(int x = 0; x < _numUPX; x++)
-      {
-          int upxSize = LittleEndian.getShort(std, grupxStart + offset);
-          if(_styleTypeCode == PARAGRAPH_STYLE)
-          {
-              if(x == 0)
-              {
-                  _papx = new byte[upxSize];
-                  System.arraycopy(std, grupxStart + offset + 2, _papx, 0, upxSize);
-              }
-              else if(x == 1)
-              {
-                  _chpx = new byte[upxSize];
-                  System.arraycopy(std, grupxStart + offset + 2, _chpx, 0, upxSize);
-              }
-          }
-          else if(_styleTypeCode == CHARACTER_STYLE && x == 0)
-          {
-              _chpx = new byte[upxSize];
-              System.arraycopy(std, grupxStart + offset + 2, _chpx, 0, upxSize);
-          }
+        //first byte(s) of variable length section of std is the length of the
+        //style name and aliases string
+        int nameLength = 0;
+        int multiplier = 1;
+        if (word9) {
+            nameLength = LittleEndian.getShort(std, baseLength);
+            multiplier = 2;
+        } else {
+            nameLength = std[baseLength];
+        }
+        //2 bytes for length, length then null terminator.
+        int grupxStart = multiplier + ((nameLength + 1) * multiplier) + baseLength;
 
-          if(upxSize % 2 == 1)
-          {
-              ++upxSize;
-          }
-          offset += 2 + upxSize;
-      }
+        int offset = 0;
+        for (int x = 0; x < _numUPX; x++) {
+            int upxSize = LittleEndian.getShort(std, grupxStart + offset);
+            if (_styleTypeCode == PARAGRAPH_STYLE) {
+                if (x == 0) {
+                    _papx = new byte[upxSize];
+                    System.arraycopy(std, grupxStart + offset + 2, _papx, 0, upxSize);
+                } else if (x == 1) {
+                    _chpx = new byte[upxSize];
+                    System.arraycopy(std, grupxStart + offset + 2, _chpx, 0, upxSize);
+                }
+            } else if (_styleTypeCode == CHARACTER_STYLE && x == 0) {
+                _chpx = new byte[upxSize];
+                System.arraycopy(std, grupxStart + offset + 2, _chpx, 0, upxSize);
+            }
+
+            if (upxSize % 2 == 1) {
+                ++upxSize;
+            }
+            offset += 2 + upxSize;
+        }
 
 
+    }
 
-  }
-  public int getBaseStyle()
-  {
-      return _baseStyleIndex;
-  }
-  public byte[] getCHPX()
-  {
-      return _chpx;
-  }
-  public byte[] getPAPX()
-  {
-      return _papx;
-  }
-  public ParagraphProperties getPAP()
-  {
-      return _pap;
-  }
-  public CharacterProperties getCHP()
-  {
-      return _chp;
-  }
-  public void setPAP(ParagraphProperties pap)
-  {
-      _pap = pap;
-  }
-  public void setCHP(CharacterProperties chp)
-  {
-      _chp = chp;
-  }
+    public int getBaseStyle() {
+        return _baseStyleIndex;
+    }
+
+    public byte[] getCHPX() {
+        return _chpx;
+    }
+
+    public byte[] getPAPX() {
+        return _papx;
+    }
+
+    public ParagraphProperties getPAP() {
+        return _pap;
+    }
+
+    public void setPAP(ParagraphProperties pap) {
+        _pap = pap;
+    }
+
+    public CharacterProperties getCHP() {
+        return _chp;
+    }
+
+    public void setCHP(CharacterProperties chp) {
+        _chp = chp;
+    }
 }

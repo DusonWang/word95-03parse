@@ -23,42 +23,43 @@ import java.nio.charset.Charset;
  * A chunk header from v4 or v5
  */
 public final class ChunkHeaderV4V5 extends ChunkHeader {
-	protected short unknown2;
-	protected short unknown3;
+    protected short unknown2;
+    protected short unknown3;
 
-	public short getUnknown2() {
-		return unknown2;
-	}
-	public short getUnknown3() {
-		return unknown3;
-	}
+    protected static int getHeaderSize() {
+        return 12;
+    }
 
-	protected static int getHeaderSize() {
-		return 12;
-	}
+    public short getUnknown2() {
+        return unknown2;
+    }
 
-	public int getSizeInBytes() {
-		return getHeaderSize();
-	}
+    public short getUnknown3() {
+        return unknown3;
+    }
 
-	/**
-	 * Does the chunk have a trailer?
-	 */
-	public boolean hasTrailer() {
-		// V4 and V5 never has trailers
-		return false;
-	}
+    public int getSizeInBytes() {
+        return getHeaderSize();
+    }
 
-	/**
-	 * Does the chunk have a separator?
-	 */
-	public boolean hasSeparator() {
-		// V4 and V5 never has separators
-		return false;
-	}
+    /**
+     * Does the chunk have a trailer?
+     */
+    public boolean hasTrailer() {
+        // V4 and V5 never has trailers
+        return false;
+    }
 
-	@Override
-	public Charset getChunkCharset() {
-		return Charset.forName("ASCII");
-	}
+    /**
+     * Does the chunk have a separator?
+     */
+    public boolean hasSeparator() {
+        // V4 and V5 never has separators
+        return false;
+    }
+
+    @Override
+    public Charset getChunkCharset() {
+        return Charset.forName("ASCII");
+    }
 }

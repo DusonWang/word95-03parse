@@ -17,7 +17,9 @@
 
 package org.apache.poi.hslf.model;
 
-import org.apache.poi.ddf.*;
+import org.apache.poi.ddf.EscherContainerRecord;
+import org.apache.poi.ddf.EscherOptRecord;
+import org.apache.poi.ddf.EscherProperties;
 
 import java.awt.*;
 
@@ -38,20 +40,20 @@ public final class TableCell extends TextBox {
     /**
      * Create a TableCell object and initialize it from the supplied Record container.
      *
-     * @param escherRecord       <code>EscherSpContainer</code> container which holds information about this shape
-     * @param parent    the parent of the shape
+     * @param escherRecord <code>EscherSpContainer</code> container which holds information about this shape
+     * @param parent       the parent of the shape
      */
-   protected TableCell(EscherContainerRecord escherRecord, Shape parent){
+    protected TableCell(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
     /**
      * Create a new TableCell. This constructor is used when a new shape is created.
      *
-     * @param parent    the parent of this Shape. For example, if this text box is a cell
-     * in a table then the parent is Table.
+     * @param parent the parent of this Shape. For example, if this text box is a cell
+     *               in a table then the parent is Table.
      */
-    public TableCell(Shape parent){
+    public TableCell(Shape parent) {
         super(parent);
 
         setShapeType(ShapeTypes.Rectangle);
@@ -59,9 +61,9 @@ public final class TableCell extends TextBox {
         //_txtrun.getRichTextRuns()[0].setFlag(false, 0, false);
     }
 
-    protected EscherContainerRecord createSpContainer(boolean isChild){
+    protected EscherContainerRecord createSpContainer(boolean isChild) {
         _escherContainer = super.createSpContainer(isChild);
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
         setEscherProperty(opt, EscherProperties.TEXT__TEXTID, 0);
         setEscherProperty(opt, EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 0x20000);
         setEscherProperty(opt, EscherProperties.FILL__NOFILLHITTEST, 0x150001);
@@ -71,10 +73,10 @@ public final class TableCell extends TextBox {
         return _escherContainer;
     }
 
-    protected void anchorBorder(int type, Line line){
+    protected void anchorBorder(int type, Line line) {
         Rectangle cellAnchor = getAnchor();
         Rectangle lineAnchor = new Rectangle();
-        switch(type){
+        switch (type) {
             case Table.BORDER_TOP:
                 lineAnchor.x = cellAnchor.x;
                 lineAnchor.y = cellAnchor.y;
@@ -110,7 +112,7 @@ public final class TableCell extends TextBox {
     }
 
     public void setBorderLeft(Line line) {
-        if(line != null) anchorBorder(Table.BORDER_LEFT, line);
+        if (line != null) anchorBorder(Table.BORDER_LEFT, line);
         this.borderLeft = line;
     }
 
@@ -119,7 +121,7 @@ public final class TableCell extends TextBox {
     }
 
     public void setBorderRight(Line line) {
-        if(line != null) anchorBorder(Table.BORDER_RIGHT, line);
+        if (line != null) anchorBorder(Table.BORDER_RIGHT, line);
         this.borderRight = line;
     }
 
@@ -128,7 +130,7 @@ public final class TableCell extends TextBox {
     }
 
     public void setBorderTop(Line line) {
-        if(line != null) anchorBorder(Table.BORDER_TOP, line);
+        if (line != null) anchorBorder(Table.BORDER_TOP, line);
         this.borderTop = line;
     }
 
@@ -137,16 +139,16 @@ public final class TableCell extends TextBox {
     }
 
     public void setBorderBottom(Line line) {
-        if(line != null) anchorBorder(Table.BORDER_BOTTOM, line);
+        if (line != null) anchorBorder(Table.BORDER_BOTTOM, line);
         this.borderBottom = line;
     }
 
-    public void setAnchor(Rectangle anchor){
+    public void setAnchor(Rectangle anchor) {
         super.setAnchor(anchor);
 
-        if(borderTop != null) anchorBorder(Table.BORDER_TOP, borderTop);
-        if(borderRight != null) anchorBorder(Table.BORDER_RIGHT, borderRight);
-        if(borderBottom != null) anchorBorder(Table.BORDER_BOTTOM, borderBottom);
-        if(borderLeft != null) anchorBorder(Table.BORDER_LEFT, borderLeft);
+        if (borderTop != null) anchorBorder(Table.BORDER_TOP, borderTop);
+        if (borderRight != null) anchorBorder(Table.BORDER_RIGHT, borderRight);
+        if (borderBottom != null) anchorBorder(Table.BORDER_BOTTOM, borderBottom);
+        if (borderLeft != null) anchorBorder(Table.BORDER_LEFT, borderLeft);
     }
 }

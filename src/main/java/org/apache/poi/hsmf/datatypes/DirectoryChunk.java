@@ -16,42 +16,42 @@
 ==================================================================== */
 package org.apache.poi.hsmf.datatypes;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.apache.poi.hsmf.MAPIMessage;
 import org.apache.poi.hsmf.datatypes.Types.MAPIType;
 import org.apache.poi.poifs.filesystem.DirectoryNode;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * A Chunk that is just a placeholder in the
- *  MAPIMessage directory structure, which
- *  contains children.
+ * MAPIMessage directory structure, which
+ * contains children.
  * This is most commonly used with nested
- *  MAPIMessages
+ * MAPIMessages
  */
 public class DirectoryChunk extends Chunk {
     private DirectoryNode dir;
-    
+
     public DirectoryChunk(DirectoryNode dir, String namePrefix, int chunkId, MAPIType type) {
         super(namePrefix, chunkId, type);
         this.dir = dir;
     }
-    
+
     /**
      * Returns the directory entry for this chunk.
      * You can then use standard POIFS methods to
-     *  enumerate the entries in it.
+     * enumerate the entries in it.
      */
     public DirectoryNode getDirectory() {
         return dir;
     }
-    
+
     /**
      * Treats the directory as an embeded MAPIMessage
-     *  (it normally is one), and returns a MAPIMessage
-     *  object to process it with.
+     * (it normally is one), and returns a MAPIMessage
+     * object to process it with.
      */
     public MAPIMessage getAsEmbededMessage() throws IOException {
         return new MAPIMessage(dir);

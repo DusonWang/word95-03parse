@@ -17,18 +17,17 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.poi.util.LittleEndian;
 
 /**
  * An atom record that specifies information about external audio or video data.
  *
  * @author Yegor Kozlov
  */
-public final class ExMediaAtom extends RecordAtom
-{
+public final class ExMediaAtom extends RecordAtom {
 
     /**
      * A bit that specifies whether the audio or video data is repeated continuously during playback.
@@ -60,33 +59,36 @@ public final class ExMediaAtom extends RecordAtom
         _recdata = new byte[8];
 
         _header = new byte[8];
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _recdata.length);
     }
 
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected ExMediaAtom(byte[] source, int start, int len) {
         // Get the header
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Grab the record data
-        _recdata = new byte[len-8];
-        System.arraycopy(source,start+8,_recdata,0,len-8);
+        _recdata = new byte[len - 8];
+        System.arraycopy(source, start + 8, _recdata, 0, len - 8);
     }
 
     /**
      * Gets the record type.
+     *
      * @return the record type.
      */
-    public long getRecordType() { return RecordTypes.ExMediaAtom.typeID; }
+    public long getRecordType() {
+        return RecordTypes.ExMediaAtom.typeID;
+    }
 
     /**
      * Write the contents of the record back, so it can be written
@@ -103,36 +105,36 @@ public final class ExMediaAtom extends RecordAtom
     /**
      * A 4-byte unsigned integer that specifies an ID for an external object.
      *
-     * @return  A 4-byte unsigned integer that specifies an ID for an external object.
+     * @return A 4-byte unsigned integer that specifies an ID for an external object.
      */
-    public int getObjectId(){
+    public int getObjectId() {
         return LittleEndian.getInt(_recdata, 0);
     }
 
     /**
      * A 4-byte unsigned integer that specifies an ID for an external object.
      *
-     * @param id  A 4-byte unsigned integer that specifies an ID for an external object.
+     * @param id A 4-byte unsigned integer that specifies an ID for an external object.
      */
-    public void setObjectId(int id){
-         LittleEndian.putInt(_recdata, 0, id);
+    public void setObjectId(int id) {
+        LittleEndian.putInt(_recdata, 0, id);
     }
 
     /**
-     *  A bit mask specifying options for displaying headers and footers
+     * A bit mask specifying options for displaying headers and footers
      *
      * @return A bit mask specifying options for displaying headers and footers
      */
-    public int getMask(){
+    public int getMask() {
         return LittleEndian.getInt(_recdata, 4);
     }
 
     /**
-     *  A bit mask specifying options for displaying video
+     * A bit mask specifying options for displaying video
      *
      * @param mask A bit mask specifying options for displaying video
      */
-    public void setMask(int mask){
+    public void setMask(int mask) {
         LittleEndian.putInt(_recdata, 4, mask);
     }
 
@@ -140,22 +142,22 @@ public final class ExMediaAtom extends RecordAtom
      * @param bit the bit to check
      * @return whether the specified flag is set
      */
-    public boolean getFlag(int bit){
+    public boolean getFlag(int bit) {
         return (getMask() & bit) != 0;
     }
 
     /**
-     * @param  bit the bit to set
-     * @param  value whether the specified bit is set
+     * @param bit   the bit to set
+     * @param value whether the specified bit is set
      */
-    public void setFlag(int bit, boolean value){
+    public void setFlag(int bit, boolean value) {
         int mask = getMask();
-        if(value) mask |= bit;
+        if (value) mask |= bit;
         else mask &= ~bit;
         setMask(mask);
     }
 
-    public String toString(){
+    public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("ExMediaAtom\n");
         buf.append("\tObjectId: " + getObjectId() + "\n");

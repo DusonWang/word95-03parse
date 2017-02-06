@@ -18,35 +18,34 @@
 package org.apache.poi.hdf.model.hdftypes;
 
 import org.apache.poi.util.LittleEndian;
+
 /**
  * Comment me
  *
  * @author Ryan Ackley
  */
 @Deprecated
-public final class DocumentProperties implements HDFType
-{
+public final class DocumentProperties implements HDFType {
 
-  public boolean _fFacingPages;
-  public int _fpc;
-  public int _epc;
-  public int _rncFtn;
-  public int _nFtn;
-  public int _rncEdn;
-  public int _nEdn;
+    public boolean _fFacingPages;
+    public int _fpc;
+    public int _epc;
+    public int _rncFtn;
+    public int _nFtn;
+    public int _rncEdn;
+    public int _nEdn;
 
-  public DocumentProperties(byte[] dopArray)
-  {
+    public DocumentProperties(byte[] dopArray) {
         _fFacingPages = (dopArray[0] & 0x1) > 0;
         _fpc = (dopArray[0] & 0x60) >> 5;
 
         short num = LittleEndian.getShort(dopArray, 2);
         _rncFtn = (num & 0x3);
-        _nFtn = (short)(num & 0xfffc) >> 2;
+        _nFtn = (short) (num & 0xfffc) >> 2;
         num = LittleEndian.getShort(dopArray, 52);
         _rncEdn = num & 0x3;
-        _nEdn = (short)(num & 0xfffc) >> 2;
+        _nEdn = (short) (num & 0xfffc) >> 2;
         num = LittleEndian.getShort(dopArray, 54);
         _epc = num & 0x3;
-  }
+    }
 }

@@ -18,9 +18,11 @@
 package org.apache.poi.sl.usermodel;
 
 public interface SimpleShape extends Shape {
-	public Fill getFill();
-	public LineStyle getLineStyle();
+    public Fill getFill();
 
-	public Hyperlink getHyperlink();
-	public void setHyperlink(Hyperlink hyperlink);
+    public LineStyle getLineStyle();
+
+    public Hyperlink getHyperlink();
+
+    public void setHyperlink(Hyperlink hyperlink);
 }

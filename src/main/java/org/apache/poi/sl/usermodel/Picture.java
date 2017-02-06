@@ -18,5 +18,5 @@
 package org.apache.poi.sl.usermodel;
 
 public interface Picture extends SimpleShape {
-	public PictureData getPictureData();
+    public PictureData getPictureData();
 }

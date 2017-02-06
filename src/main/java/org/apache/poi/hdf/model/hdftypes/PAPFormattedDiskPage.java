@@ -28,7 +28,7 @@ import org.apache.poi.util.LittleEndian;
  * value in the array. For example, if an fkp has X number of Paragraph's
  * stored in it then there are (x + 1) 4 byte ints in the beginning array. The
  * number X is determined by the last byte in a 512 byte fkp.
- *
+ * <p>
  * CHP and PAP fkps also store the compressed styles(grpprl) that correspond to
  * the offsets on the front of the fkp. The offset of the grpprls is determined
  * differently for CHP fkps and PAP fkps.
@@ -36,16 +36,14 @@ import org.apache.poi.util.LittleEndian;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class PAPFormattedDiskPage extends FormattedDiskPage
-{
+public final class PAPFormattedDiskPage extends FormattedDiskPage {
 
     /**
      * Creates a PAPFormattedDiskPage from a 512 byte array
      *
      * @param fkp a 512 byte array.
      */
-    public PAPFormattedDiskPage(byte[] fkp)
-    {
+    public PAPFormattedDiskPage(byte[] fkp) {
         super(fkp);
     }
 
@@ -55,16 +53,12 @@ public final class PAPFormattedDiskPage extends FormattedDiskPage
      * @param index The index of the papx to get.
      * @return a papx grpprl.
      */
-    public byte[] getGrpprl(int index)
-    {
+    public byte[] getGrpprl(int index) {
         int papxOffset = 2 * LittleEndian.getUnsignedByte(_fkp, ((_crun + 1) * 4) + (index * 13));
         int size = 2 * LittleEndian.getUnsignedByte(_fkp, papxOffset);
-        if(size == 0)
-        {
+        if (size == 0) {
             size = 2 * LittleEndian.getUnsignedByte(_fkp, ++papxOffset);
-        }
-        else
-        {
+        } else {
             size--;
         }
 

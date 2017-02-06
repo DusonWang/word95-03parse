@@ -18,8 +18,8 @@
 package org.apache.poi.hslf.model;
 
 
-import org.apache.poi.util.POILogger;
 import org.apache.poi.util.POILogFactory;
+import org.apache.poi.util.POILogger;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -32,29 +32,29 @@ import java.awt.geom.Rectangle2D;
 public final class ShapePainter {
     protected static POILogger logger = POILogFactory.getLogger(ShapePainter.class);
 
-    public static void paint(SimpleShape shape, Graphics2D graphics){
+    public static void paint(SimpleShape shape, Graphics2D graphics) {
         Rectangle2D anchor = shape.getLogicalAnchor2D();
         java.awt.Shape outline = shape.getOutline();
 
         //flip vertical
-        if(shape.getFlipVertical()){
+        if (shape.getFlipVertical()) {
             graphics.translate(anchor.getX(), anchor.getY() + anchor.getHeight());
             graphics.scale(1, -1);
             graphics.translate(-anchor.getX(), -anchor.getY());
         }
         //flip horizontal
-        if(shape.getFlipHorizontal()){
+        if (shape.getFlipHorizontal()) {
             graphics.translate(anchor.getX() + anchor.getWidth(), anchor.getY());
             graphics.scale(-1, 1);
-            graphics.translate(-anchor.getX() , -anchor.getY());
+            graphics.translate(-anchor.getX(), -anchor.getY());
         }
 
         //rotate transform
         double angle = shape.getRotation();
 
-        if(angle != 0){
-            double centerX = anchor.getX() + anchor.getWidth()/2;
-            double centerY = anchor.getY() + anchor.getHeight()/2;
+        if (angle != 0) {
+            double centerX = anchor.getX() + anchor.getWidth() / 2;
+            double centerY = anchor.getY() + anchor.getHeight() / 2;
 
             graphics.translate(centerX, centerY);
             graphics.rotate(Math.toRadians(angle));
@@ -71,14 +71,14 @@ public final class ShapePainter {
 
         //border
         Color lineColor = shape.getLineColor();
-        if (lineColor != null){
+        if (lineColor != null) {
             graphics.setPaint(lineColor);
-            float width = (float)shape.getLineWidth();
+            float width = (float) shape.getLineWidth();
 
             int dashing = shape.getLineDashing();
             //TODO: implement more dashing styles
             float[] dashptrn = null;
-            switch(dashing){
+            switch (dashing) {
                 case Line.PEN_SOLID:
                     dashptrn = null;
                     break;
@@ -86,9 +86,9 @@ public final class ShapePainter {
                     dashptrn = new float[]{width, width};
                     break;
                 case Line.PEN_DOTGEL:
-                    dashptrn = new float[]{width*4, width*3};
+                    dashptrn = new float[]{width * 4, width * 3};
                     break;
-               default:
+                default:
                     logger.log(POILogger.WARN, "unsupported dashing: " + dashing);
                     dashptrn = new float[]{width, width};
                     break;

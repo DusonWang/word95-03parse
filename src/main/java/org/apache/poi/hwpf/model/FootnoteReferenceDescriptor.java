@@ -47,9 +47,7 @@ public final class FootnoteReferenceDescriptor extends FRDAbstractType
         if (getClass() != obj.getClass())
             return false;
         FootnoteReferenceDescriptor other = (FootnoteReferenceDescriptor) obj;
-        if (field_1_nAuto != other.field_1_nAuto)
-            return false;
-        return true;
+        return field_1_nAuto == other.field_1_nAuto;
     }
 
     @Override

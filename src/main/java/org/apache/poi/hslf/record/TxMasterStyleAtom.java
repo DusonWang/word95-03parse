@@ -17,12 +17,14 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.hslf.model.textproperties.CharFlagsTextProp;
+import org.apache.poi.hslf.model.textproperties.ParagraphFlagsTextProp;
+import org.apache.poi.hslf.model.textproperties.TextProp;
+import org.apache.poi.hslf.model.textproperties.TextPropCollection;
 import org.apache.poi.util.LittleEndian;
 
-import java.io.OutputStream;
 import java.io.IOException;
-
-import org.apache.poi.hslf.model.textproperties.*;
+import java.io.OutputStream;
 
 /**
  * TxMasterStyleAtom atom (4003).
@@ -33,12 +35,12 @@ import org.apache.poi.hslf.model.textproperties.*;
  * except for the "other" style, which is in the Document.Environment container.
  * </p>
  * <p>
- *  This atom can store up to 5 pairs of paragraph+character styles,
- *  each pair describes an indent level. The first pair describes
- *  first-level paragraph with no indentation.
+ * This atom can store up to 5 pairs of paragraph+character styles,
+ * each pair describes an indent level. The first pair describes
+ * first-level paragraph with no indentation.
  * </p>
  *
- *  @author Yegor Kozlov
+ * @author Yegor Kozlov
  */
 public final class TxMasterStyleAtom extends RecordAtom {
 
@@ -46,9 +48,8 @@ public final class TxMasterStyleAtom extends RecordAtom {
      * Maximum number of indentatio levels allowed in PowerPoint documents
      */
     private static final int MAX_INDENT = 5;
-
-    private byte[] _header;
     private static long _type = 4003;
+    private byte[] _header;
     private byte[] _data;
 
     private TextPropCollection[] prstyles;
@@ -56,15 +57,15 @@ public final class TxMasterStyleAtom extends RecordAtom {
 
     protected TxMasterStyleAtom(byte[] source, int start, int len) {
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,_data.length);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, _data.length);
 
         //read available styles
         try {
             init();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -81,7 +82,7 @@ public final class TxMasterStyleAtom extends RecordAtom {
 
     /**
      * Write the contents of the record back, so it can be written
-     *  to disk
+     * to disk
      */
     public void writeOut(OutputStream out) throws IOException {
         // Write out the (new) header
@@ -97,7 +98,7 @@ public final class TxMasterStyleAtom extends RecordAtom {
      *
      * @return character styles defined in this record
      */
-    public TextPropCollection[] getCharacterStyles(){
+    public TextPropCollection[] getCharacterStyles() {
         return chstyles;
     }
 
@@ -106,7 +107,7 @@ public final class TxMasterStyleAtom extends RecordAtom {
      *
      * @return paragraph styles defined in this record
      */
-    public TextPropCollection[] getParagraphStyles(){
+    public TextPropCollection[] getParagraphStyles() {
         return prstyles;
     }
 
@@ -117,7 +118,7 @@ public final class TxMasterStyleAtom extends RecordAtom {
      * @return type of the text
      * @see TextHeaderAtom
      */
-    public int getTextType(){
+    public int getTextType() {
         //The atom instance value is the text type
         return LittleEndian.getShort(_header, 0) >> 4;
     }
@@ -125,7 +126,7 @@ public final class TxMasterStyleAtom extends RecordAtom {
     /**
      * parse the record data and initialize styles
      */
-    protected void init(){
+    protected void init() {
         //type of the text
         int type = getTextType();
 
@@ -139,7 +140,7 @@ public final class TxMasterStyleAtom extends RecordAtom {
         prstyles = new TextPropCollection[levels];
         chstyles = new TextPropCollection[levels];
 
-        for(short j = 0; j < levels; j++) {
+        for (short j = 0; j < levels; j++) {
 
             if (type >= TextHeaderAtom.CENTRE_BODY_TYPE) {
                 // Fetch the 2 byte value, that is safe to ignore for some types of text
@@ -150,13 +151,13 @@ public final class TxMasterStyleAtom extends RecordAtom {
             head = LittleEndian.getInt(_data, pos);
             pos += LittleEndian.INT_SIZE;
             TextPropCollection prprops = new TextPropCollection(0);
-            pos += prprops.buildTextPropList( head, getParagraphProps(type, j), _data, pos);
+            pos += prprops.buildTextPropList(head, getParagraphProps(type, j), _data, pos);
             prstyles[j] = prprops;
 
             head = LittleEndian.getInt(_data, pos);
             pos += LittleEndian.INT_SIZE;
             TextPropCollection chprops = new TextPropCollection(0);
-            pos += chprops.buildTextPropList( head, getCharacterProps(type, j), _data, pos);
+            pos += chprops.buildTextPropList(head, getCharacterProps(type, j), _data, pos);
             chstyles[j] = chprops;
         }
 
@@ -164,15 +165,15 @@ public final class TxMasterStyleAtom extends RecordAtom {
 
     /**
      * Paragraph properties for the specified text type and
-     *  indent level
+     * indent level
      * Depending on the level and type, it may be our special
-     *  ones, or the standard StyleTextPropAtom ones
+     * ones, or the standard StyleTextPropAtom ones
      */
-    protected TextProp[] getParagraphProps(int type, int level){
-        if (level != 0 || type >= MAX_INDENT){
+    protected TextProp[] getParagraphProps(int type, int level) {
+        if (level != 0 || type >= MAX_INDENT) {
             return StyleTextPropAtom.paragraphTextPropTypes;
         }
-        return new TextProp[] {
+        return new TextProp[]{
                 new ParagraphFlagsTextProp(),
                 new TextProp(2, 0x80, "bullet.char"),
                 new TextProp(2, 0x10, "bullet.font"),
@@ -195,15 +196,15 @@ public final class TxMasterStyleAtom extends RecordAtom {
 
     /**
      * Character properties for the specified text type and
-     *  indent level.
+     * indent level.
      * Depending on the level and type, it may be our special
-     *  ones, or the standard StyleTextPropAtom ones
+     * ones, or the standard StyleTextPropAtom ones
      */
-    protected TextProp[] getCharacterProps(int type, int level){
-        if (level != 0 || type >= MAX_INDENT){
+    protected TextProp[] getCharacterProps(int type, int level) {
+        if (level != 0 || type >= MAX_INDENT) {
             return StyleTextPropAtom.characterTextPropTypes;
         }
-        return new TextProp[] {
+        return new TextProp[]{
                 new CharFlagsTextProp(),
                 new TextProp(2, 0x10000, "font.index"),
                 new TextProp(2, 0x20000, "char_unknown_1"),

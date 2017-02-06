@@ -17,136 +17,139 @@
 
 package org.apache.poi.hsmf.datatypes;
 
+import org.apache.poi.hsmf.datatypes.Types.MAPIType;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.util.StringUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.poi.hsmf.datatypes.Types.MAPIType;
-import org.apache.poi.util.IOUtils;
-import org.apache.poi.util.StringUtil;
-
 /**
  * A Chunk made up of a single string.
  */
 public class StringChunk extends Chunk {
-   private static final String DEFAULT_ENCODING = "CP1252"; 
-   private String encoding7Bit = DEFAULT_ENCODING;
-   private byte[] rawValue;
-   private String value;
+    private static final String DEFAULT_ENCODING = "CP1252";
+    private String encoding7Bit = DEFAULT_ENCODING;
+    private byte[] rawValue;
+    private String value;
 
-   /**
-    * Creates a String Chunk.
-    */
-   public StringChunk(String namePrefix, int chunkId, MAPIType type) {
-      super(namePrefix, chunkId, type);
-   }
+    /**
+     * Creates a String Chunk.
+     */
+    public StringChunk(String namePrefix, int chunkId, MAPIType type) {
+        super(namePrefix, chunkId, type);
+    }
 
-   /**
-    * Create a String Chunk, with the specified
-    *  type.
-    */
-   public StringChunk(int chunkId, MAPIType type) {
-      super(chunkId, type);
-   }
+    /**
+     * Create a String Chunk, with the specified
+     * type.
+     */
+    public StringChunk(int chunkId, MAPIType type) {
+        super(chunkId, type);
+    }
 
-   /**
-    * Returns the Encoding that will be used to
-    *  decode any "7 bit" (non unicode) data.
-    * Most files default to CP1252
-    */
-   public String get7BitEncoding() {
-      return encoding7Bit;
-   }
+    /**
+     * Parses as non-unicode, supposedly 7 bit CP1252 data
+     * and returns the string that that yields.
+     */
+    protected static String parseAs7BitData(byte[] data) {
+        return parseAs7BitData(data, DEFAULT_ENCODING);
+    }
 
-   /**
-    * Sets the Encoding that will be used to
-    *  decode any "7 bit" (non unicode) data.
-    * This doesn't appear to be stored anywhere
-    *  specific in the file, so you may need
-    *  to guess by looking at headers etc
-    */
-   public void set7BitEncoding(String encoding) {
-      this.encoding7Bit = encoding;
+    /**
+     * Parses as non-unicode, supposedly 7 bit data
+     * and returns the string that that yields.
+     */
+    protected static String parseAs7BitData(byte[] data, String encoding) {
+        try {
+            return new String(data, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Encoding not found - " + encoding, e);
+        }
+    }
 
-      // Re-read the String if we're a 7 bit one
-      if(type == Types.ASCII_STRING) {
-         parseString();
-      }
-   }
+    /**
+     * Returns the Encoding that will be used to
+     * decode any "7 bit" (non unicode) data.
+     * Most files default to CP1252
+     */
+    public String get7BitEncoding() {
+        return encoding7Bit;
+    }
 
-   public void readValue(InputStream value) throws IOException {
-      rawValue = IOUtils.toByteArray(value);
-      parseString();
-   }
-   private void parseString() {
-      String tmpValue;
-      if (type == Types.ASCII_STRING) {
-         tmpValue = parseAs7BitData(rawValue, encoding7Bit);
-      } else if (type == Types.UNICODE_STRING) {
-         tmpValue = StringUtil.getFromUnicodeLE(rawValue);
-      } else {
-         throw new IllegalArgumentException("Invalid type " + type + " for String Chunk");
-      }
+    /**
+     * Sets the Encoding that will be used to
+     * decode any "7 bit" (non unicode) data.
+     * This doesn't appear to be stored anywhere
+     * specific in the file, so you may need
+     * to guess by looking at headers etc
+     */
+    public void set7BitEncoding(String encoding) {
+        this.encoding7Bit = encoding;
 
-      // Clean up
-      this.value = tmpValue.replace("\0", "");
-   }
+        // Re-read the String if we're a 7 bit one
+        if (type == Types.ASCII_STRING) {
+            parseString();
+        }
+    }
 
-   public void writeValue(OutputStream out) throws IOException {
-      out.write(rawValue);
-   }
-   private void storeString() {
-      if (type == Types.ASCII_STRING) {
-         try {
-            rawValue = value.getBytes(encoding7Bit);
-         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Encoding not found - " + encoding7Bit, e);
-         }
-      } else if (type == Types.UNICODE_STRING) {
-         rawValue = new byte[value.length()*2];
-         StringUtil.putUnicodeLE(value, rawValue, 0);
-      } else {
-         throw new IllegalArgumentException("Invalid type " + type + " for String Chunk");
-      }
-   }
+    public void readValue(InputStream value) throws IOException {
+        rawValue = IOUtils.toByteArray(value);
+        parseString();
+    }
 
-   /**
-    * Returns the Text value of the chunk
-    */
-   public String getValue() {
-      return this.value;
-   }
+    private void parseString() {
+        String tmpValue;
+        if (type == Types.ASCII_STRING) {
+            tmpValue = parseAs7BitData(rawValue, encoding7Bit);
+        } else if (type == Types.UNICODE_STRING) {
+            tmpValue = StringUtil.getFromUnicodeLE(rawValue);
+        } else {
+            throw new IllegalArgumentException("Invalid type " + type + " for String Chunk");
+        }
 
-   public byte[] getRawValue() {
-      return this.rawValue;
-   }
+        // Clean up
+        this.value = tmpValue.replace("\0", "");
+    }
 
-   public void setValue(String str) {
-      this.value = str;
-      storeString();
-   }
+    public void writeValue(OutputStream out) throws IOException {
+        out.write(rawValue);
+    }
 
-   public String toString() {
-      return this.value;
-   }
-   
-   /**
-    * Parses as non-unicode, supposedly 7 bit CP1252 data
-    *  and returns the string that that yields.
-    */
-   protected static String parseAs7BitData(byte[] data) {
-      return parseAs7BitData(data, DEFAULT_ENCODING);
-   }
-   /**
-    * Parses as non-unicode, supposedly 7 bit data
-    *  and returns the string that that yields.
-    */
-   protected static String parseAs7BitData(byte[] data, String encoding) {
-      try {
-         return new String(data, encoding);
-      } catch (UnsupportedEncodingException e) {
-         throw new RuntimeException("Encoding not found - " + encoding, e);
-      }
-   }
+    private void storeString() {
+        if (type == Types.ASCII_STRING) {
+            try {
+                rawValue = value.getBytes(encoding7Bit);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("Encoding not found - " + encoding7Bit, e);
+            }
+        } else if (type == Types.UNICODE_STRING) {
+            rawValue = new byte[value.length() * 2];
+            StringUtil.putUnicodeLE(value, rawValue, 0);
+        } else {
+            throw new IllegalArgumentException("Invalid type " + type + " for String Chunk");
+        }
+    }
+
+    /**
+     * Returns the Text value of the chunk
+     */
+    public String getValue() {
+        return this.value;
+    }
+
+    public void setValue(String str) {
+        this.value = str;
+        storeString();
+    }
+
+    public byte[] getRawValue() {
+        return this.rawValue;
+    }
+
+    public String toString() {
+        return this.value;
+    }
 }

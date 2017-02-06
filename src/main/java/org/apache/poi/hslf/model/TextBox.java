@@ -17,7 +17,8 @@
 
 package org.apache.poi.hslf.model;
 
-import org.apache.poi.ddf.*;
+import org.apache.poi.ddf.EscherContainerRecord;
+import org.apache.poi.ddf.EscherProperties;
 
 /**
  * Represents a TextFrame shape in PowerPoint.
@@ -33,10 +34,10 @@ public class TextBox extends TextShape {
     /**
      * Create a TextBox object and initialize it from the supplied Record container.
      *
-     * @param escherRecord       <code>EscherSpContainer</code> container which holds information about this shape
-     * @param parent    the parent of the shape
+     * @param escherRecord <code>EscherSpContainer</code> container which holds information about this shape
+     * @param parent       the parent of the shape
      */
-   protected TextBox(EscherContainerRecord escherRecord, Shape parent){
+    protected TextBox(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
 
     }
@@ -44,18 +45,17 @@ public class TextBox extends TextShape {
     /**
      * Create a new TextBox. This constructor is used when a new shape is created.
      *
-     * @param parent    the parent of this Shape. For example, if this text box is a cell
-     * in a table then the parent is Table.
+     * @param parent the parent of this Shape. For example, if this text box is a cell
+     *               in a table then the parent is Table.
      */
-    public TextBox(Shape parent){
+    public TextBox(Shape parent) {
         super(parent);
     }
 
     /**
      * Create a new TextBox. This constructor is used when a new shape is created.
-     *
      */
-    public TextBox(){
+    public TextBox() {
         this(null);
     }
 
@@ -64,7 +64,7 @@ public class TextBox extends TextShape {
      *
      * @return the created <code>EscherContainerRecord</code> which holds shape data
      */
-    protected EscherContainerRecord createSpContainer(boolean isChild){
+    protected EscherContainerRecord createSpContainer(boolean isChild) {
         _escherContainer = super.createSpContainer(isChild);
 
         setShapeType(ShapeTypes.TextBox);
@@ -82,7 +82,7 @@ public class TextBox extends TextShape {
         return _escherContainer;
     }
 
-    protected void setDefaultTextProperties(TextRun _txtrun){
+    protected void setDefaultTextProperties(TextRun _txtrun) {
         setVerticalAlignment(TextBox.AnchorTop);
         setEscherProperty(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 0x20002);
     }

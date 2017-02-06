@@ -17,27 +17,30 @@
 
 package org.apache.poi.hslf.model;
 
-import org.apache.poi.ddf.*;
+import org.apache.poi.ddf.EscherContainerRecord;
+import org.apache.poi.ddf.EscherOptRecord;
+import org.apache.poi.ddf.EscherProperties;
+import org.apache.poi.ddf.EscherSpRecord;
 
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Represents a line in a PowerPoint drawing
  *
- *  @author Yegor Kozlov
+ * @author Yegor Kozlov
  */
 public final class Line extends SimpleShape {
     /**
-    * Solid (continuous) pen
-    */
+     * Solid (continuous) pen
+     */
     public static final int PEN_SOLID = 1;
     /**
-     *  PS_DASH system   dash style
+     * PS_DASH system   dash style
      */
     public static final int PEN_PS_DASH = 2;
     /**
-     *  PS_DOT system   dash style
+     * PS_DOT system   dash style
      */
     public static final int PEN_DOT = 3;
     /**
@@ -49,15 +52,15 @@ public final class Line extends SimpleShape {
      */
     public static final int PEN_DASHDOTDOT = 5;
     /**
-     *  square dot style
+     * square dot style
      */
     public static final int PEN_DOTGEL = 6;
     /**
-     *  dash style
+     * dash style
      */
     public static final int PEN_DASH = 7;
     /**
-     *  long dash style
+     * long dash style
      */
     public static final int PEN_LONGDASHGEL = 8;
     /**
@@ -74,7 +77,7 @@ public final class Line extends SimpleShape {
     public static final int PEN_LONGDASHDOTDOTGEL = 11;
 
     /**
-     *  Single line (of width lineWidth)
+     * Single line (of width lineWidth)
      */
     public static final int LINE_SIMPLE = 0;
     /**
@@ -86,7 +89,7 @@ public final class Line extends SimpleShape {
      */
     public static final int LINE_THICKTHIN = 2;
     /**
-     *  Double lines, reverse order
+     * Double lines, reverse order
      */
     public static final int LINE_THINTHICK = 3;
     /**
@@ -95,20 +98,20 @@ public final class Line extends SimpleShape {
     public static final int LINE_TRIPLE = 4;
 
 
-    protected Line(EscherContainerRecord escherRecord, Shape parent){
+    protected Line(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
-    public Line(Shape parent){
+    public Line(Shape parent) {
         super(null, parent);
         _escherContainer = createSpContainer(parent instanceof ShapeGroup);
     }
 
-    public Line(){
+    public Line() {
         this(null);
     }
 
-    protected EscherContainerRecord createSpContainer(boolean isChild){
+    protected EscherContainerRecord createSpContainer(boolean isChild) {
         _escherContainer = super.createSpContainer(isChild);
 
         EscherSpRecord spRecord = _escherContainer.getChildById(EscherSpRecord.RECORD_ID);
@@ -116,7 +119,7 @@ public final class Line extends SimpleShape {
         spRecord.setOptions(type);
 
         //set default properties for a line
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
 
         //default line properties
         setEscherProperty(opt, EscherProperties.GEOMETRY__SHAPEPATH, 4);
@@ -129,7 +132,7 @@ public final class Line extends SimpleShape {
         return _escherContainer;
     }
 
-    public java.awt.Shape getOutline(){
+    public java.awt.Shape getOutline() {
         Rectangle2D anchor = getLogicalAnchor2D();
         return new Line2D.Double(anchor.getX(), anchor.getY(), anchor.getX() + anchor.getWidth(), anchor.getY() + anchor.getHeight());
     }

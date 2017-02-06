@@ -18,8 +18,8 @@
 package org.apache.poi.hslf.model;
 
 import org.apache.poi.ddf.*;
-import org.apache.poi.hslf.record.*;
 import org.apache.poi.hslf.exceptions.HSLFException;
+import org.apache.poi.hslf.record.*;
 import org.apache.poi.util.LittleEndian;
 
 import java.io.ByteArrayOutputStream;
@@ -28,8 +28,9 @@ import java.util.Iterator;
 
 /**
  * Represents an ActiveX control in a PowerPoint document.
- *
+ * <p>
  * TODO: finish
+ *
  * @author Yegor Kozlov
  */
 public final class ActiveXShape extends Picture {
@@ -38,21 +39,21 @@ public final class ActiveXShape extends Picture {
     /**
      * Create a new <code>Picture</code>
      *
-    * @param pictureIdx the index of the picture
+     * @param pictureIdx the index of the picture
      */
-    public ActiveXShape(int movieIdx, int pictureIdx){
+    public ActiveXShape(int movieIdx, int pictureIdx) {
         super(pictureIdx, null);
         setActiveXIndex(movieIdx);
     }
 
     /**
-      * Create a <code>Picture</code> object
-      *
-      * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
-      *        this picture in the <code>Slide</code>
-      * @param parent the parent shape of this picture
-      */
-     protected ActiveXShape(EscherContainerRecord escherRecord, Shape parent){
+     * Create a <code>Picture</code> object
+     *
+     * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
+     *                     this picture in the <code>Slide</code>
+     * @param parent       the parent shape of this picture
+     */
+    protected ActiveXShape(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
@@ -75,7 +76,7 @@ public final class ActiveXShape extends Picture {
         setEscherProperty(EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, -1);
 
         EscherClientDataRecord cldata = new EscherClientDataRecord();
-        cldata.setOptions((short)0xF);
+        cldata.setOptions((short) 0xF);
         _escherContainer.addChildRecord(cldata); // TODO unit test to prove getChildRecords().add is wrong
 
         OEShapeAtom oe = new OEShapeAtom();
@@ -84,7 +85,7 @@ public final class ActiveXShape extends Picture {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             oe.writeOut(out);
-        } catch(Exception e){
+        } catch (Exception e) {
             throw new HSLFException(e);
         }
         cldata.setRemainingData(out.toByteArray());
@@ -95,34 +96,35 @@ public final class ActiveXShape extends Picture {
     /**
      * Assign a control to this shape
      *
+     * @param idx the index of the movie
      * @see org.apache.poi.hslf.usermodel.SlideShow#addMovie(String, int)
-     * @param idx  the index of the movie
      */
-    public void setActiveXIndex(int idx){
+    public void setActiveXIndex(int idx) {
         EscherContainerRecord spContainer = getSpContainer();
-        for (Iterator<EscherRecord> it = spContainer.getChildIterator(); it.hasNext();) {
+        for (Iterator<EscherRecord> it = spContainer.getChildIterator(); it.hasNext(); ) {
             EscherRecord obj = it.next();
             if (obj.getRecordId() == EscherClientDataRecord.RECORD_ID) {
-                EscherClientDataRecord clientRecord = (EscherClientDataRecord)obj;
+                EscherClientDataRecord clientRecord = (EscherClientDataRecord) obj;
                 byte[] recdata = clientRecord.getRemainingData();
                 LittleEndian.putInt(recdata, 8, idx);
             }
         }
     }
 
-    public int getControlIndex(){
+    public int getControlIndex() {
         int idx = -1;
-        OEShapeAtom oe = (OEShapeAtom)getClientDataRecord(RecordTypes.OEShapeAtom.typeID);
-        if(oe != null) idx = oe.getOptions();
+        OEShapeAtom oe = (OEShapeAtom) getClientDataRecord(RecordTypes.OEShapeAtom.typeID);
+        if (oe != null) idx = oe.getOptions();
         return idx;
     }
 
     /**
      * Set a property of this ActiveX control
+     *
      * @param key
      * @param value
      */
-    public void setProperty(String key, String value){
+    public void setProperty(String key, String value) {
 
     }
 
@@ -131,17 +133,17 @@ public final class ActiveXShape extends Picture {
      *
      * @return container that specifies information about an ActiveX control
      */
-    public ExControl getExControl(){
+    public ExControl getExControl() {
         int idx = getControlIndex();
         ExControl ctrl = null;
         Document doc = getSheet().getSlideShow().getDocumentRecord();
-        ExObjList lst = (ExObjList)doc.findFirstOfType(RecordTypes.ExObjList.typeID);
-        if(lst != null){
+        ExObjList lst = (ExObjList) doc.findFirstOfType(RecordTypes.ExObjList.typeID);
+        if (lst != null) {
             Record[] ch = lst.getChildRecords();
             for (int i = 0; i < ch.length; i++) {
-                if(ch[i] instanceof ExControl){
-                    ExControl c = (ExControl)ch[i];
-                    if(c.getExOleObjAtom().getObjID() == idx){
+                if (ch[i] instanceof ExControl) {
+                    ExControl c = (ExControl) ch[i];
+                    if (c.getExOleObjAtom().getObjID() == idx) {
                         ctrl = c;
                         break;
                     }
@@ -151,7 +153,7 @@ public final class ActiveXShape extends Picture {
         return ctrl;
     }
 
-    protected void afterInsert(Sheet sheet){
+    protected void afterInsert(Sheet sheet) {
         ExControl ctrl = getExControl();
         ctrl.getExControlAtom().setSlideId(sheet._getSheetNumber());
 
@@ -159,9 +161,9 @@ public final class ActiveXShape extends Picture {
             String name = ctrl.getProgId() + "-" + getControlIndex();
             byte[] data = (name + '\u0000').getBytes("UTF-16LE");
             EscherComplexProperty prop = new EscherComplexProperty(EscherProperties.GROUPSHAPE__SHAPENAME, false, data);
-            EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+            EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
             opt.addEscherProperty(prop);
-        } catch (UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             throw new HSLFException(e);
         }
     }

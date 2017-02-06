@@ -28,9 +28,9 @@ public final class JPEG extends Bitmap {
 
     /**
      * @return type of  this picture
-     * @see  org.apache.poi.hslf.model.Picture#JPEG
+     * @see org.apache.poi.hslf.model.Picture#JPEG
      */
-    public int getType(){
+    public int getType() {
         return Picture.JPEG;
     }
 
@@ -39,7 +39,7 @@ public final class JPEG extends Bitmap {
      *
      * @return JPEG signature (<code>0x46A0</code>)
      */
-    public int getSignature(){
+    public int getSignature() {
         return 0x46A0;
     }
 }

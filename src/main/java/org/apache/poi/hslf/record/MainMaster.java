@@ -27,79 +27,88 @@ import java.util.ArrayList;
  * @author Yegor Kozlov
  */
 public final class MainMaster extends SheetContainer {
-	private byte[] _header;
-	private static long _type = 1016;
+    private static long _type = 1016;
+    private byte[] _header;
+    // Links to our more interesting children
+    private SlideAtom slideAtom;
+    private PPDrawing ppDrawing;
+    private TxMasterStyleAtom[] txmasters;
+    private ColorSchemeAtom[] clrscheme;
+    private ColorSchemeAtom _colorScheme;
 
-	// Links to our more interesting children
-	private SlideAtom slideAtom;
-	private PPDrawing ppDrawing;
-	private TxMasterStyleAtom[] txmasters;
-	private ColorSchemeAtom[] clrscheme;
-	private ColorSchemeAtom _colorScheme;
+    /**
+     * Set things up, and find our more interesting children
+     */
+    protected MainMaster(byte[] source, int start, int len) {
+        // Grab the header
+        _header = new byte[8];
+        System.arraycopy(source, start, _header, 0, 8);
 
-	/**
-	 * Returns the SlideAtom of this Slide
-	 */
-	public SlideAtom getSlideAtom() { return slideAtom; }
+        // Find our children
+        _children = Record.findChildRecords(source, start + 8, len - 8);
 
-	/**
-	 * Returns the PPDrawing of this Slide, which has all the
-	 *  interesting data in it
-	 */
-	public PPDrawing getPPDrawing() { return ppDrawing; }
+        ArrayList<TxMasterStyleAtom> tx = new ArrayList<TxMasterStyleAtom>();
+        ArrayList<ColorSchemeAtom> clr = new ArrayList<ColorSchemeAtom>();
+        // Find the interesting ones in there
+        for (int i = 0; i < _children.length; i++) {
+            if (_children[i] instanceof SlideAtom) {
+                slideAtom = (SlideAtom) _children[i];
+            } else if (_children[i] instanceof PPDrawing) {
+                ppDrawing = (PPDrawing) _children[i];
+            } else if (_children[i] instanceof TxMasterStyleAtom) {
+                tx.add((TxMasterStyleAtom) _children[i]);
+            } else if (_children[i] instanceof ColorSchemeAtom) {
+                clr.add((ColorSchemeAtom) _children[i]);
+            }
 
-	public TxMasterStyleAtom[] getTxMasterStyleAtoms() { return txmasters; }
+            if (ppDrawing != null && _children[i] instanceof ColorSchemeAtom) {
+                _colorScheme = (ColorSchemeAtom) _children[i];
+            }
 
-	public ColorSchemeAtom[] getColorSchemeAtoms() { return clrscheme; }
+        }
+        txmasters = tx.toArray(new TxMasterStyleAtom[tx.size()]);
+        clrscheme = clr.toArray(new ColorSchemeAtom[clr.size()]);
+    }
 
-	/**
-	 * Set things up, and find our more interesting children
-	 */
-	protected MainMaster(byte[] source, int start, int len) {
-		// Grab the header
-		_header = new byte[8];
-		System.arraycopy(source,start,_header,0,8);
+    /**
+     * Returns the SlideAtom of this Slide
+     */
+    public SlideAtom getSlideAtom() {
+        return slideAtom;
+    }
 
-		// Find our children
-		_children = Record.findChildRecords(source,start+8,len-8);
+    /**
+     * Returns the PPDrawing of this Slide, which has all the
+     * interesting data in it
+     */
+    public PPDrawing getPPDrawing() {
+        return ppDrawing;
+    }
 
-		ArrayList<TxMasterStyleAtom> tx = new ArrayList<TxMasterStyleAtom>();
-		ArrayList<ColorSchemeAtom> clr = new ArrayList<ColorSchemeAtom>();
-		// Find the interesting ones in there
-		for(int i=0; i<_children.length; i++) {
-			if(_children[i] instanceof SlideAtom) {
-				slideAtom = (SlideAtom)_children[i];
-			} else if(_children[i] instanceof PPDrawing) {
-				ppDrawing = (PPDrawing)_children[i];
-			} else if(_children[i] instanceof TxMasterStyleAtom) {
-				tx.add( (TxMasterStyleAtom)_children[i] );
-			} else if(_children[i] instanceof ColorSchemeAtom) {
-				clr.add( (ColorSchemeAtom)_children[i] );
-			}
+    public TxMasterStyleAtom[] getTxMasterStyleAtoms() {
+        return txmasters;
+    }
 
-			if(ppDrawing != null && _children[i] instanceof ColorSchemeAtom) {
-				_colorScheme = (ColorSchemeAtom)_children[i];
-			}
+    public ColorSchemeAtom[] getColorSchemeAtoms() {
+        return clrscheme;
+    }
 
-		}
-		txmasters = tx.toArray(new TxMasterStyleAtom[tx.size()]);
-		clrscheme = clr.toArray(new ColorSchemeAtom[clr.size()]);
-	}
+    /**
+     * We are of type 1016
+     */
+    public long getRecordType() {
+        return _type;
+    }
 
-	/**
-	 * We are of type 1016
-	 */
-	public long getRecordType() { return _type; }
+    /**
+     * Write the contents of the record back, so it can be written
+     * to disk
+     */
+    public void writeOut(OutputStream out) throws IOException {
+        writeOut(_header[0], _header[1], _type, _children, out);
+    }
 
-	/**
-	 * Write the contents of the record back, so it can be written
-	 *  to disk
-	 */
-	public void writeOut(OutputStream out) throws IOException {
-		writeOut(_header[0],_header[1],_type,_children,out);
-	}
-
-	public ColorSchemeAtom getColorScheme(){
-		return _colorScheme;
-	}
+    public ColorSchemeAtom getColorScheme() {
+        return _colorScheme;
+    }
 }

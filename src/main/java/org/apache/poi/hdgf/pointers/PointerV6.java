@@ -21,25 +21,29 @@ package org.apache.poi.hdgf.pointers;
  * A Pointer from v6+
  */
 public final class PointerV6 extends Pointer {
-	public boolean destinationHasStrings() {
-		return (0x40 <= format && format < 0x50);
-	}
-	public boolean destinationHasPointers() {
-		if(type == 20) return true;
-		if(format == 0x1d || format == 0x1e) return true;
-		return (0x50 <= format && format < 0x60);
-	}
-	public boolean destinationHasChunks() {
-		return (0xd0 <= format && format < 0xdf);
-	}
+    public boolean destinationHasStrings() {
+        return (0x40 <= format && format < 0x50);
+    }
 
-	public boolean destinationCompressed() {
-		// Apparently, it's the second least significant bit
-		return (format & 2) > 0;
-	}
+    public boolean destinationHasPointers() {
+        if (type == 20) return true;
+        if (format == 0x1d || format == 0x1e) return true;
+        return (0x50 <= format && format < 0x60);
+    }
 
-	/**
-	 * With v6 pointers, the on-disk size is 18 bytes
-	 */
-	public int getSizeInBytes() { return 18; }
+    public boolean destinationHasChunks() {
+        return (0xd0 <= format && format < 0xdf);
+    }
+
+    public boolean destinationCompressed() {
+        // Apparently, it's the second least significant bit
+        return (format & 2) > 0;
+    }
+
+    /**
+     * With v6 pointers, the on-disk size is 18 bytes
+     */
+    public int getSizeInBytes() {
+        return 18;
+    }
 }

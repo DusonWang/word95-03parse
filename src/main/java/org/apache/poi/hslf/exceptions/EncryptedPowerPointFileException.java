@@ -21,11 +21,10 @@ import org.apache.poi.EncryptedDocumentException;
 
 /**
  * This exception is thrown when we try to open a PowerPoint file, and
- *  discover that it is encrypted
+ * discover that it is encrypted
  */
-public final class EncryptedPowerPointFileException extends EncryptedDocumentException
-{
-	public EncryptedPowerPointFileException(String s) {
-		super(s);
-	}
+public final class EncryptedPowerPointFileException extends EncryptedDocumentException {
+    public EncryptedPowerPointFileException(String s) {
+        super(s);
+    }
 }

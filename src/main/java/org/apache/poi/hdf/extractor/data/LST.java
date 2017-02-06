@@ -23,15 +23,13 @@ package org.apache.poi.hdf.extractor.data;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class LST
-{
-  int _lsid;
-  int _tplc;
-  byte[] _rgistd = new byte[18];
-  boolean _fSimpleList;
-  LVL[] _levels;
+public final class LST {
+    int _lsid;
+    int _tplc;
+    byte[] _rgistd = new byte[18];
+    boolean _fSimpleList;
+    LVL[] _levels;
 
-  public LST()
-  {
-  }
+    public LST() {
+    }
 }

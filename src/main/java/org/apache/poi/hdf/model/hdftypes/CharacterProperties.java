@@ -18,40 +18,40 @@
 package org.apache.poi.hdf.model.hdftypes;
 
 import org.apache.poi.hdf.model.hdftypes.definitions.CHPAbstractType;
+
 /**
  * Properties for character runs.
  *
  * @author Ryan Ackley
  */
 @Deprecated
-public final class CharacterProperties extends CHPAbstractType implements Cloneable
-{
+public final class CharacterProperties extends CHPAbstractType implements Cloneable {
 
-  public CharacterProperties()
-  {
-    setDttmRMark(new short[2]);
-    setDttmRMarkDel(new short[2]);
-    setXstDispFldRMark(new byte[32]);
-    setBrc(new short[2]);;
-    setHps(20);
-    setFcPic(-1);
-    setIstd(10);
-    setLidFE(0x0400);
-    setLidDefault(0x0400);
-    setWCharScale(100);
-    //setFUsePgsuSettings(-1);
-  }
-  /**
-   * Used to make a deep copy of this object.
-   */
-  public Object clone() throws CloneNotSupportedException
-  {
-    CharacterProperties clone = (CharacterProperties)super.clone();
-    clone.setBrc(new short[2]);
-    System.arraycopy(getBrc(), 0, clone.getBrc(), 0, 2);
-    System.arraycopy(getDttmRMark(), 0, clone.getDttmRMark(), 0, 2);
-    System.arraycopy(getDttmRMarkDel(), 0, clone.getDttmRMarkDel(), 0, 2);
-    System.arraycopy(getXstDispFldRMark(), 0, clone.getXstDispFldRMark(), 0, 32);
-    return clone;
-  }
+    public CharacterProperties() {
+        setDttmRMark(new short[2]);
+        setDttmRMarkDel(new short[2]);
+        setXstDispFldRMark(new byte[32]);
+        setBrc(new short[2]);
+        ;
+        setHps(20);
+        setFcPic(-1);
+        setIstd(10);
+        setLidFE(0x0400);
+        setLidDefault(0x0400);
+        setWCharScale(100);
+        //setFUsePgsuSettings(-1);
+    }
+
+    /**
+     * Used to make a deep copy of this object.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        CharacterProperties clone = (CharacterProperties) super.clone();
+        clone.setBrc(new short[2]);
+        System.arraycopy(getBrc(), 0, clone.getBrc(), 0, 2);
+        System.arraycopy(getDttmRMark(), 0, clone.getDttmRMark(), 0, 2);
+        System.arraycopy(getDttmRMarkDel(), 0, clone.getDttmRMarkDel(), 0, 2);
+        System.arraycopy(getXstDispFldRMark(), 0, clone.getXstDispFldRMark(), 0, 32);
+        return clone;
+    }
 }

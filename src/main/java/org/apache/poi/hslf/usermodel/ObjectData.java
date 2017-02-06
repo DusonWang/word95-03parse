@@ -16,10 +16,10 @@
 ==================================================================== */
 package org.apache.poi.hslf.usermodel;
 
-import java.io.InputStream;
-import java.io.IOException;
-
 import org.apache.poi.hslf.record.ExOleObjStg;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A class that represents object data embedded in a slide show.
@@ -55,8 +55,8 @@ public class ObjectData {
      *
      * @param data the embedded data.
      */
-     public void setData(byte[] data) throws IOException {
-        storage.setData(data);    
+    public void setData(byte[] data) throws IOException {
+        storage.setData(data);
     }
 
     /**

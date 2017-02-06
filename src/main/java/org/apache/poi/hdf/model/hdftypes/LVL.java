@@ -23,43 +23,38 @@ package org.apache.poi.hdf.model.hdftypes;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class LVL
-{
-  public int _iStartAt;
-  public byte _nfc;
-  byte _jc;
-  boolean _fLegal;
-  boolean _fNoRestart;
-  boolean _fPrev;
-  boolean _fPrevSpace;
-  boolean _fWord6;
-  public byte[] _rgbxchNums = new byte[9];
-  public byte _ixchFollow;
-  public int _dxaSpace;
-  public int _dxaIndent;
-  public byte[] _chpx;
-  public byte[] _papx;
-  public char[] _xst;
-  public short _istd;
+public final class LVL {
+    public int _iStartAt;
+    public byte _nfc;
+    public byte[] _rgbxchNums = new byte[9];
+    public byte _ixchFollow;
+    public int _dxaSpace;
+    public int _dxaIndent;
+    public byte[] _chpx;
+    public byte[] _papx;
+    public char[] _xst;
+    public short _istd;
+    byte _jc;
+    boolean _fLegal;
+    boolean _fNoRestart;
+    boolean _fPrev;
+    boolean _fPrevSpace;
+    boolean _fWord6;
 
-  //byte _cbGrpprlChpx;
-  //byte _cbGrpprlPapx;
+    //byte _cbGrpprlChpx;
+    //byte _cbGrpprlPapx;
 
 
-  public LVL()
-  {
-  }
-  public Object clone()
-  {
-    LVL obj = null;
-    try
-    {
-      obj = (LVL)super.clone();
+    public LVL() {
     }
-    catch(Exception e)
-    {
-      e.printStackTrace();
+
+    public Object clone() {
+        LVL obj = null;
+        try {
+            obj = (LVL) super.clone();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
-    return obj;
-  }
 }

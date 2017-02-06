@@ -19,8 +19,8 @@ package org.apache.poi.hslf.record;
 
 import org.apache.poi.util.LittleEndian;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * OEPlaceholderAtom (3998).
@@ -53,10 +53,10 @@ public final class OutlineTextRefAtom extends RecordAtom {
     protected OutlineTextRefAtom(byte[] source, int start, int len) {
         // Get the header
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Grab the record data
-        _index = LittleEndian.getInt(source, start+8);
+        _index = LittleEndian.getInt(source, start + 8);
     }
 
     /**
@@ -67,7 +67,7 @@ public final class OutlineTextRefAtom extends RecordAtom {
 
         _header = new byte[8];
         LittleEndian.putUShort(_header, 0, 0);
-        LittleEndian.putUShort(_header, 2, (int)getRecordType());
+        LittleEndian.putUShort(_header, 2, (int) getRecordType());
         LittleEndian.putInt(_header, 4, 4);
     }
 
@@ -87,23 +87,23 @@ public final class OutlineTextRefAtom extends RecordAtom {
     }
 
     /**
-     * Sets text's index within the SlideListWithText container
-     * (0 for title, 1..n for the nth body).
-     *
-     * @param idx 0-based text's index
-     */
-    public void setTextIndex(int idx){
-        _index = idx;
-    }
-
-    /**
      * Return text's index within the SlideListWithText container
      * (0 for title, 1..n for the nth body).
      *
      * @return idx text's index
      */
-    public int getTextIndex(){
+    public int getTextIndex() {
         return _index;
+    }
+
+    /**
+     * Sets text's index within the SlideListWithText container
+     * (0 for title, 1..n for the nth body).
+     *
+     * @param idx 0-based text's index
+     */
+    public void setTextIndex(int idx) {
+        _index = idx;
     }
 
 }

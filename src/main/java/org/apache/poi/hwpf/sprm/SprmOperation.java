@@ -55,6 +55,7 @@ public final class SprmOperation {
     private byte[] _grpprl;
     private int _size;
     private short _value;
+
     public SprmOperation(byte[] grpprl, int offset) {
         _grpprl = grpprl;
         _value = LittleEndian.getShort(grpprl, offset);

@@ -20,12 +20,13 @@ package org.apache.poi.sl.usermodel;
 import java.awt.geom.Rectangle2D;
 
 public interface Shape {
-	public int getShapeType();
+    public int getShapeType();
 
-	public Rectangle2D getAnchor();
-	public void setAnchor(Rectangle2D anchor);
+    public Rectangle2D getAnchor();
 
-	public void moveTo(float x, float y);
+    public void setAnchor(Rectangle2D anchor);
 
-	public Shape getParent();
+    public void moveTo(float x, float y);
+
+    public Shape getParent();
 }

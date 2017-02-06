@@ -17,8 +17,6 @@
 
 package org.apache.poi.hmef.attribute;
 
-import java.util.Date;
-
 import org.apache.poi.hmef.Attachment;
 import org.apache.poi.hmef.HMEFMessage;
 import org.apache.poi.hpsf.Util;
@@ -27,47 +25,49 @@ import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.POILogFactory;
 import org.apache.poi.util.POILogger;
 
+import java.util.Date;
+
 /**
- * A pure-MAPI attribute holding a Date, which applies 
- *  to a {@link HMEFMessage} or one of its {@link Attachment}s.
+ * A pure-MAPI attribute holding a Date, which applies
+ * to a {@link HMEFMessage} or one of its {@link Attachment}s.
  */
 public final class MAPIDateAttribute extends MAPIAttribute {
-   private static POILogger logger = POILogFactory.getLogger(MAPIDateAttribute.class);
-   private Date data;
-   
-   /**
-    * Constructs a single new date attribute from the id, type,
-    *  and the contents of the stream
-    */
-   protected MAPIDateAttribute(MAPIProperty property, int type, byte[] data) {
-      super(property, type, data);
-      
-      // The value is a 64 bit Windows Filetime
-      this.data = Util.filetimeToDate(
-            LittleEndian.getLong(data, 0)
-      );
-   }
+    private static POILogger logger = POILogFactory.getLogger(MAPIDateAttribute.class);
+    private Date data;
 
-   public Date getDate() {
-      return this.data;
-   }
-   
-   public String toString() {
-      return getProperty().toString() + " " + data.toString();
-   }
-   
-   /**
-    * Returns the Date of a Attribute, converting as appropriate
-    */
-   public static Date getAsDate(MAPIAttribute attr) {
-      if(attr == null) {
-         return null;
-      }
-      if(attr instanceof MAPIDateAttribute) {
-         return ((MAPIDateAttribute)attr).getDate();
-      }
-      
-      logger.log(POILogger.WARN, "Warning, non date property found: " + attr.toString());
-      return null;
-  }
+    /**
+     * Constructs a single new date attribute from the id, type,
+     * and the contents of the stream
+     */
+    protected MAPIDateAttribute(MAPIProperty property, int type, byte[] data) {
+        super(property, type, data);
+
+        // The value is a 64 bit Windows Filetime
+        this.data = Util.filetimeToDate(
+                LittleEndian.getLong(data, 0)
+        );
+    }
+
+    /**
+     * Returns the Date of a Attribute, converting as appropriate
+     */
+    public static Date getAsDate(MAPIAttribute attr) {
+        if (attr == null) {
+            return null;
+        }
+        if (attr instanceof MAPIDateAttribute) {
+            return ((MAPIDateAttribute) attr).getDate();
+        }
+
+        logger.log(POILogger.WARN, "Warning, non date property found: " + attr.toString());
+        return null;
+    }
+
+    public Date getDate() {
+        return this.data;
+    }
+
+    public String toString() {
+        return getProperty().toString() + " " + data.toString();
+    }
 }

@@ -26,6 +26,7 @@ import org.apache.poi.util.Internal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Based on AbstractEscherRecordHolder from HSSF.
@@ -37,7 +38,7 @@ public final class EscherRecordHolder {
     private final ArrayList<EscherRecord> escherRecords;
 
     public EscherRecordHolder() {
-        escherRecords = new ArrayList<EscherRecord>();
+        escherRecords = new ArrayList<>();
     }
 
     public EscherRecordHolder(byte[] data, int offset, int size) {
@@ -47,16 +48,14 @@ public final class EscherRecordHolder {
 
     private static EscherRecord findFirstWithId(short id, List<EscherRecord> records) {
         // Check at our level
-        for (Iterator<EscherRecord> it = records.iterator(); it.hasNext(); ) {
-            EscherRecord r = it.next();
+        for (EscherRecord r : records) {
             if (r.getRecordId() == id) {
                 return r;
             }
         }
 
         // Then check our children in turn
-        for (Iterator<EscherRecord> it = records.iterator(); it.hasNext(); ) {
-            EscherRecord r = it.next();
+        for (EscherRecord r : records) {
             if (r.isContainerRecord()) {
                 EscherRecord found = findFirstWithId(id, r.getChildRecords());
                 if (found != null) {
@@ -85,14 +84,12 @@ public final class EscherRecordHolder {
     }
 
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         if (escherRecords.size() == 0) {
             buffer.append("No Escher Records Decoded").append("\n");
         }
-        Iterator<EscherRecord> iterator = escherRecords.iterator();
-        while (iterator.hasNext()) {
-            EscherRecord r = iterator.next();
+        for (EscherRecord r : escherRecords) {
             buffer.append(r.toString());
         }
         return buffer.toString();
@@ -104,8 +101,7 @@ public final class EscherRecordHolder {
      * then return that.
      */
     public EscherContainerRecord getEscherContainer() {
-        for (Iterator<EscherRecord> it = escherRecords.iterator(); it.hasNext(); ) {
-            Object er = it.next();
+        for (EscherRecord er : escherRecords) {
             if (er instanceof EscherContainerRecord) {
                 return (EscherContainerRecord) er;
             }
@@ -123,62 +119,42 @@ public final class EscherRecordHolder {
     }
 
     public List<? extends EscherContainerRecord> getDgContainers() {
-        List<EscherContainerRecord> dgContainers = new ArrayList<EscherContainerRecord>(
+        List<EscherContainerRecord> dgContainers = new ArrayList<>(
                 1);
-        for (EscherRecord escherRecord : getEscherRecords()) {
-            if (escherRecord.getRecordId() == (short) 0xF002) {
-                dgContainers.add((EscherContainerRecord) escherRecord);
-            }
-        }
+        dgContainers.addAll(getEscherRecords().stream().filter(escherRecord -> escherRecord.getRecordId() == (short) 0xF002).map(escherRecord -> (EscherContainerRecord) escherRecord).collect(Collectors.toList()));
         return dgContainers;
     }
 
     public List<? extends EscherContainerRecord> getDggContainers() {
-        List<EscherContainerRecord> dggContainers = new ArrayList<EscherContainerRecord>(
+        List<EscherContainerRecord> dggContainers = new ArrayList<>(
                 1);
-        for (EscherRecord escherRecord : getEscherRecords()) {
-            if (escherRecord.getRecordId() == (short) 0xF000) {
-                dggContainers.add((EscherContainerRecord) escherRecord);
-            }
-        }
+        dggContainers.addAll(getEscherRecords().stream().filter(escherRecord -> escherRecord.getRecordId() == (short) 0xF000).map(escherRecord -> (EscherContainerRecord) escherRecord).collect(Collectors.toList()));
         return dggContainers;
     }
 
     public List<? extends EscherContainerRecord> getBStoreContainers() {
-        List<EscherContainerRecord> bStoreContainers = new ArrayList<EscherContainerRecord>(
+        List<EscherContainerRecord> bStoreContainers = new ArrayList<>(
                 1);
         for (EscherContainerRecord dggContainer : getDggContainers()) {
-            for (EscherRecord escherRecord : dggContainer.getChildRecords()) {
-                if (escherRecord.getRecordId() == (short) 0xF001) {
-                    bStoreContainers.add((EscherContainerRecord) escherRecord);
-                }
-            }
+            bStoreContainers.addAll(dggContainer.getChildRecords().stream().filter(escherRecord -> escherRecord.getRecordId() == (short) 0xF001).map(escherRecord -> (EscherContainerRecord) escherRecord).collect(Collectors.toList()));
         }
         return bStoreContainers;
     }
 
     public List<? extends EscherContainerRecord> getSpgrContainers() {
-        List<EscherContainerRecord> spgrContainers = new ArrayList<EscherContainerRecord>(
+        List<EscherContainerRecord> spgrContainers = new ArrayList<>(
                 1);
         for (EscherContainerRecord dgContainer : getDgContainers()) {
-            for (EscherRecord escherRecord : dgContainer.getChildRecords()) {
-                if (escherRecord.getRecordId() == (short) 0xF003) {
-                    spgrContainers.add((EscherContainerRecord) escherRecord);
-                }
-            }
+            spgrContainers.addAll(dgContainer.getChildRecords().stream().filter(escherRecord -> escherRecord.getRecordId() == (short) 0xF003).map(escherRecord -> (EscherContainerRecord) escherRecord).collect(Collectors.toList()));
         }
         return spgrContainers;
     }
 
     public List<? extends EscherContainerRecord> getSpContainers() {
-        List<EscherContainerRecord> spContainers = new ArrayList<EscherContainerRecord>(
+        List<EscherContainerRecord> spContainers = new ArrayList<>(
                 1);
         for (EscherContainerRecord spgrContainer : getSpgrContainers()) {
-            for (EscherRecord escherRecord : spgrContainer.getChildRecords()) {
-                if (escherRecord.getRecordId() == (short) 0xF004) {
-                    spContainers.add((EscherContainerRecord) escherRecord);
-                }
-            }
+            spContainers.addAll(spgrContainer.getChildRecords().stream().filter(escherRecord -> escherRecord.getRecordId() == (short) 0xF004).map(escherRecord -> (EscherContainerRecord) escherRecord).collect(Collectors.toList()));
         }
         return spContainers;
     }

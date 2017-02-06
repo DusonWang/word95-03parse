@@ -91,6 +91,7 @@ public class Paragraph extends Range implements Cloneable {
     protected short _istd;
     protected ParagraphProperties _props;
     protected SprmBuffer _papx;
+
     @Deprecated
     protected Paragraph(int startIdxInclusive, int endIdxExclusive,
                         Table parent) {
@@ -102,6 +103,7 @@ public class Paragraph extends Range implements Cloneable {
         _papx = papx.getSprmBuf();
         _istd = papx.getIstd();
     }
+
     @Deprecated
     protected Paragraph(PAPX papx, Range parent) {
         super(Math.max(parent._start, papx.getStart()), Math.min(
@@ -202,6 +204,12 @@ public class Paragraph extends Range implements Cloneable {
      */
     public boolean isTableRowEnd() {
         return _props.getFTtp() || _props.getFTtpEmbedded();
+    }
+
+    void setTableRowEnd(TableProperties props) {
+        setTableRowEnd(true);
+        byte[] grpprl = TableSprmCompressor.compressTableProperty(props);
+        _papx.append(grpprl);
     }
 
     private void setTableRowEnd(boolean val) {
@@ -480,12 +488,6 @@ public class Paragraph extends Range implements Cloneable {
      */
     public int getLvl() {
         return _props.getLvl();
-    }
-
-    void setTableRowEnd(TableProperties props) {
-        setTableRowEnd(true);
-        byte[] grpprl = TableSprmCompressor.compressTableProperty(props);
-        _papx.append(grpprl);
     }
 
     /**

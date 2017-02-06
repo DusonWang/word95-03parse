@@ -17,13 +17,16 @@
 
 package org.apache.poi.hslf.model;
 
-import org.apache.poi.ddf.*;
-import org.apache.poi.hslf.usermodel.SlideShow;
-import org.apache.poi.hslf.usermodel.ObjectData;
+import org.apache.poi.ddf.EscherContainerRecord;
+import org.apache.poi.ddf.EscherProperties;
+import org.apache.poi.ddf.EscherSpRecord;
+import org.apache.poi.ddf.UnknownEscherRecord;
+import org.apache.poi.hslf.record.ExEmbed;
 import org.apache.poi.hslf.record.ExObjList;
 import org.apache.poi.hslf.record.Record;
-import org.apache.poi.hslf.record.ExEmbed;
 import org.apache.poi.hslf.record.RecordTypes;
+import org.apache.poi.hslf.usermodel.ObjectData;
+import org.apache.poi.hslf.usermodel.SlideShow;
 import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.POILogger;
 
@@ -39,16 +42,16 @@ public final class OLEShape extends Picture {
     /**
      * Create a new <code>OLEShape</code>
      *
-    * @param idx the index of the picture
+     * @param idx the index of the picture
      */
-    public OLEShape(int idx){
+    public OLEShape(int idx) {
         super(idx);
     }
 
     /**
      * Create a new <code>OLEShape</code>
      *
-     * @param idx the index of the picture
+     * @param idx    the index of the picture
      * @param parent the parent shape
      */
     public OLEShape(int idx, Shape parent) {
@@ -56,13 +59,13 @@ public final class OLEShape extends Picture {
     }
 
     /**
-      * Create a <code>OLEShape</code> object
-      *
-      * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
-      *        this picture in the <code>Slide</code>
-      * @param parent the parent shape of this picture
-      */
-     protected OLEShape(EscherContainerRecord escherRecord, Shape parent){
+     * Create a <code>OLEShape</code> object
+     *
+     * @param escherRecord the <code>EscherSpContainer</code> record which holds information about
+     *                     this picture in the <code>Slide</code>
+     * @param parent       the parent shape of this picture
+     */
+    protected OLEShape(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
@@ -71,68 +74,68 @@ public final class OLEShape extends Picture {
      *
      * @return the unique identifier for the OLE object
      */
-    public int getObjectID(){
+    public int getObjectID() {
         return getEscherProperty(EscherProperties.BLIP__PICTUREID);
     }
 
     /**
      * Set the unique identifier for the OLE object and
      * register it in the necessary structures
-     * 
+     *
      * @param objectId the unique identifier for the OLE object
      */
-    public void setObjectID(int objectId){
-    	setEscherProperty(EscherProperties.BLIP__PICTUREID, objectId);
-    	
-    	EscherContainerRecord ecr = getSpContainer();
-    	EscherSpRecord spRecord = ecr.getChildById(EscherSpRecord.RECORD_ID);
-        spRecord.setFlags(spRecord.getFlags()|EscherSpRecord.FLAG_OLESHAPE);
+    public void setObjectID(int objectId) {
+        setEscherProperty(EscherProperties.BLIP__PICTUREID, objectId);
 
-        EscherContainerRecord uerCont = ecr.getChildById((short)RecordTypes.EscherClientData);
+        EscherContainerRecord ecr = getSpContainer();
+        EscherSpRecord spRecord = ecr.getChildById(EscherSpRecord.RECORD_ID);
+        spRecord.setFlags(spRecord.getFlags() | EscherSpRecord.FLAG_OLESHAPE);
+
+        EscherContainerRecord uerCont = ecr.getChildById((short) RecordTypes.EscherClientData);
         if (uerCont == null) {
-        	uerCont = new EscherContainerRecord();
-        	ecr.addChildRecord(uerCont);
+            uerCont = new EscherContainerRecord();
+            ecr.addChildRecord(uerCont);
         }
-        uerCont.setRecordId((short)RecordTypes.EscherClientData);
-        uerCont.setVersion((short)0x000F); // yes, we are still a container ...
+        uerCont.setRecordId((short) RecordTypes.EscherClientData);
+        uerCont.setVersion((short) 0x000F); // yes, we are still a container ...
 
-        UnknownEscherRecord uer = uerCont.getChildById((short)RecordTypes.ExObjRefAtom.typeID);
+        UnknownEscherRecord uer = uerCont.getChildById((short) RecordTypes.ExObjRefAtom.typeID);
         if (uer == null) {
-        	uer = new UnknownEscherRecord();
-        	uerCont.addChildRecord(uer);
+            uer = new UnknownEscherRecord();
+            uerCont.addChildRecord(uer);
         }
-        
+
         byte uerData[] = new byte[12];
-        LittleEndian.putShort( uerData, 0, (short)0 ); // options = 0
-        LittleEndian.putShort( uerData, 2, (short)RecordTypes.ExObjRefAtom.typeID); // recordId
-        LittleEndian.putInt( uerData, 4, 4 ); // remaining bytes
-        LittleEndian.putInt( uerData, 8, objectId ); // the data
-        uer.fillFields(uerData, 0, null);        
+        LittleEndian.putShort(uerData, 0, (short) 0); // options = 0
+        LittleEndian.putShort(uerData, 2, (short) RecordTypes.ExObjRefAtom.typeID); // recordId
+        LittleEndian.putInt(uerData, 4, 4); // remaining bytes
+        LittleEndian.putInt(uerData, 8, objectId); // the data
+        uer.fillFields(uerData, 0, null);
     }
-    
-    
+
+
     /**
      * Returns unique identifier for the OLE object.
      *
      * @return the unique identifier for the OLE object
      */
-    public ObjectData getObjectData(){
+    public ObjectData getObjectData() {
         SlideShow ppt = getSheet().getSlideShow();
         ObjectData[] ole = ppt.getEmbeddedObjects();
 
         //persist reference
         ExEmbed exEmbed = getExEmbed();
         ObjectData data = null;
-        if(exEmbed != null) {
+        if (exEmbed != null) {
             int ref = exEmbed.getExOleObjAtom().getObjStgDataRef();
 
             for (int i = 0; i < ole.length; i++) {
-                if(ole[i].getExOleObjStg().getPersistId() == ref) {
-                    data=ole[i];
+                if (ole[i].getExOleObjStg().getPersistId() == ref) {
+                    data = ole[i];
                 }
             }
         }
-        if (data==null) {
+        if (data == null) {
             logger.log(POILogger.WARN, "OLE data not found");
         }
 
@@ -141,24 +144,24 @@ public final class OLEShape extends Picture {
 
     /**
      * Return the record container for this embedded object.
-     *
+     * <p>
      * <p>
      * It contains:
      * 1. ExEmbedAtom.(4045)
      * 2. ExOleObjAtom (4035)
      * 3. CString (4026), Instance MenuName (1) used for menus and the Links dialog box.
      * 4. CString (4026), Instance ProgID (2) that stores the OLE Programmatic Identifier.
-     *     A ProgID is a string that uniquely identifies a given object.
+     * A ProgID is a string that uniquely identifies a given object.
      * 5. CString (4026), Instance ClipboardName (3) that appears in the paste special dialog.
      * 6. MetaFile( 4033), optional
      * </p>
      */
-    public ExEmbed getExEmbed(){
-        if(_exEmbed == null){
+    public ExEmbed getExEmbed() {
+        if (_exEmbed == null) {
             SlideShow ppt = getSheet().getSlideShow();
 
             ExObjList lst = ppt.getDocumentRecord().getExObjList();
-            if(lst == null){
+            if (lst == null) {
                 logger.log(POILogger.WARN, "ExObjList not found");
                 return null;
             }
@@ -166,9 +169,9 @@ public final class OLEShape extends Picture {
             int id = getObjectID();
             Record[] ch = lst.getChildRecords();
             for (int i = 0; i < ch.length; i++) {
-                if(ch[i] instanceof ExEmbed){
-                    ExEmbed embd = (ExEmbed)ch[i];
-                    if( embd.getExOleObjAtom().getObjID() == id) _exEmbed = embd;
+                if (ch[i] instanceof ExEmbed) {
+                    ExEmbed embd = (ExEmbed) ch[i];
+                    if (embd.getExOleObjAtom().getObjID() == id) _exEmbed = embd;
                 }
             }
         }
@@ -180,17 +183,17 @@ public final class OLEShape extends Picture {
      *
      * @return the instance name of the embedded object
      */
-    public String getInstanceName(){
+    public String getInstanceName() {
         return getExEmbed().getMenuName();
     }
 
     /**
      * Returns the full name of the embedded object,
-     *  e.g. "Microsoft Word Document" or "Microsoft Office Excel Worksheet".
+     * e.g. "Microsoft Word Document" or "Microsoft Office Excel Worksheet".
      *
      * @return the full name of the embedded object
      */
-    public String getFullName(){
+    public String getFullName() {
         return getExEmbed().getClipboardName();
     }
 
@@ -201,7 +204,7 @@ public final class OLEShape extends Picture {
      *
      * @return the ProgID
      */
-    public String getProgID(){
+    public String getProgID() {
         return getExEmbed().getProgId();
     }
 }

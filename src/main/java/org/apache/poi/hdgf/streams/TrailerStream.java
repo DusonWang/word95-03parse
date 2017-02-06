@@ -23,12 +23,12 @@ import org.apache.poi.hdgf.pointers.PointerFactory;
 
 /**
  * The TrailerStream is a special kind of Stream containing pointers,
- *  and some core document settings.
+ * and some core document settings.
  * These is one of these in each document, and it's pointed to by
- *  a special series of byte near the start of the file.
+ * a special series of byte near the start of the file.
  */
 public class TrailerStream extends PointerContainingStream { // TODO - instantiable superclass
-	protected TrailerStream(Pointer pointer, StreamStore store, ChunkFactory chunkFactory, PointerFactory pointerFactory) {
-		super(pointer, store, chunkFactory, pointerFactory);
-	}
+    protected TrailerStream(Pointer pointer, StreamStore store, ChunkFactory chunkFactory, PointerFactory pointerFactory) {
+        super(pointer, store, chunkFactory, pointerFactory);
+    }
 }

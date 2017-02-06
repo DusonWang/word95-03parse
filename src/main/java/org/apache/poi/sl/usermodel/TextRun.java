@@ -19,12 +19,13 @@ package org.apache.poi.sl.usermodel;
 
 /**
  * Some text.
- *
+ * <p>
  * TODO - decide on how we do rich text stuff
  */
 public interface TextRun {
-	public String getText();
-	public void setText(String text);
+    public String getText();
 
-	// TODO - rich text formatting stuff
+    public void setText(String text);
+
+    // TODO - rich text formatting stuff
 }

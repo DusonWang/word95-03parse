@@ -23,8 +23,7 @@ package org.apache.poi.hdf.extractor;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class PropertySet
-{
+public final class PropertySet {
     private String _name;
     private int _type;
     private int _previous;
@@ -35,8 +34,7 @@ public final class PropertySet
     private int _num;
 
     public PropertySet(String name, int type, int previous, int next, int dir,
-                       int sb, int size, int num)
-    {
+                       int sb, int size, int num) {
         _name = name;
         _type = type;
         _previous = previous;
@@ -46,12 +44,12 @@ public final class PropertySet
         _size = size;
         _num = num;
     }
-    public int getSize()
-    {
+
+    public int getSize() {
         return _size;
     }
-    public int getStartBlock()
-    {
+
+    public int getStartBlock() {
         return _sb;
     }
 }

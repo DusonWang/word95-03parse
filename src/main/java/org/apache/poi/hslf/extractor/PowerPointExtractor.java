@@ -17,13 +17,6 @@
 
 package org.apache.poi.hslf.extractor;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-
 import org.apache.poi.POIOLE2TextExtractor;
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.model.*;
@@ -32,6 +25,13 @@ import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 /**
  * This class can be used to extract text from a PowerPoint file. Can optionally
  * also get the notes from one.
@@ -39,130 +39,130 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
  * @author Nick Burch
  */
 public final class PowerPointExtractor extends POIOLE2TextExtractor {
-   private HSLFSlideShow _hslfshow;
-   private SlideShow _show;
-   private Slide[] _slides;
+    private HSLFSlideShow _hslfshow;
+    private SlideShow _show;
+    private Slide[] _slides;
 
-   private boolean _slidesByDefault = true;
-   private boolean _notesByDefault = false;
-   private boolean _commentsByDefault = false;
-   private boolean _masterByDefault = false;
+    private boolean _slidesByDefault = true;
+    private boolean _notesByDefault = false;
+    private boolean _commentsByDefault = false;
+    private boolean _masterByDefault = false;
 
-	/**
-	 * Basic extractor. Returns all the text, and optionally all the notes
-	 */
-	public static void main(String args[]) throws IOException {
-		if (args.length < 1) {
-			System.err.println("Useage:");
-			System.err.println("\tPowerPointExtractor [-notes] <file>");
-			System.exit(1);
-		}
+    /**
+     * Creates a PowerPointExtractor, from a file
+     *
+     * @param fileName The name of the file to extract from
+     */
+    public PowerPointExtractor(String fileName) throws IOException {
+        this(new FileInputStream(fileName));
+    }
 
-		boolean notes = false;
-		boolean comments = false;
+    /**
+     * Creates a PowerPointExtractor, from an Input Stream
+     *
+     * @param iStream The input stream containing the PowerPoint document
+     */
+    public PowerPointExtractor(InputStream iStream) throws IOException {
+        this(new POIFSFileSystem(iStream));
+    }
+
+    /**
+     * Creates a PowerPointExtractor, from an open POIFSFileSystem
+     *
+     * @param fs the POIFSFileSystem containing the PowerPoint document
+     */
+    public PowerPointExtractor(POIFSFileSystem fs) throws IOException {
+        this(fs.getRoot());
+    }
+
+    /**
+     * Creates a PowerPointExtractor, from an open NPOIFSFileSystem
+     *
+     * @param fs the NPOIFSFileSystem containing the PowerPoint document
+     */
+    public PowerPointExtractor(NPOIFSFileSystem fs) throws IOException {
+        this(fs.getRoot());
+    }
+
+    /**
+     * Creates a PowerPointExtractor, from a specific place
+     * inside an open NPOIFSFileSystem
+     *
+     * @param dir the POIFS Directory containing the PowerPoint document
+     */
+    public PowerPointExtractor(DirectoryNode dir) throws IOException {
+        this(new HSLFSlideShow(dir));
+    }
+
+    /**
+     * @deprecated Use {@link #PowerPointExtractor(DirectoryNode)} instead
+     */
+    @Deprecated
+    public PowerPointExtractor(DirectoryNode dir, POIFSFileSystem fs) throws IOException {
+        this(new HSLFSlideShow(dir, fs));
+    }
+
+    /**
+     * Creates a PowerPointExtractor, from a HSLFSlideShow
+     *
+     * @param ss the HSLFSlideShow to extract text from
+     */
+    public PowerPointExtractor(HSLFSlideShow ss) {
+        super(ss);
+        _hslfshow = ss;
+        _show = new SlideShow(_hslfshow);
+        _slides = _show.getSlides();
+    }
+
+    /**
+     * Basic extractor. Returns all the text, and optionally all the notes
+     */
+    public static void main(String args[]) throws IOException {
+        if (args.length < 1) {
+            System.err.println("Useage:");
+            System.err.println("\tPowerPointExtractor [-notes] <file>");
+            System.exit(1);
+        }
+
+        boolean notes = false;
+        boolean comments = false;
         boolean master = true;
-        
-		String file;
-		if (args.length > 1) {
-			notes = true;
-			file = args[1];
-			if (args.length > 2) {
-				comments = true;
-			}
-		} else {
-			file = args[0];
-		}
 
-		PowerPointExtractor ppe = new PowerPointExtractor(file);
-		System.out.println(ppe.getText(true, notes, comments, master));
-	}
+        String file;
+        if (args.length > 1) {
+            notes = true;
+            file = args[1];
+            if (args.length > 2) {
+                comments = true;
+            }
+        } else {
+            file = args[0];
+        }
 
-	/**
-	 * Creates a PowerPointExtractor, from a file
-	 *
-	 * @param fileName The name of the file to extract from
-	 */
-	public PowerPointExtractor(String fileName) throws IOException {
-		this(new FileInputStream(fileName));
-	}
+        PowerPointExtractor ppe = new PowerPointExtractor(file);
+        System.out.println(ppe.getText(true, notes, comments, true));
+    }
 
-	/**
-	 * Creates a PowerPointExtractor, from an Input Stream
-	 *
-	 * @param iStream The input stream containing the PowerPoint document
-	 */
-	public PowerPointExtractor(InputStream iStream) throws IOException {
-		this(new POIFSFileSystem(iStream));
-	}
+    /**
+     * Should a call to getText() return slide text? Default is yes
+     */
+    public void setSlidesByDefault(boolean slidesByDefault) {
+        this._slidesByDefault = slidesByDefault;
+    }
 
-	/**
-	 * Creates a PowerPointExtractor, from an open POIFSFileSystem
-	 *
-	 * @param fs the POIFSFileSystem containing the PowerPoint document
-	 */
-	public PowerPointExtractor(POIFSFileSystem fs) throws IOException {
-		this(fs.getRoot());
-	}
+    /**
+     * Should a call to getText() return notes text? Default is no
+     */
+    public void setNotesByDefault(boolean notesByDefault) {
+        this._notesByDefault = notesByDefault;
+    }
 
-   /**
-    * Creates a PowerPointExtractor, from an open NPOIFSFileSystem
-    *
-    * @param fs the NPOIFSFileSystem containing the PowerPoint document
-    */
-   public PowerPointExtractor(NPOIFSFileSystem fs) throws IOException {
-      this(fs.getRoot());
-   }
-
-   /**
-    * Creates a PowerPointExtractor, from a specific place
-    *  inside an open NPOIFSFileSystem
-    *
-    * @param dir the POIFS Directory containing the PowerPoint document
-    */
-   public PowerPointExtractor(DirectoryNode dir) throws IOException {
-      this(new HSLFSlideShow(dir));
-   }
-
-   /**
-    * @deprecated Use {@link #PowerPointExtractor(DirectoryNode)} instead
-    */
-   @Deprecated
-	public PowerPointExtractor(DirectoryNode dir, POIFSFileSystem fs) throws IOException {
-		this(new HSLFSlideShow(dir, fs));
-	}
-
-	/**
-	 * Creates a PowerPointExtractor, from a HSLFSlideShow
-	 *
-	 * @param ss the HSLFSlideShow to extract text from
-	 */
-	public PowerPointExtractor(HSLFSlideShow ss) {
-		super(ss);
-		_hslfshow = ss;
-		_show = new SlideShow(_hslfshow);
-		_slides = _show.getSlides();
-	}
-
-	/**
-	 * Should a call to getText() return slide text? Default is yes
-	 */
-	public void setSlidesByDefault(boolean slidesByDefault) {
-		this._slidesByDefault = slidesByDefault;
-	}
-
-	/**
-	 * Should a call to getText() return notes text? Default is no
-	 */
-	public void setNotesByDefault(boolean notesByDefault) {
-		this._notesByDefault = notesByDefault;
-	}
-
-	/**
-	 * Should a call to getText() return comments text? Default is no
-	 */
-	public void setCommentsByDefault(boolean commentsByDefault) {
-		this._commentsByDefault = commentsByDefault;
-	}
+    /**
+     * Should a call to getText() return comments text? Default is no
+     */
+    public void setCommentsByDefault(boolean commentsByDefault) {
+        this._commentsByDefault = commentsByDefault;
+    }
 
     /**
      * Should a call to getText() return text from master? Default is no
@@ -171,67 +171,67 @@ public final class PowerPointExtractor extends POIOLE2TextExtractor {
         this._masterByDefault = masterByDefault;
     }
 
-	/**
-	 * Fetches all the slide text from the slideshow, but not the notes, unless
-	 * you've called setSlidesByDefault() and setNotesByDefault() to change this
-	 */
-	public String getText() {
-		return getText(_slidesByDefault, _notesByDefault, _commentsByDefault, _masterByDefault);
-	}
+    /**
+     * Fetches all the slide text from the slideshow, but not the notes, unless
+     * you've called setSlidesByDefault() and setNotesByDefault() to change this
+     */
+    public String getText() {
+        return getText(_slidesByDefault, _notesByDefault, _commentsByDefault, _masterByDefault);
+    }
 
-	/**
-	 * Fetches all the notes text from the slideshow, but not the slide text
-	 */
-	public String getNotes() {
-		return getText(false, true);
-	}
+    /**
+     * Fetches all the notes text from the slideshow, but not the slide text
+     */
+    public String getNotes() {
+        return getText(false, true);
+    }
 
-	public List<OLEShape> getOLEShapes() {
-		List<OLEShape> list = new ArrayList<OLEShape>();
+    public List<OLEShape> getOLEShapes() {
+        List<OLEShape> list = new ArrayList<OLEShape>();
 
-		for (int i = 0; i < _slides.length; i++) {
-			Slide slide = _slides[i];
+        for (int i = 0; i < _slides.length; i++) {
+            Slide slide = _slides[i];
 
-			Shape[] shapes = slide.getShapes();
-			for (int j = 0; j < shapes.length; j++) {
-				if (shapes[j] instanceof OLEShape) {
-					list.add((OLEShape) shapes[j]);
-				}
-			}
-		}
+            Shape[] shapes = slide.getShapes();
+            for (int j = 0; j < shapes.length; j++) {
+                if (shapes[j] instanceof OLEShape) {
+                    list.add((OLEShape) shapes[j]);
+                }
+            }
+        }
 
-		return list;
-	}
+        return list;
+    }
 
-	/**
-	 * Fetches text from the slideshow, be it slide text or note text. Because
-	 * the final block of text in a TextRun normally have their last \n
-	 * stripped, we add it back
-	 *
-	 * @param getSlideText fetch slide text
-	 * @param getNoteText fetch note text
-	 */
-	public String getText(boolean getSlideText, boolean getNoteText) {
-		return getText(getSlideText, getNoteText, _commentsByDefault, _masterByDefault);
-	}
+    /**
+     * Fetches text from the slideshow, be it slide text or note text. Because
+     * the final block of text in a TextRun normally have their last \n
+     * stripped, we add it back
+     *
+     * @param getSlideText fetch slide text
+     * @param getNoteText  fetch note text
+     */
+    public String getText(boolean getSlideText, boolean getNoteText) {
+        return getText(getSlideText, getNoteText, _commentsByDefault, _masterByDefault);
+    }
 
-	public String getText(boolean getSlideText, boolean getNoteText, boolean getCommentText, boolean getMasterText) {
-		StringBuffer ret = new StringBuffer();
+    public String getText(boolean getSlideText, boolean getNoteText, boolean getCommentText, boolean getMasterText) {
+        StringBuffer ret = new StringBuffer();
 
-		if (getSlideText) {
+        if (getSlideText) {
             if (getMasterText) {
                 for (SlideMaster master : _show.getSlidesMasters()) {
-                    for(Shape sh : master.getShapes()){
-                        if(sh instanceof TextShape){
-                            if(MasterSheet.isPlaceholder(sh)) {
+                    for (Shape sh : master.getShapes()) {
+                        if (sh instanceof TextShape) {
+                            if (MasterSheet.isPlaceholder(sh)) {
                                 // don't bother about boiler
                                 // plate text on master
                                 // sheets
                                 continue;
                             }
-                            TextShape tsh = (TextShape)sh;
+                            TextShape tsh = (TextShape) sh;
                             String text = tsh.getText();
-                            if (text != null){
+                            if (text != null) {
                                 ret.append(text);
                                 if (!text.endsWith("\n")) {
                                     ret.append("\n");
@@ -242,88 +242,86 @@ public final class PowerPointExtractor extends POIOLE2TextExtractor {
                 }
             }
 
-            for (int i = 0; i < _slides.length; i++) {
-				Slide slide = _slides[i];
+            for (Slide slide : _slides) {
+                // Slide header, if set
+                HeadersFooters hf = slide.getHeadersFooters();
+                if (hf != null && hf.isHeaderVisible() && hf.getHeaderText() != null) {
+                    ret.append(hf.getHeaderText()).append("\n");
+                }
 
-				// Slide header, if set
-				HeadersFooters hf = slide.getHeadersFooters();
-				if (hf != null && hf.isHeaderVisible() && hf.getHeaderText() != null) {
-					ret.append(hf.getHeaderText() + "\n");
-				}
-
-				// Slide text
+                // Slide text
                 textRunsToText(ret, slide.getTextRuns());
 
                 // Table text
-                for (Shape shape : slide.getShapes()){
-                    if (shape instanceof Table){
-                        extractTableText(ret, (Table)shape);
+                for (Shape shape : slide.getShapes()) {
+                    if (shape instanceof Table) {
+                        extractTableText(ret, (Table) shape);
                     }
                 }
                 // Slide footer, if set
-				if (hf != null && hf.isFooterVisible() && hf.getFooterText() != null) {
-					ret.append(hf.getFooterText() + "\n");
-				}
+                if (hf != null && hf.isFooterVisible() && hf.getFooterText() != null) {
+                    ret.append(hf.getFooterText()).append("\n");
+                }
 
-				// Comments, if requested and present
-				if (getCommentText) {
-					Comment[] comments = slide.getComments();
-					for (int j = 0; j < comments.length; j++) {
-						ret.append(comments[j].getAuthor() + " - " + comments[j].getText() + "\n");
-					}
-				}
-			}
-			if (getNoteText) {
-				ret.append("\n");
-			}
-		}
+                // Comments, if requested and present
+                if (getCommentText) {
+                    Comment[] comments = slide.getComments();
+                    for (Comment comment : comments) {
+                        ret.append(comment.getAuthor() + " - " + comment.getText() + "\n");
+                    }
+                }
+            }
+            if (getNoteText) {
+                ret.append("\n");
+            }
+        }
 
-		if (getNoteText) {
-			// Not currently using _notes, as that can have the notes of
-			// master sheets in. Grab Slide list, then work from there,
-			// but ensure no duplicates
-			HashSet<Integer> seenNotes = new HashSet<Integer>();
-			HeadersFooters hf = _show.getNotesHeadersFooters();
+        if (getNoteText) {
+            // Not currently using _notes, as that can have the notes of
+            // master sheets in. Grab Slide list, then work from there,
+            // but ensure no duplicates
+            HashSet<Integer> seenNotes = new HashSet<Integer>();
+            HeadersFooters hf = _show.getNotesHeadersFooters();
 
-			for (int i = 0; i < _slides.length; i++) {
-				Notes notes = _slides[i].getNotesSheet();
-				if (notes == null) {
-					continue;
-				}
-				Integer id = Integer.valueOf(notes._getSheetNumber());
-				if (seenNotes.contains(id)) {
-					continue;
-				}
-				seenNotes.add(id);
+            for (Slide _slide : _slides) {
+                Notes notes = _slide.getNotesSheet();
+                if (notes == null) {
+                    continue;
+                }
+                Integer id = notes._getSheetNumber();
+                if (seenNotes.contains(id)) {
+                    continue;
+                }
+                seenNotes.add(id);
 
-				// Repeat the Notes header, if set
-				if (hf != null && hf.isHeaderVisible() && hf.getHeaderText() != null) {
-					ret.append(hf.getHeaderText() + "\n");
-				}
+                // Repeat the Notes header, if set
+                if (hf != null && hf.isHeaderVisible() && hf.getHeaderText() != null) {
+                    ret.append(hf.getHeaderText()).append("\n");
+                }
 
-				// Notes text
+                // Notes text
                 textRunsToText(ret, notes.getTextRuns());
 
-				// Repeat the notes footer, if set
-				if (hf != null && hf.isFooterVisible() && hf.getFooterText() != null) {
-					ret.append(hf.getFooterText() + "\n");
-				}
-			}
-		}
+                // Repeat the notes footer, if set
+                if (hf != null && hf.isFooterVisible() && hf.getFooterText() != null) {
+                    ret.append(hf.getFooterText()).append("\n");
+                }
+            }
+        }
 
-		return ret.toString();
-	}
+        return ret.toString();
+    }
 
     private void extractTableText(StringBuffer ret, Table table) {
-        for (int row = 0; row < table.getNumberOfRows(); row++){
-            for (int col = 0; col < table.getNumberOfColumns(); col++){
+        for (int row = 0; row < table.getNumberOfRows(); row++) {
+            for (int col = 0; col < table.getNumberOfColumns(); col++) {
                 TableCell cell = table.getCell(row, col);
                 //defensive null checks; don't know if they're necessary
-                if (cell != null){
+                if (cell != null) {
                     String txt = cell.getText();
                     txt = (txt == null) ? "" : txt;
                     ret.append(txt);
-                    if (col < table.getNumberOfColumns()-1){
+                    if (col < table.getNumberOfColumns() - 1) {
                         ret.append("\t");
                     }
                 }
@@ -331,13 +329,13 @@ public final class PowerPointExtractor extends POIOLE2TextExtractor {
             ret.append('\n');
         }
     }
+
     private void textRunsToText(StringBuffer ret, TextRun[] runs) {
-        if (runs==null) {
+        if (runs == null) {
             return;
         }
 
-        for (int j = 0; j < runs.length; j++) {
-            TextRun run = runs[j];
+        for (TextRun run : runs) {
             if (run != null) {
                 String text = run.getText();
                 ret.append(text);

@@ -17,48 +17,48 @@
 
 package org.apache.poi.hslf.record;
 
+import org.apache.poi.util.LittleEndian;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.poi.util.LittleEndian;
-
 /**
  * Atom storing information for an OLE object.
- *
+ * <p>
  * <!--
  * offset   type    name         description
- *
+ * <p>
  * 0        uint4   drawAspect   Stores whether the object can be completely seen
- *                               (value of 1), or if only the icon is visible (value of 4).
- *
+ * (value of 1), or if only the icon is visible (value of 4).
+ * <p>
  * 4        sint4    type        Specifies whether the object is embedded or linked.
- *                               0 - embedded
- *                               1 - linked
- *
+ * 0 - embedded
+ * 1 - linked
+ * <p>
  * 8        sint4    objID       Unique identifier for the OLE object
- *
+ * <p>
  * 2        sint4    subType     This specifies the type of ole object.
- *                               0 - Default object
- *                               1 - Microsoft Clipart Gallery
- *                               2 - Microsoft Word table
- *                               3 - Microsoft Excel
- *                               4 - Microsoft Graph
- *                               5 - Microsoft Organization Chart
- *                               6 - Microsoft Equation Editor
- *                               7 - Microsoft Wordart object
- *                               8 - Sound
- *                               9 - Image
- *                               10 - PowerPoint presentation
- *                               11 - PowerPoint slide
- *                               12 - Microsoft Project
- *                               13 - Microsoft Note-It Ole
- *                               14 - Microsoft Excel chart
- *                               15 - Media Player object
- *
+ * 0 - Default object
+ * 1 - Microsoft Clipart Gallery
+ * 2 - Microsoft Word table
+ * 3 - Microsoft Excel
+ * 4 - Microsoft Graph
+ * 5 - Microsoft Organization Chart
+ * 6 - Microsoft Equation Editor
+ * 7 - Microsoft Wordart object
+ * 8 - Sound
+ * 9 - Image
+ * 10 - PowerPoint presentation
+ * 11 - PowerPoint slide
+ * 12 - Microsoft Project
+ * 13 - Microsoft Note-It Ole
+ * 14 - Microsoft Excel chart
+ * 15 - Media Player object
+ * <p>
  * 16       sint4    objStgDataRef    Reference to persist object
- *
+ * <p>
  * 20       bool1    isBlank          Set if the object's image is blank
- *           (note: KOffice has this as an int.)
+ * (note: KOffice has this as an int.)
  * -->
  *
  * @author Daniel Noll
@@ -70,15 +70,15 @@ public class ExOleObjAtom extends RecordAtom {
      */
     public static final int DRAW_ASPECT_VISIBLE = 1;
     /**
-     *   The object is displayed as a thumbnail image.
+     * The object is displayed as a thumbnail image.
      */
     public static final int DRAW_ASPECT_THUMBNAIL = 2;
     /**
-     *   The object is displayed as an icon.
+     * The object is displayed as an icon.
      */
     public static final int DRAW_ASPECT_ICON = 4;
     /**
-     *   The object is displayed on the screen as though it were printed to a printer.
+     * The object is displayed on the screen as though it were printed to a printer.
      */
     public static final int DRAW_ASPECT_DOCPRINT = 8;
 
@@ -129,31 +129,31 @@ public class ExOleObjAtom extends RecordAtom {
         _header = new byte[8];
         _data = new byte[24];
 
-        LittleEndian.putShort(_header, 0, (short)1); //MUST be 0x1
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 0, (short) 1); //MUST be 0x1
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
         LittleEndian.putInt(_header, 4, _data.length);
     }
 
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected ExOleObjAtom(byte[] source, int start, int len) {
         // Get the header.
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Get the record data.
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,len-8);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, len - 8);
 
         // Must be at least 24 bytes long
-        if(_data.length < 24) {
-        	throw new IllegalArgumentException("The length of the data for a ExOleObjAtom must be at least 24 bytes, but was only " + _data.length);
+        if (_data.length < 24) {
+            throw new IllegalArgumentException("The length of the data for a ExOleObjAtom must be at least 24 bytes, but was only " + _data.length);
         }
     }
 
@@ -173,7 +173,7 @@ public class ExOleObjAtom extends RecordAtom {
      *
      * @param aspect the draw aspect, one of the {@code DRAW_ASPECT_*} constants.
      */
-     public void setDrawAspect(int aspect) {
+    public void setDrawAspect(int aspect) {
         LittleEndian.putInt(_data, 0, aspect);
     }
 
@@ -215,7 +215,7 @@ public class ExOleObjAtom extends RecordAtom {
 
     /**
      * Gets the type of OLE object.
-     * 
+     *
      * @return the sub-type, one of the {@code SUBTYPE_*} constants.
      */
     public int getSubType() {
@@ -235,7 +235,7 @@ public class ExOleObjAtom extends RecordAtom {
      * Gets the reference to the persistent object
      *
      * @return the reference to the persistent object, corresponds with an
-     *         {@code ExOleObjStg} storage container.
+     * {@code ExOleObjStg} storage container.
      */
     public int getObjStgDataRef() {
         return LittleEndian.getInt(_data, 16);
@@ -245,7 +245,7 @@ public class ExOleObjAtom extends RecordAtom {
      * Sets the reference to the persistent object
      *
      * @param ref the reference to the persistent object, corresponds with an
-     *         {@code ExOleObjStg} storage container.
+     *            {@code ExOleObjStg} storage container.
      */
     public void setObjStgDataRef(int ref) {
         LittleEndian.putInt(_data, 16, ref);
@@ -260,7 +260,7 @@ public class ExOleObjAtom extends RecordAtom {
         // Even though this is a mere boolean, KOffice's code says it's an int.
         return LittleEndian.getInt(_data, 20) != 0;
     }
-    
+
     /**
      * Gets misc options (the last four bytes in the atom).
      *
@@ -299,7 +299,7 @@ public class ExOleObjAtom extends RecordAtom {
         out.write(_data);
     }
 
-    public String toString(){
+    public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("ExOleObjAtom\n");
         buf.append("  drawAspect: " + getDrawAspect() + "\n");

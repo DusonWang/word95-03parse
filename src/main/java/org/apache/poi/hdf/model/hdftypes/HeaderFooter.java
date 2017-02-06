@@ -23,35 +23,33 @@ package org.apache.poi.hdf.model.hdftypes;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class HeaderFooter
-{
-  public static final int HEADER_EVEN = 1;
-  public static final int HEADER_ODD = 2;
-  public static final int FOOTER_EVEN = 3;
-  public static final int FOOTER_ODD = 4;
-  public static final int HEADER_FIRST = 5;
-  public static final int FOOTER_FIRST = 6;
+public final class HeaderFooter {
+    public static final int HEADER_EVEN = 1;
+    public static final int HEADER_ODD = 2;
+    public static final int FOOTER_EVEN = 3;
+    public static final int FOOTER_ODD = 4;
+    public static final int HEADER_FIRST = 5;
+    public static final int FOOTER_FIRST = 6;
 
-  private int _type;
-  private int _start;
-  private int _end;
+    private int _type;
+    private int _start;
+    private int _end;
 
-  public HeaderFooter(int type, int startFC, int endFC)
-  {
-    _type = type;
-    _start = startFC;
-    _end = endFC;
-  }
-  public int getStart()
-  {
-    return _start;
-  }
-  public int getEnd()
-  {
-    return _end;
-  }
-  public boolean isEmpty()
-  {
-    return _start - _end == 0;
-  }
+    public HeaderFooter(int type, int startFC, int endFC) {
+        _type = type;
+        _start = startFC;
+        _end = endFC;
+    }
+
+    public int getStart() {
+        return _start;
+    }
+
+    public int getEnd() {
+        return _end;
+    }
+
+    public boolean isEmpty() {
+        return _start - _end == 0;
+    }
 }

@@ -19,8 +19,8 @@ package org.apache.poi.hslf.model;
 
 import org.apache.poi.hslf.exceptions.HSLFException;
 
-import java.util.HashMap;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 /**
  * Contains all known shape types in PowerPoint
@@ -28,30 +28,32 @@ import java.lang.reflect.Field;
  * @author Yegor Kozlov
  */
 public final class ShapeTypes implements org.apache.poi.sl.usermodel.ShapeTypes {
-    /**
-     * Return name of the shape by id
-     * @param type  - the id of the shape, one of the static constants defined in this class
-     * @return  the name of the shape
-     */
-    public static String typeName(int type) {
-        String name = (String)types.get(Integer.valueOf(type));
-        return name;
-    }
-
     public static HashMap types;
+
     static {
         types = new HashMap();
         try {
             Field[] f = org.apache.poi.sl.usermodel.ShapeTypes.class.getFields();
-            for (int i = 0; i < f.length; i++){
+            for (int i = 0; i < f.length; i++) {
                 Object val = f[i].get(null);
                 if (val instanceof Integer) {
                     types.put(val, f[i].getName());
                 }
             }
-        } catch (IllegalAccessException e){
+        } catch (IllegalAccessException e) {
             throw new HSLFException("Failed to initialize shape types");
         }
+    }
+
+    /**
+     * Return name of the shape by id
+     *
+     * @param type - the id of the shape, one of the static constants defined in this class
+     * @return the name of the shape
+     */
+    public static String typeName(int type) {
+        String name = (String) types.get(Integer.valueOf(type));
+        return name;
     }
 
 }

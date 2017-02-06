@@ -19,14 +19,14 @@ package org.apache.poi.hdf.model.hdftypes;
 
 import org.apache.poi.hdf.model.hdftypes.definitions.TCAbstractType;
 import org.apache.poi.util.LittleEndian;
+
 /**
  * Comment me
  *
  * @author Ryan Ackley
  */
 @Deprecated
-public final class TableCellDescriptor extends TCAbstractType implements HDFType
-{
+public final class TableCellDescriptor extends TCAbstractType implements HDFType {
 
   /*boolean _fFirstMerged;
   boolean _fMerged;
@@ -41,40 +41,39 @@ public final class TableCellDescriptor extends TCAbstractType implements HDFType
   short[] _brcBottom = new short[2];
   short[] _brcRight = new short [2];*/
 
-  public TableCellDescriptor()
-  {
-  }
-  static TableCellDescriptor convertBytesToTC(byte[] array, int offset)
-  {
-    TableCellDescriptor tc = new TableCellDescriptor();
-    int rgf = LittleEndian.getShort(array, offset);
-    tc.setFFirstMerged((rgf & 0x0001) > 0);
-    tc.setFMerged((rgf & 0x0002) > 0);
-    tc.setFVertical((rgf & 0x0004) > 0);
-    tc.setFBackward((rgf & 0x0008) > 0);
-    tc.setFRotateFont((rgf & 0x0010) > 0);
-    tc.setFVertMerge((rgf & 0x0020) > 0);
-    tc.setFVertRestart((rgf & 0x0040) > 0);
-    tc.setVertAlign((byte)((rgf & 0x0180) >> 7));
+    public TableCellDescriptor() {
+    }
 
-    short[] brcTop = new short[2];
-    short[] brcLeft = new short[2];
-    short[] brcBottom = new short[2];
-    short[] brcRight = new short[2];
+    static TableCellDescriptor convertBytesToTC(byte[] array, int offset) {
+        TableCellDescriptor tc = new TableCellDescriptor();
+        int rgf = LittleEndian.getShort(array, offset);
+        tc.setFFirstMerged((rgf & 0x0001) > 0);
+        tc.setFMerged((rgf & 0x0002) > 0);
+        tc.setFVertical((rgf & 0x0004) > 0);
+        tc.setFBackward((rgf & 0x0008) > 0);
+        tc.setFRotateFont((rgf & 0x0010) > 0);
+        tc.setFVertMerge((rgf & 0x0020) > 0);
+        tc.setFVertRestart((rgf & 0x0040) > 0);
+        tc.setVertAlign((byte) ((rgf & 0x0180) >> 7));
 
-    brcTop[0] = LittleEndian.getShort(array, offset + 4);
-    brcTop[1] = LittleEndian.getShort(array, offset + 6);
+        short[] brcTop = new short[2];
+        short[] brcLeft = new short[2];
+        short[] brcBottom = new short[2];
+        short[] brcRight = new short[2];
 
-    brcLeft[0] = LittleEndian.getShort(array, offset + 8);
-    brcLeft[1] = LittleEndian.getShort(array, offset + 10);
+        brcTop[0] = LittleEndian.getShort(array, offset + 4);
+        brcTop[1] = LittleEndian.getShort(array, offset + 6);
 
-    brcBottom[0] = LittleEndian.getShort(array, offset + 12);
-    brcBottom[1] = LittleEndian.getShort(array, offset + 14);
+        brcLeft[0] = LittleEndian.getShort(array, offset + 8);
+        brcLeft[1] = LittleEndian.getShort(array, offset + 10);
 
-    brcRight[0] = LittleEndian.getShort(array, offset + 16);
-    brcRight[1] = LittleEndian.getShort(array, offset + 18);
+        brcBottom[0] = LittleEndian.getShort(array, offset + 12);
+        brcBottom[1] = LittleEndian.getShort(array, offset + 14);
 
-    return tc;
-  }
+        brcRight[0] = LittleEndian.getShort(array, offset + 16);
+        brcRight[1] = LittleEndian.getShort(array, offset + 18);
+
+        return tc;
+    }
 
 }

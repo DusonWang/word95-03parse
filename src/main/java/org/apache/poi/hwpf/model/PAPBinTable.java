@@ -43,7 +43,7 @@ public class PAPBinTable {
     private static final POILogger logger = POILogFactory
             .getLogger(PAPBinTable.class);
 
-    protected ArrayList<PAPX> _paragraphs = new ArrayList<PAPX>();
+    protected ArrayList<PAPX> _paragraphs = new ArrayList<>();
 
     public PAPBinTable() {
     }
@@ -88,8 +88,8 @@ public class PAPBinTable {
         }
 
         logger.log(POILogger.DEBUG, "PAPX tables loaded in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms (",
-                Integer.valueOf(_paragraphs.size()), " elements)");
+                System.currentTimeMillis() - start, " ms (",
+                _paragraphs.size(), " elements)");
 
         if (_paragraphs.isEmpty()) {
             logger.log(POILogger.WARN, "PAPX FKPs are empty");
@@ -141,25 +141,25 @@ public class PAPBinTable {
 
             logger.log(POILogger.DEBUG,
                     "Merged (?) with PAPX from complex file table in ",
-                    Long.valueOf(System.currentTimeMillis() - start),
-                    " ms (", Integer.valueOf(paragraphs.size()),
+                    System.currentTimeMillis() - start,
+                    " ms (", paragraphs.size(),
                     " elements in total)");
             start = System.currentTimeMillis();
         }
 
-        List<PAPX> oldPapxSortedByEndPos = new ArrayList<PAPX>(paragraphs);
+        List<PAPX> oldPapxSortedByEndPos = new ArrayList<>(paragraphs);
         Collections.sort(oldPapxSortedByEndPos,
                 PropertyNode.EndComparator.instance);
 
         logger.log(POILogger.DEBUG, "PAPX sorted by end position in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms");
+                System.currentTimeMillis() - start, " ms");
         start = System.currentTimeMillis();
 
         final Map<PAPX, Integer> papxToFileOrder = new IdentityHashMap<PAPX, Integer>();
         {
             int counter = 0;
             for (PAPX papx : paragraphs) {
-                papxToFileOrder.put(papx, Integer.valueOf(counter++));
+                papxToFileOrder.put(papx, counter++);
             }
         }
         final Comparator<PAPX> papxFileOrderComparator = new Comparator<PAPX>() {
@@ -171,7 +171,7 @@ public class PAPBinTable {
         };
 
         logger.log(POILogger.DEBUG, "PAPX's order map created in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms");
+                System.currentTimeMillis() - start, " ms");
         start = System.currentTimeMillis();
 
         List<PAPX> newPapxs = new LinkedList<PAPX>();
@@ -186,7 +186,7 @@ public class PAPBinTable {
             final int endExclusive = charIndex + 1;
 
             boolean broken = false;
-            List<PAPX> papxs = new LinkedList<PAPX>();
+            List<PAPX> papxs = new LinkedList<>();
             for (int papxIndex = lastPapxIndex; papxIndex < oldPapxSortedByEndPos
                     .size(); papxIndex++) {
                 broken = false;
@@ -210,8 +210,8 @@ public class PAPBinTable {
 
             if (papxs.size() == 0) {
                 logger.log(POILogger.WARN, "Paragraph [",
-                        Integer.valueOf(startInclusive), "; ",
-                        Integer.valueOf(endExclusive),
+                        startInclusive, "; ",
+                        endExclusive,
                         ") has no PAPX. Creating new one.");
                 // create it manually
                 PAPX papx = new PAPX(startInclusive, endExclusive,
@@ -256,14 +256,13 @@ public class PAPBinTable {
             newPapxs.add(newPapx);
 
             lastParStart = endExclusive;
-            continue;
         }
         paragraphs.clear();
         paragraphs.addAll(newPapxs);
 
         logger.log(POILogger.DEBUG, "PAPX rebuilded from document text in ",
-                Long.valueOf(System.currentTimeMillis() - start), " ms (",
-                Integer.valueOf(paragraphs.size()), " elements)");
+                System.currentTimeMillis() - start, " ms (",
+                paragraphs.size(), " elements)");
         start = System.currentTimeMillis();
     }
 

@@ -662,7 +662,7 @@ public final class CharacterSprmUncompressor extends SprmUncompressor {
             case 0x75:
                 // sprmCFNoProof -- 0x875
             /*
-			 * "A ToggleOperand value that specifies whether the text is excluded from the proofing analysis. By default, text is not excluded from the proofing analysis."
+             * "A ToggleOperand value that specifies whether the text is excluded from the proofing analysis. By default, text is not excluded from the proofing analysis."
 			 * 
 			 * Word (.doc) Binary File Format. Copyright (c) 2012 Microsoft
 			 * Corporation. Released: October 8, 2012

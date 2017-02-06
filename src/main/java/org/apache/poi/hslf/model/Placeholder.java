@@ -18,8 +18,8 @@
 package org.apache.poi.hslf.model;
 
 import org.apache.poi.ddf.*;
-import org.apache.poi.hslf.record.OEPlaceholderAtom;
 import org.apache.poi.hslf.exceptions.HSLFException;
+import org.apache.poi.hslf.record.OEPlaceholderAtom;
 
 import java.io.ByteArrayOutputStream;
 
@@ -30,15 +30,15 @@ import java.io.ByteArrayOutputStream;
  */
 public final class Placeholder extends TextBox {
 
-    protected Placeholder(EscherContainerRecord escherRecord, Shape parent){
+    protected Placeholder(EscherContainerRecord escherRecord, Shape parent) {
         super(escherRecord, parent);
     }
 
-    public Placeholder(Shape parent){
+    public Placeholder(Shape parent) {
         super(parent);
     }
 
-    public Placeholder(){
+    public Placeholder() {
         super();
     }
 
@@ -47,16 +47,16 @@ public final class Placeholder extends TextBox {
      *
      * @return the created <code>EscherContainerRecord</code> which holds shape data
      */
-    protected EscherContainerRecord createSpContainer(boolean isChild){
+    protected EscherContainerRecord createSpContainer(boolean isChild) {
         _escherContainer = super.createSpContainer(isChild);
 
         EscherSpRecord spRecord = _escherContainer.getChildById(EscherSpRecord.RECORD_ID);
         spRecord.setFlags(EscherSpRecord.FLAG_HAVEANCHOR | EscherSpRecord.FLAG_HAVEMASTER);
 
         EscherClientDataRecord cldata = new EscherClientDataRecord();
-        cldata.setOptions((short)15);
+        cldata.setOptions((short) 15);
 
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(_escherContainer, EscherOptRecord.RECORD_ID);
 
         //Placeholders can't be grouped
         setEscherProperty(opt, EscherProperties.PROTECTION__LOCKAGAINSTGROUPING, 262144);
@@ -79,7 +79,7 @@ public final class Placeholder extends TextBox {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             oep.writeOut(out);
-        } catch(Exception e){
+        } catch (Exception e) {
             throw new HSLFException(e);
         }
         cldata.setRemainingData(out.toByteArray());

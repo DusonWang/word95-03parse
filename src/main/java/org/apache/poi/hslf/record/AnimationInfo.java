@@ -17,11 +17,11 @@
 
 package org.apache.poi.hslf.record;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.POILogger;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A container record that specifies information about animation information for a shape.
@@ -29,64 +29,66 @@ import org.apache.poi.util.POILogger;
  * @author Yegor Kozlov
  */
 public final class AnimationInfo extends RecordContainer {
-	private byte[] _header;
+    private byte[] _header;
 
-	// Links to our more interesting children
-	private AnimationInfoAtom animationAtom;
+    // Links to our more interesting children
+    private AnimationInfoAtom animationAtom;
 
-	/**
-	 * Set things up, and find our more interesting children
-	 */
-	protected AnimationInfo(byte[] source, int start, int len) {
-		// Grab the header
-		_header = new byte[8];
-		System.arraycopy(source,start,_header,0,8);
+    /**
+     * Set things up, and find our more interesting children
+     */
+    protected AnimationInfo(byte[] source, int start, int len) {
+        // Grab the header
+        _header = new byte[8];
+        System.arraycopy(source, start, _header, 0, 8);
 
-		// Find our children
-		_children = Record.findChildRecords(source,start+8,len-8);
-		findInterestingChildren();
-	}
+        // Find our children
+        _children = Record.findChildRecords(source, start + 8, len - 8);
+        findInterestingChildren();
+    }
 
-	/**
-	 * Go through our child records, picking out the ones that are
-	 *  interesting, and saving those for use by the easy helper
-	 *  methods.
-	 */
-	private void findInterestingChildren() {
-
-		// First child should be the ExMediaAtom
-		if(_children[0] instanceof AnimationInfoAtom) {
-			animationAtom = (AnimationInfoAtom)_children[0];
-		} else {
-			logger.log(POILogger.ERROR, "First child record wasn't a AnimationInfoAtom, was of type " + _children[0].getRecordType());
-		}
-	}
-
-	/**
-	 * Create a new AnimationInfo, with blank fields
-	 */
-	public AnimationInfo() {
+    /**
+     * Create a new AnimationInfo, with blank fields
+     */
+    public AnimationInfo() {
         // Setup our header block
-		_header = new byte[8];
-		_header[0] = 0x0f; // We are a container record
-		LittleEndian.putShort(_header, 2, (short)getRecordType());
+        _header = new byte[8];
+        _header[0] = 0x0f; // We are a container record
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
 
         _children = new Record[1];
-		_children[0] = animationAtom = new AnimationInfoAtom();
-	}
+        _children[0] = animationAtom = new AnimationInfoAtom();
+    }
 
-	/**
-	 * We are of type 4103
-	 */
-	public long getRecordType() { return RecordTypes.AnimationInfo.typeID; }
+    /**
+     * Go through our child records, picking out the ones that are
+     * interesting, and saving those for use by the easy helper
+     * methods.
+     */
+    private void findInterestingChildren() {
 
-	/**
-	 * Write the contents of the record back, so it can be written
-	 *  to disk
-	 */
-	public void writeOut(OutputStream out) throws IOException {
-		writeOut(_header[0],_header[1],getRecordType(),_children,out);
-	}
+        // First child should be the ExMediaAtom
+        if (_children[0] instanceof AnimationInfoAtom) {
+            animationAtom = (AnimationInfoAtom) _children[0];
+        } else {
+            logger.log(POILogger.ERROR, "First child record wasn't a AnimationInfoAtom, was of type " + _children[0].getRecordType());
+        }
+    }
+
+    /**
+     * We are of type 4103
+     */
+    public long getRecordType() {
+        return RecordTypes.AnimationInfo.typeID;
+    }
+
+    /**
+     * Write the contents of the record back, so it can be written
+     * to disk
+     */
+    public void writeOut(OutputStream out) throws IOException {
+        writeOut(_header[0], _header[1], getRecordType(), _children, out);
+    }
 
     /**
      * Returns the AnimationInfo

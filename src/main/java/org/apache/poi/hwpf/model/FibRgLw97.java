@@ -41,7 +41,7 @@ public class FibRgLw97 extends FibRgLw97AbstractType implements FibRgLw {
     }
 
     @SuppressWarnings("deprecation")
-    public int getSubdocumentTextStreamLength(SubdocumentType subdocumentType) {
+    public int getSubDocumentTextStreamLength(SubDocumentType subdocumentType) {
         switch (subdocumentType) {
             case MAIN:
                 return getCcpText();
@@ -65,8 +65,8 @@ public class FibRgLw97 extends FibRgLw97AbstractType implements FibRgLw {
     }
 
     @SuppressWarnings("deprecation")
-    public void setSubdocumentTextStreamLength(
-            SubdocumentType subdocumentType, int newLength) {
+    public void setSubDocumentTextStreamLength(
+            SubDocumentType subdocumentType, int newLength) {
         switch (subdocumentType) {
             case MAIN:
                 setCcpText(newLength);

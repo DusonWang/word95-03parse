@@ -49,168 +49,40 @@ public final class PPFont {
      * Constants for the pitch and family of the font.
      * The two low-order bits specify the pitch of the font and can be one of the following values
      */
-    public final static byte DEFAULT_PITCH  = 0;
-    public final static byte FIXED_PITCH    = 1;
+    public final static byte DEFAULT_PITCH = 0;
+    public final static byte FIXED_PITCH = 1;
     public final static byte VARIABLE_PITCH = 2;
 
     /**
      * Don't care or don't know.
      */
-    public final static byte FF_DONTCARE    = 0;
+    public final static byte FF_DONTCARE = 0;
     /**
      * Fonts with variable stroke width (proportional) and with serifs. Times New Roman is an example.
      */
-    public final static byte FF_ROMAN       = 16;
+    public final static byte FF_ROMAN = 16;
     /**
      * Fonts with variable stroke width (proportional) and without serifs. Arial is an example.
      */
-    public final static byte FF_SWISS       = 32;
+    public final static byte FF_SWISS = 32;
     /**
      * Fonts designed to look like handwriting. Script and Cursive are examples.
      */
-    public final static byte FF_SCRIPT      = 64;
+    public final static byte FF_SCRIPT = 64;
     /**
      * Fonts with constant stroke width (monospace), with or without serifs.
      * Monospace fonts are usually modern. CourierNew is an example
      */
-    public final static byte FF_MODERN      = 48;
+    public final static byte FF_MODERN = 48;
     /**
      * Novelty fonts. Old English is an example
      */
-    public final static byte FF_DECORATIVE  = 80;
-
-
-    protected int charset;
-    protected int type;
-    protected int flags;
-    protected int pitch;
-    protected String name;
-
-    /**
-     * Creates a new instance of PPFont
-     */
-    public PPFont(){
-
-    }
-
-    /**
-     * Creates a new instance of PPFont and initialize it from the supplied font atom
-     */
-    public PPFont(FontEntityAtom fontAtom){
-        name = fontAtom.getFontName();
-        charset = fontAtom.getCharSet();
-        type = fontAtom.getFontType();
-        flags = fontAtom.getFontFlags();
-        pitch = fontAtom.getPitchAndFamily();
-    }
-
-    /**
-     * set the name for the font (i.e. Arial)
-     *
-     * @param val  String representing the name of the font to use
-     */
-     public void setFontName(String val){
-        name = val;
-    }
-
-    /**
-     * get the name for the font (i.e. Arial)
-     *
-     * @return String representing the name of the font to use
-     */
-    public String getFontName(){
-        return name;
-    }
-
-    /**
-     * set the character set
-     *
-     * @param val - characterset
-     */
-    public void setCharSet(int val){
-        charset = val;
-    }
-
-    /**
-     * get the character set
-     *
-     * @return charset - characterset
-     */
-    public int getCharSet(){
-        return charset;
-    }
-
-    /**
-     * set the font flags
-     * Bit 1: If set, font is subsetted
-     *
-     * @param val - the font flags
-     */
-    public void setFontFlags(int val){
-        flags = val;
-    }
-
-    /**
-     * get the character set
-     * Bit 1: If set, font is subsetted
-     *
-     * @return the font flags
-     */
-    public int getFontFlags(){
-        return flags;
-    }
-
-    /**
-     * set the font type
-     * <p>
-     * Bit 1: Raster Font
-     * Bit 2: Device Font
-     * Bit 3: TrueType Font
-     * </p>
-     *
-     * @param val - the font type
-     */
-    public void setFontType(int val){
-        type = val;
-    }
-
-    /**
-     * get the font type
-     * <p>
-     * Bit 1: Raster Font
-     * Bit 2: Device Font
-     * Bit 3: TrueType Font
-     * </p>
-     *
-     * @return the font type
-     */
-    public int getFontType(){
-        return type;
-    }
-
-    /**
-     * set lfPitchAndFamily
-     *
-     *
-     * @param val - Corresponds to the lfPitchAndFamily field of the Win32 API LOGFONT structure
-     */
-    public void setPitchAndFamily(int val){
-        pitch = val;
-    }
-
-    /**
-     * get lfPitchAndFamily
-     *
-     * @return corresponds to the lfPitchAndFamily field of the Win32 API LOGFONT structure
-     */
-    public int getPitchAndFamily(){
-        return pitch;
-    }
-
+    public final static byte FF_DECORATIVE = 80;
     public static final PPFont ARIAL;
-    public static final PPFont TIMES_NEW_ROMAN ;
+    public static final PPFont TIMES_NEW_ROMAN;
     public static final PPFont COURIER_NEW;
     public static final PPFont WINGDINGS;
+
     static {
         ARIAL = new PPFont();
         ARIAL.setFontName("Arial");
@@ -239,5 +111,131 @@ public final class PPFont {
         WINGDINGS.setFontType(4);
         WINGDINGS.setFontFlags(0);
         WINGDINGS.setPitchAndFamily(VARIABLE_PITCH | FF_DONTCARE);
+    }
+
+    protected int charset;
+    protected int type;
+    protected int flags;
+    protected int pitch;
+    protected String name;
+
+    /**
+     * Creates a new instance of PPFont
+     */
+    public PPFont() {
+
+    }
+
+    /**
+     * Creates a new instance of PPFont and initialize it from the supplied font atom
+     */
+    public PPFont(FontEntityAtom fontAtom) {
+        name = fontAtom.getFontName();
+        charset = fontAtom.getCharSet();
+        type = fontAtom.getFontType();
+        flags = fontAtom.getFontFlags();
+        pitch = fontAtom.getPitchAndFamily();
+    }
+
+    /**
+     * get the name for the font (i.e. Arial)
+     *
+     * @return String representing the name of the font to use
+     */
+    public String getFontName() {
+        return name;
+    }
+
+    /**
+     * set the name for the font (i.e. Arial)
+     *
+     * @param val String representing the name of the font to use
+     */
+    public void setFontName(String val) {
+        name = val;
+    }
+
+    /**
+     * get the character set
+     *
+     * @return charset - characterset
+     */
+    public int getCharSet() {
+        return charset;
+    }
+
+    /**
+     * set the character set
+     *
+     * @param val - characterset
+     */
+    public void setCharSet(int val) {
+        charset = val;
+    }
+
+    /**
+     * get the character set
+     * Bit 1: If set, font is subsetted
+     *
+     * @return the font flags
+     */
+    public int getFontFlags() {
+        return flags;
+    }
+
+    /**
+     * set the font flags
+     * Bit 1: If set, font is subsetted
+     *
+     * @param val - the font flags
+     */
+    public void setFontFlags(int val) {
+        flags = val;
+    }
+
+    /**
+     * get the font type
+     * <p>
+     * Bit 1: Raster Font
+     * Bit 2: Device Font
+     * Bit 3: TrueType Font
+     * </p>
+     *
+     * @return the font type
+     */
+    public int getFontType() {
+        return type;
+    }
+
+    /**
+     * set the font type
+     * <p>
+     * Bit 1: Raster Font
+     * Bit 2: Device Font
+     * Bit 3: TrueType Font
+     * </p>
+     *
+     * @param val - the font type
+     */
+    public void setFontType(int val) {
+        type = val;
+    }
+
+    /**
+     * get lfPitchAndFamily
+     *
+     * @return corresponds to the lfPitchAndFamily field of the Win32 API LOGFONT structure
+     */
+    public int getPitchAndFamily() {
+        return pitch;
+    }
+
+    /**
+     * set lfPitchAndFamily
+     *
+     * @param val - Corresponds to the lfPitchAndFamily field of the Win32 API LOGFONT structure
+     */
+    public void setPitchAndFamily(int val) {
+        pitch = val;
     }
 }

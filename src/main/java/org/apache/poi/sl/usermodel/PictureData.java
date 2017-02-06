@@ -18,9 +18,11 @@
 package org.apache.poi.sl.usermodel;
 
 public interface PictureData {
-	public int getType();
-	public byte[] getUID();
+    public int getType();
 
-	public byte[] getData();
-	public void setData(byte[] data);
+    public byte[] getUID();
+
+    public byte[] getData();
+
+    public void setData(byte[] data);
 }

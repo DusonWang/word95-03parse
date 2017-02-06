@@ -20,9 +20,11 @@ package org.apache.poi.hslf.model;
 import org.apache.poi.ddf.*;
 import org.apache.poi.util.LittleEndian;
 
-import java.util.*;
-import java.util.List;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Represents a table in a PowerPoint presentation
@@ -53,10 +55,10 @@ public final class Table extends ShapeGroup {
     public Table(int numrows, int numcols) {
         super();
 
-        if(numrows < 1) throw new IllegalArgumentException("The number of rows must be greater than 1");
-        if(numcols < 1) throw new IllegalArgumentException("The number of columns must be greater than 1");
+        if (numrows < 1) throw new IllegalArgumentException("The number of rows must be greater than 1");
+        if (numcols < 1) throw new IllegalArgumentException("The number of columns must be greater than 1");
 
-        int x=0, y=0, tblWidth=0, tblHeight=0;
+        int x = 0, y = 0, tblWidth = 0, tblHeight = 0;
         cells = new TableCell[numrows][numcols];
         for (int i = 0; i < cells.length; i++) {
             x = 0;
@@ -74,15 +76,15 @@ public final class Table extends ShapeGroup {
 
         EscherContainerRecord spCont = (EscherContainerRecord) getSpContainer().getChild(0);
         EscherOptRecord opt = new EscherOptRecord();
-        opt.setRecordId((short)0xF122);
-        opt.addEscherProperty(new EscherSimpleProperty((short)0x39F, 1));
-        EscherArrayProperty p = new EscherArrayProperty((short)0x43A0, false, null);
+        opt.setRecordId((short) 0xF122);
+        opt.addEscherProperty(new EscherSimpleProperty((short) 0x39F, 1));
+        EscherArrayProperty p = new EscherArrayProperty((short) 0x43A0, false, null);
         p.setSizeOfElements(0x0004);
         p.setNumberOfElementsInArray(numrows);
         p.setNumberOfElementsInMemory(numrows);
         opt.addEscherProperty(p);
         List<EscherRecord> lst = spCont.getChildRecords();
-        lst.add(lst.size()-1, opt);
+        lst.add(lst.size() - 1, opt);
         spCont.setChildRecords(lst);
     }
 
@@ -110,20 +112,21 @@ public final class Table extends ShapeGroup {
     public int getNumberOfColumns() {
         return cells[0].length;
     }
+
     public int getNumberOfRows() {
         return cells.length;
     }
 
-    protected void afterInsert(Sheet sh){
+    protected void afterInsert(Sheet sh) {
         super.afterInsert(sh);
 
         EscherContainerRecord spCont = (EscherContainerRecord) getSpContainer().getChild(0);
         List<EscherRecord> lst = spCont.getChildRecords();
-        EscherOptRecord opt = (EscherOptRecord)lst.get(lst.size()-2);
-        EscherArrayProperty p = (EscherArrayProperty)opt.getEscherProperty(1);
+        EscherOptRecord opt = (EscherOptRecord) lst.get(lst.size() - 2);
+        EscherArrayProperty p = (EscherArrayProperty) opt.getEscherProperty(1);
         for (int i = 0; i < cells.length; i++) {
             TableCell cell = cells[i][0];
-            int rowHeight = cell.getAnchor().height*MASTER_DPI/POINT_DPI;
+            int rowHeight = cell.getAnchor().height * MASTER_DPI / POINT_DPI;
             byte[] val = new byte[4];
             LittleEndian.putInt(val, rowHeight);
             p.setElement(i, val);
@@ -132,30 +135,30 @@ public final class Table extends ShapeGroup {
                 addShape(c);
 
                 Line bt = c.getBorderTop();
-                if(bt != null) addShape(bt);
+                if (bt != null) addShape(bt);
 
                 Line br = c.getBorderRight();
-                if(br != null) addShape(br);
+                if (br != null) addShape(br);
 
                 Line bb = c.getBorderBottom();
-                if(bb != null) addShape(bb);
+                if (bb != null) addShape(bb);
 
                 Line bl = c.getBorderLeft();
-                if(bl != null) addShape(bl);
+                if (bl != null) addShape(bl);
 
             }
         }
 
     }
 
-    protected void initTable(){
+    protected void initTable() {
         Shape[] sh = getShapes();
-        Arrays.sort(sh, new Comparator(){
-            public int compare( Object o1, Object o2 ) {
-                Rectangle anchor1 = ((Shape)o1).getAnchor();
-                Rectangle anchor2 = ((Shape)o2).getAnchor();
+        Arrays.sort(sh, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                Rectangle anchor1 = ((Shape) o1).getAnchor();
+                Rectangle anchor2 = ((Shape) o2).getAnchor();
                 int delta = anchor1.y - anchor2.y;
-                if(delta == 0) delta = anchor1.x - anchor2.x;
+                if (delta == 0) delta = anchor1.x - anchor2.x;
                 return delta;
             }
         });
@@ -164,9 +167,9 @@ public final class Table extends ShapeGroup {
         ArrayList lst = new ArrayList();
         ArrayList row = null;
         for (int i = 0; i < sh.length; i++) {
-            if(sh[i] instanceof TextShape){
+            if (sh[i] instanceof TextShape) {
                 Rectangle anchor = sh[i].getAnchor();
-                if(anchor.y != y0){
+                if (anchor.y != y0) {
                     y0 = anchor.y;
                     row = new ArrayList();
                     lst.add(row);
@@ -177,9 +180,9 @@ public final class Table extends ShapeGroup {
         }
         cells = new TableCell[lst.size()][maxrowlen];
         for (int i = 0; i < lst.size(); i++) {
-            row = (ArrayList)lst.get(i);
+            row = (ArrayList) lst.get(i);
             for (int j = 0; j < row.size(); j++) {
-                TextShape tx = (TextShape)row.get(j);
+                TextShape tx = (TextShape) row.get(j);
                 cells[i][j] = new TableCell(tx.getSpContainer(), getParent());
                 cells[i][j].setSheet(tx.getSheet());
             }
@@ -191,25 +194,25 @@ public final class Table extends ShapeGroup {
      *
      * @param sheet owner of this shape
      */
-    public void setSheet(Sheet sheet){
+    public void setSheet(Sheet sheet) {
         super.setSheet(sheet);
-        if(cells == null) initTable();
+        if (cells == null) initTable();
     }
 
     /**
      * Sets the row height.
      *
-     * @param row the row index (0-based)
+     * @param row    the row index (0-based)
      * @param height the height to set (in pixels)
      */
-    public void setRowHeight(int row, int height){
+    public void setRowHeight(int row, int height) {
         int currentHeight = cells[row][0].getAnchor().height;
         int dy = height - currentHeight;
 
         for (int i = row; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
                 Rectangle anchor = cells[i][j].getAnchor();
-                if(i == row) anchor.height = height;
+                if (i == row) anchor.height = height;
                 else anchor.y += dy;
                 cells[i][j].setAnchor(anchor);
             }
@@ -223,10 +226,10 @@ public final class Table extends ShapeGroup {
     /**
      * Sets the column width.
      *
-     * @param col the column index (0-based)
+     * @param col   the column index (0-based)
      * @param width the width to set (in pixels)
      */
-    public void setColumnWidth(int col, int width){
+    public void setColumnWidth(int col, int width) {
         int currentWidth = cells[0][col].getAnchor().width;
         int dx = width - currentWidth;
         for (int i = 0; i < cells.length; i++) {
@@ -234,7 +237,7 @@ public final class Table extends ShapeGroup {
             anchor.width = width;
             cells[i][col].setAnchor(anchor);
 
-            if(col < cells[i].length - 1) for (int j = col+1; j < cells[i].length; j++) {
+            if (col < cells[i].length - 1) for (int j = col + 1; j < cells[i].length; j++) {
                 anchor = cells[i][j].getAnchor();
                 anchor.x += dx;
                 cells[i][j].setAnchor(anchor);
@@ -251,14 +254,14 @@ public final class Table extends ShapeGroup {
      *
      * @param line the border line
      */
-    public void setAllBorders(Line line){
+    public void setAllBorders(Line line) {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
                 TableCell cell = cells[i][j];
                 cell.setBorderTop(cloneBorder(line));
                 cell.setBorderLeft(cloneBorder(line));
-                if(j == cells[i].length - 1) cell.setBorderRight(cloneBorder(line));
-                if(i == cells.length - 1) cell.setBorderBottom(cloneBorder(line));
+                if (j == cells[i].length - 1) cell.setBorderRight(cloneBorder(line));
+                if (i == cells.length - 1) cell.setBorderBottom(cloneBorder(line));
             }
         }
     }
@@ -268,20 +271,20 @@ public final class Table extends ShapeGroup {
      *
      * @param line the border line
      */
-    public void setOutsideBorders(Line line){
+    public void setOutsideBorders(Line line) {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
                 TableCell cell = cells[i][j];
 
-                if(j == 0) cell.setBorderLeft(cloneBorder(line));
-                if(j == cells[i].length - 1) cell.setBorderRight(cloneBorder(line));
+                if (j == 0) cell.setBorderLeft(cloneBorder(line));
+                if (j == cells[i].length - 1) cell.setBorderRight(cloneBorder(line));
                 else {
                     cell.setBorderLeft(null);
                     cell.setBorderLeft(null);
                 }
 
-                if(i == 0) cell.setBorderTop(cloneBorder(line));
-                else if(i == cells.length - 1) cell.setBorderBottom(cloneBorder(line));
+                if (i == 0) cell.setBorderTop(cloneBorder(line));
+                else if (i == cells.length - 1) cell.setBorderBottom(cloneBorder(line));
                 else {
                     cell.setBorderTop(null);
                     cell.setBorderBottom(null);
@@ -295,18 +298,18 @@ public final class Table extends ShapeGroup {
      *
      * @param line the border line
      */
-    public void setInsideBorders(Line line){
+    public void setInsideBorders(Line line) {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
                 TableCell cell = cells[i][j];
 
-                if(j != cells[i].length - 1)
+                if (j != cells[i].length - 1)
                     cell.setBorderRight(cloneBorder(line));
                 else {
                     cell.setBorderLeft(null);
                     cell.setBorderLeft(null);
                 }
-                if(i != cells.length - 1) cell.setBorderBottom(cloneBorder(line));
+                if (i != cells.length - 1) cell.setBorderBottom(cloneBorder(line));
                 else {
                     cell.setBorderTop(null);
                     cell.setBorderBottom(null);
@@ -315,7 +318,7 @@ public final class Table extends ShapeGroup {
         }
     }
 
-    private Line cloneBorder(Line line){
+    private Line cloneBorder(Line line) {
         Line border = createBorder();
         border.setLineWidth(line.getLineWidth());
         border.setLineStyle(line.getLineStyle());
@@ -329,10 +332,10 @@ public final class Table extends ShapeGroup {
      *
      * @return the created border
      */
-    public Line createBorder(){
+    public Line createBorder() {
         Line line = new Line(this);
 
-        EscherOptRecord opt = (EscherOptRecord)getEscherChild(line.getSpContainer(), EscherOptRecord.RECORD_ID);
+        EscherOptRecord opt = (EscherOptRecord) getEscherChild(line.getSpContainer(), EscherOptRecord.RECORD_ID);
         setEscherProperty(opt, EscherProperties.GEOMETRY__SHAPEPATH, -1);
         setEscherProperty(opt, EscherProperties.GEOMETRY__FILLOK, -1);
         setEscherProperty(opt, EscherProperties.SHADOWSTYLE__SHADOWOBSURED, 0x20000);

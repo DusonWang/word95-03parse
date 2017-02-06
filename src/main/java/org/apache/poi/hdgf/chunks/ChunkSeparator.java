@@ -19,17 +19,17 @@ package org.apache.poi.hdgf.chunks;
 
 /**
  * A separator between the trailer of one chunk, and the
- *  header of the next one
+ * header of the next one
  */
 public final class ChunkSeparator {
-	protected byte[] separatorData;
+    protected byte[] separatorData;
 
-	public ChunkSeparator(byte[] data, int offset) {
-		separatorData = new byte[4];
-		System.arraycopy(data, offset, separatorData, 0, 4);
-	}
+    public ChunkSeparator(byte[] data, int offset) {
+        separatorData = new byte[4];
+        System.arraycopy(data, offset, separatorData, 0, 4);
+    }
 
-	public String toString() {
-		return "<ChunkSeparator of length " + separatorData.length + ">";
-	}
+    public String toString() {
+        return "<ChunkSeparator of length " + separatorData.length + ">";
+    }
 }

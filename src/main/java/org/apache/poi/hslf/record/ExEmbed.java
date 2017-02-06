@@ -17,11 +17,11 @@
 
 package org.apache.poi.hslf.record;
 
-import java.io.OutputStream;
-import java.io.IOException;
-
 import org.apache.poi.util.LittleEndian;
 import org.apache.poi.util.POILogger;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * This data represents an embedded object in the document.
@@ -30,13 +30,12 @@ import org.apache.poi.util.POILogger;
  */
 public class ExEmbed extends RecordContainer {
 
+    // Links to our more interesting children
+    protected RecordAtom embedAtom;
     /**
      * Record header data.
      */
     private byte[] _header;
-
-    // Links to our more interesting children
-    protected RecordAtom embedAtom;
     private ExOleObjAtom oleObjAtom;
     private CString menuName;
     private CString progId;
@@ -46,16 +45,16 @@ public class ExEmbed extends RecordContainer {
      * Set things up, and find our more interesting children
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected ExEmbed(byte[] source, int start, int len) {
         // Grab the header
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Find our children
-        _children = Record.findChildRecords(source,start+8,len-8);
+        _children = Record.findChildRecords(source, start + 8, len - 8);
         findInterestingChildren();
     }
 
@@ -68,7 +67,7 @@ public class ExEmbed extends RecordContainer {
 
         // Setup our header block
         _header[0] = 0x0f; // We are a container record
-        LittleEndian.putShort(_header, 2, (short)getRecordType());
+        LittleEndian.putShort(_header, 2, (short) getRecordType());
 
         // Setup our child records
         CString cs1 = new CString();
@@ -92,27 +91,33 @@ public class ExEmbed extends RecordContainer {
     private void findInterestingChildren() {
 
         // First child should be the ExHyperlinkAtom
-        if(_children[0] instanceof ExEmbedAtom) {
-            embedAtom = (ExEmbedAtom)_children[0];
+        if (_children[0] instanceof ExEmbedAtom) {
+            embedAtom = (ExEmbedAtom) _children[0];
         } else {
             logger.log(POILogger.ERROR, "First child record wasn't a ExEmbedAtom, was of type " + _children[0].getRecordType());
         }
 
         // Second child should be the ExOleObjAtom
         if (_children[1] instanceof ExOleObjAtom) {
-            oleObjAtom = (ExOleObjAtom)_children[1];
+            oleObjAtom = (ExOleObjAtom) _children[1];
         } else {
             logger.log(POILogger.ERROR, "Second child record wasn't a ExOleObjAtom, was of type " + _children[1].getRecordType());
         }
 
         for (int i = 2; i < _children.length; i++) {
-            if (_children[i] instanceof CString){
-                CString cs = (CString)_children[i];
+            if (_children[i] instanceof CString) {
+                CString cs = (CString) _children[i];
                 int opts = cs.getOptions() >> 4;
-                switch(opts){
-                    case 0x1: menuName = cs; break;
-                    case 0x2: progId = cs; break;
-                    case 0x3: clipboardName = cs; break;
+                switch (opts) {
+                    case 0x1:
+                        menuName = cs;
+                        break;
+                    case 0x2:
+                        progId = cs;
+                        break;
+                    case 0x3:
+                        clipboardName = cs;
+                        break;
                 }
             }
         }
@@ -123,9 +128,8 @@ public class ExEmbed extends RecordContainer {
      *
      * @return the {@link ExEmbedAtom}.
      */
-    public ExEmbedAtom getExEmbedAtom()
-    {
-        return (ExEmbedAtom)embedAtom;
+    public ExEmbedAtom getExEmbedAtom() {
+        return (ExEmbedAtom) embedAtom;
     }
 
     /**
@@ -133,8 +137,7 @@ public class ExEmbed extends RecordContainer {
      *
      * @return the {@link ExOleObjAtom}.
      */
-    public ExOleObjAtom getExOleObjAtom()
-    {
+    public ExOleObjAtom getExOleObjAtom() {
         return oleObjAtom;
     }
 
@@ -143,44 +146,40 @@ public class ExEmbed extends RecordContainer {
      *
      * @return the name used for menus and the Links dialog box.
      */
-    public String getMenuName()
-    {
+    public String getMenuName() {
         return menuName == null ? null : menuName.getText();
     }
 
-    public void setMenuName(String s)
-    {
-        if(menuName != null) menuName.setText(s);
+    public void setMenuName(String s) {
+        if (menuName != null) menuName.setText(s);
     }
 
     /**
      * Gets the OLE Programmatic Identifier.
-     * 
+     *
      * @return the OLE Programmatic Identifier.
      */
-    public String getProgId()
-    {
+    public String getProgId() {
         return progId == null ? null : progId.getText();
     }
 
-    public void setProgId(String s)
-    {
-        if(progId != null) progId.setText(s);
+    public void setProgId(String s) {
+        if (progId != null) progId.setText(s);
     }
+
     /**
      * Gets the name that appears in the paste special dialog.
      *
      * @return the name that appears in the paste special dialog.
      */
-    public String getClipboardName()
-    {
+    public String getClipboardName() {
         return clipboardName == null ? null : clipboardName.getText();
     }
 
-    public void setClipboardName(String s)
-    {
-        if(clipboardName != null) clipboardName.setText(s);
+    public void setClipboardName(String s) {
+        if (clipboardName != null) clipboardName.setText(s);
     }
+
     /**
      * Returns the type (held as a little endian in bytes 3 and 4)
      * that this class handles.
@@ -199,6 +198,6 @@ public class ExEmbed extends RecordContainer {
      * @throws IOException if there was an error writing to the stream.
      */
     public void writeOut(OutputStream out) throws IOException {
-        writeOut(_header[0],_header[1],getRecordType(),_children,out);
+        writeOut(_header[0], _header[1], getRecordType(), _children, out);
     }
 }

@@ -21,7 +21,7 @@ package org.apache.poi.hdf.model.hdftypes;
 /**
  * common data structure in a Word file. Contains an array of 4 byte ints in
  * the front that relate to an array of abitrary data structures in the back.
- *
+ * <p>
  * This class acts more like a pointer. In the sense that it doesn't store any
  * data. It only provides convenience methods for accessing a particular
  * PlexOfCps
@@ -29,8 +29,7 @@ package org.apache.poi.hdf.model.hdftypes;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class PlexOfCps
-{
+public final class PlexOfCps {
     private int _count;
     private int _offset;
     private int _sizeOfStruct;
@@ -39,39 +38,37 @@ public final class PlexOfCps
     /**
      * Constructor
      *
-     * @param size The size in bytes of this PlexOfCps
+     * @param size         The size in bytes of this PlexOfCps
      * @param sizeOfStruct The size of the data structure type stored in
-     *        this PlexOfCps.
+     *                     this PlexOfCps.
      */
-    public PlexOfCps(int size, int sizeOfStruct)
-    {
-        _count = (size - 4)/(4 + sizeOfStruct);
+    public PlexOfCps(int size, int sizeOfStruct) {
+        _count = (size - 4) / (4 + sizeOfStruct);
         _sizeOfStruct = sizeOfStruct;
     }
-    public int getIntOffset(int index)
-    {
-      return index * 4;
+
+    public int getIntOffset(int index) {
+        return index * 4;
     }
+
     /**
      * returns the number of data structures in this PlexOfCps.
      *
      * @return The number of data structures in this PlexOfCps
      */
-    public int length()
-    {
+    public int length() {
         return _count;
     }
+
     /**
      * Returns the offset, in bytes, from the beginning if this PlexOfCps to
      * the data structure at index.
      *
      * @param index The index of the data structure.
-     *
      * @return The offset, in bytes, from the beginning if this PlexOfCps to
-     *         the data structure at index.
+     * the data structure at index.
      */
-    public int getStructOffset(int index)
-    {
+    public int getStructOffset(int index) {
         return (4 * (_count + 1)) + (_sizeOfStruct * index);
     }
 }

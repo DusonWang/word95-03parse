@@ -51,6 +51,11 @@ public final class MD5 {
         return new String(ob);
     }
 
+    public static void main(String args[]) throws UnsupportedEncodingException {
+        MD5 md5 = new MD5();
+        System.out.println(md5.getMD5ofStr("123456"));
+    }
+
     public String getMD5ofStr(String inbuf) {
         md5Init();
         md5Update(inbuf.getBytes(), inbuf.length());
@@ -63,13 +68,13 @@ public final class MD5 {
 
     }
 
-    public void getMD5StoreDigest(MD5 hwpf) {
+    public void getMD5StoreDigest(MD5 hw) {
         int i, j;
         for (i = 0, j = 0; i < 4; i++, j += 4) {
-            hwpf.digest[j] = (byte) (hwpf.state[i] & 0xffL);
-            hwpf.digest[j + 1] = (byte) ((hwpf.state[i] >>> 8) & 0xffL);
-            hwpf.digest[j + 2] = (byte) ((hwpf.state[i] >>> 16) & 0xffL);
-            hwpf.digest[j + 3] = (byte) ((hwpf.state[i] >>> 24) & 0xffL);
+            hw.digest[j] = (byte) (hw.state[i] & 0xffL);
+            hw.digest[j + 1] = (byte) ((hw.state[i] >>> 8) & 0xffL);
+            hw.digest[j + 2] = (byte) ((hw.state[i] >>> 16) & 0xffL);
+            hw.digest[j + 3] = (byte) ((hw.state[i] >>> 24) & 0xffL);
         }
     }
 
@@ -179,7 +184,7 @@ public final class MD5 {
     }
 
     private void md5MemCopy(byte[] output, byte[] input,
-                           int outPos, int inPos, int len) {
+                            int outPos, int inPos, int len) {
         int i;
 
         for (i = 0; i < len; i++)
@@ -289,10 +294,5 @@ public final class MD5 {
                     (b2iu(input[j + 2]) << 16) |
                     (b2iu(input[j + 3]) << 24);
 
-    }
-
-    public static void main(String args[]) throws UnsupportedEncodingException {
-        MD5 md5 = new MD5();
-        System.out.println(md5.getMD5ofStr("123456"));
     }
 }

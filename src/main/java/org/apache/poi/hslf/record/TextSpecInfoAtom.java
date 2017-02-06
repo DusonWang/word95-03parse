@@ -19,8 +19,8 @@ package org.apache.poi.hslf.record;
 
 import org.apache.poi.util.LittleEndian;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -42,27 +42,31 @@ public final class TextSpecInfoAtom extends RecordAtom {
 
     /**
      * Constructs the link related atom record from its
-     *  source data.
+     * source data.
      *
      * @param source the source data as a byte array.
-     * @param start the start offset into the byte array.
-     * @param len the length of the slice in the byte array.
+     * @param start  the start offset into the byte array.
+     * @param len    the length of the slice in the byte array.
      */
     protected TextSpecInfoAtom(byte[] source, int start, int len) {
         // Get the header.
         _header = new byte[8];
-        System.arraycopy(source,start,_header,0,8);
+        System.arraycopy(source, start, _header, 0, 8);
 
         // Get the record data.
-        _data = new byte[len-8];
-        System.arraycopy(source,start+8,_data,0,len-8);
+        _data = new byte[len - 8];
+        System.arraycopy(source, start + 8, _data, 0, len - 8);
 
     }
+
     /**
      * Gets the record type.
+     *
      * @return the record type.
      */
-    public long getRecordType() { return RecordTypes.TextSpecInfoAtom.typeID; }
+    public long getRecordType() {
+        return RecordTypes.TextSpecInfoAtom.typeID;
+    }
 
     /**
      * Write the contents of the record back, so it can be written
@@ -81,22 +85,23 @@ public final class TextSpecInfoAtom extends RecordAtom {
      *
      * @param size the text length
      */
-    public void setTextSize(int size){
+    public void setTextSize(int size) {
         LittleEndian.putInt(_data, 0, size);
     }
 
     /**
      * Reset the content to one info run with the default values
-     * @param size  the site of parent text
+     *
+     * @param size the site of parent text
      */
-    public void reset(int size){
+    public void reset(int size) {
         _data = new byte[10];
         // 01 00 00 00
         LittleEndian.putInt(_data, 0, size);
         // 01 00 00 00
         LittleEndian.putInt(_data, 4, 1); //mask
         // 00 00
-        LittleEndian.putShort(_data, 8, (short)0); //langId
+        LittleEndian.putShort(_data, 8, (short) 0); //langId
 
         // Update the size (header bytes 5-8)
         LittleEndian.putInt(_header, 4, _data.length);
@@ -107,32 +112,37 @@ public final class TextSpecInfoAtom extends RecordAtom {
      *
      * @return the number of characters covered by this records
      */
-    public int getCharactersCovered(){
+    public int getCharactersCovered() {
         int covered = 0;
         TextSpecInfoRun[] runs = getTextSpecInfoRuns();
         for (int i = 0; i < runs.length; i++) covered += runs[i].len;
         return covered;
     }
 
-    public TextSpecInfoRun[] getTextSpecInfoRuns(){
+    public TextSpecInfoRun[] getTextSpecInfoRuns() {
         ArrayList<TextSpecInfoRun> lst = new ArrayList<TextSpecInfoRun>();
         int pos = 0;
         int[] bits = {1, 0, 2};
-        while(pos < _data.length) {
+        while (pos < _data.length) {
             TextSpecInfoRun run = new TextSpecInfoRun();
-            run.len = LittleEndian.getInt(_data, pos); pos += 4;
-            run.mask = LittleEndian.getInt(_data, pos); pos += 4;
+            run.len = LittleEndian.getInt(_data, pos);
+            pos += 4;
+            run.mask = LittleEndian.getInt(_data, pos);
+            pos += 4;
             for (int i = 0; i < bits.length; i++) {
-                if((run.mask & 1 << bits[i]) != 0){
-                    switch (bits[i]){
+                if ((run.mask & 1 << bits[i]) != 0) {
+                    switch (bits[i]) {
                         case 0:
-                            run.spellInfo = LittleEndian.getShort(_data, pos); pos += 2;
+                            run.spellInfo = LittleEndian.getShort(_data, pos);
+                            pos += 2;
                             break;
                         case 1:
-                            run.langId = LittleEndian.getShort(_data, pos); pos += 2;
+                            run.langId = LittleEndian.getShort(_data, pos);
+                            pos += 2;
                             break;
                         case 2:
-                            run.altLangId = LittleEndian.getShort(_data, pos); pos += 2;
+                            run.altLangId = LittleEndian.getShort(_data, pos);
+                            pos += 2;
                             break;
                     }
                 }
@@ -157,7 +167,7 @@ public final class TextSpecInfoAtom extends RecordAtom {
 
         /**
          * Spelling status of this text. See Spell Info table below.
-         *
+         * <p>
          * <p>Spell Info Types:</p>
          * <li>0    Unchecked
          * <li>1    Previously incorrect, needs rechecking
@@ -166,7 +176,7 @@ public final class TextSpecInfoAtom extends RecordAtom {
          *
          * @return Spelling status of this text
          */
-        public short getSpellInfo(){
+        public short getSpellInfo() {
             return spellInfo;
         }
 
@@ -175,7 +185,7 @@ public final class TextSpecInfoAtom extends RecordAtom {
          *
          * @return Windows LANGID for this text.
          */
-        public short getLangId(){
+        public short getLangId() {
             return spellInfo;
         }
 
@@ -184,16 +194,16 @@ public final class TextSpecInfoAtom extends RecordAtom {
          * must be a valid non-East Asian LANGID if the text has an East Asian language,
          * otherwise may be an East Asian LANGID or language neutral (zero).
          *
-         * @return  Alternate Windows LANGID of this text
+         * @return Alternate Windows LANGID of this text
          */
-        public short getAltLangId(){
+        public short getAltLangId() {
             return altLangId;
         }
 
         /**
          * @return Length of special info run.
          */
-        public int length(){
+        public int length() {
             return len;
         }
     }

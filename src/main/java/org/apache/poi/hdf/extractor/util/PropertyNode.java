@@ -24,42 +24,36 @@ package org.apache.poi.hdf.extractor.util;
  */
 @Deprecated
 public abstract class PropertyNode implements Comparable {
-  private byte[] _grpprl;
-  private int _fcStart;
-  private int _fcEnd;
+    private byte[] _grpprl;
+    private int _fcStart;
+    private int _fcEnd;
 
-  public PropertyNode(int fcStart, int fcEnd, byte[] grpprl)
-  {
-      _fcStart = fcStart;
-      _fcEnd = fcEnd;
-      _grpprl = grpprl;
-  }
-  public int getStart()
-  {
-      return _fcStart;
-  }
-  public int getEnd()
-  {
-    return _fcEnd;
-  }
-  protected byte[] getGrpprl()
-  {
-    return _grpprl;
-  }
-  public int compareTo(Object o)
-  {
-      int fcStart = ((PropertyNode)o).getStart();
-      if(_fcStart == fcStart)
-      {
-        return 0;
-      }
-      else if(_fcStart < fcStart)
-      {
-        return -1;
-      }
-      else
-      {
-        return 1;
-      }
-  }
+    public PropertyNode(int fcStart, int fcEnd, byte[] grpprl) {
+        _fcStart = fcStart;
+        _fcEnd = fcEnd;
+        _grpprl = grpprl;
+    }
+
+    public int getStart() {
+        return _fcStart;
+    }
+
+    public int getEnd() {
+        return _fcEnd;
+    }
+
+    protected byte[] getGrpprl() {
+        return _grpprl;
+    }
+
+    public int compareTo(Object o) {
+        int fcStart = ((PropertyNode) o).getStart();
+        if (_fcStart == fcStart) {
+            return 0;
+        } else if (_fcStart < fcStart) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 }

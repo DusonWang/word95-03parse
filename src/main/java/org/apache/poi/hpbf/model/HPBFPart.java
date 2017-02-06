@@ -17,89 +17,95 @@
 
 package org.apache.poi.hpbf.model;
 
+import org.apache.poi.poifs.filesystem.DirectoryNode;
+import org.apache.poi.poifs.filesystem.DocumentEntry;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.poi.poifs.filesystem.DirectoryNode;
-import org.apache.poi.poifs.filesystem.DocumentEntry;
-
 /**
  * Parent class of all HPBF sub-parts, handling
- *  the fiddly reading in / writing out bits
- *  for all of them.
+ * the fiddly reading in / writing out bits
+ * for all of them.
  */
 public abstract class HPBFPart {
-	protected byte[] data;
-	/**
-	 * @param path  the path to the part, eg Contents or Quill, QuillSub, CONTENTS
-	 */
-	public HPBFPart(DirectoryNode baseDir, String[] path) throws IOException {
+    protected byte[] data;
 
-		DirectoryNode dir = getDir(path, baseDir);
-		String name = path[path.length-1];
+    /**
+     * @param path the path to the part, eg Contents or Quill, QuillSub, CONTENTS
+     */
+    public HPBFPart(DirectoryNode baseDir, String[] path) throws IOException {
 
-		DocumentEntry docProps;
-		try {
-			docProps = (DocumentEntry)dir.getEntry(name);
-		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException("File invalid - failed to find document entry '"
-					+ name + "'");
-		}
+        DirectoryNode dir = getDir(path, baseDir);
+        String name = path[path.length - 1];
 
-		// Grab the data from the part stream
-		data = new byte[docProps.getSize()];
-		dir.createDocumentInputStream(name).read(data);
-	}
-	private DirectoryNode getDir(String[] path, DirectoryNode baseDir) {
-		DirectoryNode dir = baseDir;
-		for(int i=0; i<path.length-1; i++) {
-			try {
-				dir = (DirectoryNode)dir.getEntry(path[i]);
-			} catch (FileNotFoundException e) {
-				throw new IllegalArgumentException("File invalid - failed to find directory entry '"
-						+ path[i] + "'");
-			}
-		}
-		return dir;
-	}
+        DocumentEntry docProps;
+        try {
+            docProps = (DocumentEntry) dir.getEntry(name);
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("File invalid - failed to find document entry '"
+                    + name + "'");
+        }
 
-	public void writeOut(DirectoryNode baseDir) throws IOException {
-		String[] path = getPath();
+        // Grab the data from the part stream
+        data = new byte[docProps.getSize()];
+        dir.createDocumentInputStream(name).read(data);
+    }
 
-		// Ensure that all parent directories exist
-		DirectoryNode dir = baseDir;
-		for(int i=0; i<path.length-1; i++) {
-			try {
-				dir = (DirectoryNode)dir.getEntry(path[i]);
-			} catch(FileNotFoundException e) {
-				dir.createDirectory(path[i]);
-			}
-		}
+    private DirectoryNode getDir(String[] path, DirectoryNode baseDir) {
+        DirectoryNode dir = baseDir;
+        for (int i = 0; i < path.length - 1; i++) {
+            try {
+                dir = (DirectoryNode) dir.getEntry(path[i]);
+            } catch (FileNotFoundException e) {
+                throw new IllegalArgumentException("File invalid - failed to find directory entry '"
+                        + path[i] + "'");
+            }
+        }
+        return dir;
+    }
 
-		// Update the byte array with the latest data
-		generateData();
+    public void writeOut(DirectoryNode baseDir) throws IOException {
+        String[] path = getPath();
 
-		// Write out
-		ByteArrayInputStream bais = new ByteArrayInputStream(data);
-		dir.createDocument(path[path.length-1], bais);
-	}
+        // Ensure that all parent directories exist
+        DirectoryNode dir = baseDir;
+        for (int i = 0; i < path.length - 1; i++) {
+            try {
+                dir = (DirectoryNode) dir.getEntry(path[i]);
+            } catch (FileNotFoundException e) {
+                dir.createDirectory(path[i]);
+            }
+        }
 
-	/**
-	 * Called just before writing out, to trigger
-	 *  the data byte array to be updated with the
-	 *  latest contents.
-	 */
-	protected abstract void generateData();
+        // Update the byte array with the latest data
+        generateData();
 
-	/**
-	 * Returns the raw data that makes up
-	 *  this document part.
-	 */
-	public byte[] getData() { return data; }
+        // Write out
+        ByteArrayInputStream bais = new ByteArrayInputStream(data);
+        dir.createDocument(path[path.length - 1], bais);
+    }
 
-	/**
-	 * Returns
-	 */
-	public final String[] getPath() {return null;}
+    /**
+     * Called just before writing out, to trigger
+     * the data byte array to be updated with the
+     * latest contents.
+     */
+    protected abstract void generateData();
+
+    /**
+     * Returns the raw data that makes up
+     * this document part.
+     */
+    public byte[] getData() {
+        return data;
+    }
+
+    /**
+     * Returns
+     */
+    public final String[] getPath() {
+        return null;
+    }
 }

@@ -18,7 +18,9 @@
 package org.apache.poi.sl.usermodel;
 
 public interface ShapeContainer {
-	public Shape[] getShapes();
-	public void addShape(Shape shape);
-	public boolean removeShape(Shape shape);
+    public Shape[] getShapes();
+
+    public void addShape(Shape shape);
+
+    public boolean removeShape(Shape shape);
 }

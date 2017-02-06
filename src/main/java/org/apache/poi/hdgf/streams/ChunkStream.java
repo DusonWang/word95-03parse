@@ -17,8 +17,6 @@
 
 package org.apache.poi.hdgf.streams;
 
-import java.util.ArrayList;
-
 import org.apache.poi.hdgf.chunks.Chunk;
 import org.apache.poi.hdgf.chunks.ChunkFactory;
 import org.apache.poi.hdgf.chunks.ChunkHeader;
@@ -26,56 +24,60 @@ import org.apache.poi.hdgf.pointers.Pointer;
 import org.apache.poi.util.POILogFactory;
 import org.apache.poi.util.POILogger;
 
+import java.util.ArrayList;
+
 public final class ChunkStream extends Stream {
-	private static POILogger logger = POILogFactory.getLogger(ChunkStream.class);
-	
-	private ChunkFactory chunkFactory;
-	/** All the Chunks we contain */
-	private Chunk[] chunks;
+    private static POILogger logger = POILogFactory.getLogger(ChunkStream.class);
 
-	protected ChunkStream(Pointer pointer, StreamStore store, ChunkFactory chunkFactory) {
-		super(pointer, store);
-		this.chunkFactory = chunkFactory;
+    private ChunkFactory chunkFactory;
+    /**
+     * All the Chunks we contain
+     */
+    private Chunk[] chunks;
 
-		// For compressed stores, we require all of the data
-		store.copyBlockHeaderToContents();
-	}
+    protected ChunkStream(Pointer pointer, StreamStore store, ChunkFactory chunkFactory) {
+        super(pointer, store);
+        this.chunkFactory = chunkFactory;
 
-	public Chunk[] getChunks() { return chunks; }
+        // For compressed stores, we require all of the data
+        store.copyBlockHeaderToContents();
+    }
 
-	/**
-	 * Process the contents of the stream out into chunks
-	 */
-	public void findChunks() {
-		ArrayList<Chunk> chunksA = new ArrayList<Chunk>();
+    public Chunk[] getChunks() {
+        return chunks;
+    }
 
-		if(getPointer().getOffset() == 0x64b3) {
-			int i = 0;
-			i++;
-		}
+    /**
+     * Process the contents of the stream out into chunks
+     */
+    public void findChunks() {
+        ArrayList<Chunk> chunksA = new ArrayList<Chunk>();
 
-		int pos = 0;
-		byte[] contents = getStore().getContents();
-		try {
-			while(pos < contents.length) {
-				// Ensure we have enough data to create a chunk from
-				int headerSize = ChunkHeader.getHeaderSize(chunkFactory.getVersion());
-				if(pos+headerSize <= contents.length) {
-					Chunk chunk = chunkFactory.createChunk(contents, pos);
-					chunksA.add(chunk);
+        if (getPointer().getOffset() == 0x64b3) {
+            int i = 0;
+            i++;
+        }
 
-					pos += chunk.getOnDiskSize();
-				} else {
-					logger.log(POILogger.WARN, "Needed " + headerSize + " bytes to create the next chunk header, but only found " + (contents.length-pos) + " bytes, ignoring rest of data");
-					pos = contents.length;
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			logger.log(POILogger.ERROR, "Failed to create chunk at " + pos + ", ignoring rest of data." + e);
-		}
+        int pos = 0;
+        byte[] contents = getStore().getContents();
+        try {
+            while (pos < contents.length) {
+                // Ensure we have enough data to create a chunk from
+                int headerSize = ChunkHeader.getHeaderSize(chunkFactory.getVersion());
+                if (pos + headerSize <= contents.length) {
+                    Chunk chunk = chunkFactory.createChunk(contents, pos);
+                    chunksA.add(chunk);
 
-		chunks = chunksA.toArray(new Chunk[chunksA.size()]);
-	}
+                    pos += chunk.getOnDiskSize();
+                } else {
+                    logger.log(POILogger.WARN, "Needed " + headerSize + " bytes to create the next chunk header, but only found " + (contents.length - pos) + " bytes, ignoring rest of data");
+                    pos = contents.length;
+                }
+            }
+        } catch (Exception e) {
+            logger.log(POILogger.ERROR, "Failed to create chunk at " + pos + ", ignoring rest of data." + e);
+        }
+
+        chunks = chunksA.toArray(new Chunk[chunksA.size()]);
+    }
 }

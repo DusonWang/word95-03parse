@@ -23,14 +23,12 @@ package org.apache.poi.hdf.model.hdftypes;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class LFO
-{
-  int _lsid;
-  int _clfolvl;
-  LFOLVL[] _levels;
+public final class LFO {
+    int _lsid;
+    int _clfolvl;
+    LFOLVL[] _levels;
 
-  public LFO()
-  {
+    public LFO() {
 
-  }
+    }
 }

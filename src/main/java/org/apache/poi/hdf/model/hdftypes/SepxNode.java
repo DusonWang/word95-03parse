@@ -23,22 +23,20 @@ package org.apache.poi.hdf.model.hdftypes;
  * @author Ryan Ackley
  */
 @Deprecated
-public final class SepxNode extends PropertyNode
-{
+public final class SepxNode extends PropertyNode {
 
-  int _index;
+    int _index;
 
-  public SepxNode(int index, int start, int end, byte[] sepx)
-  {
-    super(start, end, sepx);
-  }
-  public byte[] getSepx()
-  {
-    return getGrpprl();
-  }
+    public SepxNode(int index, int start, int end, byte[] sepx) {
+        super(start, end, sepx);
+    }
 
-  public int compareTo(Object obj) {
-      return 0;
-  }
+    public byte[] getSepx() {
+        return getGrpprl();
+    }
+
+    public int compareTo(Object obj) {
+        return 0;
+    }
 
 }

@@ -17,79 +17,79 @@
 
 package org.apache.poi.hmef.attribute;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.poi.hmef.Attachment;
 import org.apache.poi.hmef.HMEFMessage;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.util.LittleEndian;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 
 /**
  * An attribute which applies to a {@link HMEFMessage}
- *  or one of its {@link Attachment}s.
+ * or one of its {@link Attachment}s.
  * Note - the types and IDs differ from standard Outlook/MAPI
- *  ones, so we can't just re-use the HSMF ones.
+ * ones, so we can't just re-use the HSMF ones.
  */
 public class TNEFAttribute {
-   private final TNEFProperty property;
-   private final int type;
-   private final byte[] data;
-   private final int checksum;
-   
-   /**
-    * Constructs a single new attribute from the id, type,
-    *  and the contents of the stream
-    */
-   protected TNEFAttribute(int id, int type, InputStream inp) throws IOException {
-      this.type = type;
-      int length = LittleEndian.readInt(inp);
-      
-      property = TNEFProperty.getBest(id, type);
-      data = new byte[length];
-      IOUtils.readFully(inp, data);
-      
-      checksum = LittleEndian.readUShort(inp);
-   }
-   
-   /**
-    * Creates a new TNEF Attribute by reading data from
-    *  the stream within a {@link HMEFMessage}
-    */
-   public static TNEFAttribute create(InputStream inp) throws IOException {
-      int id   = LittleEndian.readUShort(inp);
-      int type = LittleEndian.readUShort(inp);
-      
-      // Create as appropriate
-      if(id == TNEFProperty.ID_MAPIPROPERTIES.id ||
-            id == TNEFProperty.ID_ATTACHMENT.id) {
-         return new TNEFMAPIAttribute(id, type, inp);
-      }
-      if(type == TNEFProperty.TYPE_STRING ||
-           type == TNEFProperty.TYPE_TEXT) {
-         return new TNEFStringAttribute(id, type, inp);
-      }
-      if(type == TNEFProperty.TYPE_DATE) {
-         return new TNEFDateAttribute(id, type, inp);
-      }
-      return new TNEFAttribute(id, type, inp); 
-   }
+    private final TNEFProperty property;
+    private final int type;
+    private final byte[] data;
+    private final int checksum;
 
-   public TNEFProperty getProperty() {
-      return property;
-   }
+    /**
+     * Constructs a single new attribute from the id, type,
+     * and the contents of the stream
+     */
+    protected TNEFAttribute(int id, int type, InputStream inp) throws IOException {
+        this.type = type;
+        int length = LittleEndian.readInt(inp);
 
-   public int getType() {
-      return type;
-   }
+        property = TNEFProperty.getBest(id, type);
+        data = new byte[length];
+        IOUtils.readFully(inp, data);
 
-   public byte[] getData() {
-      return data;
-   }
-   
-   public String toString() {
-      return "Attribute " + property.toString() + ", type=" + type + 
-             ", data length=" + data.length; 
-   }
+        checksum = LittleEndian.readUShort(inp);
+    }
+
+    /**
+     * Creates a new TNEF Attribute by reading data from
+     * the stream within a {@link HMEFMessage}
+     */
+    public static TNEFAttribute create(InputStream inp) throws IOException {
+        int id = LittleEndian.readUShort(inp);
+        int type = LittleEndian.readUShort(inp);
+
+        // Create as appropriate
+        if (id == TNEFProperty.ID_MAPIPROPERTIES.id ||
+                id == TNEFProperty.ID_ATTACHMENT.id) {
+            return new TNEFMAPIAttribute(id, type, inp);
+        }
+        if (type == TNEFProperty.TYPE_STRING ||
+                type == TNEFProperty.TYPE_TEXT) {
+            return new TNEFStringAttribute(id, type, inp);
+        }
+        if (type == TNEFProperty.TYPE_DATE) {
+            return new TNEFDateAttribute(id, type, inp);
+        }
+        return new TNEFAttribute(id, type, inp);
+    }
+
+    public TNEFProperty getProperty() {
+        return property;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public String toString() {
+        return "Attribute " + property.toString() + ", type=" + type +
+                ", data length=" + data.length;
+    }
 }

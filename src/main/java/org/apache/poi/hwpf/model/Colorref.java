@@ -94,9 +94,7 @@ public class Colorref implements Cloneable {
         if (getClass() != obj.getClass())
             return false;
         Colorref other = (Colorref) obj;
-        if (value != other.value)
-            return false;
-        return true;
+        return value == other.value;
     }
 
     public int getValue() {

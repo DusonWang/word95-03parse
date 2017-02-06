@@ -17,13 +17,13 @@
 
 package org.apache.poi.hslf.extractor;
 
-import org.apache.poi.hslf.usermodel.SlideShow;
-import org.apache.poi.hslf.usermodel.PictureData;
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.model.Picture;
+import org.apache.poi.hslf.usermodel.PictureData;
+import org.apache.poi.hslf.usermodel.SlideShow;
 
-import java.io.IOException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Utility to extract pictures from a PowerPoint file.

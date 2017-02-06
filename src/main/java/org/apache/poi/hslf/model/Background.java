@@ -18,8 +18,8 @@
 package org.apache.poi.hslf.model;
 
 import org.apache.poi.ddf.EscherContainerRecord;
-import org.apache.poi.hslf.usermodel.PictureData;
 import org.apache.poi.hslf.blip.Bitmap;
+import org.apache.poi.hslf.usermodel.PictureData;
 import org.apache.poi.util.POILogger;
 
 import javax.imageio.ImageIO;
