@@ -63,13 +63,13 @@ public final class MD5 {
 
     }
 
-    public void getMD5StoreDigest(MD5 hwpf) {
+    public void getMD5StoreDigest(MD5 hw) {
         int i, j;
         for (i = 0, j = 0; i < 4; i++, j += 4) {
-            hwpf.digest[j] = (byte) (hwpf.state[i] & 0xffL);
-            hwpf.digest[j + 1] = (byte) ((hwpf.state[i] >>> 8) & 0xffL);
-            hwpf.digest[j + 2] = (byte) ((hwpf.state[i] >>> 16) & 0xffL);
-            hwpf.digest[j + 3] = (byte) ((hwpf.state[i] >>> 24) & 0xffL);
+            hw.digest[j] = (byte) (hw.state[i] & 0xffL);
+            hw.digest[j + 1] = (byte) ((hw.state[i] >>> 8) & 0xffL);
+            hw.digest[j + 2] = (byte) ((hw.state[i] >>> 16) & 0xffL);
+            hw.digest[j + 3] = (byte) ((hw.state[i] >>> 24) & 0xffL);
         }
     }
 
