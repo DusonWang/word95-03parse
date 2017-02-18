@@ -78,17 +78,17 @@ public final class PPTXMLDump {
             return;
         }
         boolean outFile = false;
-        for (int i = 0; i < args.length; i++) {
+        for (String arg : args) {
 
-            if (args[i].startsWith("-")) {
-                if ("-f".equals(args[i])) {
+            if (arg.startsWith("-")) {
+                if ("-f".equals(arg)) {
                     //write ouput to a file
                     outFile = true;
                 }
             } else {
-                File ppt = new File(args[i]);
+                File ppt = new File(arg);
                 PPTXMLDump dump = new PPTXMLDump(ppt);
-                System.out.println("Dumping " + args[i]);
+                System.out.println("Dumping " + arg);
 
                 if (outFile) {
                     FileWriter out = new FileWriter(ppt.getName() + ".xml");
@@ -122,7 +122,7 @@ public final class PPTXMLDump {
         for (i = offset; i < (offset + length); i++) {
             int c = data[i];
             out.write((char) hexval[(c & 0xF0) >> 4]);
-            out.write((char) hexval[(c & 0x0F) >> 0]);
+            out.write((char) hexval[(c & 0x0F)]);
             out.write(' ');
             if ((i + 1 - offset) % linesize == 0 && i != (offset + length - 1)) {
                 out.write(CR);
@@ -214,7 +214,7 @@ public final class PPTXMLDump {
      * @param padding
      * @throws java.io.IOException
      */
-    public void dumpPictures(byte[] data, int padding) throws IOException {
+    private void dumpPictures(byte[] data, int padding) throws IOException {
         int pos = 0;
         while (pos < data.length) {
             byte[] header = new byte[PICT_HEADER_SIZE];

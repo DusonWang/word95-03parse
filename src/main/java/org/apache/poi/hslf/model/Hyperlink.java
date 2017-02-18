@@ -173,16 +173,16 @@ public final class Hyperlink {
         return address;
     }
 
-    public void setAddress(String str) {
-        address = str;
-    }
-
     public void setAddress(Slide slide) {
         String href = slide._getSheetNumber() + "," + slide.getSlideNumber() + ",Slide " + slide.getSlideNumber();
         setAddress(href);
         ;
         setTitle("Slide " + slide.getSlideNumber());
         setType(Hyperlink.LINK_SLIDENUMBER);
+    }
+
+    public void setAddress(String str) {
+        address = str;
     }
 
     public int getId() {

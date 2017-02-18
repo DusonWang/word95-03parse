@@ -20,9 +20,9 @@ import org.apache.poi.util.Beta;
 
 @Beta
 public interface FontReplacer {
-    public Triplet update(Triplet original);
+    Triplet update(Triplet original);
 
-    public class Triplet {
+    class Triplet {
         public String fontName;
         public boolean bold;
         public boolean italic;

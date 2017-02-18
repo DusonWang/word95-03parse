@@ -26,12 +26,12 @@ public class WordToFoUtils extends AbstractWordUtils {
         compactChildNodesR(blockElement, "fo:inline");
     }
 
-    public static void setBold(final Element element, final boolean bold) {
+    static void setBold(final Element element, final boolean bold) {
         element.setAttribute("font-weight", bold ? "bold" : "normal");
     }
 
-    public static void setBorder(Element element, BorderCode borderCode,
-                                 String where) {
+    private static void setBorder(Element element, BorderCode borderCode,
+                                  String where) {
         if (element == null)
             throw new IllegalArgumentException("element is null");
 
@@ -53,7 +53,7 @@ public class WordToFoUtils extends AbstractWordUtils {
         }
     }
 
-    public static void setCharactersProperties(
+    static void setCharactersProperties(
             final CharacterRun characterRun, final Element inline) {
         StringBuilder textDecorations = new StringBuilder();
 
@@ -110,19 +110,19 @@ public class WordToFoUtils extends AbstractWordUtils {
         }
     }
 
-    public static void setFontFamily(final Element element,
-                                     final String fontFamily) {
+    static void setFontFamily(final Element element,
+                              final String fontFamily) {
         if (isEmpty(fontFamily))
             return;
 
         element.setAttribute("font-family", fontFamily);
     }
 
-    public static void setFontSize(final Element element, final int fontSize) {
+    static void setFontSize(final Element element, final int fontSize) {
         element.setAttribute("font-size", String.valueOf(fontSize));
     }
 
-    public static void setIndent(Paragraph paragraph, Element block) {
+    private static void setIndent(Paragraph paragraph, Element block) {
         if (paragraph.getFirstLineIndent() != 0) {
             block.setAttribute(
                     "text-indent",
@@ -157,19 +157,19 @@ public class WordToFoUtils extends AbstractWordUtils {
         }
     }
 
-    public static void setItalic(final Element element, final boolean italic) {
+    static void setItalic(final Element element, final boolean italic) {
         element.setAttribute("font-style", italic ? "italic" : "normal");
     }
 
-    public static void setJustification(Paragraph paragraph,
-                                        final Element element) {
+    private static void setJustification(Paragraph paragraph,
+                                         final Element element) {
         String justification = getJustification(paragraph.getJustification());
         if (isNotEmpty(justification))
             element.setAttribute("text-align", justification);
     }
 
-    public static void setLanguage(final CharacterRun characterRun,
-                                   final Element inline) {
+    static void setLanguage(final CharacterRun characterRun,
+                            final Element inline) {
         if (characterRun.getLanguageCode() != 0) {
             final String language = getLanguage(characterRun.getLanguageCode());
             if (isNotEmpty(language))
@@ -177,8 +177,8 @@ public class WordToFoUtils extends AbstractWordUtils {
         }
     }
 
-    public static void setParagraphProperties(Paragraph paragraph,
-                                              Element block) {
+    static void setParagraphProperties(Paragraph paragraph,
+                                       Element block) {
         setIndent(paragraph, block);
         setJustification(paragraph, block);
 
@@ -206,8 +206,8 @@ public class WordToFoUtils extends AbstractWordUtils {
         block.setAttribute("white-space-collapse", "false");
     }
 
-    public static void setPictureProperties(Picture picture,
-                                            Element graphicElement) {
+    static void setPictureProperties(Picture picture,
+                                     Element graphicElement) {
         final int horizontalScale = picture.getHorizontalScalingFactor();
         final int verticalScale = picture.getVerticalScalingFactor();
 
@@ -251,9 +251,9 @@ public class WordToFoUtils extends AbstractWordUtils {
         }
     }
 
-    public static void setTableCellProperties(TableRow tableRow,
-                                              TableCell tableCell, Element element, boolean toppest,
-                                              boolean bottomest, boolean leftest, boolean rightest) {
+    static void setTableCellProperties(TableRow tableRow,
+                                       TableCell tableCell, Element element, boolean toppest,
+                                       boolean bottomest, boolean leftest, boolean rightest) {
         element.setAttribute("width", (tableCell.getWidth() / TWIPS_PER_INCH)
                 + "in");
         element.setAttribute("padding-start",
@@ -285,8 +285,8 @@ public class WordToFoUtils extends AbstractWordUtils {
         setBorder(element, top, "top");
     }
 
-    public static void setTableRowProperties(TableRow tableRow,
-                                             Element tableRowElement) {
+    static void setTableRowProperties(TableRow tableRow,
+                                      Element tableRowElement) {
         if (tableRow.getRowHeight() > 0) {
             tableRowElement.setAttribute("height",
                     (tableRow.getRowHeight() / TWIPS_PER_INCH) + "in");

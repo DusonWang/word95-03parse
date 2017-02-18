@@ -24,7 +24,6 @@ import org.apache.poi.ddf.EscherRecordFactory;
 import org.apache.poi.util.Internal;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 

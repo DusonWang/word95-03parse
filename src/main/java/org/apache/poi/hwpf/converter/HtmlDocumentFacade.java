@@ -28,10 +28,10 @@ import java.util.Map;
 public class HtmlDocumentFacade {
     protected final Element body;
     protected final Document document;
-    protected final Element head;
+    private final Element head;
     protected final Element html;
     protected Element title;
-    protected Text titleText;
+    private Text titleText;
     /**
      * Map from tag name, to map linking known styles and css class names
      */
@@ -68,7 +68,7 @@ public class HtmlDocumentFacade {
         addMeta("keywords", value);
     }
 
-    public void addMeta(final String name, String value) {
+    private void addMeta(final String name, String value) {
         Element meta = document.createElement("meta");
         meta.setAttribute("name", name);
         meta.setAttribute("content", value);
@@ -84,7 +84,7 @@ public class HtmlDocumentFacade {
         element.setAttribute("class", newClassValue);
     }
 
-    protected String buildStylesheet(
+    private String buildStylesheet(
             final Map<String, Map<String, String>> prefixToMapOfStyles) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Map<String, String> byPrefix : prefixToMapOfStyles.values()) {
@@ -106,7 +106,7 @@ public class HtmlDocumentFacade {
         return document.createElement("div");
     }
 
-    public Element createBookmark(String name) {
+    Element createBookmark(String name) {
         final Element basicLink = document.createElement("a");
         basicLink.setAttribute("name", name);
         return basicLink;
@@ -120,19 +120,19 @@ public class HtmlDocumentFacade {
         return document.createElement("h2");
     }
 
-    public Element createHyperlink(String internalDestination) {
+    Element createHyperlink(String internalDestination) {
         final Element basicLink = document.createElement("a");
         basicLink.setAttribute("href", internalDestination);
         return basicLink;
     }
 
-    public Element createImage(String src) {
+    Element createImage(String src) {
         Element result = document.createElement("img");
         result.setAttribute("src", src);
         return result;
     }
 
-    public Element createLineBreak() {
+    Element createLineBreak() {
         return document.createElement("br");
     }
 
@@ -140,7 +140,7 @@ public class HtmlDocumentFacade {
         return document.createElement("li");
     }
 
-    public Element createOption(String value, boolean selected) {
+    Element createOption(String value, boolean selected) {
         Element result = document.createElement("option");
         result.appendChild(createText(value));
         if (selected) {
@@ -149,11 +149,11 @@ public class HtmlDocumentFacade {
         return result;
     }
 
-    public Element createParagraph() {
+    Element createParagraph() {
         return document.createElement("p");
     }
 
-    public Element createSelect() {
+    Element createSelect() {
         return document.createElement("select");
     }
 

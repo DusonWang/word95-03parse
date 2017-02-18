@@ -19,6 +19,6 @@ package org.apache.poi.hssf.converter;
 import org.apache.poi.util.Beta;
 
 @Beta
-public class ExcelToFoUtils extends AbstractExcelUtils {
+class ExcelToFoUtils extends AbstractExcelUtils {
 
 }

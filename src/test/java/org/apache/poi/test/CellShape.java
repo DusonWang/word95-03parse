@@ -28,18 +28,6 @@ public class CellShape {
         m_colm = col;
     }
 
-    public void setText(String text) {
-        m_text = text;
-    }
-
-    public void setLeft(int left) {
-        m_left = left;
-    }
-
-    public void setRight(int right) {
-        m_right = right;
-    }
-
     public int getColm() {
         return m_colm;
     }
@@ -48,11 +36,23 @@ public class CellShape {
         return m_text;
     }
 
+    public void setText(String text) {
+        m_text = text;
+    }
+
     public int getLeft() {
         return m_left;
     }
 
+    public void setLeft(int left) {
+        m_left = left;
+    }
+
     public int getRight() {
         return m_right;
+    }
+
+    public void setRight(int right) {
+        m_right = right;
     }
 }

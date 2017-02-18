@@ -40,8 +40,8 @@ import java.util.TreeSet;
 
 @Beta
 public class AbstractWordUtils {
-    public static final float TWIPS_PER_INCH = 1440.0f;
-    public static final int TWIPS_PER_PT = 20;
+    static final float TWIPS_PER_INCH = 1440.0f;
+    static final int TWIPS_PER_PT = 20;
     static final String EMPTY = "";
     private static final POILogger logger = POILogFactory
             .getLogger(AbstractWordUtils.class);
@@ -62,22 +62,22 @@ public class AbstractWordUtils {
             for (int c = 0; c < tableRow.numCells(); c++) {
                 TableCell tableCell = tableRow.getCell(c);
 
-                edges.add(Integer.valueOf(tableCell.getLeftEdge()));
-                edges.add(Integer.valueOf(tableCell.getLeftEdge()
-                        + tableCell.getWidth()));
+                edges.add(tableCell.getLeftEdge());
+                edges.add(tableCell.getLeftEdge()
+                        + tableCell.getWidth());
             }
         }
 
         Integer[] sorted = edges.toArray(new Integer[edges.size()]);
         int[] result = new int[sorted.length];
         for (int i = 0; i < sorted.length; i++) {
-            result[i] = sorted[i].intValue();
+            result[i] = sorted[i];
         }
 
         return result;
     }
 
-    static boolean canBeMerged(Node node1, Node node2, String requiredTagName) {
+    public static boolean canBeMerged(Node node1, Node node2, String requiredTagName) {
         if (node1.getNodeType() != Node.ELEMENT_NODE
                 || node2.getNodeType() != Node.ELEMENT_NODE)
             return false;
@@ -140,7 +140,7 @@ public class AbstractWordUtils {
         return str1 == null ? str2 == null : str1.equals(str2);
     }
 
-    public static String getBorderType(BorderCode borderCode) {
+    static String getBorderType(BorderCode borderCode) {
         if (borderCode == null)
             throw new IllegalArgumentException("borderCode is null");
 
@@ -187,7 +187,7 @@ public class AbstractWordUtils {
         }
     }
 
-    public static String getBorderWidth(BorderCode borderCode) {
+    static String getBorderWidth(BorderCode borderCode) {
         int lineWidth = borderCode.getLineWidth();
         int pt = lineWidth / 8;
         int pte = lineWidth - pt * 8;
@@ -200,9 +200,9 @@ public class AbstractWordUtils {
         return stringBuilder.toString();
     }
 
-    public static String getBulletText(NumberingState numberingState,
-                                       HWPFList list, char level) {
-        StringBuffer bulletBuffer = new StringBuffer();
+    static String getBulletText(NumberingState numberingState,
+                                HWPFList list, char level) {
+        StringBuilder bulletBuffer = new StringBuilder();
         char[] xst = list.getNumberText(level).toCharArray();
         for (char element : xst) {
             if (element < 9) {
@@ -212,14 +212,14 @@ public class AbstractWordUtils {
 
                 if (!list.isStartAtOverriden(element)
                         && numberingState.levels.containsKey(key)) {
-                    num = numberingState.levels.get(key).intValue();
+                    num = numberingState.levels.get(key);
                     if (level == element) {
                         num++;
-                        numberingState.levels.put(key, Integer.valueOf(num));
+                        numberingState.levels.put(key, num);
                     }
                 } else {
                     num = list.getStartAt(element);
-                    numberingState.levels.put(key, Integer.valueOf(num));
+                    numberingState.levels.put(key, num);
                 }
 
                 if (level == element) {
@@ -292,14 +292,14 @@ public class AbstractWordUtils {
     }
 
     public static String getOpacity(int argbValue) {
-        int opacity = (int) ((argbValue & 0xFF000000l) >>> 24);
+        int opacity = (int) ((argbValue & 0xFF000000L) >>> 24);
         if (opacity == 0 || opacity == 0xFF)
             return ".0";
 
         return "" + (opacity / (float) 0xFF);
     }
 
-    public static String getColor24(int argbValue) {
+    static String getColor24(int argbValue) {
         if (argbValue == -1)
             throw new IllegalArgumentException("This colorref is empty");
 
@@ -352,7 +352,7 @@ public class AbstractWordUtils {
         return result.toString();
     }
 
-    public static String getJustification(int js) {
+    static String getJustification(int js) {
         switch (js) {
             case 0:
                 return "start";
@@ -377,7 +377,7 @@ public class AbstractWordUtils {
         return "";
     }
 
-    public static String getLanguage(int languageCode) {
+    static String getLanguage(int languageCode) {
         switch (languageCode) {
             case 1024:
                 return EMPTY;
@@ -389,7 +389,7 @@ public class AbstractWordUtils {
                 return "en-uk";
             default:
                 logger.log(POILogger.WARN, "Uknown or unmapped language code: ",
-                        Integer.valueOf(languageCode));
+                        languageCode);
                 return EMPTY;
         }
     }
@@ -410,7 +410,7 @@ public class AbstractWordUtils {
         return !isEmpty(str);
     }
 
-    public static HWPFDocumentCore loadDoc(final DirectoryNode root)
+    static HWPFDocumentCore loadDoc(final DirectoryNode root)
             throws IOException {
         try {
             return new HWPFDocument(root);
@@ -419,7 +419,7 @@ public class AbstractWordUtils {
         }
     }
 
-    public static HWPFDocumentCore loadDoc(File docFile) throws IOException {
+    static HWPFDocumentCore loadDoc(File docFile) throws IOException {
         final FileInputStream istream = new FileInputStream(docFile);
         try {
             return loadDoc(istream);
@@ -428,12 +428,12 @@ public class AbstractWordUtils {
         }
     }
 
-    public static HWPFDocumentCore loadDoc(InputStream inputStream)
+    private static HWPFDocumentCore loadDoc(InputStream inputStream)
             throws IOException {
         return loadDoc(HWPFDocumentCore.verifyAndBuildPOIFS(inputStream));
     }
 
-    public static HWPFDocumentCore loadDoc(
+    private static HWPFDocumentCore loadDoc(
             final POIFSFileSystem poifsFileSystem) throws IOException {
         return loadDoc(poifsFileSystem.getRoot());
     }
@@ -449,9 +449,9 @@ public class AbstractWordUtils {
         return str.substring(0, pos);
     }
 
-    public static class NumberingState {
+    static class NumberingState {
 
-        private final Map<String, Integer> levels = new HashMap<String, Integer>();
+        private final Map<String, Integer> levels = new HashMap<>();
 
     }
 

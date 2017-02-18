@@ -206,15 +206,15 @@ public class Paragraph extends Range implements Cloneable {
         return _props.getFTtp() || _props.getFTtpEmbedded();
     }
 
+    private void setTableRowEnd(boolean val) {
+        _props.setFTtp(val);
+        _papx.updateSprm(SPRM_FTTP, val);
+    }
+
     void setTableRowEnd(TableProperties props) {
         setTableRowEnd(true);
         byte[] grpprl = TableSprmCompressor.compressTableProperty(props);
         _papx.append(grpprl);
-    }
-
-    private void setTableRowEnd(boolean val) {
-        _props.setFTtp(val);
-        _papx.updateSprm(SPRM_FTTP, val);
     }
 
     public int getTableLevel() {

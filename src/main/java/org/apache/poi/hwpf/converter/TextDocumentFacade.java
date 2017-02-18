@@ -25,13 +25,13 @@ import org.w3c.dom.Text;
 public class TextDocumentFacade {
     protected final Element body;
     protected final Document document;
-    protected final Element head;
+    private final Element head;
     protected final Element root;
 
     protected Element title;
-    protected Text titleText;
+    private Text titleText;
 
-    public TextDocumentFacade(Document document) {
+    TextDocumentFacade(Document document) {
         this.document = document;
 
         root = document.createElement("html");
@@ -48,19 +48,19 @@ public class TextDocumentFacade {
         head.appendChild(title);
     }
 
-    public void addAuthor(String value) {
+    void addAuthor(String value) {
         addMeta("Author", value);
     }
 
-    public void addDescription(String value) {
+    void addDescription(String value) {
         addMeta("Description", value);
     }
 
-    public void addKeywords(String value) {
+    void addKeywords(String value) {
         addMeta("Keywords", value);
     }
 
-    public void addMeta(final String name, String value) {
+    private void addMeta(final String name, String value) {
         Element meta = document.createElement("meta");
 
         Element metaName = document.createElement("name");
@@ -74,7 +74,7 @@ public class TextDocumentFacade {
         head.appendChild(meta);
     }
 
-    public Element createBlock() {
+    Element createBlock() {
         return document.createElement("div");
     }
 
@@ -90,7 +90,7 @@ public class TextDocumentFacade {
         return result;
     }
 
-    public Element createParagraph() {
+    Element createParagraph() {
         return document.createElement("p");
     }
 
@@ -102,15 +102,15 @@ public class TextDocumentFacade {
         return document.createElement("tbody");
     }
 
-    public Element createTableCell() {
+    Element createTableCell() {
         return document.createElement("td");
     }
 
-    public Element createTableRow() {
+    Element createTableRow() {
         return document.createElement("tr");
     }
 
-    public Text createText(String data) {
+    Text createText(String data) {
         return document.createTextNode(data);
     }
 

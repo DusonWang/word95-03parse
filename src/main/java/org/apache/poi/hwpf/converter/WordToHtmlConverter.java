@@ -64,7 +64,7 @@ public class WordToHtmlConverter extends AbstractWordConverter {
      *
      * @param document XML DOM Document used as HTML document
      */
-    public WordToHtmlConverter(Document document) {
+    private WordToHtmlConverter(Document document) {
         this.htmlDocumentFacade = new HtmlDocumentFacade(document);
     }
 
@@ -132,7 +132,7 @@ public class WordToHtmlConverter extends AbstractWordConverter {
         }
     }
 
-    static Document process(File docFile) throws Exception {
+    private static Document process(File docFile) throws Exception {
         final HWPFDocumentCore wordDocument = WordToHtmlUtils.loadDoc(docFile);
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
                 DocumentBuilderFactory.newInstance().newDocumentBuilder()
@@ -361,8 +361,8 @@ public class WordToHtmlConverter extends AbstractWordConverter {
         block.appendChild(htmlDocumentFacade.createLineBreak());
     }
 
-    protected void processNoteAutonumbered(HWPFDocument doc, String type,
-                                           int noteIndex, Element block, Range noteTextRange) {
+    private void processNoteAutonumbered(HWPFDocument doc, String type,
+                                         int noteIndex, Element block, Range noteTextRange) {
         final String textIndex = String.valueOf(noteIndex + 1);
         final String textIndexClass = htmlDocumentFacade.getOrCreateCssClass(
                 "a", "vertical-align:super;font-size:smaller;");
@@ -639,7 +639,7 @@ public class WordToHtmlConverter extends AbstractWordConverter {
         final String pFontName;
         final int pFontSize;
 
-        public BlockProperties(String pFontName, int pFontSize) {
+        BlockProperties(String pFontName, int pFontSize) {
             this.pFontName = pFontName;
             this.pFontSize = pFontSize;
         }

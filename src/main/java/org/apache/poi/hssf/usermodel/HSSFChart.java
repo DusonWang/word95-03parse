@@ -151,7 +151,7 @@ public final class HSSFChart {
         records.add(createFontBasisRecord2());
         records.add(new ProtectRecord(false));
         records.add(createUnitsRecord());
-        records.add(createChartRecord(0, 0, 30434904, 19031616));
+        records.add(createChartRecord());
         records.add(createBeginRecord());
         records.add(createSCLRecord((short) 1, (short) 1));
         records.add(createPlotGrowthRecord(65536, 65536));
@@ -884,12 +884,12 @@ public final class HSSFChart {
         return new BeginRecord();
     }
 
-    private ChartRecord createChartRecord(int x, int y, int width, int height) {
+    private ChartRecord createChartRecord() {
         ChartRecord r = new ChartRecord();
-        r.setX(x);
-        r.setY(y);
-        r.setWidth(width);
-        r.setHeight(height);
+        r.setX(0);
+        r.setY(0);
+        r.setWidth(30434904);
+        r.setHeight(19031616);
         return r;
     }
 

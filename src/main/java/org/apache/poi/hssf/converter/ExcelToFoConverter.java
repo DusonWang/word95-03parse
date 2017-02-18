@@ -62,7 +62,7 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
     private final FoDocumentFacade foDocumentFacade;
     private float pageMarginInches = 0.4f;
 
-    public ExcelToFoConverter(Document document) {
+    private ExcelToFoConverter(Document document) {
         this.foDocumentFacade = new FoDocumentFacade(document);
     }
 
@@ -123,7 +123,7 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
         return excelToHtmlConverter.getDocument();
     }
 
-    protected String createPageMaster(float tableWidthIn, String pageMasterName) {
+    private void createPageMaster(float tableWidthIn, String pageMasterName) {
         final float paperHeightIn;
         final float paperWidthIn;
         {
@@ -155,7 +155,6 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
         regionBody.setAttribute("margin", topMargin + "in " + rightMargin
                 + "in " + bottomMargin + "in " + leftMargin + "in");
 
-        return pageMasterName;
     }
 
     @Override
@@ -163,7 +162,7 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
         return foDocumentFacade.getDocument();
     }
 
-    public float getPageMarginInches() {
+    private float getPageMarginInches() {
         return pageMarginInches;
     }
 
@@ -178,7 +177,7 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
      * @return <tt>false</tt> if cell style by itself (without text, i.e.
      * borders, fill, etc.) worth a mention, <tt>true</tt> otherwise
      */
-    protected boolean isEmptyStyle(CellStyle cellStyle) {
+    private boolean isEmptyStyle(CellStyle cellStyle) {
         return cellStyle.getFillPattern() == 0 //
                 && cellStyle.getBorderTop() == HSSFCellStyle.BORDER_NONE //
                 && cellStyle.getBorderRight() == HSSFCellStyle.BORDER_NONE //
@@ -186,9 +185,9 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
                 && cellStyle.getBorderLeft() == HSSFCellStyle.BORDER_NONE; //
     }
 
-    protected boolean processCell(HSSFWorkbook workbook, HSSFCell cell,
-                                  Element tableCellElement, int normalWidthPx, int maxSpannedWidthPx,
-                                  float normalHeightPt) {
+    private boolean processCell(HSSFWorkbook workbook, HSSFCell cell,
+                                Element tableCellElement, int normalWidthPx, int maxSpannedWidthPx,
+                                float normalHeightPt) {
         final HSSFCellStyle cellStyle = cell.getCellStyle();
 
         String value;
@@ -307,8 +306,8 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
         return ExcelToHtmlUtils.isEmpty(value) && emptyStyle;
     }
 
-    protected void processCellStyle(HSSFWorkbook workbook,
-                                    HSSFCellStyle cellStyle, Element cellTarget, Element blockTarget) {
+    private void processCellStyle(HSSFWorkbook workbook,
+                                  HSSFCellStyle cellStyle, Element cellTarget, Element blockTarget) {
         blockTarget.setAttribute("white-space-collapse", "false");
         {
             String textAlign = ExcelToFoUtils.getAlign(cellStyle
@@ -347,8 +346,8 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
 
     }
 
-    protected void processCellStyleBorder(HSSFWorkbook workbook,
-                                          Element cellTarget, String type, short xlsBorder, short borderColor) {
+    private void processCellStyleBorder(HSSFWorkbook workbook,
+                                        Element cellTarget, String type, short xlsBorder, short borderColor) {
         if (xlsBorder == HSSFCellStyle.BORDER_NONE)
             return;
 
@@ -368,8 +367,8 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
         cellTarget.setAttribute("border-" + type, borderStyle.toString());
     }
 
-    protected void processCellStyleFont(HSSFWorkbook workbook,
-                                        Element blockTarget, HSSFFont font) {
+    private void processCellStyleFont(HSSFWorkbook workbook,
+                                      Element blockTarget, HSSFFont font) {
         Triplet triplet = new Triplet();
         triplet.fontName = font.getFontName();
 
@@ -401,8 +400,8 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
 
     }
 
-    protected void processColumnHeaders(HSSFSheet sheet, int maxSheetColumns,
-                                        Element table) {
+    private void processColumnHeaders(HSSFSheet sheet, int maxSheetColumns,
+                                      Element table) {
         Element tableHeader = foDocumentFacade.createTableHeader();
         Element row = foDocumentFacade.createTableRow();
 
@@ -439,8 +438,8 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
      *
      * @return table width in inches
      */
-    protected float processColumnWidths(HSSFSheet sheet, int maxSheetColumns,
-                                        Element table) {
+    private float processColumnWidths(HSSFSheet sheet, int maxSheetColumns,
+                                      Element table) {
         float tableWidth = 0;
 
         if (isOutputRowNumbers()) {
@@ -471,7 +470,7 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
         return tableWidth;
     }
 
-    protected void processDocumentInformation(
+    private void processDocumentInformation(
             SummaryInformation summaryInformation) {
         if (ExcelToFoUtils.isNotEmpty(summaryInformation.getTitle()))
             foDocumentFacade.setTitle(summaryInformation.getTitle());
@@ -489,9 +488,9 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
     /**
      * @return maximum 1-base index of column that were rendered, zero if none
      */
-    protected int processRow(HSSFWorkbook workbook,
-                             CellRangeAddress[][] mergedRanges, HSSFRow row,
-                             Element tableRowElement) {
+    private int processRow(HSSFWorkbook workbook,
+                           CellRangeAddress[][] mergedRanges, HSSFRow row,
+                           Element tableRowElement) {
         final HSSFSheet sheet = row.getSheet();
         final short maxColIx = row.getLastCellNum();
         if (maxColIx <= 0) {
@@ -678,8 +677,8 @@ public class ExcelToFoConverter extends AbstractExcelConverter {
 
         Element pageSequence = foDocumentFacade
                 .createPageSequence(pageMasterName);
-        Element flow = foDocumentFacade.addFlowToPageSequence(pageSequence,
-                "xsl-region-body");
+        Element flow = foDocumentFacade.addFlowToPageSequence(pageSequence
+        );
 
         HSSFSheet sheet = workbook.getSheetAt(sheetIndex);
         float tableWidthIn = processSheet(workbook, sheet, flow);

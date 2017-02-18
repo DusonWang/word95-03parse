@@ -22,7 +22,6 @@ import org.apache.poi.hsmf.datatypes.MAPIProperty;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Lists the different MAPI types

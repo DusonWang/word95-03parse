@@ -136,7 +136,7 @@ public class WordToTextConverter extends AbstractWordConverter {
         }
     }
 
-    static Document process(File docFile) throws Exception {
+    private static Document process(File docFile) throws Exception {
         final HWPFDocumentCore wordDocument = AbstractWordUtils
                 .loadDoc(docFile);
         WordToTextConverter wordToTextConverter = new WordToTextConverter(
@@ -172,7 +172,7 @@ public class WordToTextConverter extends AbstractWordConverter {
         return stringWriter.toString();
     }
 
-    public boolean isOutputSummaryInformation() {
+    private boolean isOutputSummaryInformation() {
         return outputSummaryInformation;
     }
 
@@ -277,8 +277,8 @@ public class WordToTextConverter extends AbstractWordConverter {
         block.appendChild(textDocumentFacade.createText("\n"));
     }
 
-    protected void processNote(HWPFDocument wordDocument, Element block,
-                               Range noteTextRange) {
+    private void processNote(HWPFDocument wordDocument, Element block,
+                             Range noteTextRange) {
         final int noteIndex = noteCounters.getAndIncrement();
         block.appendChild(textDocumentFacade
                 .createText(UNICODECHAR_ZERO_WIDTH_SPACE + "[" + noteIndex

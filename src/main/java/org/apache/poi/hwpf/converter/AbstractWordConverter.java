@@ -37,9 +37,9 @@ import java.util.regex.Pattern;
 
 @Beta
 public abstract class AbstractWordConverter {
-    protected static final char UNICODECHAR_NO_BREAK_SPACE = '\u00a0';
-    protected static final char UNICODECHAR_NONBREAKING_HYPHEN = '\u2011';
-    protected static final char UNICODECHAR_ZERO_WIDTH_SPACE = '\u200b';
+    static final char UNICODECHAR_NO_BREAK_SPACE = '\u00a0';
+    private static final char UNICODECHAR_NONBREAKING_HYPHEN = '\u2011';
+    static final char UNICODECHAR_ZERO_WIDTH_SPACE = '\u200b';
     private static final byte BEL_MARK = 7;
     private static final byte FIELD_BEGIN_MARK = 19;
     private static final byte FIELD_END_MARK = 21;
@@ -167,7 +167,7 @@ public abstract class AbstractWordConverter {
         return count;
     }
 
-    public PicturesManager getPicturesManager() {
+    private PicturesManager getPicturesManager() {
         return picturesManager;
     }
 
@@ -187,8 +187,8 @@ public abstract class AbstractWordConverter {
                                              Element currentBlock, Range range, int currentTableLevel,
                                              List<Bookmark> rangeBookmarks);
 
-    protected boolean processCharacters(final HWPFDocumentCore wordDocument,
-                                        final int currentTableLevel, final Range range, final Element block) {
+    boolean processCharacters(final HWPFDocumentCore wordDocument,
+                              final int currentTableLevel, final Range range, final Element block) {
         if (range == null)
             return false;
 
@@ -272,7 +272,7 @@ public abstract class AbstractWordConverter {
 
             if (structure.structure instanceof Bookmark) {
                 // other bookmarks with same boundaries
-                List<Bookmark> bookmarks = new LinkedList<Bookmark>();
+                List<Bookmark> bookmarks = new LinkedList<>();
                 for (Bookmark bookmark : ((HWPFDocument) wordDocument)
                         .getBookmarks()
                         .getBookmarksStartedBetween(structure.start,
@@ -473,9 +473,9 @@ public abstract class AbstractWordConverter {
         return haveAnyText;
     }
 
-    protected void processDeadField(HWPFDocumentCore wordDocument,
-                                    Element currentBlock, Range range, int currentTableLevel,
-                                    int beginMark, int separatorMark, int endMark) {
+    private void processDeadField(HWPFDocumentCore wordDocument,
+                                  Element currentBlock, Range range, int currentTableLevel,
+                                  int beginMark, int separatorMark, int endMark) {
         if (beginMark + 1 < separatorMark && separatorMark + 1 < endMark) {
             Range formulaRange = new Range(range.getCharacterRun(
                     beginMark + 1).getStartOffset(), range.getCharacterRun(
@@ -525,7 +525,6 @@ public abstract class AbstractWordConverter {
             processCharacters(wordDocument, currentTableLevel,
                     deadFieldValueSubrage, currentBlock);
 
-        return;
     }
 
     public void processDocument(HWPFDocumentCore wordDocument) {
@@ -563,8 +562,8 @@ public abstract class AbstractWordConverter {
         }
     }
 
-    protected void processDrawnObject(HWPFDocument doc,
-                                      CharacterRun characterRun, Element block) {
+    private void processDrawnObject(HWPFDocument doc,
+                                    CharacterRun characterRun, Element block) {
         if (getPicturesManager() == null)
             return;
 
@@ -609,8 +608,8 @@ public abstract class AbstractWordConverter {
             HWPFDocument wordDocument, int noteIndex, Element block,
             Range endnoteTextRange);
 
-    protected void processField(HWPFDocument wordDocument, Range parentRange,
-                                int currentTableLevel, Field field, Element currentBlock) {
+    private void processField(HWPFDocument wordDocument, Range parentRange,
+                              int currentTableLevel, Field field, Element currentBlock) {
         switch (field.getType()) {
             case 37: // page reference
             {
@@ -665,7 +664,7 @@ public abstract class AbstractWordConverter {
 
                 if (values != null) {
                     processDropDownList(currentBlock, cr, values,
-                            defIndex == null ? -1 : defIndex.intValue());
+                            defIndex == null ? -1 : defIndex);
                     return;
                 }
                 break;
@@ -760,8 +759,8 @@ public abstract class AbstractWordConverter {
     protected abstract void processLineBreak(Element block,
                                              CharacterRun characterRun);
 
-    protected void processNoteAnchor(HWPFDocument doc,
-                                     CharacterRun characterRun, final Element block) {
+    private void processNoteAnchor(HWPFDocument doc,
+                                   CharacterRun characterRun, final Element block) {
         {
             Notes footnotes = doc.getFootnotes();
             int noteIndex = footnotes
@@ -802,7 +801,6 @@ public abstract class AbstractWordConverter {
 
                 processEndnoteAutonumbered(doc, noteIndex, block,
                         noteTextRange);
-                return;
             }
         }
     }
@@ -813,7 +811,7 @@ public abstract class AbstractWordConverter {
                 "_" + characterRun.getPicOffset());
         if (entry == null) {
             logger.log(POILogger.WARN, "Referenced OLE2 object '",
-                    Integer.valueOf(characterRun.getPicOffset()),
+                    characterRun.getPicOffset(),
                     "' not found in ObjectPool");
             return false;
         }
@@ -823,7 +821,7 @@ public abstract class AbstractWordConverter {
         } catch (Exception exc) {
             logger.log(POILogger.WARN,
                     "Unable to convert internal OLE2 object '",
-                    Integer.valueOf(characterRun.getPicOffset()), "': ", exc,
+                    characterRun.getPicOffset(), "': ", exc,
                     exc);
             return false;
         }
@@ -846,8 +844,8 @@ public abstract class AbstractWordConverter {
                                              Element parentElement, int currentTableLevel, Paragraph paragraph,
                                              String bulletText);
 
-    protected void processParagraphes(HWPFDocumentCore wordDocument,
-                                      Element flow, Range range, int currentTableLevel) {
+    void processParagraphes(HWPFDocumentCore wordDocument,
+                            Element flow, Range range, int currentTableLevel) {
         final int paragraphs = range.numParagraphs();
         for (int p = 0; p < paragraphs; p++) {
             Paragraph paragraph = range.getParagraph(p);
@@ -894,7 +892,7 @@ public abstract class AbstractWordConverter {
                 }
             }
 
-            if (processed == false) {
+            if (!processed) {
                 processParagraph(wordDocument, flow, currentTableLevel,
                         paragraph, AbstractWordUtils.EMPTY);
             }
@@ -910,16 +908,16 @@ public abstract class AbstractWordConverter {
         processSection(wordDocument, section, 0);
     }
 
-    protected void processSymbol(HWPFDocument doc, CharacterRun characterRun,
-                                 Element block) {
+    private void processSymbol(HWPFDocument doc, CharacterRun characterRun,
+                               Element block) {
 
     }
 
     protected abstract void processTable(HWPFDocumentCore wordDocument,
                                          Element flow, Table table);
 
-    protected int tryDeadField(HWPFDocumentCore wordDocument, Range range,
-                               int currentTableLevel, int beginMark, Element currentBlock) {
+    private int tryDeadField(HWPFDocumentCore wordDocument, Range range,
+                             int currentTableLevel, int beginMark, Element currentBlock) {
         int[] separatorEnd = tryDeadField_lookupFieldSeparatorEnd(
                 wordDocument, range, beginMark);
         if (separatorEnd == null)
@@ -963,10 +961,6 @@ public abstract class AbstractWordConverter {
             }
 
             if (text.getBytes()[0] == FIELD_END_MARK) {
-                if (endMark != -1) {
-                    // double;
-                    return null;
-                }
 
                 endMark = c;
                 break;
@@ -984,8 +978,8 @@ public abstract class AbstractWordConverter {
         final int endMark;
         final int separatorMark;
 
-        public DeadFieldBoundaries(int beginMark, int separatorMark,
-                                   int endMark) {
+        DeadFieldBoundaries(int beginMark, int separatorMark,
+                            int endMark) {
             this.beginMark = beginMark;
             this.separatorMark = separatorMark;
             this.endMark = endMark;

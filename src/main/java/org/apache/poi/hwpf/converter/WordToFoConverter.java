@@ -427,8 +427,8 @@ public class WordToFoConverter extends AbstractWordConverter {
         String regularPage = createPageMaster(section, "page", sectionCounter);
 
         Element pageSequence = foDocumentFacade.addPageSequence(regularPage);
-        Element flow = foDocumentFacade.addFlowToPageSequence(pageSequence,
-                "xsl-region-body");
+        Element flow = foDocumentFacade.addFlowToPageSequence(pageSequence
+        );
 
         processParagraphes(wordDocument, flow, section, Integer.MIN_VALUE);
 

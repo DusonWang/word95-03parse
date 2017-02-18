@@ -33,7 +33,7 @@ import org.w3c.dom.Document;
  */
 @Beta
 public abstract class AbstractExcelConverter {
-    protected final HSSFDataFormatter _formatter = new HSSFDataFormatter();
+    final HSSFDataFormatter _formatter = new HSSFDataFormatter();
     private FontReplacer fontReplacer = new DefaultFontReplacer();
     private boolean outputColumnHeaders = true;
     private boolean outputHiddenColumns = false;
@@ -41,12 +41,12 @@ public abstract class AbstractExcelConverter {
     private boolean outputLeadingSpacesAsNonBreaking = true;
     private boolean outputRowNumbers = true;
 
-    protected static int getColumnWidth(HSSFSheet sheet, int columnIndex) {
+    static int getColumnWidth(HSSFSheet sheet, int columnIndex) {
         return ExcelToHtmlUtils.getColumnWidthInPx(sheet
                 .getColumnWidth(columnIndex));
     }
 
-    protected static int getDefaultColumnWidth(HSSFSheet sheet) {
+    static int getDefaultColumnWidth(HSSFSheet sheet) {
         return ExcelToHtmlUtils.getColumnWidthInPx(sheet
                 .getDefaultColumnWidth());
     }
@@ -57,13 +57,13 @@ public abstract class AbstractExcelConverter {
      *
      * @param columnIndex 0-based column index
      */
-    protected String getColumnName(int columnIndex) {
+    String getColumnName(int columnIndex) {
         return NumberFormatter.getNumber(columnIndex + 1, 3);
     }
 
     protected abstract Document getDocument();
 
-    public FontReplacer getFontReplacer() {
+    FontReplacer getFontReplacer() {
         return fontReplacer;
     }
 
@@ -75,11 +75,11 @@ public abstract class AbstractExcelConverter {
      * Generates name for output as row number in case
      * <tt>{@link #isOutputRowNumbers()} == true</tt>
      */
-    protected String getRowName(HSSFRow row) {
+    String getRowName(HSSFRow row) {
         return String.valueOf(row.getRowNum() + 1);
     }
 
-    public boolean isOutputColumnHeaders() {
+    boolean isOutputColumnHeaders() {
         return outputColumnHeaders;
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractExcelConverter {
         this.outputColumnHeaders = outputColumnHeaders;
     }
 
-    public boolean isOutputHiddenColumns() {
+    boolean isOutputHiddenColumns() {
         return outputHiddenColumns;
     }
 
@@ -95,7 +95,7 @@ public abstract class AbstractExcelConverter {
         this.outputHiddenColumns = outputZeroWidthColumns;
     }
 
-    public boolean isOutputHiddenRows() {
+    boolean isOutputHiddenRows() {
         return outputHiddenRows;
     }
 
@@ -103,7 +103,7 @@ public abstract class AbstractExcelConverter {
         this.outputHiddenRows = outputZeroHeightRows;
     }
 
-    public boolean isOutputLeadingSpacesAsNonBreaking() {
+    boolean isOutputLeadingSpacesAsNonBreaking() {
         return outputLeadingSpacesAsNonBreaking;
     }
 
@@ -112,7 +112,7 @@ public abstract class AbstractExcelConverter {
         this.outputLeadingSpacesAsNonBreaking = outputPrePostSpacesAsNonBreaking;
     }
 
-    public boolean isOutputRowNumbers() {
+    boolean isOutputRowNumbers() {
         return outputRowNumbers;
     }
 
@@ -120,7 +120,7 @@ public abstract class AbstractExcelConverter {
         this.outputRowNumbers = outputRowNumbers;
     }
 
-    protected boolean isTextEmpty(HSSFCell cell) {
+    boolean isTextEmpty(HSSFCell cell) {
         final String value;
         switch (cell.getCellType()) {
             case HSSFCell.CELL_TYPE_STRING:

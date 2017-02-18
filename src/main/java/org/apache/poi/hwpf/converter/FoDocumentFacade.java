@@ -25,11 +25,11 @@ public class FoDocumentFacade {
 
     private static final String NS_XSLFO = "http://www.w3.org/1999/XSL/Format";
 
-    protected final Element declarations;
+    private final Element declarations;
     protected final Document document;
-    protected final Element layoutMasterSet;
+    private final Element layoutMasterSet;
     protected final Element root;
-    protected Element propertiesRoot;
+    private Element propertiesRoot;
 
     public FoDocumentFacade(Document document) {
         this.document = document;
@@ -45,10 +45,9 @@ public class FoDocumentFacade {
         root.appendChild(declarations);
     }
 
-    public Element addFlowToPageSequence(final Element pageSequence,
-                                         String flowName) {
+    public Element addFlowToPageSequence(final Element pageSequence) {
         final Element flow = document.createElementNS(NS_XSLFO, "fo:flow");
-        flow.setAttribute("flow-name", flowName);
+        flow.setAttribute("flow-name", "xsl-region-body");
         pageSequence.appendChild(flow);
 
         return flow;
@@ -76,7 +75,7 @@ public class FoDocumentFacade {
         root.appendChild(pageSequence);
     }
 
-    public Element addPageSequence(String pageMaster) {
+    Element addPageSequence(String pageMaster) {
         final Element pageSequence = createPageSequence(pageMaster);
         root.appendChild(pageSequence);
         return pageSequence;
@@ -99,14 +98,14 @@ public class FoDocumentFacade {
         return simplePageMaster;
     }
 
-    public Element createBasicLinkExternal(String externalDestination) {
+    Element createBasicLinkExternal(String externalDestination) {
         final Element basicLink = document.createElementNS(NS_XSLFO,
                 "fo:basic-link");
         basicLink.setAttribute("external-destination", externalDestination);
         return basicLink;
     }
 
-    public Element createBasicLinkInternal(String internalDestination) {
+    Element createBasicLinkInternal(String internalDestination) {
         final Element basicLink = document.createElementNS(NS_XSLFO,
                 "fo:basic-link");
         basicLink.setAttribute("internal-destination", internalDestination);
@@ -117,18 +116,18 @@ public class FoDocumentFacade {
         return document.createElementNS(NS_XSLFO, "fo:block");
     }
 
-    public Element createExternalGraphic(String source) {
+    Element createExternalGraphic(String source) {
         Element result = document.createElementNS(NS_XSLFO,
                 "fo:external-graphic");
         result.setAttribute("src", "url('" + source + "')");
         return result;
     }
 
-    public Element createFootnote() {
+    Element createFootnote() {
         return document.createElementNS(NS_XSLFO, "fo:footnote");
     }
 
-    public Element createFootnoteBody() {
+    Element createFootnoteBody() {
         return document.createElementNS(NS_XSLFO, "fo:footnote-body");
     }
 
@@ -136,7 +135,7 @@ public class FoDocumentFacade {
         return document.createElementNS(NS_XSLFO, "fo:inline");
     }
 
-    public Element createLeader() {
+    Element createLeader() {
         return document.createElementNS(NS_XSLFO, "fo:leader");
     }
 
@@ -144,15 +143,15 @@ public class FoDocumentFacade {
         return document.createElementNS(NS_XSLFO, "fo:list-block");
     }
 
-    public Element createListItem() {
+    private Element createListItem() {
         return document.createElementNS(NS_XSLFO, "fo:list-item");
     }
 
-    public Element createListItemBody() {
+    private Element createListItemBody() {
         return document.createElementNS(NS_XSLFO, "fo:list-item-body");
     }
 
-    public Element createListItemLabel(String text) {
+    private Element createListItemLabel(String text) {
         Element result = document.createElementNS(NS_XSLFO,
                 "fo:list-item-label");
         Element block = createBlock();
@@ -200,7 +199,7 @@ public class FoDocumentFacade {
         return document;
     }
 
-    protected Element getOrCreatePropertiesRoot() {
+    private Element getOrCreatePropertiesRoot() {
         if (propertiesRoot != null)
             return propertiesRoot;
 
@@ -225,7 +224,7 @@ public class FoDocumentFacade {
     }
 
     public void setCreatorTool(String value) {
-        setXmpProperty("CreatorTool", value);
+        setXmpProperty(value);
     }
 
     public void setDescription(String value) {
@@ -237,7 +236,7 @@ public class FoDocumentFacade {
         }
     }
 
-    public Element setDublinCoreProperty(String name, String value) {
+    private Element setDublinCoreProperty(String name, String value) {
         return setProperty("http://purl.org/dc/elements/1.1/", "dc", name,
                 value);
     }
@@ -246,7 +245,7 @@ public class FoDocumentFacade {
         setPdfProperty("Keywords", value);
     }
 
-    public Element setPdfProperty(String name, String value) {
+    private Element setPdfProperty(String name, String value) {
         return setProperty("http://ns.adobe.com/pdf/1.3/", "pdf", name, value);
     }
 
@@ -254,8 +253,8 @@ public class FoDocumentFacade {
         setPdfProperty("Producer", value);
     }
 
-    protected Element setProperty(String namespace, String prefix,
-                                  String name, String value) {
+    private Element setProperty(String namespace, String prefix,
+                                String name, String value) {
         Element propertiesRoot = getOrCreatePropertiesRoot();
         NodeList existingChildren = propertiesRoot.getChildNodes();
         for (int i = 0; i < existingChildren.getLength(); i++) {
@@ -292,8 +291,8 @@ public class FoDocumentFacade {
         setDublinCoreProperty("title", value);
     }
 
-    public Element setXmpProperty(String name, String value) {
-        return setProperty("http://ns.adobe.com/xap/1.0/", "xmp", name, value);
+    private Element setXmpProperty(String value) {
+        return setProperty("http://ns.adobe.com/xap/1.0/", "xmp", "CreatorTool", value);
     }
 
 }

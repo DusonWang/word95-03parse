@@ -62,7 +62,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
     private Map<Short, String> excelStyleToClass = new LinkedHashMap<Short, String>();
     private boolean useDivsToSpan = false;
 
-    public ExcelToHtmlConverter(Document doc) {
+    private ExcelToHtmlConverter(Document doc) {
         htmlDocumentFacade = new HtmlDocumentFacade(doc);
     }
 
@@ -123,7 +123,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         return excelToHtmlConverter.getDocument();
     }
 
-    protected String buildStyle(HSSFWorkbook workbook, HSSFCellStyle cellStyle) {
+    private String buildStyle(HSSFWorkbook workbook, HSSFCellStyle cellStyle) {
         StringBuilder style = new StringBuilder();
 
         style.append("white-space:pre-wrap;");
@@ -175,11 +175,11 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
             borderStyle.append(ExcelToHtmlUtils.getColor(color));
         }
 
-        style.append("border-" + type + ":" + borderStyle + ";");
+        style.append("border-").append(type).append(":").append(borderStyle).append(";");
     }
 
-    void buildStyle_font(HSSFWorkbook workbook, StringBuilder style,
-                         HSSFFont font) {
+    private void buildStyle_font(HSSFWorkbook workbook, StringBuilder style,
+                                 HSSFFont font) {
         switch (font.getBoldweight()) {
             case HSSFFont.BOLDWEIGHT_BOLD:
                 style.append("font-weight:bold;");
@@ -193,11 +193,10 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         final HSSFColor fontColor = workbook.getCustomPalette().getColor(
                 font.getColor());
         if (fontColor != null)
-            style.append("color: " + ExcelToHtmlUtils.getColor(fontColor)
-                    + "; ");
+            style.append("color: ").append(ExcelToHtmlUtils.getColor(fontColor)).append("; ");
 
         if (font.getFontHeightInPoints() != 0)
-            style.append("font-size:" + font.getFontHeightInPoints() + "pt;");
+            style.append("font-size:").append(font.getFontHeightInPoints()).append("pt;");
 
         if (font.getItalic()) {
             style.append("font-style:italic;");
@@ -240,8 +239,8 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         return htmlDocumentFacade.getDocument();
     }
 
-    protected String getStyleClassName(HSSFWorkbook workbook,
-                                       HSSFCellStyle cellStyle) {
+    private String getStyleClassName(HSSFWorkbook workbook,
+                                     HSSFCellStyle cellStyle) {
         final Short cellStyleKey = cellStyle.getIndex();
 
         String knownClass = excelStyleToClass.get(cellStyleKey);
@@ -255,7 +254,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         return cssClass;
     }
 
-    public boolean isUseDivsToSpan() {
+    private boolean isUseDivsToSpan() {
         return useDivsToSpan;
     }
 
@@ -271,8 +270,8 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         this.useDivsToSpan = useDivsToSpan;
     }
 
-    protected boolean processCell(HSSFCell cell, Element tableCellElement,
-                                  int normalWidthPx, int maxSpannedWidthPx, float normalHeightPt) {
+    private boolean processCell(HSSFCell cell, Element tableCellElement,
+                                int normalWidthPx, int maxSpannedWidthPx, float normalHeightPt) {
         final HSSFCellStyle cellStyle = cell.getCellStyle();
 
         String value;
@@ -334,10 +333,13 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         }
 
         final boolean noText = ExcelToHtmlUtils.isEmpty(value);
-        final boolean wrapInDivs = !noText && isUseDivsToSpan()
-                && !cellStyle.getWrapText();
+        boolean wrapInDivs = false;
+        if (cellStyle != null) {
+            wrapInDivs = !noText && isUseDivsToSpan()
+                    && !cellStyle.getWrapText();
+        }
 
-        final short cellStyleIndex = cellStyle.getIndex();
+        final short cellStyleIndex = cellStyle != null ? cellStyle.getIndex() : 0;
         if (cellStyleIndex != 0) {
             HSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook();
             String mainCssClass = getStyleClassName(workbook, cellStyle);
@@ -406,8 +408,8 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         return ExcelToHtmlUtils.isEmpty(value) && cellStyleIndex == 0;
     }
 
-    protected void processColumnHeaders(HSSFSheet sheet, int maxSheetColumns,
-                                        Element table) {
+    private void processColumnHeaders(HSSFSheet sheet, int maxSheetColumns,
+                                      Element table) {
         Element tableHeader = htmlDocumentFacade.createTableHeader();
         table.appendChild(tableHeader);
 
@@ -434,8 +436,8 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
      * Creates COLGROUP element with width specified for all columns. (Except
      * first if <tt>{@link #isOutputRowNumbers()}==true</tt>)
      */
-    protected void processColumnWidths(HSSFSheet sheet, int maxSheetColumns,
-                                       Element table) {
+    private void processColumnWidths(HSSFSheet sheet, int maxSheetColumns,
+                                     Element table) {
         // draw COLS after we know max column number
         Element columnGroup = htmlDocumentFacade.createTableColumnGroup();
         if (isOutputRowNumbers()) {
@@ -453,7 +455,7 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         table.appendChild(columnGroup);
     }
 
-    protected void processDocumentInformation(
+    private void processDocumentInformation(
             SummaryInformation summaryInformation) {
         if (ExcelToHtmlUtils.isNotEmpty(summaryInformation.getTitle()))
             htmlDocumentFacade.setTitle(summaryInformation.getTitle());
@@ -472,8 +474,8 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
     /**
      * @return maximum 1-base index of column that were rendered, zero if none
      */
-    protected int processRow(CellRangeAddress[][] mergedRanges, HSSFRow row,
-                             Element tableRowElement) {
+    private int processRow(CellRangeAddress[][] mergedRanges, HSSFRow row,
+                           Element tableRowElement) {
         final HSSFSheet sheet = row.getSheet();
         final short maxColIx = row.getLastCellNum();
         if (maxColIx <= 0)
@@ -560,14 +562,14 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         return maxRenderedColumn + 1;
     }
 
-    protected void processRowNumber(HSSFRow row,
-                                    Element tableRowNumberCellElement) {
+    private void processRowNumber(HSSFRow row,
+                                  Element tableRowNumberCellElement) {
         tableRowNumberCellElement.setAttribute("class", "rownumber");
         Text text = htmlDocumentFacade.createText(getRowName(row));
         tableRowNumberCellElement.appendChild(text);
     }
 
-    protected void processSheet(HSSFSheet sheet) {
+    private void processSheet(HSSFSheet sheet) {
         processSheetHeader(htmlDocumentFacade.getBody(), sheet);
 
         final int physicalNumberOfRows = sheet.getPhysicalNumberOfRows();
@@ -629,13 +631,13 @@ public class ExcelToHtmlConverter extends AbstractExcelConverter {
         htmlDocumentFacade.getBody().appendChild(table);
     }
 
-    protected void processSheetHeader(Element htmlBody, HSSFSheet sheet) {
+    private void processSheetHeader(Element htmlBody, HSSFSheet sheet) {
         Element h2 = htmlDocumentFacade.createHeader2();
         h2.appendChild(htmlDocumentFacade.createText(sheet.getSheetName()));
         htmlBody.appendChild(h2);
     }
 
-    public void processWorkbook(HSSFWorkbook workbook) {
+    private void processWorkbook(HSSFWorkbook workbook) {
         final SummaryInformation summaryInformation = workbook
                 .getSummaryInformation();
         if (summaryInformation != null) {

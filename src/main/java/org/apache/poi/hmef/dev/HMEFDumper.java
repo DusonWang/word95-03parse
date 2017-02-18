@@ -33,6 +33,7 @@ import java.util.List;
 public final class HMEFDumper {
     private InputStream inp;
     private boolean truncatePropertyData;
+
     public HMEFDumper(InputStream inp) throws IOException {
         this.inp = inp;
 

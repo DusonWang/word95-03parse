@@ -41,7 +41,7 @@ public class AbstractExcelUtils {
     private static final short EXCEL_COLUMN_WIDTH_FACTOR = 256;
     private static final int UNIT_OFFSET_LENGTH = 7;
 
-    public static String getAlign(short alignment) {
+    static String getAlign(short alignment) {
         switch (alignment) {
             case HSSFCellStyle.ALIGN_CENTER:
                 return "center";
@@ -63,7 +63,7 @@ public class AbstractExcelUtils {
         }
     }
 
-    public static String getBorderStyle(short xlsBorder) {
+    static String getBorderStyle(short xlsBorder) {
         final String borderStyle;
         switch (xlsBorder) {
             case HSSFCellStyle.BORDER_NONE:
@@ -92,7 +92,7 @@ public class AbstractExcelUtils {
         return borderStyle;
     }
 
-    public static String getBorderWidth(short xlsBorder) {
+    static String getBorderWidth(short xlsBorder) {
         final String borderWidth;
         switch (xlsBorder) {
             case HSSFCellStyle.BORDER_MEDIUM_DASH_DOT:
@@ -158,7 +158,7 @@ public class AbstractExcelUtils {
      * @return {@link CellRangeAddress} from map if cell with specified row and
      * column numbers contained in found range, <tt>null</tt> otherwise
      */
-    public static CellRangeAddress getMergedRange(
+    static CellRangeAddress getMergedRange(
             CellRangeAddress[][] mergedRanges, int rowNumber, int columnNumber) {
         CellRangeAddress[] mergedRangeRowInfo = rowNumber < mergedRanges.length ? mergedRanges[rowNumber]
                 : null;
@@ -176,7 +176,7 @@ public class AbstractExcelUtils {
         return !isEmpty(str);
     }
 
-    public static HSSFWorkbook loadXls(File xlsFile) throws IOException {
+    static HSSFWorkbook loadXls(File xlsFile) throws IOException {
         final FileInputStream inputStream = new FileInputStream(xlsFile);
         try {
             return new HSSFWorkbook(inputStream);

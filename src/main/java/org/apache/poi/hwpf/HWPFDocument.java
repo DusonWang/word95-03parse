@@ -662,7 +662,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
         return tt;
     }
 
-    public boolean verifyPWD(byte pwArray[], byte docId[], byte salt[], byte hashedSalt[], MD5 valContext) {
+    private boolean verifyPWD(byte pwArray[], byte docId[], byte salt[], byte hashedSalt[], MD5 valContext) {
         RC4 tool = new RC4();
         RC4 key = new RC4();
         int offset = 0, keyOffset = 0;
@@ -714,7 +714,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
         return true;
     }
 
-    public byte[] expandPW(String password) {
+    private byte[] expandPW(String password) {
         int i;
         byte[] pwArray = new byte[64];
         for (i = 0; i < 64; i++)

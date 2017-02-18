@@ -41,48 +41,48 @@ import java.io.PushbackInputStream;
  * {@link HWPFDocument} or {@link HWPFOldDocument}
  */
 public abstract class HWPFDocumentCore extends POIDocument {
-    protected static final String STREAM_OBJECT_POOL = "ObjectPool";
-    protected static final String STREAM_WORD_DOCUMENT = "WordDocument";
+    static final String STREAM_OBJECT_POOL = "ObjectPool";
+    static final String STREAM_WORD_DOCUMENT = "WordDocument";
 
     /**
      * Holds OLE2 objects
      */
-    protected ObjectPoolImpl _objectPool;
+    ObjectPoolImpl _objectPool;
 
     /**
      * The FIB
      */
-    protected FileInformationBlock _fib;
+    FileInformationBlock _fib;
 
     /**
      * Holds styles for this document.
      */
-    protected StyleSheet _ss;
+    StyleSheet _ss;
 
     /**
      * Contains formatting properties for text
      */
-    protected CHPBinTable _cbt;
+    CHPBinTable _cbt;
 
     /**
      * Contains formatting properties for paragraphs
      */
-    protected PAPBinTable _pbt;
+    PAPBinTable _pbt;
 
     /**
      * Contains formatting properties for sections.
      */
-    protected SectionTable _st;
+    SectionTable _st;
 
     /**
      * Holds fonts for this document.
      */
-    protected FontTable _ft;
+    FontTable _ft;
 
     /**
      * Hold list tables
      */
-    protected ListTables _lt;
+    ListTables _lt;
 
     /**
      * main document stream buffer

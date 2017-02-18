@@ -23,8 +23,8 @@ import org.apache.poi.util.Beta;
 import java.util.Arrays;
 
 @Beta
-public class ExcelToHtmlUtils extends AbstractExcelUtils {
-    public static void appendAlign(StringBuilder style, short alignment) {
+class ExcelToHtmlUtils extends AbstractExcelUtils {
+    static void appendAlign(StringBuilder style, short alignment) {
         String cssAlign = getAlign(alignment);
         if (isEmpty(cssAlign))
             return;
@@ -41,7 +41,7 @@ public class ExcelToHtmlUtils extends AbstractExcelUtils {
      *
      * @see #getMergedRange(CellRangeAddress[][], int, int)
      */
-    public static CellRangeAddress[][] buildMergedRangesMap(HSSFSheet sheet) {
+    static CellRangeAddress[][] buildMergedRangesMap(HSSFSheet sheet) {
         CellRangeAddress[][] mergedRanges = new CellRangeAddress[1][];
         for (int m = 0; m < sheet.getNumMergedRegions(); m++) {
             final CellRangeAddress cellRangeAddress = sheet.getMergedRegion(m);

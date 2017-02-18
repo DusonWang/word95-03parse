@@ -1019,8 +1019,8 @@ public class MAPIProperty {
     private static final int ID_FIRST_CUSTOM = 0x8000;
     private static final int ID_LAST_CUSTOM = 0xFFFE;
     private static Map<Integer, MAPIProperty> attributes = new HashMap<Integer, MAPIProperty>();
-   
-   /* ---------------------------------------------------------------------  */
+
+    /* ---------------------------------------------------------------------  */
     public final int id;
     public final MAPIType usualType;
     public final String name;

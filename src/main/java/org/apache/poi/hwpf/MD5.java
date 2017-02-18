@@ -1,48 +1,45 @@
 package org.apache.poi.hwpf;
 
-import java.io.UnsupportedEncodingException;
-
 public final class MD5 {
-    public static final int S11 = 7;
-    public static final int S12 = 12;
-    public static final int S13 = 17;
-    public static final int S14 = 22;
+    private static final int S11 = 7;
+    private static final int S12 = 12;
+    private static final int S13 = 17;
+    private static final int S14 = 22;
 
-    public static final int S21 = 5;
-    public static final int S22 = 9;
-    public static final int S23 = 14;
-    public static final int S24 = 20;
+    private static final int S21 = 5;
+    private static final int S22 = 9;
+    private static final int S23 = 14;
+    private static final int S24 = 20;
 
-    public static final int S31 = 4;
-    public static final int S32 = 11;
-    public static final int S33 = 16;
-    public static final int S34 = 23;
+    private static final int S31 = 4;
+    private static final int S32 = 11;
+    private static final int S33 = 16;
+    private static final int S34 = 23;
 
-    public static final int S41 = 6;
-    public static final int S42 = 10;
-    public static final int S43 = 15;
-    public static final int S44 = 21;
+    private static final int S41 = 6;
+    private static final int S42 = 10;
+    private static final int S43 = 15;
+    private static final int S44 = 21;
 
-    public static final byte[] PADDING = {-128, 0, 0, 0, 0, 0, 0, 0, 0,
+    private static final byte[] PADDING = {-128, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    public String digestHexStr;
-    public byte[] digest = new byte[16];
+    byte[] digest = new byte[16];
 
     private long[] state = new long[4]; // state (ABCD)
     private long[] count = new long[2]; // number of bits, modulo 2^64 (lsb first)
     private byte[] buffer = new byte[64]; // input buffer
 
-    public MD5() {
+    MD5() {
         md5Init();
     }
 
-    public static long b2iu(byte b) {
+    private static long b2iu(byte b) {
         return b < 0 ? b & 0x7F + 128 : b;
     }
 
-    public static String byteHEX(byte ib) {
+    private static String byteHEX(byte ib) {
         char[] Digit = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F'};
         char[] ob = new char[2];
@@ -51,24 +48,19 @@ public final class MD5 {
         return new String(ob);
     }
 
-    public static void main(String args[]) throws UnsupportedEncodingException {
-        MD5 md5 = new MD5();
-        System.out.println(md5.getMD5ofStr("123456"));
-    }
-
-    public String getMD5ofStr(String inbuf) {
+    private String getMD5ofStr(String inBuf) {
         md5Init();
-        md5Update(inbuf.getBytes(), inbuf.length());
+        md5Update(inBuf.getBytes(), inBuf.length());
         md5Final();
-        digestHexStr = "";
+        StringBuilder digestHexStr = new StringBuilder();
         for (int i = 0; i < 16; i++) {
-            digestHexStr += byteHEX(digest[i]);
+            digestHexStr.append(byteHEX(digest[i]));
         }
-        return digestHexStr;
+        return digestHexStr.toString();
 
     }
 
-    public void getMD5StoreDigest(MD5 hw) {
+    void getMD5StoreDigest(MD5 hw) {
         int i, j;
         for (i = 0, j = 0; i < 4; i++, j += 4) {
             hw.digest[j] = (byte) (hw.state[i] & 0xffL);
@@ -78,7 +70,7 @@ public final class MD5 {
         }
     }
 
-    public void md5Init() {
+    void md5Init() {
         count[0] = 0L;
         count[1] = 0L;
         ///* Load magic initialization constants.
@@ -139,7 +131,7 @@ public final class MD5 {
         return a;
     }
 
-    public void md5Update(byte[] inBuf, int inputLen) {
+    void md5Update(byte[] inBuf, int inputLen) {
 
         int i, index, partLen;
         byte[] block = new byte[64];
@@ -195,7 +187,7 @@ public final class MD5 {
         long a = state[0], b = state[1], c = state[2], d = state[3];
         long[] x = new long[16];
 
-        Decode(x, block, 64);
+        Decode(x, block);
 
           /* Round 1 */
         a = FF(a, b, c, d, x[0], S11, 0xd76aa478L); /* 1 */
@@ -286,9 +278,9 @@ public final class MD5 {
         }
     }
 
-    private void Decode(long[] output, byte[] input, int len) {
+    private void Decode(long[] output, byte[] input) {
         int i, j;
-        for (i = 0, j = 0; j < len; i++, j += 4)
+        for (i = 0, j = 0; j < 64; i++, j += 4)
             output[i] = b2iu(input[j]) |
                     (b2iu(input[j + 1]) << 8) |
                     (b2iu(input[j + 2]) << 16) |
