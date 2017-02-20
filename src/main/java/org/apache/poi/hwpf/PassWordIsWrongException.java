@@ -1,7 +1,7 @@
 package org.apache.poi.hwpf;
 
-public class PassWordIsWrongException extends IllegalArgumentException {
-    public PassWordIsWrongException(String s) {
+class PassWordIsWrongException extends IllegalArgumentException {
+    PassWordIsWrongException(String s) {
         super(s);
     }
 }

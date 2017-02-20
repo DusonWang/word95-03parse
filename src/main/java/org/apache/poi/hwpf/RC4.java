@@ -1,15 +1,15 @@
 package org.apache.poi.hwpf;
 
 public class RC4 {
-    public byte[] state;
+    private byte[] state;
     public int x;
     public int y;
 
-    public RC4() {
+    RC4() {
         state = new byte[256];
     }
 
-    public void prepareKey(byte[] key_data_ptr, int key_data_len, RC4 key) {
+    private void prepareKey(byte[] key_data_ptr, int key_data_len, RC4 key) {
         int index1;
         int index2;
         byte[] state;
@@ -29,7 +29,7 @@ public class RC4 {
         }
     }
 
-    public void makeKey(int block, RC4 rc4key, MD5 md5) {
+    void makeKey(int block, RC4 rc4key, MD5 md5) {
         byte[] pwArray = new byte[64];
         MD5 temp = new MD5();
         for (int i = 0; i < 64; i++) pwArray[i] = 0;
