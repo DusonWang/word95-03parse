@@ -10,12 +10,12 @@ import java.util.ArrayList;
 public class TestDoc97 {
     private static ArrayList<RawTable> m_RawTables = new ArrayList<>();
 
-    public static String docTableCellHyperlinkText(String cellText) {
+    private static String docTableCellHyperlinkText(String cellText) {
         return cellText.replaceAll("HYPERLINK \"mailto:[^@]+@{1}[^@^\"]+\"{1}",
                 "");
     }
 
-    public static String formatToSpace(String s) {
+    private static String formatToSpace(String s) {
         byte[] bs = s.getBytes();
         for (int i = 0; i < bs.length; ++i) {
             if (bs[i] < 32 && bs[i] > 0)
