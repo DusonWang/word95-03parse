@@ -360,7 +360,7 @@ public final class HWPFDocument extends HWPFDocumentCore {
     public HWPFDocument(DirectoryNode directory, String password) throws Exception {
         // Load the main stream and FIB
         // Also handles HPSF bits
-        super(directory, password);
+        super(directory);
         byte[] test = new byte[0x10];
         RC4 key = new RC4();
         RC4 tool = new RC4();

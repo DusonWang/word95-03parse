@@ -150,39 +150,6 @@ public abstract class HWPFDocumentCore extends POIDocument {
     }
 
     /**
-     * This constructor loads a encrypted Word97-03 document from a specific point
-     * in a POIFSFileSystem, probably not the default.
-     * Used typically to open embeded documents.
-     *
-     * @param directory The DirectoryNode that contains the Word document.
-     * @throws IOException If there is an unexpected IOException from the passed
-     *                     in POIFSFileSystem.
-     */
-    public HWPFDocumentCore(DirectoryNode directory, String password) throws IOException {
-        // Sort out the hpsf properties
-
-        super(directory);
-
-        // read in the main stream.
-        DocumentEntry documentProps = (DocumentEntry)
-                directory.getEntry("WordDocument");
-        _mainStream = new byte[documentProps.getSize()];
-
-        directory.createDocumentInputStream(STREAM_WORD_DOCUMENT).read(_mainStream);
-        // Create our FIB, and check for the doc being encrypted
-        _fib = new FileInformationBlock(_mainStream);
-
-        DirectoryEntry objectPoolEntry;
-        try {
-            objectPoolEntry = (DirectoryEntry) directory
-                    .getEntry(STREAM_OBJECT_POOL);
-        } catch (FileNotFoundException exc) {
-            objectPoolEntry = null;
-        }
-        _objectPool = new ObjectPoolImpl(objectPoolEntry);
-    }
-
-    /**
      * Takens an InputStream, verifies that it's not RTF, builds a
      * POIFSFileSystem from it, and returns that.
      */
